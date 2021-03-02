@@ -15,22 +15,22 @@ const registrationFormValidator=function(event){
     let regexMail=/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
     let regexPhone=/^[789]\d{9}$/;
     if(!regexAlpha.test(document.getElementById("fullname").value)){
-        console.log("Invalid Name");
+        toast("Invalid Name..!","danger","Invalid Input");
         return false;
     }else if(!regexMail.test(document.getElementById("emailid").value)){
-        console.log("Invalid Email");
+        toast("Invalid Email..!","danger","Invalid Input");
         return false;
     }else if(!regexPhone.test(document.getElementById("mobile").value)){
-        console.log("Invalid Mobile");
+        toast("Invalid Mobile..!","danger","Invalid Input");
         return false;
     }else if(document.getElementById("gender").value!='m' && document.getElementById("gender").value!='f'){
-        console.log("Please select your gender");
+        toast("Please select your gender..!","danger","Invalid Input");
         return false;
     }else if(document.getElementById("pass1").value!=document.getElementById("pass2").value){
-        console.log("Please confirm your Password");
+        toast("Please confirm your password..!","danger","Invalid Input");
         return false;
     }else if(checkPassword(document.getElementById("pass1").value)<=50){
-        console.log("Please select a strong Password..!");
+        toast("Please select a strong Password..!","danger","Warning");
         return false;
     }
     // console.log
