@@ -5,14 +5,14 @@
 	<title>Library</title>
 	<meta charset="utf-8">
 	<meta name="author" content="periyandavar">
-	<meta name="discription" content="">
-	<meta name="keywords" content="">
+    <meta name="discription" content="library Mangement system">
+	<meta name="keywords" content="Library, LMS">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
  	<link rel="icon" type="image/png" href="img/favicon.png"/>
     <link rel="stylesheet" type="text/css" href="user/css/form.css">
     <link rel="stylesheet" type="text/css" href="user/css/core.css">
     <link rel="stylesheet" type="text/css" href="user/css/icons.css">
-    
+    <link rel="stylesheet" type="text/css" href="user/css/font-awesome-4.7.0/css/font-awesome.min.css">
     
 </head>
 <body>
@@ -20,13 +20,24 @@
 	<header>
             <img src="user/img/lms-logo.png">
 			<!-- <h1>LMS</h1> -->
-            <a href="javascript:dropDownMenuClick('user-drop-down');">&#64;</a>
+            
+            <a href="javascript:dropDownMenuClick('user-drop-down');"><i class="fa fa-user" aria-hidden="true"></i>
+            </a>
             <div class="drop-down" id="user-drop-down">
                 <ul>
                     <li onclick="openModal('sign-up-modal');dropDownMenuClick('user-drop-down');">Sign up</li>
                     <li onclick="openModal('log-in-modal');dropDownMenuClick('user-drop-down');">Login</li>
                 </ul>
             </div>
+            <a style="margin-right: 0;" id="searchButton" href="javascript:dropDownMenuClick('searchBar');"><i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+            <div class="searchBar" id="searchBar">
+                <input type="text"  name="search" placeholder="Search...">
+                <button>
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                 </button>
+            </div>
+            
 	</header>
 	<!-- navigation -->
 
@@ -172,7 +183,7 @@
                     </div>
                     <div class="form-input-div">
                         <label>Enter Password</label>
-                        <input class="form-control" onkeyup="passStrength()" type="password" id="pass" name="password" placeholder="Create Password..." autocomplete="off" required="">
+                        <input class="form-control" onkeyup="passStrength()" type="password" id="pass" name="password" placeholder="Enter Password..." autocomplete="off" required="">
                         <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
 		                <span id="pass1msg" style="display:none"></span>
                     </div>

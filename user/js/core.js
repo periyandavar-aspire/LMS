@@ -32,7 +32,6 @@ function changeSlide(index){
 }
 
 function openModal(ele){
-    console.log(ele);
     ele=document.getElementById(ele);
     ele.style.display="block";
 }
