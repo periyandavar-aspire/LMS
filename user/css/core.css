@@ -154,6 +154,7 @@ body{
     height: 42px;
     cursor: pointer;
     font-size: 18px;
+    padding-top: 2px;
 }
 .searchButton{
     padding: 5px;
@@ -198,6 +199,7 @@ article .section-card{
 .main{
     display: block;
     overflow: auto;
+    min-height: 100%;
 }
 .title{
     font-weight: bold;
@@ -275,13 +277,12 @@ article aside .side-bar-right:hover{
 footer{
     background-color: black;
     color: white;
-    text-align: center;
+    text-align: right;
     margin: -8px;
     padding: 7px;
     margin-top: 4px;
     bottom: 0;
 }
-
 .alert-modal{
 	display: block;
 	margin-left: 25%;
@@ -314,12 +315,7 @@ footer{
 	font-size: 22px;
 	cursor: pointer;
 }
-.positive{
-		background-color: #008000e3;
-}
-.negative{
-		background-color: #ff0000ed;
-}
+
 
 .close-modal{
 	font-size: 39px;
@@ -378,10 +374,6 @@ footer{
 	top: 10px;
 }
 
-
-
-
-
 .dark-primary-color    { background: #1976D2; }
 .default-primary-color { background: #2196F3; }
 .light-primary-color   { background: #BBDEFB; }
@@ -390,8 +382,10 @@ footer{
 .primary-text-color    { color: #212121; }
 .secondary-text-color  { color: #757575; }
 .divider-color         { border-color: #BDBDBD; }
-.positive {background-color: #29afd6;}
+/* .positive {background-color: #29afd6;} */
 .negative { background-color:#da3434d4;}
+.positive{ background-color: #039d03a3;}
+
 a{
     text-decoration: none;
 }
@@ -401,7 +395,7 @@ a{
     }
 }
 
-@media(max-width:535px){
+@media(max-width:700px){
     .dots{
         margin-left: 36%;
     }
@@ -422,6 +416,7 @@ a{
     }
     .searchBar{
         display: none;
+        margin-right:6px ;
     }
     #searchButton{
         display: block;
