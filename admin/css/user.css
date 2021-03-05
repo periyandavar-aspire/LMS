@@ -1,0 +1,177 @@
+/* Navigation Bar Design */
+nav{
+    float: left;
+    margin-top: 53px;
+    background-color: #1976D2;
+    margin-left: -8px;
+    width: 18%;
+    /* padding: 5px; */
+    padding-bottom:12px ;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+}
+nav ul li{
+    list-style: none;
+    margin: 1px;
+    margin-left: -41px;
+    height: 26px;
+    padding: 10px;
+    font-size: 21px;
+    cursor: pointer;
+}
+.mobNav{
+    display: none;
+}
+nav ul li a{
+    color: white;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+nav ul li:hover{
+    background-color: black;
+}
+#nav-drop-down ul li a:hover{
+    color: #1eafe8;
+}
+/* Main Content Design */
+.main{
+    margin-left: 19%;
+    padding-top: 45px;
+}
+/* Table Design */
+.tab_design {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+  }
+.tab_design th{
+    background-color: #0ea5de;
+}  
+.tab_design th,.tab_design td {
+    text-align: left;
+    padding: 8px;
+    border-style:groove ;
+}
+tr:nth-child(odd){
+    background-color: #f9f9f9;
+}
+tr:nth-child(even){
+    background-color: #d4dce1;
+}
+/* Div card design */
+.div-card{
+    border: #ddd solid 1px;
+    margin: 1px;
+    overflow: auto;
+    display: block;
+    background-color: white;
+}
+.div-card-header{
+    background-color: #c4d1e0;
+    padding: 10px;
+    font-size: 20px;
+    font-style: normal;
+    font-family: fangsong;
+    border-color: #ddd;
+}
+.div-card-body{
+    padding: 14px;
+}
+.left-panel{
+    float: left;
+    padding: 9px;
+    max-width: 40%;
+}
+.right-panel{
+    float: right;
+    padding: 9px;
+    max-width: 45%;
+}
+.right-panel input{
+    width: 73%;
+}
+/* pagination buttons */
+.pagination{
+    list-style: none;
+    margin-left: -57px;
+    margin-top: -5px;
+}
+.pagination li{
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #428bca;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+.pagination .disable{
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+.pagination .active{
+    color: #fff;
+    cursor: default;
+    background-color: #428bca;
+    border-color: #428bca;
+}
+.left-panel-select{
+    height:28px;
+}
+.left-panel-input{
+    height: 15px;
+}
+.panel{
+    padding-top:9px ;
+}
+.card{
+    padding: 1px 21px;
+    margin: 12px 2px;
+    border: #ddd solid 1px;
+    overflow: auto;
+    display: block;
+    background-color: white;
+}
+.icon-btn{
+    width: 37px;
+    font-size: 17px;
+    margin: 1px;
+    padding: 5px;
+}
+.checkbox{
+    width: 45px;
+}
+input[type=checkbox]{
+    width: 25px;
+    height: 30px;
+    cursor: pointer;
+}
+/* Media Queries */
+@media all and (max-width:800px){
+    nav{
+        display: none;
+    }
+    .mobNav{
+        display: inline-block;
+    }
+    #nav-drop-down{
+        width: 182px;
+    }
+    .shortMenu{
+        display: none;
+    }
+    .main{
+        margin-left: 3px;
+    }
+}
