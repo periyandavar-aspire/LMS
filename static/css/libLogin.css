@@ -1,0 +1,94 @@
+.left-panel-login img{
+    float: left;
+    height: 100%;
+    width: 52%;
+    position: fixed;
+    top: 0;
+    display: block;
+    bottom: 0;
+}
+.left-panel-login img:hover{
+    transform: scaleX(-1);
+}
+.right-panel-login{
+    float: right;
+    width: 46%;
+    padding: 16px;
+    background-color: #e8f7f763;
+    margin: -2px;
+    height: 100%;
+    position: relative;
+    right: 0;
+    top: 20%;
+}
+
+article{
+    height: 100%;
+    display: block;
+    overflow: hidden;
+    margin: -8px;
+}
+.logo-banar{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    border: #312b2b solid 2px;
+    background-color: white;
+    padding: 7px;
+    margin-bottom: 17px;
+    max-width: 400px;
+    height: auto;
+}
+.right-panel-login h1{
+    text-align: center;
+    font-family: sans-serif;
+    padding: 8px;
+    margin: 7px;
+}
+.login-wrapper{
+    padding: 31px;
+    margin: 29px;
+    border: #ddd groove 2px;
+    margin-top: 14%;
+    margin-bottom: 14%;
+    background: #667db6;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #667db6, #0082c8, #0082c8, #667db6);  
+    background: linear-gradient(to bottom, #667db6, #0082c8, #0082c8, #667db6); 
+    border-radius: 16px;
+    box-shadow: 8px 9px 10px 5px #000000ba;
+}
+.login-wrapper:hover{
+    box-shadow:  -8px -9px 10px 5px #000000ba;
+}
+.form-input-div{
+    margin: 17px;
+}
+.button-control{
+    margin-bottom: 12px;
+    margin-left: 43%;
+    margin-top: 14px;
+    width: 61px;
+    height: 45px;
+}
+/* Media Queries */
+@media all and (max-width:800px){
+    .left-panel-login img{
+        width: 40%;
+    }
+    .right-panel-login{
+        width: 60%;
+    }
+}
+@media all and (max-width:600px){
+    .left-panel-login img {
+        display: none;
+    }
+    .right-panel-login{
+        width: 100%;
+        background-image: url("../img/login.jpg");
+        position: relative;
+    }
+    .logo-banar{
+        max-width: 146px;
+    }
+}
