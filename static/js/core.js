@@ -1,4 +1,41 @@
 var slideIndex=0;
+var dropDownBtns=document.getElementsByClassName('drop-down-btn');
+if(dropDownBtns!=null){
+	for(let i=0;i<dropDownBtns.length;i++){
+		dropDownBtns[i].addEventListener("click",function(){
+			toggleClass(this,"active");
+			let content=this.lastElementChild;
+			if(content.style.display=="block")
+				content.style.display="none";
+			else
+				content.style.display="block";
+				console.log("we");
+		});
+	}
+}
+window.onclick=function(event){
+	let index=event.target.className.indexOf("drop-down");
+	if(index<0){
+		let elems=document.getElementsByClassName("drop-down");
+		for (let i=0;i<elems.length;i++) {
+			elems[i].style.display="none";
+		}
+	}
+};
+function toggleClass(element,className) {
+	// let element = document.getElementById(name);
+	if (element.classList) { 
+	  element.classList.toggle(className);
+	} else {
+		let classes = element.className.split(" ");
+		let i = classes.indexOf(className);
+		if (i >= 0) 
+			classes.splice(i, 1);
+		else 
+			classes.push(className);
+		element.className = classes.join(" "); 
+	}
+  }
 function slideshow(){
     const slides=document.getElementsByClassName('slide');
     

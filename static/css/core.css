@@ -26,12 +26,19 @@ header{
     padding: 7px;
     cursor: pointer;
     color: white;
+    font-size: 17px;
+    font-family: monospace;
 }
 
-.drop-down ul li:hover{
+/* .drop-down ul li:hover{
     background-color: white;
     color: black;
 }
+
+.drop-down ul li a:hover{
+    background-color: white;
+    color: black;
+} */
 
 .drop-down{
     display: none;
@@ -155,6 +162,9 @@ body{
     cursor: pointer;
     font-size: 18px;
     padding-top: 2px;
+}
+.drop-down ul li:hover {
+    background-color: black;
 }
 .searchButton{
     padding: 5px;
@@ -315,7 +325,9 @@ footer{
 	font-size: 22px;
 	cursor: pointer;
 }
-
+.drop-down-container{
+    display: none;
+}
 
 .close-modal{
 	font-size: 39px;

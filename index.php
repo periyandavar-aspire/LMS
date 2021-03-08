@@ -4,10 +4,13 @@ require_once 'core/Controller.php';
 $path = $_SERVER['PATH_INFO'] ?? DEFAULT_PAGE;
 $req = explode('/', ltrim($path));
 $ctrl = $req[1];
-$method = $req[2] ?? 'index';
-$method = ($method!="")?$method:'index';
-// print_r($req);
-// echo "$ctrl<br>$method";
+// $method = $req[2] ?? 'index';
+// $method = ($method!="")?$method:'index';
+$method = $req[2];
+if($method==null || $method==""){
+    header('Location: ' . $ctrl."/index");
+    exit();
+}
 $ctrlPath= CTRL_DIR.$ctrl.'Controller.php';
 if(file_exists($ctrlPath)){
     require_once CTRL_DIR.$ctrl.'Controller.php';
