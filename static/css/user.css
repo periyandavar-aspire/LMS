@@ -10,12 +10,16 @@ nav{
     height: 100%;
     position: fixed;
     z-index: 0;
+    overflow: auto;
+}
+nav >ul{
+    margin-bottom: 100px;
 }
 nav ul li{
     list-style: none;
     margin: 1px;
     margin-left: -41px;
-    height: 26px;
+    /* height: 26px; */
     padding: 10px;
     font-size: 21px;
     cursor: pointer;
@@ -27,6 +31,8 @@ nav ul li a{
     color: white;
     font-family: monospace;
     text-transform: uppercase;
+    display: inline-block;
+    width: 100%;
 }
 nav ul li:hover{
     background-color: black;
@@ -37,7 +43,7 @@ nav ul li:hover{
 /* Main Content Design */
 .main{
     margin-left: 19%;
-    padding-top: 45px;
+    padding-top: 63px;
 }
 /* Table Design */
 .tab_design {
@@ -68,9 +74,11 @@ tr:nth-child(even){
     overflow: auto;
     display: block;
     background-color: white;
+    margin-bottom: 15px;
+    margin-top: 12px;
 }
 .div-card-header{
-    background-color: #c4d1e0;
+    background-color: #7da6e3;
     padding: 10px;
     font-size: 20px;
     font-style: normal;
@@ -119,6 +127,15 @@ tr:nth-child(even){
     cursor: not-allowed;
     background-color: #fff;
     border-color: #ddd;
+}
+ul .active{
+    background-color: #414344;
+}
+ul .active:hover{
+    background-color: #414344;   
+}
+ul .active li:hover{
+    background-color: black;
 }
 .pagination .active{
     color: #fff;

@@ -1,20 +1,22 @@
 <?php
-class AdminController extends Controller{
+class AuthorsController extends Controller{
     public function __construct($model=null)
     {
         parent::__construct($model);
     }
     public function index(){
-        $this->loadView("admin");
-    }
-    public function home(){
         $this->loadLayout("adminHeader.html");
-        $this->loadView('home');
+        $this->loadView('addAuthors');
         $this->loadLayout("adminFooter.html");
     }
-    public function profile(){
+    public function add(){
         $this->loadLayout("adminHeader.html");
-        $this->loadView('adminProfile');
+        $this->loadView('addAuthors');
+        $this->loadLayout("adminFooter.html");
+    }
+    public function manage(){
+        $this->loadLayout("adminHeader.html");
+        $this->loadView('manageAuthors');
         $this->loadLayout("adminFooter.html");
     }
 }
