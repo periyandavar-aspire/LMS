@@ -143,4 +143,8 @@ function hideToast() {
 	}
 }
 
+function showElement(id) 
+{
+	document.getElementById(id).style.display='block';
+}
 // closure function,void(0),namespace,this..deviceorien,,

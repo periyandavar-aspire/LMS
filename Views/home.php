@@ -157,5 +157,5 @@
     <input type="checkbox"><label>three</label>
 </section>
 <script>
-    document.getElementById('home').className+=" active";
+    document.getElementById('home').className += " active";
 </script>

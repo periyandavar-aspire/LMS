@@ -15,7 +15,7 @@
             </section> -->
             <section class="right-panel-login">
                 <div class="login-wrapper">
-                    <img class="logo-banar"  src="<?php echo baseURL()?>/static/img/lms-logo.png">
+                    <img class="logo-banar"  src="<?php echo baseURL()?>/static/img/lms-logo.jpg">
                     <h1>Login Page</h1>
                     <hr>
                 <form>

@@ -41,5 +41,5 @@
     </form>
 </section>
 <script>
-    document.getElementById('users').className+=" active";
+    document.getElementById('users').className += " active";
 </script>

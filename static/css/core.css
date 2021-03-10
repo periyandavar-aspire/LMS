@@ -14,6 +14,13 @@ header{
     box-shadow: 12px 11px 8px 0 rgb(0 0 0 / 20%);
     
 }
+.form-input-div textarea {
+    height: 87px;
+}
+.file-preview{
+    width: 157px;
+    height: 100px;
+}
 .drop-down ul{
     list-style: none;
     font-size: 22px;
