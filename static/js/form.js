@@ -194,3 +194,24 @@ function confirmPassword()
 	else
         document.querySelector("#pass2msg").innerHTML="";
 }
+function changePreview(event)
+{
+    let ele = event.target.parentElement;
+    let reader = new FileReader();
+    if (event.target.value != "") {
+        console.log(event.target.files);
+        extension = event.target.files[0].name.substring(event.target.files[0].name.lastIndexOf('.') + 1).toLowerCase();
+        if (extension != "png" && extension != "jpg" && extension != "jpeg") {
+            alert("Please upload a image file..");
+            event.target.value = "";
+        } else {
+            reader.onload = function () {
+                preview = document.createElement("img");
+                preview.src = reader.result;
+                preview.className = "file-preview";
+                ele.appendChild(preview);
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+}

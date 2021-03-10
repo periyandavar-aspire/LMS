@@ -74,5 +74,5 @@
     </div>
 </section>
 <script>
-    document.getElementById('issued').className+=" active";
+    document.getElementById('issued').className += " active";
 </script>

@@ -74,5 +74,5 @@
     </div>
 </section>
 <script>
-    document.getElementById('categories').className+=" active";
+    document.getElementById('categories').className += " active";
 </script>

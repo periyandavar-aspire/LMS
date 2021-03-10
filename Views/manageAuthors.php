@@ -74,5 +74,5 @@
     </div>
 </section>
 <script>
-    document.getElementById('authors').className+=" active";
+    document.getElementById('authors').className += " active";
 </script>

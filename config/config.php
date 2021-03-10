@@ -1,10 +1,26 @@
 <?php
-define('VIEWS_DIR',"Views/");
-define('MODELS_DIR',"Models/");
-define('CTRL_DIR',"Controllers/");
-define('LAYOUT_DIR',"static/layout/");
-define('BASE_URL',"http://localhost/LMS/");
-define('DEFAULT_PAGE','/home');
-function baseURL(){
-    return BASE_URL;
-}
+// defined('VALID_REQ') OR exit('Not a valid Request');
+/**
+ * Base URL of the site
+ */
+$config['base_url'] = "http://lms.com";
+/**
+ * Path to views Directory
+ */
+$config['views'] = "Views/";
+/**
+ * Path to Models Directory
+ */
+$config['modles'] = "Models/";
+/**
+ * Path to Controllers Directory
+ */
+$config['controllers'] ="Controllers/";
+/**
+ * Path to Layout Directory
+ */
+$config['layouts'] = "static/layout/";
+/**
+ * Default page index page
+ */
+$config['default_page'] = "/home";

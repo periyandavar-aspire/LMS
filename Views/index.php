@@ -16,7 +16,7 @@
     <body> 
         <!-- header -->
 	    <header>
-            <img src="<?php echo baseURL()?>/static/img/lms-logo.png">
+            <img src="<?php echo baseURL()?>/static/img/lms-logo.jpg">
             <a href="javascript:dropDownMenuClick('user-drop-down');"><i class="fa fa-user" aria-hidden="true"></i>
             </a>
             <div class="drop-down" id="user-drop-down">
@@ -112,8 +112,7 @@
                     Occidental</address>
                     <h2 class="title">Tel. nos.:</h2>
                     (034) 433-2281 / 435-0535
-                    <h2 class="title">Fax:</h2>
-                    ***</p>
+                    </p>
                 </div>
             </aside>
         </article>
