@@ -7,9 +7,3 @@ function baseURL()
     return $config['base_url'];
 }
 
-spl_autoload_register(function ($className) {
-    $file = 'core/' . $className . ".php";
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});

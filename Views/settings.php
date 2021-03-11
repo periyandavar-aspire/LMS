@@ -4,23 +4,27 @@
     <form action="/admin/updatePageSettings" onsubmit="//event.preventDefault(); registrationFormValidator(event);" method="POST">
         <div class="form-input-div">
             <label>About Us</label>
-            <textarea class="form-control"id="aboutus" name="aboutus" required=""></textarea>
+            <textarea class="form-control"id="aboutus" name="aboutus" required=""><?php if(isset($data['aboutus'])) echo $data['aboutus'] ?></textarea>
         </div>
         <div class="form-input-div">
             <label>Address</label>
-            <textarea class="form-control"id="address" name="address" required=""></textarea>
+            <textarea class="form-control"id="address" name="address" required=""><?php if(isset($data['address'])) echo $data['address'] ?></textarea>
         </div>
         <div class="form-input-div">
             <label>Phone Number </label>
-            <input class="form-control" pattern="^[789]\d{9}$" type="text" id="mobile" name="mobileno" maxlength="10" placeholder="Mobile Number..." autocomplete="off" required="">
-        </div>                                                    
+            <input class="form-control" pattern="^[789]\d{9}$" type="text" id="mobile" name="mobileno" maxlength="10" placeholder="Mobile Number..." autocomplete="off" required="" value="<?php if(isset($data['mobileno'])) echo $data['mobileno'] ?>">
+        </div> 
+        <div class="form-input-div">
+            <label>Mail Id </label>
+            <input class="form-control" type="mail" id="mail" name="mail" placeholder="Mail Id..." autocomplete="off" required="" value="<?php if(isset($data['mail'])) echo $data['mail'] ?>">
+        </div>                                                     
         <div class="form-input-div">
             <label>Mission</label>
-            <textarea class="form-control"id="mission" name="mission" required=""></textarea>
+            <textarea class="form-control"id="mission" name="mission" required=""><?php if(isset($data['mission'])) echo $data['mission'] ?></textarea>
         </div>                    
         <div class="form-input-div">
             <label>Vision</label>
-            <textarea class="form-control"id="vision" name="vision" required=""></textarea>
+            <textarea class="form-control"id="vision" name="vision" required=""><?php if(isset($data['vision'])) echo $data['vision'] ?></textarea>
         </div>                                     
         <div class="form-buttons">
             <button type="submit" class="button-control positive">Submit</button>
