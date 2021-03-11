@@ -2,8 +2,8 @@
 define("VALID_REQ",true);
 session_start();
 require_once 'config/config.php';
+require_once 'core/autoload.php';
 require_once 'core/core.php';
-require_once 'core/Controller.php';
 
 $path = $_SERVER['PATH_INFO'] ?? $config['default_page'];
 $req = explode('/', ltrim($path));

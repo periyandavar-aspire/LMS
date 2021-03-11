@@ -49,20 +49,32 @@ class AdminController extends Controller
         $this->loadLayout("adminHeader.html");
         $data = [];
         $fdv = new FormDataValidation();
-        $data["pageMsg"] = $fdv->customizeInput(
-            $this->input->post('mobileno'),
+        $fields = new fields(['aboutus','address','mobileno','vision','mail']);
+        $fields->addFields('mission');
+        $fields->addRule(['mail' => "mailValidation"]);
+        $fields->addValues($this->input->post());
+        $fields->addCustomeRule(
+            'mobileno',
             new class implements ValidationRule {
                 public function validate($data)
                 {
                     return preg_match('/^[6789]\d{9}$/', $data);
                 }
+                // public function format($data)
+                // {
+                //     return "+91 " . $data;
+                // }
                 public function format($data)
                 {
-                    return "+91 " . $data;
+                    return $data;
                 }
             }
         );
-        // $data["pageMsg"] = "valid";
+        if (!$fdv->validate($fields)) {
+            $data["pageMsg"] = "invalid";
+        } else {
+            $data['data'] = $fields->getData();
+        }
         $this->loadView('settings', $data);
         $this->loadLayout("adminFooter.html");
     }
