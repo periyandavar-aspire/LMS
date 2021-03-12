@@ -70,7 +70,7 @@ class Fields implements Iterator
     /**
      * return fields data values as association array
      */
-    public function getData()
+    public function getData(): array
     {
         $fieldsData=[];
         foreach ($this->fields as $key => $value) {
@@ -98,7 +98,7 @@ class Fields implements Iterator
      * @param string $key field name
      * @param string $value filed value
      */
-    public function setData($key, $value)
+    public function setData(string $key, string $value)
     {
         if (isset($this->fields[$key])) {
             $this->fields[$key]['data'] = $value;
@@ -110,19 +110,19 @@ class Fields implements Iterator
         reset($this->fields);
     }
 
-    public function valid()
+    public function valid(): bool
     {
         $flag = key($this->fields);
         $flag = ($flag !== NULL);
         return $flag;
     }
 
-    public function key()
+    public function key(): string
     {
         return key($this->fields);
     }
 
-    public function current()
+    public function current(): array
     {
         return current($this->fields);
     }

@@ -6,7 +6,7 @@ class FormDataValidation
      * @param string $data data to be validate
      * @param ValidationRule $vr ValidationRule Object defining custom validation and format
      */
-    public function customValidation($data, ValidationRule $vr)
+    public function customValidation(string $data, ValidationRule $vr): bool
     {
         if ($vr->validate($data)) {
             return $vr->format($data);
@@ -18,7 +18,7 @@ class FormDataValidation
     /**
      * performs mobile number validation
      */
-    public function mobileNumberValidation($data)
+    public function mobileNumberValidation(string $data): bool
     {
         return preg_match('/^[6789]\d{9}$/', $data);
     }
@@ -26,7 +26,7 @@ class FormDataValidation
     /**
      * performs mail validation
      */
-    public function mailValidation($data)
+    public function mailValidation(string $data): bool
     {
         return preg_match('/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/', $data);
     }
@@ -35,7 +35,7 @@ class FormDataValidation
      * validate all the passed $fields and returns the validation result
      * @param Fields $fields Fields object to be validate
      */
-    public function validate(Fields $fields)
+    public function validate(Fields $fields): bool
     {
         foreach ($fields as $field => $value) {
             $fieldName = $field;

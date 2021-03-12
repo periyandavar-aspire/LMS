@@ -1,6 +1,6 @@
 <?php
 interface ValidationRule
 {
-    public function validate($data);
-    public function format($data);
+    public function validate(?string $data): ?bool;
+    public function format(?string $data): ?string;
 }

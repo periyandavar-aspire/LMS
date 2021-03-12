@@ -25,7 +25,7 @@ trait FileUploader
         $this->maxFileSize = $size;
     }
 
-    public function checkExtension($filename)
+    public function checkExtension(string $filename): bool
     {
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         if ($this->allowedFiles == "*") {
@@ -38,7 +38,7 @@ trait FileUploader
         return false;
     }
 
-    public function validateSize($size)
+    public function validateSize(int $size): bool
     {
         if ($this->maxFileSize < $size) {
             return false;
@@ -52,7 +52,7 @@ trait FileUploader
     //     return file_exists($file);
     // }
 
-    public function validateFile($file)
+    public function validateFile(array $file): bool
     {
         if ($this->checkExtension($file['name']) && $this->validateSize($file['size'])) {
             return true;
@@ -60,7 +60,7 @@ trait FileUploader
         return false;
     }
 
-    public function uploadFile($file, $destination, $overwrite = false) 
+    public function uploadFile(array $file, string $destination, bool $overwrite = false): bool 
     {
         if ($this->validateFile($file)) {
             if (!$overwrite) {

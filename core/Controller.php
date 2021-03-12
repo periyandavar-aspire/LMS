@@ -30,7 +30,7 @@ class Controller
      * @param string $file filename without extensions
      * only files with .php extensions are allowed and those files should store on View Folder
      */
-    public function loadView($file, $data = null)
+    public function loadView(string $file, ?array $data = null)
     {
         global $config;
         $path = $config['views'] . '' . $file . ".php";
@@ -52,7 +52,7 @@ class Controller
      * @param bool  $permanent optional default:false indicates whether the redirect is permanent or not
      * 
      */
-    public function redirect($url, $permanent = false)
+    public function redirect(string $url, bool $permanent = false)
     {
         if (headers_sent() === false) {
             header('Location: ../' . $url, true, ($permanent === true) ? 301 : 302);
@@ -73,7 +73,7 @@ class Controller
      * @param string $file html filename with extension
      * @access public
      */
-    public function loadLayout($file)
+    public function loadLayout(string $file)
     {
         global $config;
         $path = $config['layouts'] . '/' . $file;
