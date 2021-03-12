@@ -28,7 +28,7 @@ class InputData
         $this->filesData = $_FILES;
     }
 
-    public function get($key = null, $default = null)
+    public function get(?string $key = null, ?string $default = null)
     {
         $value = $this->checkKey($this->getData, $key, $default);
         if(is_array($value)) {
@@ -37,7 +37,7 @@ class InputData
         return htmlspecialchars($value);
     }
 
-    public function post($key = null, $default = null)
+    public function post(?string $key = null, ?string $default = null)
     {
         $value = $this->checkKey($this->postData, $key, $default);
         if(is_array($value)) {
@@ -46,17 +46,17 @@ class InputData
         return htmlspecialchars($value);
     }
 
-    public function session($key = null, $default = null)
+    public function session(?string $key, ?string $default = null): string
     {
-        return $this->checkKey($this->sessionData, $key, $default);
+        return base64_decode($this->checkKey($this->sessionData, $key, $default));
     }
 
-    public function files($key = null, $default = null)
+    public function files(?string $key = null, ?string $default = null)
     {
         return $this->checkKey($this->filesData, $key, $default);
     }
 
-    private function checkKey($data, $key = null, $default = null)
+    private function checkKey($data, ?string $key = null, ?string $default = null)
     {
         if ($key) {
             if (isset($data[$key])) {

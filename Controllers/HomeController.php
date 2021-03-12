@@ -8,5 +8,6 @@ class HomeController extends Controller
     public function index()
     {
         $this->loadView("index");
+        setSessionData("user","user");
     }
 }

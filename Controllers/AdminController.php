@@ -1,7 +1,7 @@
 <?php
-class AdminController extends Controller
+class AdminController extends UserController
 {
-    public function __construct($model = null)
+    public function __construct(?Model $model = null)
     {
         parent::__construct($model);
     }
@@ -9,6 +9,7 @@ class AdminController extends Controller
     public function index()
     {
         $this->loadView("admin");
+        setSessionData("user","admin");
     }
 
     public function home()
@@ -56,7 +57,7 @@ class AdminController extends Controller
         $fields->addCustomeRule(
             'mobileno',
             new class implements ValidationRule {
-                public function validate($data)
+                public function validate(?string $data): ?bool
                 {
                     return preg_match('/^[6789]\d{9}$/', $data);
                 }
@@ -64,7 +65,7 @@ class AdminController extends Controller
                 // {
                 //     return "+91 " . $data;
                 // }
-                public function format($data)
+                public function format(?string $data): ?string
                 {
                     return $data;
                 }

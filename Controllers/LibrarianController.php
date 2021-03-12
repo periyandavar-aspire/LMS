@@ -1,5 +1,5 @@
 <?php
-class LibrarianController extends Controller
+class LibrarianController extends UserController
 {
     public function __construct($model = null)
     {
@@ -8,9 +8,22 @@ class LibrarianController extends Controller
     public function index()
     {
         $this->loadView("librarian");
+        setSessionData("user","librarian");
     }
+    
     public function home()
     {
+        $this->loadLayout("adminHeader.html");
+        echo "librarian";
         $this->loadView('home');
+        $this->loadLayout("adminFooter.html");
+    }
+
+    public function profile()
+    {
+        $this->loadLayout("adminHeader.html");
+        echo "librarian";
+        $this->loadView('adminProfile');
+        $this->loadLayout("adminFooter.html");
     }
 }

@@ -2,6 +2,7 @@
 define("VALID_REQ",true);
 session_start();
 require_once 'config/config.php';
+require_once 'config/routeConfig.php';
 require_once 'core/autoload.php';
 require_once 'core/core.php';
 
@@ -10,12 +11,26 @@ $req = explode('/', ltrim($path));
 $ctrl = $req[1];
 $method = $req[2] ?? 'index';
 
+if (isset($route[$ctrl . "/*"])) {
+    $rules = $route[$ctrl . "/*"];
+    if ($rules($method) != true) {
+        exit();
+    }
+}
+
+if (isset($route[$ctrl . '/' . $method])) {
+    $rules = $route[$ctrl . '/' . $method];
+    if ($rules() != true) {
+        exit();
+    }
+}
+
 if ($method === "") {
     header('Location: ' . "../" . $ctrl . "/index");
     exit();
 }
 
-if ($method===null) {
+if ($method == null) {
     header('Location: ' . $ctrl . "/index");
     exit();
 }
@@ -23,7 +38,6 @@ if ($method===null) {
 $ctrlPath = $config['controllers'] . $ctrl . 'Controller.php';
 
 if (file_exists($ctrlPath)) {
-    require_once $config['controllers'] . $ctrl . 'Controller.php';
     $controllerName = ucfirst($ctrl) . "Controller";
     $controllerObj = new $controllerName();
     if (method_exists($controllerName, $method)) {
@@ -36,3 +50,4 @@ if (file_exists($ctrlPath)) {
     header('HTTP/1.1 404 Not Found');
     die('404 - The file - ' . $ctrlPath . ' - not found');
 }
+
