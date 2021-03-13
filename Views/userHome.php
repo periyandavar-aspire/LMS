@@ -1,62 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-	    <title>Library</title>
-	    <meta charset="utf-8">
-	    <meta name="author" content="periyandavar">
-	    <meta name="discription" content="library Mangement system">
-	    <meta name="keywords" content="Library, LMS">
-	    <meta name="viewport" content="width=device-width,initial-scale=1.0">
- 	    <link rel="icon" type="image/png" href="img/favicon.png"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/form.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/core.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/user.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/font-awesome-4.7.0/css/font-awesome.min.css">
-    </head>
-    <body> 
-    	<header>
-            <img src="<?php echo baseURL()?>/static/img/lms-logo.png">
-		    <a href="javascript:dropDownMenuClick('user-drop-down');" class="shortMenu">
-                <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
-            <div class="drop-down" id="user-drop-down">
-                <ul>
-                    <li onclick="openModal('sign-up-modal');dropDownMenuClick('user-drop-down');">Profile</li>
-                    <li onclick="openModal('log-in-modal');dropDownMenuClick('user-drop-down');">Logout</li>
-                </ul>
-            </div>
-            <a href="javascript:dropDownMenuClick('nav-drop-down');" class="mobNav" >
-                <i class="fa fa-bars" aria-hidden="true"></i>
-            </a>
-            <div class="drop-down" id="nav-drop-down">
-                <ul>
-                    <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                    <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
-                    <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
-                </ul>
-            </div>
-            <a style="margin-right: 0;" id="searchButton" href="javascript:dropDownMenuClick('searchBar');">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </a>
-            <div class="searchBar" id="searchBar">
-                <input type="text"  name="search" placeholder="Search...">
-                <button>
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                 </button>
-            </div>    
-	    </header>
-        <nav>
-            <ul>
-                <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
-                <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
-                <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
-            </ul>
-        </nav>
         <article class="main">
 		    <section class="card">
-                <hr>
+                <hr>Home
                 <h1>Mission</h1> 
                 <hr>
                 <p> The University Libraries strengthen and enhance the teaching, research and service 
@@ -214,10 +158,3 @@
                 <input type="checkbox"><label>three</label>
             </section>
         </article>
-        <footer>
-    		LMS &#169; 2021
-    	</footer>
-        <script src="<?php echo baseURL()?>/static/js/core.js"></script>
-        <script src="<?php echo baseURL()?>/static/js/form.js"></script>
-    </body>
-</html>

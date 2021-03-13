@@ -251,22 +251,25 @@ article aside .side-bar-right:hover{
     padding: 12px;
     z-index: 1;
     box-shadow: -3px 12px 15px 6px black;
-    width: 55%;
+    width: 42%;
     /* height: 124px; */
-    padding: 12px;
+    padding: 30px;
+    text-align: center;
     position: relative;
     overflow: auto;
     display: block;
-    margin-top: 4%;
+    margin-top: 8%;
     max-height: 90%;
     margin-left: 24%;
-    /* bottom: 12%; */
+    margin-bottom: 8%;
 }
 .close-modal{
-    cursor: pointer;
-    right: 16px;
+    font-size: 32px;
     position: absolute;
-    color: aliceblue;
+    cursor: pointer;
+    color: orangered;
+    margin-top: -25px;
+    margin-left: 41%;
 }
 .modal-shadow{
     position: fixed;
@@ -277,10 +280,11 @@ article aside .side-bar-right:hover{
     z-index: 1;
     left: 0;
     display: none;
+    overflow: auto;
 }
 .modal h1{
-    background-color: #000000c2;
-    color: white;
+    /* background-color: #000000c2;
+    color: white; */
     margin-block-start: 2px;
     margin-block-end: 2px;
     padding: 5px;
@@ -334,14 +338,6 @@ footer{
 }
 .drop-down-container{
     display: none;
-}
-
-.close-modal{
-	font-size: 39px;
-	position: absolute;
-	cursor: pointer;
-	margin-left: 23%;
-	margin-top: -15px;
 }
 
 .toast {
@@ -423,8 +419,8 @@ a{
         letter-spacing: 3px;
     }
     .modal{
-        margin-left:9%;
-        width: 75%;
+        margin-left:5%;
+        width: 70%;
     }
     .toast{
         width: 173px;

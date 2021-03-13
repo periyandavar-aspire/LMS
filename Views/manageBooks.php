@@ -32,23 +32,23 @@
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>PHP And MySql programming</td>
+                        <td>PHP And MySql programming <span class="fa fa-star" id="b#1"></span></td>
                         <td>222333</td>
                         <td>2017-07-15 16:29:26</td>
                         <td><span style="color:red">Not Return Yet</span></td>
                         <td></td>
                     </tr> 
                     <tr>
-                        <td>1</td>
-                        <td>PHP And MySql programming</td>
+                        <td>2</td>
+                        <td>PHP And MySql programming <span class="fa fa-star" id="b#2"></span></td> 
                         <td>222333</td>
                         <td>2017-07-15 16:29:26</td>
                         <td><span style="color:red">Not Return Yet</span></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td>PHP And MySql programming</td>
+                        <td>3</td>
+                        <td>PHP And MySql programming <span class="fa fa-star" id="b#3"></span></td> 
                         <td>222333</td>
                         <td>2017-07-15 16:29:26</td>
                         <td><span style="color:red">Not Return Yet</span></td>
@@ -76,3 +76,4 @@
 <script>
     document.getElementById('books').className += " active";
 </script>
+<script src="<?php echo baseurl();?>/static/js/bookstatus.js"></script>

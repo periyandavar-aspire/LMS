@@ -5,32 +5,23 @@ class UserController extends Controller
     {
         parent::__construct($model);
     }
-    public function index()
+    
+    public static function home()
     {
-        $this->loadView("index");
-    }
-    public function home()
-    {
-        echo "user home";
-        $this->loadView("user");
+        $model = func_get_args()[0] ?? null;
+        $obj = static::getMyInstance($model);
+        $obj->loadLayout("userHeader.html");
+        $obj->loadView("userHome");
+        $obj->loadLayout("userFooter.html");
     }
 
-    public function profile()
+    public static function profile()
     {
         echo "user profile";
-        $this->loadView("user");
+        $obj = static::getMyInstance();
+        $obj->loadLayout("userHeader.html");
+        $obj->loadView("userProfile");
+        $obj->loadLayout("userFooter.html");
     }
 
-
-    public function executeMethod($method)
-    {
-        if($method == "") {
-            $method = "index";
-        }
-        if (method_exists($this, $method)) {
-            static::$method(); 
-        } else {
-            echo "method not exists $method";
-        }
-    }
 }

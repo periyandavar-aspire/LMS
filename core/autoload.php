@@ -18,3 +18,13 @@ spl_autoload_register(function ($className) {
         require_once $file;
     }
 });
+
+/**
+ * This will loads the models form models directory on need
+ */
+spl_autoload_register(function ($className) {
+    $file = 'Models/' . $className . ".php";
+    if (file_exists($file)) {
+        require_once $file;
+    }
+});
