@@ -1,18 +1,17 @@
 <?php
 
 
-$route["user/*"] = function (): ?bool {
+$route["user/*"] = function (): bool {
     $method = func_get_arg(0);
     if ($method == "index") {
         return true;
     } else {
-        $obj = CtrlFromSession('user');
-        if ($obj == null) {
-            (new UserController())->index();
+        $cname = staticCtrlFromSession('user');
+        if ($cname == null) {
+            (new HomeController())->index();
         } else {
-            $obj->executeMethod($method);
+            $cname::executeMethod($method);
         }
-        return null;
     }
     return false;
 };

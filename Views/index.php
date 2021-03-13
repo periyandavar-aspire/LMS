@@ -21,8 +21,8 @@
             </a>
             <div class="drop-down" id="user-drop-down">
                 <ul>
-                    <li onclick="openModal('sign-up-modal');dropDownMenuClick('user-drop-down');">Sign up</li>
-                    <li onclick="openModal('log-in-modal');dropDownMenuClick('user-drop-down');">Login</li>
+                    <li id="signup">Sign up</li>
+                    <li id="login">Login</li>
                 </ul>
             </div>
             <a style="margin-right: 0;" id="searchButton" href="javascript:dropDownMenuClick('searchBar');">
@@ -121,7 +121,7 @@
             <div class="modal">
                 <span class="close-modal" onclick="closeModal('sign-up-modal');">✖</span>
                 <h1>User Signup</h1>
-                <hr>
+                <hr><br>
                 <form action="#" onsubmit="event.preventDefault(); registrationFormValidator(event);" method="POST">
                     <div class="form-input-div">
                         <label>Enter Full Name</label>
@@ -157,7 +157,7 @@
                     </div>
                     <div class="form-input-div">
                         <label>Verification code : </label>
-                        <input type="text" id="vercode" name="vercode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img src="captcha.php">
+                        <input type="text" id="vercode" name="vercode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="signImg">
                     </div>                                    
                     <div class="form-buttons">
                         <button type="submit" class="button-control positive">Signup</button>
@@ -170,7 +170,7 @@
             <div class="modal">
                 <span class="close-modal" onclick="closeModal('log-in-modal');">✖</span>
                 <h1>User Login</h1>
-                <hr>
+                <hr><br>
                 <form>
                     <div class="form-input-div">
                         <label>Enter Email ID</label>
@@ -185,7 +185,7 @@
                     </div>
                     <div class="form-input-div">
                         <label>Verification code : </label>
-                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img src="captcha.php">
+                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="logImg" src="">
                     </div> 
                     <div class="form-buttons">
                         <button type="button" class="button-control positive">Login</button>
@@ -201,4 +201,15 @@
         <script src="<?php echo baseURL()?>/static/js/form.js"></script>
         <script>slideshow();</script>
     </body>
+    <script>
+        document.getElementById("login").onclick = function () {
+            openModal('log-in-modal', 'logImg', '<?php echo baseurl() . "/home/captcha"; ?>');
+            dropDownMenuClick('user-drop-down');
+        };
+
+        document.getElementById("signup").onclick = function () {
+            openModal('sign-up-modal', 'signImg','<?php echo baseurl() . "/home/captcha"; ?>' );
+            dropDownMenuClick('user-drop-down');
+        }
+    </script>
 </html>

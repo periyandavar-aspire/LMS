@@ -13,14 +13,17 @@
 .right-panel-login{
     width: 46%;
     padding: 16px;
-    background-color: #e8f7f763;
     margin: -2px;
     height: 100%;
     position: relative;
     left: 24%;
     top: 20%;
 }
-
+body{
+    background: #0575E6;
+    background: -webkit-linear-gradient(to left, #021B79, #0575E6);
+    background: linear-gradient(to left, #021B79, #0575E6);
+}
 article{
     height: 100%;
     display: block;
@@ -50,9 +53,9 @@ article{
     border: #ddd groove 2px;
     margin-top: 14%;
     margin-bottom: 14%;
-    background: #667db6;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #667db6, #0082c8, #0082c8, #667db6);  
-    background: linear-gradient(to bottom, #667db6, #0082c8, #0082c8, #667db6); 
+    background: #636363;
+    background: -webkit-linear-gradient(to left, #a2ab58, #636363);
+    background: linear-gradient(to left, #a2ab58, #636363);
     border-radius: 16px;
     box-shadow: 8px 9px 10px 5px #000000ba;
 }
@@ -69,6 +72,13 @@ article{
     width: 61px;
     height: 45px;
 }
+.msg {
+    text-align: center;
+    font-size: 18px;
+    color: #e90909;
+    font-weight: 600;
+}
+
 /* Media Queries */
 @media all and (max-width:800px){
     .left-panel-login img{

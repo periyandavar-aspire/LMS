@@ -5,25 +5,25 @@ class LibrarianController extends UserController
     {
         parent::__construct($model);
     }
-    public function index()
-    {
-        $this->loadView("librarian");
-        setSessionData("user","librarian");
-    }
+    // public function index()
+    // {
+    //     $this->loadView("librarian");
+    //     setSessionData("user","librarian");
+    // }
     
-    public function home()
+    public static function home()
     {
-        $this->loadLayout("adminHeader.html");
-        echo "librarian";
-        $this->loadView('home');
-        $this->loadLayout("adminFooter.html");
+        $obj = static::getMyInstance();
+        $obj->loadLayout("librarianHeader.html");
+        $obj->loadView('librarianHome');
+        $obj->loadLayout("librarianFooter.html");
     }
 
-    public function profile()
+    public static function profile()
     {
-        $this->loadLayout("adminHeader.html");
-        echo "librarian";
-        $this->loadView('adminProfile');
-        $this->loadLayout("adminFooter.html");
+        $obj = static::getMyInstance();
+        $obj->loadLayout("librarianHeader.html");
+        $obj->loadView('librarianProfile');
+        $obj->loadLayout("librarianFooter.html");
     }
 }

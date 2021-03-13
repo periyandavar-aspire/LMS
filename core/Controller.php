@@ -11,7 +11,7 @@ class Controller
      * using this variable we can acces the model class functions within this controller 
      * Ex : $this->model->getData();
      */
-    private $model;
+    protected $model;
     /**
      * @var InputData $input allows us to access the get, post, session, files method
      */
@@ -30,7 +30,7 @@ class Controller
      * @param string $file filename without extensions
      * only files with .php extensions are allowed and those files should store on View Folder
      */
-    public function loadView(string $file, ?array $data = null)
+    protected function loadView(string $file, ?array $data = null)
     {
         global $config;
         $path = $config['views'] . '' . $file . ".php";
@@ -52,7 +52,7 @@ class Controller
      * @param bool  $permanent optional default:false indicates whether the redirect is permanent or not
      * 
      */
-    public function redirect(string $url, bool $permanent = false)
+    protected function redirect(string $url, bool $permanent = false)
     {
         if (headers_sent() === false) {
             header('Location: ../' . $url, true, ($permanent === true) ? 301 : 302);
@@ -73,7 +73,7 @@ class Controller
      * @param string $file html filename with extension
      * @access public
      */
-    public function loadLayout(string $file)
+    protected function loadLayout(string $file)
     {
         global $config;
         $path = $config['layouts'] . '/' . $file;
@@ -111,5 +111,17 @@ class Controller
     //         echo "$path script is missing";
     // }
     
+    protected static function getMyInstance(?Model $model = null)
+    {
+        return new static();
+    }
 
+    public static function executeMethod($method)
+    {
+        if (method_exists(new static(), $method)) {
+            static::$method(); 
+        } else {
+            echo "method not exists $method";
+        }
+    }
 }

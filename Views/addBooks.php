@@ -42,4 +42,5 @@
 </section>
 <script>
     document.getElementById('books').className+=" active";
+    <script src="../static/js/bookstatus.js"></script>
 </script>

@@ -7,6 +7,7 @@
  	    <link rel="icon" type="image/png" href="<?php echo baseURL()?>/static/img/favicon.png"/>
          <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/form.css">
         <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/login.css">
+        
     </head>
     <body>
         <article>
@@ -18,7 +19,7 @@
                     <img class="logo-banar"  src="<?php echo baseURL()?>/static/img/lms-logo.jpg">
                     <h1>Login Page</h1>
                     <hr>
-                <form>
+                <form action="adminLogin" method="post">
                     <div class="form-input-div">
                         <label>Enter Email ID</label>
                         <input class="form-control" type="email" name="email" id="mailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
@@ -32,10 +33,13 @@
                     </div>
                     <div class="form-input-div">
                         <label>Verification code : </label>
-                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img src="captcha.php">
+                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img src="<?php echo "/home/captcha"; ?>">
                     </div> 
                     <div class="form-buttons">
-                        <button type="button" class="button-control positive">Login</button>
+                        <button type="submit" class="button-control positive">Login</button>
+                    </div>
+                    <div class="msg">
+                        <?php if(isset($msg)) echo $msg; ?>
                     </div>
                 </form>
                 </div>
