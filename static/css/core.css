@@ -184,7 +184,10 @@ body{
     background-color: #675e5ede;
 }
 .section-card{
-    background-color: darkslategrey;
+    /* background-color: darkslategrey; */
+    background: #667db6;
+    background: -webkit-linear-gradient(to bottom, #667db6, #0082c8, #0082c8, #667db6);
+    background: linear-gradient(to bottom, #667db6, #0082c8, #0082c8, #667db6);
     border-radius: 12px;
     width: 75%;
     margin: 2px;
@@ -206,7 +209,12 @@ body{
     text-indent: 25px;
     line-height: 20px;
     word-spacing: 3px;
-    color:#fffffff2
+    color: #000000db;
+    font-weight: 500;
+}
+
+*::selection{
+    background-color: #be42e1b8;
 }
 
 article .section-card{

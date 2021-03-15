@@ -44,6 +44,7 @@ nav ul li:hover{
 .main{
     margin-left: 19%;
     padding-top: 63px;
+    min-height: calc(100vh - 108px);
 }
 /* Table Design */
 .tab_design {

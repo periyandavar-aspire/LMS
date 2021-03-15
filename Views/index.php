@@ -9,66 +9,72 @@
 	    <meta name="viewport" content="width=device-width,initial-scale=1.0">
  	    <link rel="icon" type="image/png" href="<?php echo baseURL()?>/static/img/favicon.png"/>
         <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/form.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/core.css">
+        <!-- <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/core.css"> -->
+        <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/cores.css">
         <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/icons.css">
         <link rel="stylesheet" type="text/css" href="<?php echo baseURL()?>/static/css/font-awesome-4.7.0/css/font-awesome.min.css">
     </head>
     <body> 
-        <!-- header -->
-	    <header>
-            <img src="<?php echo baseURL()?>/static/img/lms-logo.jpg">
-            <a href="javascript:dropDownMenuClick('user-drop-down');"><i class="fa fa-user" aria-hidden="true"></i>
+        <!-- Navigation -->
+        <nav id="fixed-top" class="navbar navbar-expand-md navbar-dark navbar-custom fixed-top">
+        <!-- Text Logo - Use this if you don't have a graphic logo -->
+        <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Aria</a> -->
+
+        <!-- Image Logo -->
+        <a class="navbar-brand logo-image" href="index.html"><img src="<?php echo baseURL()?>/static/img/lms-logo.jpg"></a>
+       
+
+        <div class="expand-navbar" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#header">HOME <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#intro">INTRO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">SERVICES</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">CONTACT</a>
+                </li>
+            </ul>
+            <span class="nav-icons">
+                <span>
+                    <a class="nav-link" href="#">
+                        <span class="hexagon"></span>
+                        <i class="fab fa-facebook-f fa-stack-1x"></i>
+                    </a>
+                </span>
+                <span class="fa-stack">
+                <a href="javascript:dropDownMenuClick('user-drop-down');"><i class="fa fa-user" aria-hidden="true"></i>
             </a>
             <div class="drop-down" id="user-drop-down">
                 <ul>
-                    <li id="signup">Sign up</li>
-                    <li id="login">Login</li>
+                    <li> <a href="<?php echo baseURL()?>/home/registration">Sign up</a></li>
+                    <li> <a href="<?php echo baseURL()?>/home/login">Login</a></li>
                 </ul>
             </div>
-            <a style="margin-right: 0;" id="searchButton" href="javascript:dropDownMenuClick('searchBar');">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </a>
-            <div class="searchBar" id="searchBar">
-                <input type="text"  name="search" placeholder="Search...">
-                <button>
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                 </button>
-            </div>
-	    </header>
-        <div class="slider-wrapper">
-            <article class="slide">
-                <img src="<?php echo baseURL()?>/static/img/cover/1.jpg">
-            </article>
-            <article class="slide">
-                <img src="<?php echo baseURL()?>/static/img/cover/2.jpg">
-            </article>
-            <article class="slide">
-                <img src="<?php echo baseURL()?>/static/img/cover/3.jpg">
-            </article>
-            <article class="slide">
-                <img src="<?php echo baseURL()?>/static/img/cover/4.jpg">
-            </article>
-            <article class="slide">
-                <img src="<?php echo baseURL()?>/static/img/cover/5.jpg">
-            </article>
-            <article class="slide">
-                <img src="<?php echo baseURL()?>/static/img/cover/6.jpg">
-            </article>
-            <!-- <div class="control-arrows">
-                <img src="user/img/symbols/prev.png">
-            </div>
-            <div class="control-arrows next">
-                <img src="user/img/symbols/next.png">
-            </div> -->
-            <div class="dots">
-                <div class="dot" onclick="changeSlide(0);"></div>
-                <div class="dot" onclick="changeSlide(1);"></div>
-                <div class="dot" onclick="changeSlide(2);"></div>
-                <div class="dot" onclick="changeSlide(3);"></div>
-                <div class="dot" onclick="changeSlide(4);"></div>
-                <div class="dot" onclick="changeSlide(5);"></div>
-            </div>
+                </span>
+            </span>
         </div>
+    </nav>
+    <header id="header" class="header">
+        <div class="header-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-container">
+                            <h1>MORE..!<span><span class="morph">READ </span><span class="morph">LEARN </span></h1>
+                            <p class="p-heading p-large">The University Libraries strengthen and enhance the teaching, research and service of the University at Albany. The Libraries promote intellectual growth and creativity by developing collections, facilitating access to information resources, teaching the effective use of information resources and critical evaluation skills and offering research assistance.</p>
+                        </div>
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of header-content -->
+    </header> <!-- end of header -->
+	    
     
         <!-- article -->
 	    <article class="main">
@@ -117,99 +123,36 @@
             </aside>
         </article>
         <br><br>
-        <div class="modal-shadow" id="sign-up-modal">
-            <div class="modal">
-                <span class="close-modal" onclick="closeModal('sign-up-modal');">✖</span>
-                <h1>User Signup</h1>
-                <hr><br>
-                <form action="#" onsubmit="event.preventDefault(); registrationFormValidator(event);" method="POST">
-                    <div class="form-input-div">
-                        <label>Enter Full Name</label>
-                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="fullname" name="fullanme" autocomplete="off" placeholder="Full Name..." required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Select Your Gender</label>
-                        <select class="form-control select-input" name="gender" id="gender" placeholder="Full Name..." required="">
-                            <option value="" style="display: none;">Select Gender</option>
-                            <option value="m">Male</option>
-                            <option value="f">Female</option>
-                        </select>
-                    </div>
-                    <div class="form-input-div">
-                        <label>Enter Mobile Number </label>
-                        <input class="form-control" pattern="^[789]\d{9}$" type="text" id="mobile" name="mobileno" maxlength="10" placeholder="Mobile Number..." autocomplete="off" required="">
-                    </div>                                                    
-                    <div class="form-input-div">
-                        <label>Enter Email</label>
-                        <input class="form-control" type="email" name="email" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
-                        <span id="user-availability-status" style="font-size:12px;"></span> 
-                    </div>                    
-                    <div class="form-input-div">
-                        <label>Enter Password</label>
-                        <input class="form-control" onkeyup="passStrength()" type="password" id="pass1" name="password" placeholder="Create Password..." autocomplete="off" required="">
-                        <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
-		                <span id="pass1msg" style="display:none"></span>
-                    </div>    
-                    <div class="form-input-div">
-                        <label>Confirm Password </label>
-                        <input class="form-control"  onkeyup="confirmPassword()" type="password" id="pass2" name="confirmpassword" placeholder="Confirm Password..." autocomplete="off" required="">
-                        <span id="pass2msg" style="color:red"></span>
-                    </div>
-                    <div class="form-input-div">
-                        <label>Verification code : </label>
-                        <input type="text" id="vercode" name="vercode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="signImg">
-                    </div>                                    
-                    <div class="form-buttons">
-                        <button type="submit" class="button-control positive">Signup</button>
-                        <button type="button" onclick="closeModal('sign-up-modal');" class="button-control negative">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal-shadow" id="log-in-modal">
-            <div class="modal">
-                <span class="close-modal" onclick="closeModal('log-in-modal');">✖</span>
-                <h1>User Login</h1>
-                <hr><br>
-                <form>
-                    <div class="form-input-div">
-                        <label>Enter Email ID</label>
-                        <input class="form-control" type="email" name="email" id="mailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
-                        <span id="user-availability-status" style="font-size:12px;"></span> 
-                    </div>
-                    <div class="form-input-div">
-                        <label>Enter Password</label>
-                        <input class="form-control" onkeyup="passStrength()" type="password" id="pass" name="password" placeholder="Enter Password..." autocomplete="off" required="">
-                        <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
-		                <span id="pass1msg" style="display:none"></span>
-                    </div>
-                    <div class="form-input-div">
-                        <label>Verification code : </label>
-                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="logImg" src="">
-                    </div> 
-                    <div class="form-buttons">
-                        <button type="button" class="button-control positive">Login</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        
 	    <!-- footer -->
 	    <footer>
     		LMS &#169; 2021
     	</footer>
         <script src="<?php echo baseURL()?>/static/js/core.js"></script>
         <script src="<?php echo baseURL()?>/static/js/form.js"></script>
-        <script>slideshow();</script>
-    </body>
+        <!-- <script>slideshow();</script> -->
+    </body>  
     <script>
-        document.getElementById("login").onclick = function () {
-            openModal('log-in-modal', 'logImg', '<?php echo baseurl() . "/home/captcha"; ?>');
-            dropDownMenuClick('user-drop-down');
-        };
-
-        document.getElementById("signup").onclick = function () {
-            openModal('sign-up-modal', 'signImg','<?php echo baseurl() . "/home/captcha"; ?>' );
-            dropDownMenuClick('user-drop-down');
+        window.onscroll = function (event) {
+            if (window.pageYOffset > 20) {
+                addClass(document.getElementById("fixed-top"), "nav-bar-active");
+		} else {
+            removeClass(document.getElementById("fixed-top"), "nav-bar-active");
+		}
         }
-    </script>
+        function hasClass(elem, className) {
+    return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+function addClass(elem, className) {
+    if (!hasClass(elem, className)) {
+        elem.className += ' ' + className;
+    }
+}
+function removeClass(elem, className) {
+    if (hasClass(elem, className)) {
+        elem.className = elem.className.replace(" "+className," ");
+    }
+}
+
+    </script>  
 </html>

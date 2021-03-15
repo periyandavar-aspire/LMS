@@ -25,24 +25,6 @@ class LoginController extends Controller
         $this->loadView("admin", $data);
     }
 
-    public function userLogin()
-    {
-        $user = $this->input->post('email');
-        $pass = $this->model->getUserPass($user);
-        $captcha = $this->input->post("verfcode");
-        if ($captcha != $this->input->session("captcha")) {
-            $data["msg"] = "Invalid captcha..!";
-            $this->loadView("index", $data);
-            return;
-        }
-        if ($pass == md5($this->input->post('password'))) {
-            setSessionData("user", "user");
-            setSessionData("id", $user);
-            $this->redirect("user/home");
-        }
-        $data["msg"] = "Login failed..!";
-        $this->loadView("index", $data);
-    }
 
     public function librarianLogin()
     {

@@ -1,5 +1,5 @@
 <?php
-class Model
+abstract class Model
 {
     public function __construct()
     {
@@ -11,4 +11,5 @@ class Model
         //close conection
     }
 
+    
 }

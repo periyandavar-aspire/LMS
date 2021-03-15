@@ -22,7 +22,7 @@
             <div class="drop-down" id="user-drop-down">
                 <ul>
                     <li onclick="openModal('sign-up-modal');dropDownMenuClick('user-drop-down');">Profile</li>
-                    <li onclick="openModal('log-in-modal');dropDownMenuClick('user-drop-down');">Logout</li>
+                    <li><a href="../user/logout">Logout</a></li>
                 </ul>
             </div>
             <a href="javascript:dropDownMenuClick('nav-drop-down');" class="mobNav" >
@@ -30,10 +30,10 @@
             </a>
             <div class="drop-down" id="nav-drop-down">
                 <ul>
-                    <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                    <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
-                    <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                    <li><a href="../user/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li><a href="../user/profile"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
+                    <li><a href="../issuedBooks/user"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
+                    <li><a href="../user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                 </ul>
             </div>
             <a style="margin-right: 0;" id="searchButton" href="javascript:dropDownMenuClick('searchBar');">
@@ -48,9 +48,9 @@
 	    </header>
         <nav>
             <ul>
-                <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                <li><a href="#"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
-                <li><a href="#"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
-                <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                <li id="home"><a href="../user/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li id="profile"><a href="../user/profile"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
+                <li id="Issuedbooks"><a href="../issuedBooks/user"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
+                <li><a href="../user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
             </ul>
         </nav>

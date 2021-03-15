@@ -17,11 +17,17 @@ class UserController extends Controller
 
     public static function profile()
     {
-        echo "user profile";
+        // echo "user profile";
         $obj = static::getMyInstance();
         $obj->loadLayout("userHeader.html");
         $obj->loadView("userProfile");
         $obj->loadLayout("userFooter.html");
+    }
+
+    public static function logout()
+    {
+        $obj = static::getMyInstance();
+        $obj->redirect("home/login");
     }
 
 }

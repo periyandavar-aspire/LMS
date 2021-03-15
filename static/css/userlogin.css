@@ -36,10 +36,8 @@ meter{
 }
 .button-control{
     display: inline-block;
-    /* width: 10%;
-    height: 36px; */
     padding: 6px 12px;
-    font-size: 14px;
+    font-size: 17px;
     line-height: 1.5;
     cursor: pointer;
     background-color: #29afd6;
@@ -51,7 +49,12 @@ meter{
 .modal .button-control{
     width: 17%;
 }
-
+.negative {
+    background-color: #d62323e8;
+}
+a{
+    text-decoration: none;
+}
 .form-control:focus,.form-control:focus-visible,.form-control:focus-within {
     border-color: #29afd6;
 }
@@ -62,6 +65,42 @@ meter{
 }
 .form-control :valid{
     border-color: #29afd6;
+}
+.card {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    margin-bottom: 5%;
+    border: 2px groove #ddd;
+    padding: 30px;
+    box-shadow: -2px 4px 15px black;
+    border-radius: 60px;
+    background-color: white;
+}
+.signup{
+    margin-top: 5%;
+}
+span{
+    text-align: center;
+    width: 100%;
+    font-size: 18px;    
+}
+body{
+    background: #033683;
+    background: -webkit-linear-gradient(to left, #033683, #1e90ff,#2b6ba9);
+    background: linear-gradient(to left, #033683, #1e90ff,#2b6ba9);
+}
+.msg{
+    text-align: center;
+    color: red;
+    font-size: 21px;
+}
+.form-buttons{
+    text-align: center;
+}
+.link{
+    color:blue;
 }
 @media(max-width:900px){
     .button-control{

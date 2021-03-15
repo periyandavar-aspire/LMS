@@ -1,7 +1,8 @@
 <section>
     <div class="div-card">
         <div class="div-card-header">
-            Categories
+            Categories&nbsp;&nbsp;
+            <a target="_blank" href="export" class="button-control">Export Data</a>
         </div>
         <div class="div-card-body"  style="overflow-x:auto;">
             <div>
@@ -76,4 +77,4 @@
 <script>
     document.getElementById('books').className += " active";
 </script>
-<script src="<?php echo baseurl();?>/static/js/bookstatus.js"></script>
+<!-- <script src="<?php echo baseurl();?>/static/js/bookstatus.js"></script> -->

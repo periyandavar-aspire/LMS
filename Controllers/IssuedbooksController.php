@@ -23,4 +23,11 @@ class IssuedbooksController extends Controller
         $this->loadView('manageIssuedbooks');
         $this->loadLayout("adminFooter.html");
     }
+
+    public function user()
+    {
+        $this->loadLayout("userHeader.html");
+        $this->loadView("IssuedBooks");
+        $this->loadLayout("userFooter.html");
+    }
 }
