@@ -26,4 +26,10 @@ class LibrarianController extends UserController
         $obj->loadView('librarianProfile');
         $obj->loadLayout("librarianFooter.html");
     }
+
+    public static function logout()
+    {
+        $obj = static::getMyInstance();
+        $obj->redirect("login/librarian");
+    }
 }

@@ -24,6 +24,28 @@ class BooksController extends Controller
         $this->loadLayout("adminFooter.html");
     }
 
+    public function export()
+    {
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=output.csv');
+        $output = fopen('output.csv', 'w');
+
+        fputcsv($output, array('Column 1', 'Column 2', 'Column 3'));
+
+        $list = array (
+            array('aaa', 'bbb', 'ccc', 'dddd'),
+            array('123', '456', '789'),
+            array('"aaa"', '"bbb"')
+        );
+        
+        
+        foreach ($list as $fields) {
+            fputcsv($output, $fields);
+        }
+        
+        fclose($output);
+    }
+
     public function bookstatus()
     {
         $lastUpdate = filemtime("log/unavailablebooks.log");
