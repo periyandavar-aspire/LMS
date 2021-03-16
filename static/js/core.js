@@ -1,3 +1,41 @@
+window.onscroll = function (event) {
+    if (window.pageYOffset > 20) {
+        addClass(document.getElementById("fixed-top"), "nav-bar-active");
+    } else {
+        removeClass(document.getElementById("fixed-top"), "nav-bar-active");
+    }
+    if  (window.pageYOffset > screen.height) {
+        document.getElementById("back-to-top").style.display = "inline";
+    } else {
+        document.getElementById("back-to-top").style.display = "none";
+    }
+}
+function hasClass(elem, className) {
+    return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+function addClass(elem, className) {
+    if (!hasClass(elem, className)) {
+        elem.className += ' ' + className;
+    }
+}
+function removeClass(elem, className) {
+    if (hasClass(elem, className)) {
+        elem.className = elem.className.replace(" "+className," ");
+    }
+}
+
+function menucontrol() {
+	if (document.getElementById('menu').style.display != "none") {
+		document.getElementById('menu').style.display='none';
+	} else {
+		document.getElementById('menu').style.display='block';
+	}
+}
+
+
+
+
+
 var slideIndex = 0;
 var dropDownBtns = document.getElementsByClassName('drop-down-btn');
 if (dropDownBtns != null) {

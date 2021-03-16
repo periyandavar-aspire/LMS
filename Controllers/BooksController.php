@@ -7,9 +7,9 @@ class BooksController extends Controller
     }
     public function index()
     {
-        $this->loadLayout("adminHeader.html");
-        $this->loadView('addBooks');
-        $this->loadLayout("adminFooter.html");
+        // $this->loadLayout("adminHeader.html");
+        $this->loadView('books');
+        // $this->loadLayout("adminFooter.html");
     }
     public function add()
     {
@@ -28,7 +28,7 @@ class BooksController extends Controller
     {
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename=output.csv');
-        $output = fopen('output.csv', 'w');
+        $output = fopen('php:outputoutput.csv', 'w');
 
         fputcsv($output, array('Column 1', 'Column 2', 'Column 3'));
 
