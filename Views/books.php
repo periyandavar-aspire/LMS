@@ -24,19 +24,14 @@
         
             <!-- Image Logo -->
             <a class="navbar-logo" href="home"><img src="<?php echo baseURL()?>/static/img/favicon.png">&nbsp;LMS</a>
-
-            <button class="navbar-toggler" type="button" onclick="menucontrol();">
-                <span class="navbar-toggler-awesome fas fa-bars"></span>
-                <span class="navbar-toggler-awesome fas fa-times"></span>
-            </button>
         
             <div class="expand-navbar" id="menu">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="home">HOME </a>
+                        <a class="nav-link" href="home">HOME </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="books">BOOKS</a>
+                        <a class="nav-link active" href="books">BOOKS</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#footer">ABOUT</a>
@@ -56,14 +51,14 @@
         </nav>
         <!-- Navigation ends -->
         <!-- header starts -->
-        <header>
+        <header class="books-header">
             <div class="header-content">
                 <div class="container">
                     <div class="row">
                         <div class="cols">
                             <div class="text-container">
                                 <h1>A PLACE TO <span class="morph"> </span></h1>
-                                <p class="heading-para">We store the energy that fuels the imagination. we open up windows to the world and inspire you to explore and achieve, and contribute to improving your quality of life.</p>
+                                <p class="heading-para">Find the Books of your Taste.. <br>Among the thounsand's collection.</p>
                                 <a class="btn-link" href="home/registration">JOIN NOW</a>
                             </div>
                         </div> 
@@ -75,36 +70,6 @@
 	    <!-- main content article start -->
         <article>
             <!-- section 1 -->
-            <section>
-                <div class="container">
-                    <div class="row">
-                        <div class="cols col-3">
-                            <div class="text-container">
-                                <h1>Our vision & Mission</h1>
-                                <p class="text-para">The University Libraries are engaged in learning and discovery as essential participants 
-                                in the educational community. We develop, organize, provide access to and preserve materials 
-                                to meet the needs of present and future generations of students and scholars. We explore and 
-                                implement innovative technologies and services to deliver information and scholarly resources 
-                                conveniently to users anytime/anyplace. We also provide well-equipped and functional physical 
-                                spaces where students can pursue independent learning and discovery outside the classroom. 
-                                The University Libraries support scholarship and research productivity and 
-                                foster their vitality.</p>
-                                <p class="text-para italics-text">"Our vission is to strengthen and enhance the learning and to promote the intellectual growth and 
-                                creativity by developing collections, facilitating access to information resources, 
-                                teaching the effective use of information resources and critical evaluation skills and 
-                                offering research assistance."</p>
-                                <div class="text-author">Admin</div>
-                            </div> 
-                        </div> 
-                        <div class="cols col-5">
-                            <div class="image-container">
-                                <img src="<?php echo baseURL()?>/static/img/cover/3.jpg">
-                            </div>
-                        </div> 
-                    </div> 
-                </div> 
-            </section> 
-            <!-- section 2 -->
             <section>
                 <div class="container">
                     <div class="row">
@@ -327,7 +292,7 @@
                     <!-- Books row end -->
                     <!-- show more button -->
                     <div class="btn-container">
-                        <a class="btn-link" href="books">SHOW MORE</a>
+                        <a class="btn-link" href="#">SHOW MORE</a>
                     </div>
                 </div> 
             </section>

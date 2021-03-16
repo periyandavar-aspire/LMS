@@ -124,4 +124,21 @@ class Controller
             echo "method not exists $method";
         }
     }
+
+    public function __call($name, $args)
+    {
+        echo "error the page is not found..!";
+    }
+
+    public static function __callStatic($name, $args)
+    {
+        echo "echo the page is not found";
+    }
+    /**
+     * making clone as deep copy instead of shallow by __clone magic method
+     */
+    public function __clone()
+    {
+        $this->model = clone $this->model;
+    }
 }
