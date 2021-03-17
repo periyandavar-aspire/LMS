@@ -139,7 +139,9 @@ body{
 #searchButton{
     display: none;
 }
-
+.expand-nav {
+    display: block;
+}
 .searchBar{
     /* display: inline-block; */
     /* float: right; */

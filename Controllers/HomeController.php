@@ -7,10 +7,29 @@ class HomeController extends Controller
     }
     public function index()
     {
+        $this->loadLayout("header.html");
         $this->loadView("index");
+        $this->loadLayout("footer.html");
         // setSessionData("user","user");
     }
 
+    public function home()
+    {
+        $this->index();
+    }
+
+    public function books()
+    {
+        $this->loadLayout("header.html");
+        $this->loadView("books");
+        $this->loadLayout("footer.html");
+    }
+    public function aboutus()
+    {
+        $this->loadLayout("header.html");
+        $this->loadView("aboutus");
+        $this->loadLayout("footer.html");
+    }
     public function captcha()
     {
         $captcha = rand(1000, 9999); 
@@ -47,11 +66,15 @@ class HomeController extends Controller
             }
             $data["msg"] = "Login failed..!";
         }
+        $this->loadLayout("header.html");
         $this->loadView("login", $data);
+        $this->loadLayout("footer.html");
     }
 
     public function registration()
     {
+        $this->loadLayout("header.html");
         $this->loadView("registration");
+        $this->loadLayout("footer.html");
     }
 }

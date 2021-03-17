@@ -24,3 +24,7 @@ $config['layouts'] = "static/layout/";
  * Default page index page
  */
 $config['default_page'] = "/home";
+/**
+ * set the name of the controller handles errors
+ */
+$config['error_ctrl'] = "errors";
