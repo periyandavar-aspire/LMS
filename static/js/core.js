@@ -20,15 +20,23 @@ function addClass(elem, className) {
 }
 function removeClass(elem, className) {
     if (hasClass(elem, className)) {
-        elem.className = elem.className.replace(" "+className," ");
-    }
+		if(elem.className == className) {
+			elem.className = "";
+		} else {
+        	elem.className = elem.className.replace(" "+className,"");
+		}
+	} 
 }
 
 function menucontrol() {
-	if (document.getElementById('menu').style.display != "none") {
-		document.getElementById('menu').style.display='none';
+	if (hasClass(document.getElementById('menu'), "closed-nav")) {
+		removeClass(document.getElementById("menu"), "closed-nav");
+		addClass(document.getElementById("open-menu"), "closed-nav");
+		removeClass(document.getElementById("close-menu"), "closed-nav");
 	} else {
-		document.getElementById('menu').style.display='block';
+		addClass(document.getElementById("menu"), "closed-nav");
+		removeClass(document.getElementById("open-menu"), "closed-nav");
+		addClass(document.getElementById("close-menu"), "closed-nav");
 	}
 }
 

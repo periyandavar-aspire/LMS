@@ -1,39 +1,63 @@
-var m_strUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-var m_strLowerCase = "abcdefghijklmnopqrstuvwxyz";
-var m_strNumber = "0123456789";
-var m_strCharacters = "!@#$%^&*?_~"
+const m_strUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const m_strLowerCase = "abcdefghijklmnopqrstuvwxyz";
+const m_strNumber = "0123456789";
+const m_strCharacters = "!@#$%^&*?_~";
+const regexMail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-function passStrength()
+function passStrength(password)
 {
 	document.querySelector("#pass1str").style.display="block";	
 	document.querySelector("#pass1msg").style.display="block";
-	runPassword(document.querySelector("#pass1").value);
+	runPassword(document.querySelector("#"+password).value);
 }
 
-const registrationFormValidator=function(event){
-    let regexAlpha=/^[A-Za-z]+$/;
-    let regexMail=/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
-    let regexPhone=/^[789]\d{9}$/;
+const loginFormValidator = function (event) {
+    if(!regexMail.test(document.getElementById("emailid").value)){
+        toast("Invalid Email..!","danger","Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+};
+
+const registrationFormValidator = function(event) {
+    const regexAlpha = /^[A-Za-z]+$/;
+    const regexPhone = /^[789]\d{9}$/;
+    let password = document.getElementById("password"); 
+    let confirmPassword = document.getElementById("confirmPassword"); 
+    console.log("dd");
     if(!regexAlpha.test(document.getElementById("fullname").value)){
         toast("Invalid Name..!","danger","Invalid Input");
+        event.preventDefault();
         return false;
-    }else if(!regexMail.test(document.getElementById("emailid").value)){
+    } else if (!new RegExp(/^[A-Za-z0-9_]*$/).test(document.getElementById("username").value)) {
+        document.getElementById('msg').innerHTML = "Invalid username..!";
+        event.preventDefault();
+        return false;
+    } else if (password.length < 6) {
+        document.getElementById('msg').innerHTML = "Password is too short.. It should be six character long..!";
+        event.preventDefault();
+    } else if(!regexMail.test(document.getElementById("emailid").value)){
         toast("Invalid Email..!","danger","Invalid Input");
+        event.preventDefault();
         return false;
     }else if(!regexPhone.test(document.getElementById("mobile").value)){
         toast("Invalid Mobile..!","danger","Invalid Input");
+        event.preventDefault();
         return false;
     }else if(document.getElementById("gender").value!='m' && document.getElementById("gender").value!='f'){
         toast("Please select your gender..!","danger","Invalid Input");
+        event.preventDefault();
         return false;
-    }else if(document.getElementById("pass1").value!=document.getElementById("pass2").value){
+    }else if(password != confirmPassword){
         toast("Please confirm your password..!","danger","Invalid Input");
+        event.preventDefault();
         return false;
-    }else if(checkPassword(document.getElementById("pass1").value)<=50){
+    }else if(checkPassword(password) <= 50){
         toast("Please select a strong Password..!","danger","Warning");
+        event.preventDefault();
         return false;
     }
-    // console.log
+    // console.log 
     return true;
     // if(!validation){
     // event.preventDefault();
@@ -187,12 +211,12 @@ function countContain(strPassword, strCheck)
     } 
     return nCount; 
 }
-function confirmPassword()
+function checkConfirm(ele1, ele2, target)
 {
-	if(document.querySelector("#pass1").value!=document.querySelector("#pass2").value)
-        document.querySelector("#pass2msg").innerHTML="Passwords Dismatch...!";
+	if(document.querySelector("#" + ele1).value != document.querySelector("#"+ele2).value)
+        document.querySelector("#" + target).innerHTML = "Passwords Dismatch...!";
 	else
-        document.querySelector("#pass2msg").innerHTML="";
+        document.querySelector("#" + target).innerHTML = "";
 }
 function changePreview(event)
 {

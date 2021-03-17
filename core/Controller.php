@@ -20,7 +20,7 @@ class Controller
      * Constructor menthod
      * @param Model $model model class object to intialize $this->model
      */
-    public function __construct($model)
+    public function __construct($model = null)
     {
         $this->model = $model;
         $this->input = new InputData();

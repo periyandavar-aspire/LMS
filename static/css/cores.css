@@ -39,6 +39,13 @@ nav img{
 }
 .books-header {
     background: linear-gradient(rgb(0 0 0 / 35%), rgb(0 0 0 / 62%)), url(../img/cover/1.jpg) center center no-repeat;   
+    background-size: cover;
+}
+.top-container {
+    background: linear-gradient(rgb(0 0 0 / 3%), rgb(0 0 0 / 62%)), url(../img/cover/2.jpg) center center no-repeat;   
+    background-size: cover;
+    margin: -8px;
+    padding: 28px;
 }
 header {
     background: linear-gradient(rgb(0 0 0 / 35%), rgb(0 0 0 / 62%)), url(../img/cover/6.jpg) center center no-repeat;
@@ -46,13 +53,36 @@ header {
     margin: -8px;
     padding: 28px;
 }
-
-.header-content {
-    padding-top: 14.75rem;
-    padding-bottom: 17.5rem;
+.regist-container {
+    background: linear-gradient(rgb(0 0 0 / 38%), rgb(0 0 0 / 62%)), url(../img/cover/5.jpg) center center no-repeat;
+    background-size: cover;
 }
-
+.about-container {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/4.jpg) center center no-repeat;
+    background-size: cover;
+}
+.err-404-container {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/7.jpg) center center no-repeat;
+    background-size: cover;
+}
+header .header-content {
+    padding-top: 236px;
+    padding-bottom: 280px;
+}
+.top-container .header-content {
+    padding-top: 136px;
+    padding-bottom: 136px;
+}
 header .container {
+    max-width: 1145px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}
+.top-container .container {
     max-width: 1145px;
     width: 100%;
     padding-right: 15px;
@@ -91,6 +121,15 @@ header h1 {
     color: #fff;
     position: relative;
 }
+
+.login-container .text-container {
+    margin-top: 12px;
+}
+
+.login-container h1 {
+    color: #fff;
+    position: relative;
+}
 * {
     font-family: sans-serif;
 }
@@ -104,7 +143,12 @@ header h1 {
     font-weight: 400;
     font-size: 24px;
 }
-
+.navbar-toggler {
+    background-color: #0a2534;
+    color: #fff;
+    padding: 15px;
+    font-size: 28px;
+}
 .nav-link {
     color: #fff;
     padding: 0.25rem 0.75rem 0.25rem 0.75rem;
@@ -125,7 +169,7 @@ header h1 {
     box-shadow: -7px 7px 12px 2px rgb(35 33 33);
     background-color: #0a2534;
     height: 52px;
-    padding: 0px 57px;
+    
 }
 .navbar-logo{
     text-decoration: none;
@@ -146,7 +190,6 @@ header h1 {
     padding-left: 15px;
     padding-right: 15px;
     text-align: center;
-    flex: 0 0 100%;
 }
 .nav-link .icons {
     background: url(/static/img/symbols/icon-background.svg);
@@ -176,6 +219,7 @@ header h1 {
     font: 700 12px sans-serif;
     text-decoration: none;
     transition: all 0.2s;
+    cursor: pointer;
 }
 .btn-link:hover {
     color:dodgerblue;
@@ -268,6 +312,7 @@ section .container {
     padding-right: 15px;
     padding-left: 15px;
 }
+
 .card {
     display: inline-block;
     vertical-align: top;
@@ -283,7 +328,27 @@ section .container {
     margin-left: 17px;
     margin-right: 17px;
 }
-
+.form-card {
+    background-color: #081e2bed;
+    padding: 17px;
+    margin: 15px;
+    max-width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 17px;
+    border-color: #1e90ff82;
+    border-style: solid;
+    color: #fff;
+}
+.form-card form {
+    padding: 8px;
+    margin: 4px;
+    text-align: left;
+}
+.top-container h1 {
+    color: #fff;
+}
 .card-image img {
     max-width: 100%;
     height: auto;
@@ -343,7 +408,9 @@ footer a {
     transform: translate(-50%, -50%);
     text-align: center;
 }
-
+a {
+    color: dodgerblue;
+}
 /* .navbar-toggler {
     display: none;
 } */
@@ -411,10 +478,13 @@ footer {
     background-color: #0a2534;
     color: #dfe5ec;
     margin: -8px;
-    margin-top: 12px;
+    /* margin-top: 12px; */
     padding-bottom: 25px;
     padding-left: 27px;
 }
+/* footer:target, #menu-contact{
+    color: dodgerblue;
+} */
 .align-container-center {
     text-align: center;
 }
@@ -484,9 +554,6 @@ article section:nth-of-type(2){
     .navbar-toggler {
         display: none;
     }
-    .expand-navbar {
-        display: flex;
-    }
     .expand-navbar ul {
         list-style: none;
         display: flex;
@@ -496,6 +563,10 @@ article section:nth-of-type(2){
         margin-bottom: 0;
         margin-left: auto;
     }
+    .nav-bar-active {
+        padding: 0px 57px;
+    }
+    
 }
 
 @media screen and (max-width: 768px) {
@@ -504,5 +575,27 @@ article section:nth-of-type(2){
         flex-basis: 100%;
         flex-grow: 1;
         background: #0a2534;
+        margin-left: -32px;
+        margin-right: -32px;
+        /* display: block; */
+    }
+     .navbar {
+        background-color: #0a2534;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        height: unset;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+    .expand-navbar ul {
+        padding-left: 40px;
+    }
+    
+    .expand-navbar li {
+        padding: 5px;
+    }
+
+    .closed-nav {
+        display: none;
     }
 }
