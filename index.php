@@ -3,6 +3,7 @@ define("VALID_REQ",true);
 session_start();
 require_once 'config/config.php';
 require_once 'config/routeConfig.php';
+require_once 'config/dbConfig.php';
 require_once 'core/autoload.php';
 require_once 'core/core.php';
 

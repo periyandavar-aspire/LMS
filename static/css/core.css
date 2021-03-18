@@ -346,8 +346,13 @@ footer{
 	font-size: 22px;
 	cursor: pointer;
 }
-.drop-down-container{
+.drop-down-container {
     display: none;
+}
+
+.toast-symbols {
+    padding: 7px;
+    font-size: 20px;
 }
 
 .toast {

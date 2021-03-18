@@ -17,9 +17,4 @@ class LoginModel extends Model
         return md5("libr");
     }
 
-    public function getUserPass(string $name)
-    {
-        return md5("user");
-    }
-
 }

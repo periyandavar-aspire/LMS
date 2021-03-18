@@ -3,7 +3,7 @@ class HomeController extends Controller
 {
     public function __construct($model = null)
     {
-        parent::__construct(new LoginModel());
+        parent::__construct(new HomeModel());
     }
     public function index()
     {
@@ -15,7 +15,8 @@ class HomeController extends Controller
 
     public function home()
     {
-        $this->index();
+        // $this->index();
+        $this->model->getData();
     }
 
     public function books()

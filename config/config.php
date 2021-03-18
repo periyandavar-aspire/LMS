@@ -28,3 +28,8 @@ $config['default_page'] = "/home";
  * set the name of the controller handles errors
  */
 $config['error_ctrl'] = "errors";
+// /**
+//  * add any core files to be autoload
+//  * ex: $config['conf-dir'] = 'pdf-core,img-core';
+//  */
+// $config['conf-dir'] = '';

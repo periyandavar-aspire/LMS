@@ -1,15 +1,4 @@
-window.onscroll = function (event) {
-    if (window.pageYOffset > 20) {
-        addClass(document.getElementById("fixed-top"), "nav-bar-active");
-    } else {
-        removeClass(document.getElementById("fixed-top"), "nav-bar-active");
-    }
-    if  (window.pageYOffset > screen.height) {
-        document.getElementById("back-to-top").style.display = "inline";
-    } else {
-        document.getElementById("back-to-top").style.display = "none";
-    }
-}
+
 function hasClass(elem, className) {
     return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
@@ -148,26 +137,33 @@ function AskConfirm(title, msg='', ok=function ok(){} , cancel=function cancel()
 
 function toast(msg = '', theme = '', title = ""){
 	var ele = document.getElementById('toast-container');
+	var symbol = '';
+	var title = '';
 	switch (theme) {
 		case 'info':
-			title = title != '' ? title : "New Message..!";
+			title = title != '' ? title : "Info..!";
+			symbol = '<i class="fa fa-info toast-symbols" aria-hidden="true"></i>';
 			break;
 		case 'warning':
 			title = title != '' ? title : "Warning..!";
-			break;
+			symbol = '<i class="fa fa-exclamation-triangle toast-symbols" aria-hidden="true"></i>';
+			break; 
 		case 'danger':
 			title = title != '' ? title : "Danger..!";
+			symbol = '<i class="fa fa-shield toast-symbols" aria-hidden="true"></i>';
 			break;
 		case 'success':
 			title = title != '' ? title : "Success..!";
+			symbol = '<i class="fa fa-check toast-symbols" aria-hidden="true"></i>';
 			break;
 		default:
 			title = title != '' ? title : "New Message..!";
+			symbol = '<i class="fa fa-bell toast-symbols" aria-hidden="true"></i>';
 			break;
 
 	}
 	code = '<div class="toast ' + theme + '"><span class="close-toast" onclick="this.parentNode.style.display=\'none\'">&#x2716;</span>'
-	code = code + '<h3>' + title + '</h3>';
+	code = code + '<h3>' + symbol + title + '</h3>';
 	code = code + '<span>' + msg + '</span>';
 	code = code + '</div>';
 	if (ele == null) {
@@ -178,9 +174,7 @@ function toast(msg = '', theme = '', title = ""){
 	} else {
 		ele.innerHTML = ele.innerHTML+code;
 	}
-	
-	//document.getElementsByTagName('body')[0].innerHTML=code+document.getElementsByTagName('body')[0].innerHTML;
-	//  setTimeout(hideToast, 20000); 
+	setTimeout(hideToast, 20000); 
 }
 
 function hideToast(){
@@ -195,4 +189,3 @@ function showElement(id)
 {
 	document.getElementById(id).style.display = 'block';
 }
-// closure function,void(0),namespace,this..deviceorien,,
