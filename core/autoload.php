@@ -28,3 +28,23 @@ spl_autoload_register(function ($className) {
         require_once $file;
     }
 });
+
+/**
+ * This function will load all files from config directory
+ */
+// function loadConfig()
+// {
+//     foreach (glob("config/*.php") as $filename) {
+//         require_once $filename;
+//     }
+//     if (isset($config['conf-dir'])) {
+//         if ($config['conf-dir'] != '') {
+//             $dirs = array_slice($config['conf-dir'], ",");
+//             foreach ($dirs as $dir) {
+//                 foreach (glob($dir) as $filename) {
+//                     require_once $filename;
+//                 }
+//             }
+//         }
+//     }
+// }

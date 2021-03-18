@@ -16,7 +16,7 @@ img {
 
 
 nav {
-    padding: 2.125rem 1.5rem 2.125rem 2rem;
+    padding: 35px 25px 35px 25px;
     box-shadow: none;
     background: transparent;
 }
@@ -62,7 +62,7 @@ header {
     background-size: cover;
 }
 .err-404-container {
-    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/7.jpg) center center no-repeat;
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/13.jpg) center center no-repeat;
     background-size: cover;
 }
 header .header-content {

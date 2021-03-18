@@ -1,15 +1,23 @@
 <?php
-abstract class Model
+class Model
 {
+    protected $db;
+
     public function __construct()
     {
-        //dbconnection
-    }
+        global $dbConfig;
+        if ($dbConfig['usepdo']) {
+            $this->db = new Pdohandler($dbConfig['driver'], $dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database']);
+        }
+        else {
+            $handler = $dbConfig['driver'] . "Handler";
+            $this->db = new $handler($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database']);
+        }
+    }   
 
     public function __destruct()
     {
-        //close conection
+        $this->db->close();
     }
 
-    
 }
