@@ -34,7 +34,7 @@ class HomeController extends Controller
     public function captcha()
     {
         $captcha = rand(1000, 9999); 
-        setSessionData("captcha",$captcha);
+        Utility::setSessionData("captcha",$captcha);
         $height = 25; 
         $width = 65;   
         $image = imagecreate($width, $height); 
@@ -50,28 +50,45 @@ class HomeController extends Controller
 
     public function login()
     {
+        $this->loadLayout("header.html");
+        $this->loadView("login");
+        $this->loadLayout("footer.html");
+    }
+
+    public function dologin()
+    {
         $data = [];
-        if ($this->input->post("email") != null) {
-            $user = $this->input->post('email');
+        $user = $this->input->post('email');
+        $fdv = new FormDataValidation();
+        $fields = new fields(['email', 'captcha']);
+        $fields->addRule(['email' => "mailValidation"]);
+        $fields->addCustomeRule(
+            'captcha',
+            new class implements ValidationRule {
+                public function validate(?string $data): ?bool
+                {
+                    $flag = $data == (new InputData())->session("captcha");
+                    return $flag;
+                }
+            }
+        );
+        $fields->addValues($this->input->post());
+        if (!$fdv->validate($fields, $field)) {
+            $data["msg"] = "Invalid $field..!";
+        } else {
             $pass = $this->model->getUserPass($user);
-            $captcha = $this->input->post("verfcode");
-            if ($captcha != $this->input->session("captcha")) {
-                $data["msg"] = "Invalid captcha..!";
-                $this->loadView("login", $data);
-                return;
-            }
             if ($pass == md5($this->input->post('password'))) {
-                setSessionData("user", "user");
-                setSessionData("id", $user);
+                Utility::setSessionData("user", "user");
+                Utility::setSessionData("id", $user);
                 $this->redirect("user/home");
+            } else {
+                $data["msg"] = "Login failed..!";
             }
-            $data["msg"] = "Login failed..!";
         }
         $this->loadLayout("header.html");
         $this->loadView("login", $data);
         $this->loadLayout("footer.html");
     }
-
     public function registration()
     {
         $this->loadLayout("header.html");

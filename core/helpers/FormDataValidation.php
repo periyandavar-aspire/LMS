@@ -8,11 +8,7 @@ class FormDataValidation
      */
     public function customValidation(string $data, ValidationRule $vr): bool
     {
-        if ($vr->validate($data)) {
-            return $vr->format($data);
-        } else {
-                return false;
-        }
+        return $vr->validate($data);
     }
 
     /**
@@ -28,14 +24,14 @@ class FormDataValidation
      */
     public function mailValidation(string $data): bool
     {
-        return preg_match('/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/', $data);
+        return preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $data);
     }
 
     /**
      * validate all the passed $fields and returns the validation result
      * @param Fields $fields Fields object to be validate
      */
-    public function validate(Fields $fields): bool
+    public function validate(Fields $fields, &$invalidField = null): bool
     {
         foreach ($fields as $field => $value) {
             $fieldName = $field;
@@ -44,6 +40,7 @@ class FormDataValidation
             if ($rule instanceof ValidationRule) {
                 $newValue = $this->customValidation($data, $rule);
                 if ($newValue === false) {
+                    $invalidField = $fieldName;
                     return false; 
                 } else {
                     $fields->setData($fieldName, $newValue);
@@ -51,6 +48,7 @@ class FormDataValidation
             } else if ($rule != "") {
                 if (method_exists($this,$rule)) {
                     if (!$this->$rule($data)) {
+                        $invalidField = $fieldName;
                         return false;
                     }
                 }

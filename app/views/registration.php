@@ -50,7 +50,7 @@
                                 </div>   
                                 <div class="form-input-div">
                                         <label>Verification code : </label>
-                                        <input type="text" id="vercode" name="vercode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="signImg" src='<?php echo baseurl() . "/home/captcha"; ?>'>
+                                        <input type="text" id="vercode" name="vercode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="signImg" src='<?php echo Utility::baseURL() . "/home/captcha"; ?>'>
                                 </div>                                 
                                 <div class="form-buttons">
                                     <button type="submit" name="signup" class="btn-link">Submit</button>
@@ -72,4 +72,4 @@
 <script>
     document.getElementById("menu-register").className += " active";
 </script>
-<script src="<?php echo baseurl();?>/static/js/form.js"></script>
+<script src="<?php echo Utility::baseURL();?>/static/js/form.js"></script>

@@ -11,7 +11,7 @@
                         <section class="form-card">
                             <h1>User Login</h1>
                             <hr>
-                            <form action="#" onsubmit="loginFormValidator(event);" method="POST">                                     
+                            <form action="login" method="POST">                                     
                                 <div class="form-input-div">
                                     <label>Enter Email</label>
                                     <input class="form-control" type="email" name="email" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
@@ -25,7 +25,7 @@
                                 </div>   
                                 <div class="form-input-div">
                                         <label>Verification code : </label>
-                                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="logImg" src="<?php echo baseurl() . "/home/captcha"; ?>">
+                                        <input type="text" name="captcha" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="logImg" src="<?php echo Utility::baseURL() . "/home/captcha"; ?>">
                                 </div>                                  
                                 <div class="form-buttons">
                                     <button type="submit" name="login" class="btn-link">Login</button>
@@ -48,4 +48,4 @@
 <script>
     document.getElementById("menu-login").className += " active";
 </script>
-<script src="<?php echo baseurl();?>/static/js/form.js"></script>
+<script src="<?php echo Utility::baseURL();?>/static/js/form.js"></script>

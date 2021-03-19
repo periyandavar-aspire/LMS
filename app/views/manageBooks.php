@@ -77,4 +77,4 @@
 <script>
     document.getElementById('books').className += " active";
 </script>
-<!-- <script src="<?php echo baseurl();?>/static/js/bookstatus.js"></script> -->
+<!-- <script src="<?php echo Utility::baseURL();?>/static/js/bookstatus.js"></script> -->
