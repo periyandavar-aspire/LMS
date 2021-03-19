@@ -22,8 +22,8 @@ const loginFormValidator = function (event) {
 const registrationFormValidator = function(event) {
     const regexAlpha = /^[A-Za-z]+$/;
     const regexPhone = /^[789]\d{9}$/;
-    let password = document.getElementById("password"); 
-    let confirmPassword = document.getElementById("confirmPassword"); 
+    let password = document.getElementById("password").value; 
+    let confirmPassword = document.getElementById("confirmPassword").value; 
     console.log("dd");
     if(!regexAlpha.test(document.getElementById("fullname").value)){
         toast("Invalid Name..!","danger","Invalid Input");

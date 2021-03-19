@@ -5,7 +5,6 @@
  */
 class Controller
 {
-    use FileUploader;
     /**
      * @var Model $model model class object that will has the link to the Model Class
      * using this variable we can acces the model class functions within this controller 
@@ -60,13 +59,13 @@ class Controller
         exit();
     }
     /**
-     * Default index function for the controller
-     * if the index method is not defined in the sub class then this function will called and
-     * loads default index page
+     * 
+     * 
      */
-    public function index()
+    public function dispatch(string $url, bool $caseSensitive = false)
     {
-        $this->loadView('index');
+        Route::dispatch($url, 'get', $caseSensitive);
+        exit();
     }
     /**
      * This function loads html layout files

@@ -1,6 +1,7 @@
 <?php
 class Fields implements Iterator
 {
+    use FileUploader;
     /**
      * @var array $fields list of fields stored in array
      */

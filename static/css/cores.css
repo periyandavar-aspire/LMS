@@ -23,7 +23,9 @@ nav {
 nav img{
     background-color: white;
 }
-
+.msg {
+    color: red;
+}
 
 .nav-icons {
     display: block;
