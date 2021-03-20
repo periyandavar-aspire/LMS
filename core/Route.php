@@ -70,7 +70,7 @@ class Route
                 $pathMatch = true;
                 $rule = $route['rule'];
                 if ($rule != null) {
-                    if ($rule($matches) == null) {
+                    if ($rule($matches) != true) {
                         return;
                     }
                 }
