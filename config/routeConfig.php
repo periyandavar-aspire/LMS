@@ -11,7 +11,7 @@ Route::add('/login', '/home/dologin', 'post');
 Route::add('/register', '/home/registration', 'post');
 Route::add('/home/captcha');
 Route::add('/home/home');
-Route::add('/user/home',null ,'get',function (): bool {
+Route::add('/user/home',null ,'get',function () {
     $cname = Utility::staticCtrlFromSession('user');
     if ($cname == null) {
         (new HomeController())->index();

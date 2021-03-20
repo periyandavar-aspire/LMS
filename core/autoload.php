@@ -17,20 +17,23 @@ spl_autoload_register(function ($className) {
 });
 
 /**
- * This autoload function loads all the classes from core/base directory on need
+ * This autoload function loads all the classes from helpers directory on need
  */
 spl_autoload_register(function ($className) {
-    $file = 'core/base/' . $className . ".php";
+    $file = 'core/helpers/' . $className . ".php";
     if (file_exists($file)) {
         require_once $file;
     }
 });
 
+
 /**
- * This autoload function loads all the classes from helpers directory on need
+ * This will loads the services form services directory on need
  */
 spl_autoload_register(function ($className) {
-    $file = 'core/helpers/' . $className . ".php";
+    global $config;
+    $ModelPath = $config['services'];
+    $file = $ModelPath . $className . ".php";
     if (file_exists($file)) {
         require_once $file;
     }

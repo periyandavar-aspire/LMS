@@ -25,6 +25,10 @@ $config['layouts'] = "static/layout/";
  */
 $config['db_handlers'] = "app/dbHandlers/";
 /**
+ * Path to custom db handlers
+ */
+$config['services'] = "app/services/";
+/**
  * Default page index page
  */
 $config['default_page'] = "/home";

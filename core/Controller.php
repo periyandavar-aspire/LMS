@@ -16,13 +16,18 @@ class Controller
      */
     protected $input;
     /**
+     * @var Service $service service class object that will offers the services(bussiness logics)
+     */
+    /**
      * Constructor menthod
      * @param Model $model model class object to intialize $this->model
+     * @param Service $service service class object to intialize $this->service
      */
-    public function __construct($model = null)
+    public function __construct($model = null, $service = null)
     {
         $this->model = $model;
         $this->input = new InputData();
+        $this->service = new Service();
     }
     /**
      * This function will load the required View(php) file without error on failure
