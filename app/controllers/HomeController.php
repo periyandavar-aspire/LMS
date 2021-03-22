@@ -1,7 +1,7 @@
 <?php
 class HomeController extends Controller
 {
-    public function __construct($model = null)
+    public function __construct()
     {
         parent::__construct(new HomeModel());
     }
@@ -58,7 +58,7 @@ class HomeController extends Controller
     public function dologin()
     {
         $data = [];
-        $user = $this->input->post('email');
+        $mail = $this->input->post('email');
         $fdv = new FormDataValidation();
         $fields = new fields(['email', 'captcha']);
         $fields->addRule(['email' => "mailValidation"]);
@@ -76,10 +76,11 @@ class HomeController extends Controller
         if (!$fdv->validate($fields, $field)) {
             $data["msg"] = "Invalid $field..!";
         } else {
-            $pass = $this->model->getUserPass($user);
+            $pass = $this->model->getUserPass($mail);
             if ($pass == md5($this->input->post('password'))) {
-                Utility::setSessionData("user", "user");
-                Utility::setSessionData("id", $user);
+                Utility::setsessionData('login', true);
+                Utility::setSessionData("type", "user");                
+                Utility::setSessionData("id", $mail);
                 $this->redirect("user/home");
             } else {
                 $data["msg"] = "Login failed..!";

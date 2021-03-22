@@ -1,9 +1,9 @@
 <?php
 class BooksController extends Controller
 {
-    public function __construct($model = null)
+    public function __construct()
     {
-        parent::__construct($model);
+        parent::__construct();
     }
     public function index()
     {
@@ -23,7 +23,12 @@ class BooksController extends Controller
         $this->loadView('manageBooks');
         $this->loadLayout("adminFooter.html");
     }
-
+    public function available()
+    {
+        $this->loadLayout("userHeader.html");
+        $this->loadView('availableBooks');
+        $this->loadLayout("userFooter.html");
+    }
     public function export()
     {
         header('Content-Type: text/csv; charset=utf-8');

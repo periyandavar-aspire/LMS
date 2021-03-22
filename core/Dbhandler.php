@@ -3,21 +3,24 @@
 abstract class Dbhandler
 {
     protected $db;
-    
-    public function close() {
-        $this->db = null;
-    }
-
+    protected $result;
+    abstract public function close();
     abstract public function runQuery(string $sql, array $bindValues=[]);
     abstract protected function executeQuery();
     abstract protected function fetch();
-    abstract public static function getInstance();
+    abstract public static function getInstance(string $host, string $user, string $pass, string $db, string $driver);
 	
     protected static $instance = null;
     protected $query; // $getSQL
     private $sql; // $getSQL incomplete query without where
     protected $bindValues;
 	private $table, $columns, $limit, $orderBy ,$where;
+
+    public function __destruct()
+    {
+        if ($this->db != null)
+            $this->db->close();
+    }
 
     public function query($query, $args = [])
     {
@@ -29,19 +32,23 @@ abstract class Dbhandler
         return $result;
     }
 
-    public function get()
-    {
-        $this->query  = "SELECT " . $this->columns . " FROM " . $this->table . $this->where . $this->limit . $this->orderBy;
-        // echo $this->query. "<br>";
-        $result = $this->fetch();
-        return $result;
-    }
+    // public function get()
+    // {
+    //     // $this->query  = "SELECT " . $this->columns . " FROM " . $this->table . $this->where . $this->limit . $this->orderBy;
+    //     // echo $this->query. "<br>";
+    //     $result = $this->fetch();
+    //     return $result;
+    // }
 
     public function execute()
     {
-        $this->query  = $this->sql . $this->where;
-        // echo $this->query. "<br>";
+        if ($this->sql == '') {
+            $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->where . $this->limit . $this->orderBy;
+        } else {
+            $this->query  = $this->sql . $this->where;
+        }
         $result = $this->executeQuery();
+        $this->resetQuery();
         return $result;
     }
     
@@ -71,7 +78,7 @@ abstract class Dbhandler
         $this->resetQuery();
         $set = '';
         $index = 1;
-        foreach ($fields as $column => $fied) {
+        foreach ($fields as $column => $field) {
             $set .= "`$column` = ?";
             $this->bindValues[] = $field;
             if ($index < count($fields)) {

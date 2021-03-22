@@ -18,7 +18,7 @@ class Fields implements Iterator
         } else {
             foreach ($fields as $field) {
                 $this->fields[$field]['data'] = null;
-                $this->fields[$field]['rule'] = null;
+                $this->fields[$field]['rule'] = [];
             }
         }
     }
@@ -29,7 +29,7 @@ class Fields implements Iterator
     {
         foreach ($fields as $field) {
             $this->fields[$field]['data'] = null;
-            $this->fields[$field]['rule'] = null;
+            $this->fields[$field]['rule'] = [];
         }
     }
     /**
@@ -56,14 +56,48 @@ class Fields implements Iterator
             }
         }
     }
+
+    /**
+     * @return array $values
+     * gives all the values for the fields as array
+     */
+    public function getValues()
+    {
+        $values = [];
+        foreach ($this->fields as $field => $value) {
+            $fieldName = $field;
+            $data = $value["data"];
+            $values[$fieldName] = $data;
+        }
+        return $values;
+    }
+
     /**
      * @param array $fieldsRules as (fields=>rules)
      */
     public function addRule(array $fieldsRules)
     {
-        foreach ($fieldsRules as $key => $value) {
+        foreach ($fieldsRules as $key => $values) {
             if (isset($this->fields[$key])) {
-                $this->fields[$key]['rule'] = $value;
+                if (is_array($values)) {
+                    foreach ($values as $value) {
+                        $this->fields[$key]['rule'][] = $value;
+                    }
+                } else {
+                    $this->fields[$key]['rule'][] = $values;
+                }
+            }
+        }
+    }
+
+    /**
+     * sets the required fields
+     */
+    public function setRequiredFields(...$fields)
+    {
+        foreach ($fields as $field) {
+            if (isset($this->fields[$field])) {
+                $this->fields[$field]['rule'][] = 'required';
             }
         }
     }
@@ -90,7 +124,7 @@ class Fields implements Iterator
     public function addCustomeRule(string $field,ValidationRule $vr)
     {
         if (isset($this->fields[$field])) {
-            $this->fields[$field]['rule'] = $vr;
+            $this->fields[$field]['rule'][] = $vr;
         }
     }
 

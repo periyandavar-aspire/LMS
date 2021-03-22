@@ -22,7 +22,7 @@ nav ul li{
     margin-left: -41px;
     /* height: 26px; */
     padding: 12px;
-    font-size: 22px;
+    font-size: 17px;
     cursor: pointer;
     color: white;
     margin-bottom: 4px;
@@ -66,6 +66,7 @@ header {
     padding: 0;
     box-shadow: -7px 7px 12px 2px rgb(35 33 33);
     padding-right: 15px;
+    padding-left: 15px;
 }
 
 #searchBar {
@@ -79,6 +80,7 @@ header {
 #searchBar input {
     padding: 6px 9px;
     height: 20px;
+    width: 138px;
 }
 
 header .symbols {
@@ -93,17 +95,24 @@ header .symbols:hover {
 
 .main {
     margin-left: 18%;
-    padding: 15px;
+    padding: 24px;
+    min-height: calc(100vh - 100px);
 }
 footer {
     padding: 5px;
     margin-left: 17%;
     background-color: black;
 }
+header {
+    margin-left: 17%;
+}
 
 /*pagination*/
 .pagination{
     list-style: none;
+}
+.dropdown {
+    height: inherit;
 }
 .pagination li{
     margin-left: 0;
@@ -154,4 +163,83 @@ tr:nth-child(even){
 /**/
 #user-drop-down {
     display: none;
+}
+p {
+    font-size: 15px;
+    line-height: 21px;
+    text-indent: 37px;
+    font-family: sans-serif;
+    font-weight: 400;
+}
+section .container {
+    width: unset;
+}
+footer .container {
+    text-align: center;
+}
+.dashboard-icons {
+    font-size: 24px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 400;
+    display: inline-block;
+    margin: 15px;
+}
+
+.dashboard-icons i {
+    font-size: 75px;
+    color: #31708f;
+}
+nav .active {
+    color: dodgerblue;
+}
+.dashboard-icons a {
+    text-decoration: none;
+    color: unset;
+    line-height: 40px;
+}
+label {
+    color: black !important;
+}
+@media screen and (min-width: 992px) {
+    #searchBar input {
+        width: 275px;
+    }
+    #searchBar button {
+        padding: 8px;
+    }
+}
+@media screen and (max-width: 992px) {
+    .navbar-img{
+        display: none;
+    }
+    .closed-nav {
+        display: none;
+    }
+    .main {
+        margin-left: unset;
+    }
+    #footer {
+        margin-left: -8px;
+    }
+    nav {
+        height: unset;
+        overflow: visible;
+    }
+    .nav-menu {
+        background-color: #012534;
+        align-items: center;
+        width: 100vh;
+        position: relative;
+        padding: 4px;
+        margin-top: -4px;
+    }
+    header .navbar-logo {
+        display: none;
+    }   
+    header {
+        padding: 2px;
+        margin: unset;
+    } 
 }

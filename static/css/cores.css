@@ -362,8 +362,15 @@ section .container {
 
 .card-content {
     border: 1px solid #ebe8e8;
-    border-bottom-left-radius: 0.375rem;
-    border-bottom-right-radius: 0.375rem;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    background-color: #fff;
+    padding: 20px;
+}
+
+.div-card {
+    border: 1px solid #ebe8e8;
+    border-radius: 1px;
     background-color: #fff;
     padding: 20px;
 }

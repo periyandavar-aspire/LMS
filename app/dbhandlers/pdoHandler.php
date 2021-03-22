@@ -2,57 +2,74 @@
 
 class PdoHandler extends DbHandler
 {
-    public function __construct($driver, $host, $user, $pass, $db)
+    public function __construct($host, $user, $pass, $db, $driver)
     {
-        $this->db = new PDO("$driver:host=$host;dbname=$db;", $user, $pass) or die("DB error..");
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);    
+        $this->con = new PDO("$driver:host=$host;dbname=$db;", $user, $pass);
+        $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);    
     }
 
-    public static function getInstance()
+    public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
 	{
 		if (!self::$instance) {
-			self::$instance = new DbHandler();
+			self::$instance = new PdoHandler($host, $user, $pass, $db, $driver);
 		}
 		return self::$instance;
 	}
 
     public function executeQuery()
     {
-        $stmt = $this->db->prepare($this->query);
-        try {
-            $flag = $stmt->execute($this->bindValues);
-        } catch (Exception $e){
-            return false;
+        $stmt = $this->con->prepare($this->query);
+        $index = 1;
+        foreach ((array)$this->bindValues as $bindValue) {
+            switch (gettype($bindValue)) {
+                case 'integer':
+                    $paramType = PDO::PARAM_INT;
+                    break;
+                default:
+                    $paramType = PDO::PARAM_STR;
+                    break;
+            }
+            $stmt->bindValue($index, $bindValue, $paramType);
+            $index++;
+        }
+        $flag = $stmt->execute();
+        if ($flag == true) {
+            $this->result = $stmt;
         }
         return $flag;
     }
 
     public function fetch()
     {
-        $stmt = $this->db->prepare($this->query);
-        try {
-            $flag = $stmt->execute($this->bindValues);
-            if ($flag) {
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
-                return $result;
-            }
-        } catch (Exception $e) {
-
+        if ($this->result != null) {
+            return $this->result->fetch(PDO::FETCH_OBJ);
+        } else {
+            return null;
         }
-
-        return null;
     }
 
     public function runQuery(string $sql, array $bindValues=[])
     {
-        $result = $this->db->query($sql);
-        if ($result != false) {
-            print_r ($result->fetch(PDO::FETCH_OBJ));
-            return $result->fetch(PDO::FETCH_OBJ);
-        } else {
-            return null;
+        $stmt = $this->con->prepare($sql);
+        $index = 1;
+        foreach ($bindValues as $bindValue) {
+            switch (gettype($bindValue)) {
+                case 'integer':
+                    $paramType = PDO::PARAM_INT;
+                    break;
+                default:
+                    $paramType = PDO::PARAM_STR;
+                    break;
+            }
+            $stmt->bindValue($index, $value, $paramType);
+            $index++;
         }
+        $flag = $stmt->execute();
+        if ($flag == true) {
+            $this->result = $stmt;
+        }
+        return $flag;
     }
 
     public function getValues(string $table, ?array $fields, ?array $conditions)
@@ -69,7 +86,7 @@ class PdoHandler extends DbHandler
             array_push($values, $value);
         }
         
-        $stmt = $this->db->prepare("SELECT $selectFields FROM $table WHERE $where");
+        $stmt = $this->con->prepare("SELECT $selectFields FROM $table WHERE $where");
         $index = 1;
         foreach ($values as $value) {
             $stmt->bindValue($index++, $value, PDO::PARAM_STR);
@@ -87,7 +104,7 @@ class PdoHandler extends DbHandler
             $fieldsValues .= ' ?,';
         }
         $fieldsValues = rtrim($fieldsValues, ',');
-        $stmt = $this->db->prepare("INSERT INTO $table($insertFields) VALUES($fieldsValues)");
+        $stmt = $this->con->prepare("INSERT INTO $table($insertFields) VALUES($fieldsValues)");
         $index = 1;
         foreach ($values as $value) {
             $stmt->bindValue($index, $value, PDO::PARAM_STR);
@@ -99,5 +116,10 @@ class PdoHandler extends DbHandler
             return false;
         }
         return true;
+    }
+
+    public function close()
+    {
+        $this->con = null;
     }
 }
