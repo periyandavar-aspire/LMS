@@ -7,11 +7,11 @@ class Model
     {
         global $dbConfig;
         if ($dbConfig['usepdo']) {
-            $this->db = new Pdohandler($dbConfig['driver'], $dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database']);
+            $this->db = Pdohandler::getInstance($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database'], $dbConfig['driver']);
         }
         else {
             $handler = $dbConfig['driver'] . "Handler";
-            $this->db = new $handler($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database']);
+            $this->db = $handler::getInstance($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database'], $dbConfig['driver']);
         }
     }   
 

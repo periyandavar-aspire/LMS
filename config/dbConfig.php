@@ -15,7 +15,7 @@ $dbConfig = array('host' => 'localhost',
     'user' => 'root',
     'password' => '',
     'database' => 'lms',
-    'usepdo' => false,
+    'usepdo' => true,
     'driver' => 'mysql',
     'prefix' => ''
 );

@@ -1,5 +1,6 @@
 
 function hasClass(elem, className) {
+	console.log(elem);
     return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
 function addClass(elem, className) {

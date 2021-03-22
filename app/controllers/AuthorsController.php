@@ -1,9 +1,9 @@
 <?php
 class AuthorsController extends Controller
 {
-    public function __construct($model = null)
+    public function __construct()
     {
-        parent::__construct($model);
+        parent::__construct();
     }
     public function index()
     {

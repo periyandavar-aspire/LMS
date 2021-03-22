@@ -7,54 +7,53 @@
 	    <meta name="discription" content="library Mangement system">
 	    <meta name="keywords" content="Library, LMS">
 	    <meta name="viewport" content="width=device-width,initial-scale=1.0">
- 	    <link rel="icon" type="image/png" href="img/favicon.png"/>
+ 	    <link rel="icon" type="image/png" href="../static/img/favicon.png"/>
         <link rel="stylesheet" type="text/css" href="../static/css/form.css">
         <link rel="stylesheet" type="text/css" href="../static/css/cores.css">
         <link rel="stylesheet" type="text/css" href="../static/css/users.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/toast.css">
         <link rel="stylesheet" type="text/css" href="../static/css/font-awesome-4.7.0/css/font-awesome.min.css">
     </head>
     <body> 
     	<header>
-           
-		    
-            <!-- <a href="javascript:dropDownMenuClick('nav-drop-down');" class="mobNav" >
-                <i class="fa fa-bars" aria-hidden="true"></i>
-            </a>
-            <div class="drop-down" id="nav-drop-down">
-                <ul>
-                    <li><a href="../user/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                    <li><a href="../user/profile"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
-                    <li><a href="../issuedBooks/user"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
-                    <li><a href="../user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
-                </ul>
-            </div>
-            <a style="margin-right: 0;" id="searchButton" href="javascript:dropDownMenuClick('searchBar');">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </a> -->
+            <a class="navbar-logo" href="home"><img src="../static/img/favicon.png">&nbsp;LMS</a>
             <div class="searchBar" id="searchBar">
                 <input type="text"  name="search" placeholder="Search...">
                 <button>
                     <i class="fa fa-search" aria-hidden="true"></i>
                  </button>
             </div> 
-            <a href="javascript:dropDownMenuClick('user-drop-down');" class="shortMenu">
-                <i class="fa fa-user symbols" aria-hidden="true"></i>
-            </a>
-            <div class="drop-down" id="user-drop-down">
-                <ul>
-                    <li onclick="openModal('sign-up-modal');dropDownMenuClick('user-drop-down');">Profile</li>
-                    <li><a href="../user/logout">Logout</a></li>
-                </ul>
-            </div>   
+            <!-- <div class="dropdown">
+                <a href="javascript:dropDownMenuClick('user-drop-down');" class="shortMenu">
+                    <i class="fa fa-user symbols" aria-hidden="true"></i>
+                </a>
+                <div class="drop-down" id="user-drop-down">
+                    <ul class="unstyle-list">
+                        <li onclick="openModal('sign-up-modal');dropDownMenuClick('user-drop-down');">Profile</li>
+                        <li><a href="../user/logout">Logout</a></li>
+                    </ul>
+                </div>   
+            </div> -->
 	    </header>
+        
         <nav>
-            <div id="nav-bar-top">
+            <button class="navbar-toggler" type="button" onclick="menucontrol();">
+                <span class="" id="open-menu"><i class="fa fa-bars" aria-hidden="true"></i></span>
+                <span class="closed-nav" id="close-menu"><i class="fa fa-times" aria-hidden="true"></i></span>
+            </button>
+            <div class="navbar-img">
+                <div id="nav-bar-top">
+                </div>
+                <hr>
             </div>
-            <hr>
-            <ul>
-                <li id="home"><a href="../user/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                <li id="profile"><a href="../user/profile"><i class="fa fa-user-circle" aria-hidden="true"></i> Profile</a></li>
-                <li id="Issuedbooks"><a href="../issuedBooks/user"><i class="fa fa-book" aria-hidden="true"></i> Issued Books</a></li>
-                <li><a href="../user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
-            </ul>
+            <div class='nav-menu closed-nav' id='menu'>
+                <ul>
+                    <li><a href="../user/home" id="home"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Home</a></li>
+                    <li><a href="../user/profile"  id="profile"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Profile</a></li>
+                    <li><a href="../user/availbleBooks" id="books"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Available Books</a></li>
+                    <li><a href="../user/booked" id="booked"><i class="fa fa-bookmark" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Booked for Lend</a></li>
+                    <li><a href="../user/lent" id="lent"><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Lent Books</a></li>
+                    <li><a href="../user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Logout</a></li>
+                </ul>
+            </div>
         </nav>

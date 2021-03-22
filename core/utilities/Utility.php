@@ -15,23 +15,36 @@ class Utility
         $_SESSION[$key] = $value;
     }
 
-    public static function ctrlFromSession(string $key): ?Controller
+    public static function validateSession(string $key): bool
     {
         $value = (new InputData)->session($key);
         if ($value == null) {
-            return null;
+            return false;
         }
-        $value = ucfirst($value) . "Controller";
-        return new $value();
+        return true;
     }
 
-    public static function staticCtrlFromSession(string $key): ?string
+    public static function redirectURL(string $url)
     {
-        $value = (new InputData)->session($key);
-        if ($value == null) {
-            return null;
+        if (headers_sent() === false) {
+            header('Location: ../' . $url, true, ($permanent === true) ? 301 : 302);
         }
-        $value = ucfirst($value) . "Controller";
-        return $value;
+        exit();
     }
+
+    public static function endsWith($str, $endStr) 
+    { 
+        $len = strlen($endStr); 
+        if ($len == 0) { 
+            return true; 
+        } 
+        return (substr($str, -$len) === $endStr); 
+    }
+
+    public static function startsWith ($str, $startStr) 
+    { 
+        $len = strlen($startStr); 
+        return (substr($str, 0, $len) === $startStr); 
+    } 
+
 }

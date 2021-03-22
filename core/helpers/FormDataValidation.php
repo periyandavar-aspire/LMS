@@ -20,11 +20,57 @@ class FormDataValidation
     }
 
     /**
+     * performs mobile alpha and space validation
+     */
+    public function alphaSpaceValidation(string $data): bool
+    {
+        return preg_match('/^[A-Za-z ]*$/', $data);
+    }
+
+    /**
      * performs mail validation
      */
     public function mailValidation(string $data): bool
     {
         return preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $data);
+    }
+
+    /**
+     * performs custom reqular expression validation
+     */
+    public function expressValidation(string $data, string $expression): bool
+    {
+        return preg_match($expression, $data);
+    }
+
+    /**
+     * validates length
+     */
+    public function lengthValidation(string $data, ?int $minlength, ?int $maxlength = null): bool
+    {
+        if ($minlength != null) {
+            if (strlen($data) < $minlength) {
+                return false;
+            }
+        }
+        if ($maxlength != null) {
+            if (strlen($data) > $maxlength) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * required fields validation
+     */
+    public function required(?string $data): bool
+    {
+        if ($data == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -36,20 +82,41 @@ class FormDataValidation
         foreach ($fields as $field => $value) {
             $fieldName = $field;
             $data = $value["data"];
-            $rule = $value["rule"];
-            if ($rule instanceof ValidationRule) {
-                $newValue = $this->customValidation($data, $rule);
-                if ($newValue === false) {
-                    $invalidField = $fieldName;
-                    return false; 
-                } else {
-                    $fields->setData($fieldName, $newValue);
-                }
-            } else if ($rule != "") {
-                if (method_exists($this,$rule)) {
-                    if (!$this->$rule($data)) {
-                        $invalidField = $fieldName;
-                        return false;
+            $rules = $value["rule"];
+            // if ($rules instanceof ValidationRule) {
+            //     $newValue = $this->customValidation($data, $rule);
+            //     if ($newValue === false) {
+            //         $invalidField = $fieldName;
+            //         return false; 
+            //     } else {
+            //         $fields->setData($fieldName, $newValue);
+            //     }
+            // } else 
+            if ($rules != "") {
+                foreach ((array)$rules as $rule) {
+                    
+                    $params = explode(" ", $rule);
+                    $rule = array_shift($params);
+                    if ($rule instanceof ValidationRule) {
+                        $newValue = $this->customValidation($data, $rule);
+                        if ($newValue === false) {
+                            $invalidField = $fieldName;
+                            return false; 
+                        } else {
+                            $fields->setData($fieldName, $newValue);
+                        }
+                    } else if (method_exists($this, $rule)) {
+                        if (count($params) == 0) {
+                            if (!$this->$rule($data)) {
+                                $invalidField = $fieldName;
+                                return false;
+                            }
+                        } else if (count($params) != 0) {
+                            if (!$this->$rule($data, ...$params)) {
+                                $invalidField = $fieldName;
+                                return false;
+                            }
+                        }
                     }
                 }
             }

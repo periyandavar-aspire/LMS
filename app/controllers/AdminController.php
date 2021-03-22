@@ -1,9 +1,9 @@
 <?php
 class AdminController extends UserController
 {
-    public function __construct(?Model $model = null)
+    public function __construct()
     {
-        parent::__construct($model);
+        parent::__construct(null);
     }
 
     // public function index()

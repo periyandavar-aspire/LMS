@@ -1,7 +1,7 @@
 <?php
 class IssuedbooksController extends Controller
 {
-    public function __construct($model = null)
+    public function __construct()
     {
         parent::__construct($model);
     }

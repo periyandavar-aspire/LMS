@@ -3,7 +3,9 @@ const m_strLowerCase = "abcdefghijklmnopqrstuvwxyz";
 const m_strNumber = "0123456789";
 const m_strCharacters = "!@#$%^&*?_~";
 const regexMail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
+const regexAlpha = /^[A-Za-z]+$/;
+const regexAlphaSpace = /^[A-Za-z ]+$/;
+const regexPhone = /^[789]\d{9}$/;
 function passStrength(password)
 {
 	document.querySelector("#pass1str").style.display="block";	
@@ -20,39 +22,75 @@ const loginFormValidator = function (event) {
 };
 
 const registrationFormValidator = function(event) {
-    const regexAlpha = /^[A-Za-z]+$/;
-    const regexPhone = /^[789]\d{9}$/;
     let password = document.getElementById("password").value; 
     let confirmPassword = document.getElementById("confirmPassword").value; 
-    console.log("dd");
-    if(!regexAlpha.test(document.getElementById("fullname").value)){
+    if (!regexAlphaSpace.test(document.getElementById("fullname").value)) {
         toast("Invalid Name..!","danger","Invalid Input");
         event.preventDefault();
         return false;
     } else if (!new RegExp(/^[A-Za-z0-9_]*$/).test(document.getElementById("username").value)) {
-        document.getElementById('msg').innerHTML = "Invalid username..!";
+        toast('danger', "Invalid username..!");
         event.preventDefault();
         return false;
     } else if (password.length < 6) {
-        document.getElementById('msg').innerHTML = "Password is too short.. It should be six character long..!";
+        toast('danger', "Password is too short.. It should be six character long..!");
         event.preventDefault();
-    } else if(!regexMail.test(document.getElementById("emailid").value)){
+    } else if(!regexMail.test(document.getElementById("emailid").value)) {
         toast("Invalid Email..!","danger","Invalid Input");
         event.preventDefault();
         return false;
-    }else if(!regexPhone.test(document.getElementById("mobile").value)){
+    } else if(!regexPhone.test(document.getElementById("mobile").value)) {
         toast("Invalid Mobile..!","danger","Invalid Input");
         event.preventDefault();
         return false;
-    }else if(document.getElementById("gender").value!='m' && document.getElementById("gender").value!='f'){
+    } else if(document.getElementById("gender").value!='m' && document.getElementById("gender").value!='f') {
         toast("Please select your gender..!","danger","Invalid Input");
         event.preventDefault();
         return false;
-    }else if(password != confirmPassword){
+    } else if(password != confirmPassword) {
         toast("Please confirm your password..!","danger","Invalid Input");
         event.preventDefault();
         return false;
-    }else if(checkPassword(password) <= 50){
+    } else if(checkPassword(password) <= 50) {
+        toast("Please select a strong Password..!","danger","Warning");
+        event.preventDefault();
+        return false;
+    } else if(document.getElementById('vercode').value == '') {
+        toast("Please enter captcha..!","danger","Warning");
+        event.preventDefault();
+        return false;
+    }
+    return true;
+    
+}
+
+const editProfileValidator = function(event) {
+    let password = document.getElementById("password").value; 
+    let confirmPassword = document.getElementById("confirmPassword").value; 
+    if (!regexAlphaSpace.test(document.getElementById("fullname").value)) {
+        toast("Invalid Name..!","danger","Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (password.length < 6 && password != '') {
+        toast('danger', "Password is too short.. It should be six character long..!");
+        event.preventDefault();
+    } else if(!regexMail.test(document.getElementById("emailid").value)) {
+        toast("Invalid Email..!","danger","Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if(!regexPhone.test(document.getElementById("mobile").value)) {
+        toast("Invalid Mobile..!","danger","Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if(document.getElementById("gender").value!='m' && document.getElementById("gender").value!='f') {
+        toast("Please select your gender..!","danger","Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if(password != confirmPassword) {
+        toast("Please confirm your password..!","danger","Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if(checkPassword(password) <= 50 && password !='') {
         toast("Please select a strong Password..!","danger","Warning");
         event.preventDefault();
         return false;
