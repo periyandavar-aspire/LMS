@@ -6,7 +6,7 @@ class FormDataValidation
      * @param string $data data to be validate
      * @param ValidationRule $vr ValidationRule Object defining custom validation and format
      */
-    public function customValidation(string $data, ValidationRule $vr): bool
+    public function customValidation(?string $data, ValidationRule $vr): bool
     {
         return $vr->validate($data);
     }
@@ -83,20 +83,8 @@ class FormDataValidation
             $fieldName = $field;
             $data = $value["data"];
             $rules = $value["rule"];
-            // if ($rules instanceof ValidationRule) {
-            //     $newValue = $this->customValidation($data, $rule);
-            //     if ($newValue === false) {
-            //         $invalidField = $fieldName;
-            //         return false; 
-            //     } else {
-            //         $fields->setData($fieldName, $newValue);
-            //     }
-            // } else 
-            if ($rules != "") {
+            if ($rules != "" && $rules != null) {
                 foreach ((array)$rules as $rule) {
-                    
-                    $params = explode(" ", $rule);
-                    $rule = array_shift($params);
                     if ($rule instanceof ValidationRule) {
                         $newValue = $this->customValidation($data, $rule);
                         if ($newValue === false) {
@@ -105,16 +93,20 @@ class FormDataValidation
                         } else {
                             $fields->setData($fieldName, $newValue);
                         }
-                    } else if (method_exists($this, $rule)) {
-                        if (count($params) == 0) {
-                            if (!$this->$rule($data)) {
-                                $invalidField = $fieldName;
-                                return false;
-                            }
-                        } else if (count($params) != 0) {
-                            if (!$this->$rule($data, ...$params)) {
-                                $invalidField = $fieldName;
-                                return false;
+                    } else {
+                        $params = explode(" ", $rule);
+                        $rule = array_shift($params);
+                        if (method_exists($this, $rule)) {
+                            if (count($params) == 0) {
+                                if (!$this->$rule($data)) {
+                                    $invalidField = $fieldName;
+                                    return false;
+                                }
+                            } else if (count($params) != 0) {
+                                if (!$this->$rule($data, ...$params)) {
+                                    $invalidField = $fieldName;
+                                    return false;
+                                }
                             }
                         }
                     }

@@ -559,7 +559,7 @@ article section:nth-of-type(2){
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 992px) {
     .navbar-toggler {
         display: none;
     }
@@ -578,7 +578,7 @@ article section:nth-of-type(2){
     
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
     .expand-navbar {
         align-items: center;
         flex-basis: 100%;

@@ -1,5 +1,5 @@
 <?php
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     public function __construct()
     {
@@ -88,6 +88,46 @@ class HomeController extends Controller
         }
         $this->loadLayout("header.html");
         $this->loadView("login", $data);
+        $this->loadLayout("footer.html");
+    }
+    public function createAccount()
+    {
+        $data = [];
+        $fdv = new FormDataValidation();
+        $fields = new fields(['mail', 'username', 'fullname', 'password', 'gender', 'mobile']);
+        $rules = [
+            'mail' => 'mailValidation',
+            'fullName' => 'alphaSpaceValidation',
+            'username' => "expressValidation /^[A-Za-z0-9_]*$/", 
+            'password' => "lengthValidation 6",
+            'mobile' => 'mobileNumberValidation'
+        ];
+        $fields->addRule($rules);
+        $fields->addCustomeRule(
+            'gender',
+            new class implements ValidationRule {
+                public function validate(?string $data): ?bool
+                {
+                    if ($data == 'm' || $data == 'f') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        );
+        $fields->addValues($this->input->post());
+        if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
+            $data["msg"] = "Invalid captcha..!";
+        } else if (!$fdv->validate($fields, $field)) {
+            $data["msg"] = "Invalid $field..!";
+        } elseif (!$this->model->createAccount($fields->getValues())) {
+            $data["msg"] = "Unable to create an account..!";
+        } else {
+            $data['msg'] = "Account created successfully..!";
+        }
+        $this->loadLayout("header.html");
+        $this->loadView("registration", $data);
         $this->loadLayout("footer.html");
     }
     public function registration()

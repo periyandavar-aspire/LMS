@@ -3,7 +3,7 @@
 trait FileUploader
 {   
     /**
-     * @var array allowedFiles allowed files for uploading
+     * @var array|string allowedFiles allowed files for uploading
      */
     private $allowedFiles = "*";
     /**

@@ -3,7 +3,7 @@
  * Super class for all controller. all controllers should extend this controller
  * Controller class consists of basic level functions for various purposes
  */
-class Controller
+class BaseController
 {
     /**
      * @var Model $model model class object that will has the link to the Model Class
@@ -27,7 +27,7 @@ class Controller
     {
         $this->model = $model;
         $this->input = new InputData();
-        $this->service = new Service();
+        $this->service = $service;
     }
     /**
      * This function will load the required View(php) file without error on failure

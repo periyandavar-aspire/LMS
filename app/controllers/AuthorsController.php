@@ -1,5 +1,5 @@
 <?php
-class AuthorsController extends Controller
+class AuthorsController extends BaseController
 {
     public function __construct()
     {

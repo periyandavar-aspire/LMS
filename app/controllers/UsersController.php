@@ -1,5 +1,5 @@
 <?php
-class UsersController extends Controller
+class UsersController extends BaseController
 {
     public function __construct()
     {

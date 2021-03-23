@@ -13,18 +13,18 @@
                             <hr>
                             <form action="login" method="POST">                                     
                                 <div class="form-input-div">
-                                    <label>Enter Email</label>
+                                    <label>Enter Email <span class="required-star">*</span></label>
                                     <input class="form-control" type="email" name="email" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
                                     <span id="user-availability-status" style="font-size:12px;"></span> 
                                 </div>                    
                                 <div class="form-input-div">
-                                    <label>Enter Password</label>
+                                    <label>Enter Password <span class="required-star">*</span></label>
                                     <input class="form-control" name="password" type="password" placeholder="********" autocomplete="off" required="">
                                     <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
                                     <span id="pass1msg" style="display:none"></span>
                                 </div>   
                                 <div class="form-input-div">
-                                        <label>Verification code : </label>
+                                        <label>Verification code <span class="required-star">*</span> </label>
                                         <input type="text" name="captcha" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img id="logImg" src="<?php echo Utility::baseURL() . "/home/captcha"; ?>">
                                 </div>                                  
                                 <div class="form-buttons">
@@ -34,7 +34,7 @@
                                 <div class="msg">
                                     <?php if(isset($msg)) echo $msg ?>
                                 </div>
-                                <br><span> Don't have an account..? <a class="link" href="registration"> Register here </a></span>
+                                <br><span> Don't have an account..? <a class="link" href="/register"> Register here </a></span>
 
                             </form>
                         </section>

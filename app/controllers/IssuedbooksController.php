@@ -1,5 +1,5 @@
 <?php
-class IssuedbooksController extends Controller
+class IssuedbooksController extends BaseController
 {
     public function __construct()
     {

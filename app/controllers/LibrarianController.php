@@ -1,5 +1,5 @@
 <?php
-class LibrarianController extends UserController
+class LibrarianController extends BaseController
 {
     public function __construct()
     {

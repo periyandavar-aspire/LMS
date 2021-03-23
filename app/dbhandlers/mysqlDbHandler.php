@@ -1,6 +1,6 @@
 <?php
 
-class MysqlHandler extends DbHandler
+class MysqlDbHandler extends DbHandler
 {
     public function __construct(string $host, string $user, string $pass, string $db)
     {
@@ -10,12 +10,12 @@ class MysqlHandler extends DbHandler
     public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
 	{
 		if (!self::$instance) {
-			self::$instance = new MysqlHandler($host, $user, $pass, $db);
+			self::$instance = new static($host, $user, $pass, $db);
 		}
 		return self::$instance;
 	}
 
-    public function executeQuery()
+    public function executeQuery(): bool
     {
         $stmt = $this->con->prepare($this->query);
         $paramType = "";
@@ -57,7 +57,7 @@ class MysqlHandler extends DbHandler
         }
     }
 
-    public function runQuery(string $sql, array $bindValues=[])
+    public function runQuery(string $sql, array $bindValues=[]): bool
     {
         $stmt = $this->con->prepare($sql);
         $paramType = "";
@@ -105,6 +105,9 @@ class MysqlHandler extends DbHandler
 
     public function close()
     {
-        $this->con->close();
+        if(is_resource($this->con) && get_resource_type($this->con)==='mysql link'){
+            $this->con->close();
+        }
+        $this->con = null;
     }
 }
