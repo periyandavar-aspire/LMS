@@ -1,6 +1,6 @@
 <?php
 
-class HomeModel extends Model
+class HomeModel extends BaseModel
 {
 
     public function __construct()
@@ -26,6 +26,17 @@ class HomeModel extends Model
         $this->db->where('mail', '=', $mail);
         $this->db->execute();
         $result = $this->db->fetch();
-        return $result->password;
+        if ($result != null) {
+            return $result->password;
+        } else {
+            return null;
+        }
+    }
+
+    public function createAccount(array $fields)
+    {
+        $fields['password'] = md5($fields['password']);
+        $flag = $this->db->insert('user', $fields)->execute();
+        return  $flag;
     }
 }

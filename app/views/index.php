@@ -7,7 +7,7 @@
                     <div class="text-container">
                         <h1>A PLACE TO <span class="morph"> </span></h1>
                         <p class="heading-para">We store the energy that fuels the imagination. we open up windows to the world and inspire you to explore and achieve, and contribute to improving your quality of life.</p>
-                        <a class="btn-link" href="home/registration">JOIN NOW</a>
+                        <a class="btn-link" href="/register">JOIN NOW</a>
                     </div>
                 </div> 
             </div> 

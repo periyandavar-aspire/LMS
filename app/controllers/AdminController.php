@@ -1,5 +1,5 @@
 <?php
-class AdminController extends UserController
+class AdminController extends BaseController
 {
     public function __construct()
     {
@@ -11,7 +11,7 @@ class AdminController extends UserController
     //     static::home();
     // }
 
-    public static function home()
+    public function home()
     {
         $obj = static::getMyInstance(null);
         $obj->loadLayout("adminHeader.html");
@@ -19,7 +19,7 @@ class AdminController extends UserController
         $obj->loadLayout("adminFooter.html");
     }
 
-    public static function profile()
+    public function profile()
     {
         $obj = static::getMyInstance();
         $obj->loadLayout("adminHeader.html");
@@ -27,7 +27,7 @@ class AdminController extends UserController
         $obj->loadLayout("adminFooter.html");
     }
 
-    public static function logout()
+    public function logout()
     {
         session_destroy();
         $obj = static::getMyInstance();

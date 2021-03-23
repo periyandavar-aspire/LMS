@@ -1,5 +1,5 @@
 <?php
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function __construct()
     {
@@ -53,9 +53,6 @@ class UserController extends Controller
                 }
             }
         }
-        echo $data['msg'];
-        // $data['result'] = $this->model->getProfile($id);
-        // $this->redirect('user/profile');
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout("userHeader.html");
         $this->loadView("userProfile", $data);
@@ -64,8 +61,8 @@ class UserController extends Controller
 
     public function logout()
     {
-        // $obj = static::getMyInstance();
-        $this->redirect("home/login");
+        session_destroy();
+        $this->redirect("/login");
     }
 
     public function lent()

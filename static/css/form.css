@@ -73,6 +73,9 @@ meter{
 .form-control :valid{
     border-color: #29afd6;
 }
+span.required-star {
+    color: red;
+}
 @media(max-width:900px){
     .button-control{
         width: 38%;

@@ -1,6 +1,6 @@
 <?php
 
-class PdoHandler extends DbHandler
+class PdoDbHandler extends DbHandler
 {
     public function __construct($host, $user, $pass, $db, $driver)
     {
@@ -12,12 +12,12 @@ class PdoHandler extends DbHandler
     public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
 	{
 		if (!self::$instance) {
-			self::$instance = new PdoHandler($host, $user, $pass, $db, $driver);
+			self::$instance = new static($host, $user, $pass, $db, $driver);
 		}
 		return self::$instance;
 	}
 
-    public function executeQuery()
+    public function executeQuery(): bool
     {
         $stmt = $this->con->prepare($this->query);
         $index = 1;
@@ -49,7 +49,7 @@ class PdoHandler extends DbHandler
         }
     }
 
-    public function runQuery(string $sql, array $bindValues=[])
+    public function runQuery(string $sql, array $bindValues=[]): bool
     {
         $stmt = $this->con->prepare($sql);
         $index = 1;

@@ -1,5 +1,5 @@
 <?php
-class AdminSettingsController extends UserController
+class AdminSettingsController extends BaseController
 {
     public function __construct()
     {

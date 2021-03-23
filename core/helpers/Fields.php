@@ -11,10 +11,10 @@ class Fields implements Iterator
      * @param array $fields null value or array of strings
      * constructor function used to initiate $fields
      */
-    public function __construct(?array $fields)
+    public function __construct(?array $fields = null)
     {
         if ($fields == NULL) {
-            $fields = $fields;
+            $this->fields = null;
         } else {
             foreach ($fields as $field) {
                 $this->fields[$field]['data'] = null;
