@@ -11,25 +11,25 @@ spl_autoload_register(function ($className) {
         if (file_exists($file)) {
             require_once $file;
         }
-    } else if (Utility::endsWith(strtolower($className), 'model')) {
+    } elseif (Utility::endsWith(strtolower($className), 'model')) {
         $ModelPath = $config['models'];
         $file = $ModelPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
-    } else if (Utility::endsWith(strtolower($className), 'service')) {
+    } elseif (Utility::endsWith(strtolower($className), 'service')) {
         $ModelPath = $config['services'];
         $file = $ModelPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
-    } else if (Utility::endsWith(strtolower($className), 'handler')) {
+    } elseif (Utility::endsWith(strtolower($className), 'handler')) {
         $DBPath = $config['db_handlers'];
         $file = $DBPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
-    } else if (Utility::endsWith(strtolower($className), 'view')) {
+    } elseif (Utility::endsWith(strtolower($className), 'view')) {
         $ViewPath = $config['views'];
         $file = $ViewPath . $className . ".php";
         if (file_exists($file)) {

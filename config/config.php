@@ -7,15 +7,15 @@ $config['base_url'] = "http://lms.com";
 /**
  * Path to views Directory
  */
-$config['views'] = "app/views/";
+$config['views'] = "app/view/";
 /**
  * Path to Models Directory
  */
-$config['models'] = "app/models/";
+$config['models'] = "app/model/";
 /**
  * Path to Controllers Directory
  */
-$config['controllers'] ="app/controllers/";
+$config['controllers'] ="app/controller/";
 /**
  * Path to Layout Directory
  */
@@ -23,11 +23,11 @@ $config['layouts'] = "static/layout/";
 /**
  * Path to custom db handlers
  */
-$config['db_handlers'] = "app/dbHandlers/";
+$config['db_handlers'] = "app/dbHandler/";
 /**
  * Path to custom db handlers
  */
-$config['services'] = "app/services/";
+$config['services'] = "app/service/";
 /**
  * Default page index page
  */

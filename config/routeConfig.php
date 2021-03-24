@@ -75,3 +75,8 @@ Route::add('/user/logout', null, 'get', function () {
                 Utility::redirectURL('login');
         }
 });
+
+Route::add('/librarian/home');
+Route::add('/librarian/profile');
+
+Route::add('/admin/profile');
