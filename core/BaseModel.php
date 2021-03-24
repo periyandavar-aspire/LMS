@@ -8,8 +8,7 @@ class BaseModel
         global $dbConfig;
         if ($dbConfig['usepdo']) {
             $this->db = PdoDbHandler::getInstance($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database'], $dbConfig['driver']);
-        }
-        else {
+        } else {
             $handler = $dbConfig['driver'] . "DbHandler";
             $this->db = $handler::getInstance($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database'], $dbConfig['driver']);
         }
