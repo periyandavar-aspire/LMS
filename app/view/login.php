@@ -13,8 +13,8 @@
                             <hr>
                             <form action="login" method="POST">                                     
                                 <div class="form-input-div">
-                                    <label>Enter Email <span class="required-star">*</span></label>
-                                    <input class="form-control" type="email" name="email" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
+                                    <label>Enter User Name <span class="required-star">*</span></label>
+                                    <input class="form-control" type="text" pattern="^[a-zA-Z0-9_]+$" id="username" name="username" autocomplete="off" placeholder="User Name..." required="">
                                     <span id="user-availability-status" style="font-size:12px;"></span> 
                                 </div>                    
                                 <div class="form-input-div">

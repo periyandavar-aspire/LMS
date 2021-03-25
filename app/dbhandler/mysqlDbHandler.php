@@ -8,12 +8,12 @@ class MysqlDbHandler extends DbHandler
     }
 
     public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
-	{
-		if (!self::$instance) {
-			self::$instance = new static($host, $user, $pass, $db);
-		}
-		return self::$instance;
-	}
+    {
+        if (!self::$instance) {
+            self::$instance = new static($host, $user, $pass, $db);
+        }
+        return self::$instance;
+    }
 
     public function executeQuery(): bool
     {
@@ -105,7 +105,7 @@ class MysqlDbHandler extends DbHandler
 
     public function close()
     {
-        if(is_resource($this->con) && get_resource_type($this->con)==='mysql link'){
+        if (is_resource($this->con) && get_resource_type($this->con)==='mysql link') {
             $this->con->close();
         }
         $this->con = null;

@@ -16,5 +16,4 @@ class LoginModel extends BaseModel
     {
         return md5("libr");
     }
-
 }

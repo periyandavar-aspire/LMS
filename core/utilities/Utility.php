@@ -32,19 +32,18 @@ class Utility
         exit();
     }
 
-    public static function endsWith($str, $endStr) 
-    { 
-        $len = strlen($endStr); 
-        if ($len == 0) { 
-            return true; 
-        } 
-        return (substr($str, -$len) === $endStr); 
+    public static function endsWith($str, $endStr)
+    {
+        $len = strlen($endStr);
+        if ($len == 0) {
+            return true;
+        }
+        return (substr($str, -$len) === $endStr);
     }
 
-    public static function startsWith ($str, $startStr) 
-    { 
-        $len = strlen($startStr); 
-        return (substr($str, 0, $len) === $startStr); 
-    } 
-
+    public static function startsWith($str, $startStr)
+    {
+        $len = strlen($startStr);
+        return (substr($str, 0, $len) === $startStr);
+    }
 }

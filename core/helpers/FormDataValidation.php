@@ -1,5 +1,5 @@
 <?php
-class FormDataValidation 
+class FormDataValidation
 {
     /**
      * performs the custom validation
@@ -89,7 +89,7 @@ class FormDataValidation
                         $newValue = $this->customValidation($data, $rule);
                         if ($newValue === false) {
                             $invalidField = $fieldName;
-                            return false; 
+                            return false;
                         } else {
                             $fields->setData($fieldName, $newValue);
                         }
@@ -98,11 +98,18 @@ class FormDataValidation
                         $rule = array_shift($params);
                         if (method_exists($this, $rule)) {
                             if (count($params) == 0) {
-                                if (!$this->$rule($data)) {
+                                if ($data == null) {
+                                    if (in_array("required", (array)$rules)) {
+                                        return true;
+                                    } else {
+                                        $invalidField = $fieldName;
+                                        return false;
+                                    }
+                                } elseif (!$this->$rule($data)) {
                                     $invalidField = $fieldName;
                                     return false;
                                 }
-                            } else if (count($params) != 0) {
+                            } elseif (count($params) != 0) {
                                 if (!$this->$rule($data, ...$params)) {
                                     $invalidField = $fieldName;
                                     return false;

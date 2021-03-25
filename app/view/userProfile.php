@@ -12,30 +12,30 @@
                 </div>
             </div>
         
-        <form action="profile/update" onsubmit="editProfileValidator(event);" method="POST">
+        <form action="/user/profile/update" onsubmit="editProfileValidator(event);" method="POST">
             <div class="form-input-div">
                 <label>Full Name <span class="required-star">*</span></label>
-                <input class="form-control" type="text" value="<?php echo $result->FullName; ?>" pattern="^[a-zA-Z ]+$" id="fullname" name="fullname" autocomplete="off" placeholder="Full Name..." required="">
+                <input class="form-control" type="text" value="<?php echo $result->fullName; ?>" pattern="^[a-zA-Z ]+$" id="fullname" name="fullname" autocomplete="off" placeholder="Full Name..." required="">
             </div>
             <div class="form-input-div">
                 <label>User Name</label>
-                <input class="form-control" disabled type="text" value="<?php echo $result->UserName; ?>" pattern="^[a-zA-Z0-9_]+$" id="username" name="username" autocomplete="off" placeholder="User Name..." required="">
+                <input class="form-control" disabled type="text" value="<?php echo $result->userName; ?>" pattern="^[a-zA-Z0-9_]+$" id="username" name="username" autocomplete="off" placeholder="User Name..." required="">
             </div>
             <div class="form-input-div">
                 <label>Select Your Gender <span class="required-star">*</span></label>
                 <select class="form-control select-input" name="gender" id="gender" placeholder="Full Name..." required="">
                     <option value="" style="display: none;">Select Gender</option>
-                    <option value="m" <?php if ($result->Gender=='1') echo "selected"; ?>>Male</option>
-                    <option value="f" <?php if ($result->Gender=='2') echo "selected"; ?>>Female</option>
+                    <option value="m" <?php if ($result->gender=='1') echo "selected"; ?>>Male</option>
+                    <option value="f" <?php if ($result->gender=='2') echo "selected"; ?>>Female</option>
                 </select>
             </div>
             <div class="form-input-div">
                 <label>Mobile Number <span class="required-star">*</span></label>
-                <input class="form-control" value="<?php echo $result->Mobile; ?>" pattern="^[789]\d{9}$" type="text" id="mobile" name="mobile" maxlength="10" placeholder="Mobile Number..." autocomplete="off" required="">
+                <input class="form-control" value="<?php echo $result->mobile; ?>" pattern="^[789]\d{9}$" type="text" id="mobile" name="mobile" maxlength="10" placeholder="Mobile Number..." autocomplete="off" required="">
             </div>                                                    
             <div class="form-input-div">
                 <label>Email <span class="required-star">*</span></label>
-                <input class="form-control" disabled type="email" value="<?php echo $result->Mail; ?>" name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
+                <input class="form-control" disabled type="email" value="<?php echo $result->mail; ?>" name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
                 <span id="user-availability-status" style="font-size:12px;"></span> 
             </div>                    
             <div class="form-input-div">

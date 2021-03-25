@@ -7,7 +7,7 @@ class BaseController
 {
     /**
      * @var Model $model model class object that will has the link to the Model Class
-     * using this variable we can acces the model class functions within this controller 
+     * using this variable we can acces the model class functions within this controller
      * Ex : $this->model->getData();
      */
     protected $model;
@@ -43,9 +43,8 @@ class BaseController
                 foreach ($data as $key => $value) {
                     $$key = $value;
                 }
-            }    
+            }
             include_once $path;
-            
         } else {
             echo "$path not found";
         }
@@ -54,15 +53,15 @@ class BaseController
      * This function will redirect the page
      * @param string $url page to redirect
      * @param bool  $permanent optional default:false indicates whether the redirect is permanent or not
-     * 
+     *
      */
     protected function redirect(string $url, bool $permanent = false)
     {
         Utility::redirectURL($url, $permanent);
     }
     /**
-     * 
-     * 
+     *
+     *
      */
     public function dispatch(string $url, bool $caseSensitive = false)
     {
@@ -78,17 +77,18 @@ class BaseController
     {
         global $config;
         $path = $config['layouts'] . '/' . $file;
-        if(file_exists($path))
+        if (file_exists($path)) {
             readfile($path);
-        else
+        } else {
             echo "$path layout is missing";
+        }
     }
     /**
      * This functions load the style sheet
      * @param $style style sheet filename with extension
      * @param bool $staticPath optional default:true if its true this function will load
      * css from static directory
-     *  
+     *
      */
     // public function addCSS($style,$staticPath){
     //     $path = ($staticPath) ? (STATIC_DIR."/".$style) : $style;
@@ -97,20 +97,18 @@ class BaseController
     //     else
     //         echo "$path style sheet is missing";
     // }
-    // /**
-    //  * This functions load the script
-    //  * @param $script script filename with extension
-    //  * @param bool $staticPath optional default:true if its true this function will load
-    //  * script from static directory
-    //  *  
-    //  */
-    // public function addJS($script,$staticPath){
-    //     $path = ($staticPath) ? (STATIC_DIR."/".$script) : $script;
-    //     if(file_exists($path))
-    //         readfile($path);
-    //     else
-    //         echo "$path script is missing";
-    // }
+    
+    
+    /**
+     * adds the Js script on the view
+     * @param string $script
+     * 
+     * @return void
+     */
+    public function addScript(string $script)
+    {
+        echo "<script>" . $script . "</script>";
+    }
     
     protected static function getMyInstance(?Model $model = null)
     {
@@ -120,7 +118,7 @@ class BaseController
     public static function executeMethod($method)
     {
         if (method_exists(new static(), $method)) {
-            static::$method(); 
+            static::$method();
         } else {
             echo "method not exists $method";
         }

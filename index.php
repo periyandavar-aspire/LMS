@@ -1,5 +1,5 @@
 <?php
-define("VALID_REQ",true);
+define("VALID_REQ", true);
 session_start();
 require_once 'core/Route.php';
 
@@ -16,4 +16,3 @@ try {
     echo "Error 500";
     print_r($e);
 }
-

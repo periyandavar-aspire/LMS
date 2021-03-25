@@ -37,7 +37,7 @@ class BooksController extends BaseController
 
         fputcsv($output, array('Column 1', 'Column 2', 'Column 3'));
 
-        $list = array (
+        $list = array(
             array('aaa', 'bbb', 'ccc', 'dddd'),
             array('123', '456', '789'),
             array('"aaa"', '"bbb"')
@@ -58,14 +58,14 @@ class BooksController extends BaseController
         header("Content-Type: text/event-stream");
         while (true) {
             // if ($lastUpdate != filemtime("log/unavailablebooks.log")) {
-                echo "event: $lastUpdate";
-                echo "\n\n";
-                $data = base64_decode(file_get_contents("log/unavailablebooks.log"));
-                echo 'data:'.$data."\n\n";
+            echo "event: $lastUpdate";
+            echo "\n\n";
+            $data = base64_decode(file_get_contents("log/unavailablebooks.log"));
+            echo 'data:'.$data."\n\n";
             // }
             flush();
             sleep(10);
-            if(connection_aborted()){
+            if (connection_aborted()) {
                 break;
             }
         }

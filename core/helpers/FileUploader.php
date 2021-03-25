@@ -1,7 +1,7 @@
 <?php
 
 trait FileUploader
-{   
+{
     /**
      * @var array|string allowedFiles allowed files for uploading
      */
@@ -30,9 +30,9 @@ trait FileUploader
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         if ($this->allowedFiles == "*") {
             return true;
-        } else if (is_array($this->allowedFiles)) {
+        } elseif (is_array($this->allowedFiles)) {
             return in_array($extension, $this->allowedFiles);
-        } else if (strtolower($this->allowedFiles) == $extension) {
+        } elseif (strtolower($this->allowedFiles) == $extension) {
             return true;
         }
         return false;
@@ -60,7 +60,7 @@ trait FileUploader
         return false;
     }
 
-    public function uploadFile(array $file, string $destination, bool $overwrite = false): bool 
+    public function uploadFile(array $file, string $destination, bool $overwrite = false): bool
     {
         if ($this->validateFile($file)) {
             if (!$overwrite) {
@@ -71,6 +71,6 @@ trait FileUploader
             move_uploaded_file($file['tmp_name'], $destination);
             return true;
         }
-        return false; 
+        return false;
     }
 }

@@ -30,11 +30,11 @@ abstract class Dbhandler
      */
     abstract public function fetch();
     /**
-     * This abstract function should implemented on the handlers to get the instance of the class in 
+     * This abstract function should implemented on the handlers to get the instance of the class in
      * singleton approch
      */
     abstract public static function getInstance(string $host, string $user, string $pass, string $db, string $driver);
-	/**
+    /**
      * Instance of the class
      */
     protected static $instance = null;
@@ -53,18 +53,18 @@ abstract class Dbhandler
     /**
      * @var string $table stores table name if its select query
      */
-	private $table;
+    private $table;
     /**
      * @var string $columns stores columns
      */
     private $columns;
     /**
-     * @var string $limit stores limit value 
-     */ 
+     * @var string $limit stores limit value
+     */
     private $limit;
     /**
      * @var string $orderBy stores order value
-     */ 
+     */
     private $orderBy;
     /**
      * @var string $where stores where condition
@@ -82,8 +82,9 @@ abstract class Dbhandler
      */
     public function __destruct()
     {
-        if ($this->con != null)
+        if ($this->con != null) {
             $this->close();
+        }
     }
     /**
      * quert function to run directly raw query with or without bind values
@@ -126,11 +127,11 @@ abstract class Dbhandler
     private function resetQuery()
     {
         $this->table = null;
-		$this->columns = null;
-		$this->sql = null;
-		$this->bindValues = null;
-		$this->limit = null;
-		$this->orderBy = null;
+        $this->columns = null;
+        $this->sql = null;
+        $this->bindValues = null;
+        $this->limit = null;
+        $this->orderBy = null;
         $this->where = null;
     }
     /**
@@ -200,52 +201,52 @@ abstract class Dbhandler
      * we can call this in following way
      * select('field1', 'field2', 'field3');
      */
-	public function select()
-	{
+    public function select()
+    {
         $this->resetQuery();
         $columns = func_get_args();
-		for($i = 0; $i < count($columns); $i++) {
-			$columns[$i] = trim($columns[$i]);
-		}
-		$columns = implode('`, `', $columns);
-		$this->columns = "`$columns`";
-		return $this;
-	}
+        for ($i = 0; $i < count($columns); $i++) {
+            $columns[$i] = trim($columns[$i]);
+        }
+        $columns = implode('`, `', $columns);
+        $this->columns = "`$columns`";
+        return $this;
+    }
     /**
      * selectAs used to add select fields with as value
-     * call this function by 
+     * call this function by
      * selectAs(['field1' => 'as1', 'field2' => 'as2'])
      */
     public function selectAs(array $selectData)
-	{
-		$fields = array_keys($selectData);
+    {
+        $fields = array_keys($selectData);
         $as = array_values($selectData);
         $columns = [];
-		for($i = 0; $i < count($fields); $i++) {
+        for ($i = 0; $i < count($fields); $i++) {
             $column[] = trim($fields[$i]) . " AS " . trim($as[$i]);
         }
-		$columns = implode('`, `', $columns);
-		$this->columns = "`$columns`";
-		return $this;
-	}
+        $columns = implode('`, `', $columns);
+        $this->columns = "`$columns`";
+        return $this;
+    }
     /**
      * selectAll function used to selectAll fields
      */
     public function selectAll()
-	{
+    {
         $this->resetQuery();
-		$this->columns = "*";
-		return $this;
-	}
+        $this->columns = "*";
+        return $this;
+    }
     /**
      * from used to select table in select query
      * use : select('field')->from('table');
      */
     public function from($tableName)
-	{
-		$this->table = $tableName;
-		return $this;
-	}
+    {
+        $this->table = $tableName;
+        return $this;
+    }
     /**
      * where function to add where condition with AND
      * we can use this in there ways
@@ -255,11 +256,11 @@ abstract class Dbhandler
      * where('id != ?', 1)
      * where ('id', '!=', 1)
      * $where = ['id != 1']
-     * where($where) 
+     * where($where)
      * $where = ['id != ?', 1]
-     * where($where) 
+     * where($where)
      * $where = ['id', '!=', 1]
-     * where($where) 
+     * where($where)
      */
     public function where()
     {
@@ -313,11 +314,11 @@ abstract class Dbhandler
      * orWhere('id != ?', 1)
      * orWhere ('id', '!=', 1)
      * $orWhere = ['id != 1']
-     * orWhere($orWhere) 
+     * orWhere($orWhere)
      * $orWhere = ['id != ?', 1]
-     * orWhere($orWhere) 
+     * orWhere($orWhere)
      * $orWhere = ['id', '!=', 1]
-     * orWhere($orWhere) 
+     * orWhere($orWhere)
      */
     public function orWhere()
     {
@@ -366,44 +367,40 @@ abstract class Dbhandler
      * to set limit and offset values in select query
      */
     public function limit(int $limit, ?int $offset=null)
-	{
-		if ($offset ==null ) {
-			$this->limit = " LIMIT $limit";
-		}else{
-			$this->limit = " LIMIT $limit OFFSET $offset";
-		}
+    {
+        if ($offset ==null) {
+            $this->limit = " LIMIT $limit";
+        } else {
+            $this->limit = " LIMIT $limit OFFSET $offset";
+        }
 
-		return $this;
-	}
+        return $this;
+    }
     /**
      * to perform sort
      */
     public function orderBy($field_name, $order = 'ASC')
-	{
-		$field_name = trim($field_name);
+    {
+        $field_name = trim($field_name);
 
-		$order =  trim(strtoupper($order));
+        $order =  trim(strtoupper($order));
 
-		// validate it's not empty and have a proper valuse
-		if ($field_name !== null && ($order == 'ASC' || $order == 'DESC')) {
-			if ($this->orderBy ==null ) {
-				$this->orderBy = " ORDER BY $field_name $order";
-			}else{
-				$this->orderBy .= ", $field_name $order";
-			}
-			
-		}
+        // validate it's not empty and have a proper valuse
+        if ($field_name !== null && ($order == 'ASC' || $order == 'DESC')) {
+            if ($this->orderBy ==null) {
+                $this->orderBy = " ORDER BY $field_name $order";
+            } else {
+                $this->orderBy .= ", $field_name $order";
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
     /**
      * return query value
      */
     public function getQuery()
-	{
-		return $this->query;
-	}
-
-
-
+    {
+        return $this->query;
+    }
 }

@@ -16,10 +16,11 @@ class AdminSettingsController extends BaseController
     {
         $this->loadLayout("adminHeader.html");
         $data = [];
-        if($this->uploadFile($this->input->files('logobanar'), "static/img/lms-logo.jpg",true))
+        if ($this->uploadFile($this->input->files('logobanar'), "static/img/lms-logo.jpg", true)) {
             $data["msg"] = "Logo is uploaded successfully..!";
-        else
+        } else {
             $data["msg"] = "File upload failed..!";
+        }
         $this->loadView('settings', $data);
         $this->loadLayout("adminFooter.html");
     }

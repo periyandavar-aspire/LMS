@@ -2,7 +2,6 @@
 
 class HomeModel extends BaseModel
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -19,11 +18,11 @@ class HomeModel extends BaseModel
         print_r($result);
     }
 
-    public function getUserPass(string $mail)
+    public function getUserPass(string $username)
     {
-        $this->db->select('mail','password');
+        $this->db->select('username', 'password');
         $this->db->from('user');
-        $this->db->where('mail', '=', $mail);
+        $this->db->where('username', '=', $username);
         $this->db->execute();
         $result = $this->db->fetch();
         if ($result != null) {

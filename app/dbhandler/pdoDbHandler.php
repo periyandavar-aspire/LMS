@@ -6,16 +6,16 @@ class PdoDbHandler extends DbHandler
     {
         $this->con = new PDO("$driver:host=$host;dbname=$db;", $user, $pass);
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);    
+        $this->con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     }
 
     public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
-	{
-		if (!self::$instance) {
-			self::$instance = new static($host, $user, $pass, $db, $driver);
-		}
-		return self::$instance;
-	}
+    {
+        if (!self::$instance) {
+            self::$instance = new static($host, $user, $pass, $db, $driver);
+        }
+        return self::$instance;
+    }
 
     public function executeQuery(): bool
     {
