@@ -38,7 +38,7 @@ class UserController extends BaseController
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $data['msg'] = "Invalid $field..!";
-        } else if (!$this->model->updateProfile($id, $fields->getValues())) {
+        } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
             $data['msg'] = "Unable to update the profile..!";
         } else {
             $data['msg'] = "Profile updated successfully..!";
@@ -69,13 +69,13 @@ class UserController extends BaseController
     {
         $this->loadLayout("userHeader.html");
         $this->loadView("lentBooks");
-        $this->loadLayout("userFooter.html");   
+        $this->loadLayout("userFooter.html");
     }
 
     public function booked()
     {
         $this->loadLayout("userHeader.html");
         $this->loadView("booked");
-        $this->loadLayout("userFooter.html");   
+        $this->loadLayout("userFooter.html");
     }
 }

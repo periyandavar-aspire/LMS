@@ -7,7 +7,6 @@ es.onmessage = function(e) {
         let status = data[1];
         let book = data[0];
         let ele = document.getElementById("b#"+book);
-        console.log("b#"+book);
         if (ele != null) {
             if (status) {
                 ele.style.color = "orange";

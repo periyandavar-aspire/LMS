@@ -7,22 +7,22 @@ class UserModel extends BaseModel
     //     parent::__construct();
     // }
 
-    public function getProfile(string $mail)
+    public function getProfile(string $username)
     {
-        $this->db->selectAll()->from('user')->where('mail', '=', $mail)->execute();
+        $this->db->selectAll()->from('user')->where('username', '=', $username)->execute();
         $result = $this->db->fetch();
         return $result;
     }
 
-    public function updateProfile(string $mail, array $userData)
+    public function updateProfile(string $username, array $userData)
     {
-        $result = $this->db->update('user', $userData)->where('mail', '=', $mail)->execute();
+        $result = $this->db->update('user', $userData)->where('username', '=', $username)->execute();
         return $result;
     }
 
-    public function updatePassword(string $mail, string $password)
+    public function updatePassword(string $username, string $password)
     {
-        $result = $this->db->update('user', ['password' => md5($password)])->where('mail', '=', $mail)->execute();
+        $result = $this->db->update('user', ['password' => md5($password)])->where('username', '=', $username)->execute();
         return $result;
     }
 }

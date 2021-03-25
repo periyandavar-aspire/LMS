@@ -58,17 +58,16 @@ class HomeController extends BaseController
     public function dologin()
     {
         $data = [];
-        $mail = $this->input->post('email');
+        $username = $this->input->post('username');
         $fdv = new FormDataValidation();
-        $fields = new fields(['email', 'captcha']);
-        $fields->addRule(['email' => "mailValidation"]);
+        $fields = new fields(['username', 'captcha']);
+        $fields->addRule(['username' => "expressValidation /^[A-Za-z0-9_]*$/"]);
         $fields->addCustomeRule(
             'captcha',
             new class implements ValidationRule {
                 public function validate(?string $data): ?bool
                 {
-                    $flag = $data == (new InputData())->session("captcha");
-                    return $flag;
+                    return $data == (new InputData())->session("captcha") ? true : false;
                 }
             }
         );
@@ -76,11 +75,11 @@ class HomeController extends BaseController
         if (!$fdv->validate($fields, $field)) {
             $data["msg"] = "Invalid $field..!";
         } else {
-            $pass = $this->model->getUserPass($mail);
+            $pass = $this->model->getUserPass($username);
             if ($pass == md5($this->input->post('password'))) {
                 Utility::setsessionData('login', true);
                 Utility::setSessionData("type", "user");                
-                Utility::setSessionData("id", $mail);
+                Utility::setSessionData("id", $username);
                 $this->redirect("user/home");
             } else {
                 $data["msg"] = "Login failed..!";
@@ -119,12 +118,16 @@ class HomeController extends BaseController
         $fields->addValues($this->input->post());
         if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
             $data["msg"] = "Invalid captcha..!";
-        } else if (!$fdv->validate($fields, $field)) {
+        } elseif (!$fdv->validate($fields, $field)) {
             $data["msg"] = "Invalid $field..!";
         } elseif (!$this->model->createAccount($fields->getValues())) {
             $data["msg"] = "Unable to create an account..!";
         } else {
-            $data['msg'] = "Account created successfully..!";
+            $this->loadLayout("header.html");
+            $this->loadView("login");
+            $this->loadLayout("footer.html");
+            $this->addScript("toast('Your Account is created successfully..!', 'success');");
+            return;
         }
         $this->loadLayout("header.html");
         $this->loadView("registration", $data);

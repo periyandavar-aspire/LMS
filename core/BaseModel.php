@@ -12,11 +12,10 @@ class BaseModel
             $handler = $dbConfig['driver'] . "DbHandler";
             $this->db = $handler::getInstance($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database'], $dbConfig['driver']);
         }
-    }   
+    }
 
     public function __destruct()
     {
         $this->db->close();
     }
-
 }

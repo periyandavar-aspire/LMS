@@ -30,20 +30,26 @@ class InputData
 
     public function get(?string $key = null, ?string $default = null)
     {
-        $value = $this->checkKey($this->getData, $key, $default);
-        if(is_array($value)) {
-            return $value;
+        $data = $this->checkKey($this->getData, $key, $default);
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = htmlspecialchars(trim($value));
+            }
+            return $data;
         }
-        return htmlspecialchars($value);
+        return htmlspecialchars(trim($data));
     }
 
     public function post(?string $key = null, ?string $default = null)
     {
-        $value = $this->checkKey($this->postData, $key, $default);
-        if(is_array($value)) {
-            return $value;
+        $data = $this->checkKey($this->postData, $key, $default);
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = htmlspecialchars(trim($value));
+            }
+            return $data;
         }
-        return htmlspecialchars($value);
+        return htmlspecialchars(trim($data));
     }
 
     public function session(?string $key, ?string $default = null): string

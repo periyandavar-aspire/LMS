@@ -13,7 +13,7 @@ class Fields implements Iterator
      */
     public function __construct(?array $fields = null)
     {
-        if ($fields == NULL) {
+        if ($fields == null) {
             $this->fields = null;
         } else {
             foreach ($fields as $field) {
@@ -117,11 +117,11 @@ class Fields implements Iterator
     }
 
     /**
-     * adds  the custom rule to the fields 
+     * adds  the custom rule to the fields
      * @param string $field fieldname
      * @param ValidationRule $vr ValidationRule Object
      */
-    public function addCustomeRule(string $field,ValidationRule $vr)
+    public function addCustomeRule(string $field, ValidationRule $vr)
     {
         if (isset($this->fields[$field])) {
             $this->fields[$field]['rule'][] = $vr;
@@ -148,7 +148,7 @@ class Fields implements Iterator
     public function valid(): bool
     {
         $flag = key($this->fields);
-        $flag = ($flag !== NULL);
+        $flag = ($flag !== null);
         return $flag;
     }
 
