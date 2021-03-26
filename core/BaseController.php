@@ -37,7 +37,7 @@ class BaseController
     protected function loadView(string $file, ?array $data = null)
     {
         global $config;
-        $path = $config['views'] . '' . $file . ".php";
+        $path = $config['view'] . '' . $file . ".php";
         if (file_exists($path)) {
             if ($data != null) {
                 foreach ($data as $key => $value) {
@@ -76,7 +76,7 @@ class BaseController
     protected function loadLayout(string $file)
     {
         global $config;
-        $path = $config['layouts'] . '/' . $file;
+        $path = $config['layout'] . '/' . $file;
         if (file_exists($path)) {
             readfile($path);
         } else {
@@ -102,7 +102,7 @@ class BaseController
     /**
      * adds the Js script on the view
      * @param string $script
-     * 
+     *
      * @return void
      */
     public function addScript(string $script)

@@ -32,7 +32,9 @@
                                     <!-- <a href="registration" class="button-control negative">Register</a> -->
                                 </div>
                                 <div class="msg">
-                                    <?php if(isset($msg)) echo $msg ?>
+                                    <?php if (isset($msg)) {
+    echo $msg;
+} ?>
                                 </div>
                                 <br><span> Don't have an account..? <a class="link" href="/register"> Register here </a></span>
 

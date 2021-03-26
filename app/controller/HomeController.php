@@ -33,19 +33,19 @@ class HomeController extends BaseController
     }
     public function captcha()
     {
-        $captcha = rand(1000, 9999); 
-        Utility::setSessionData("captcha",$captcha);
-        $height = 25; 
-        $width = 65;   
-        $image = imagecreate($width, $height); 
-        imagecolorallocate($image, 0, 0, 0); 
-        $white = imagecolorallocate($image, 255, 255, 255); 
-        $font_size = 14; 
-        imagestring($image, $font_size, 5, 5, $captcha, $white); 
-        imagejpeg($image, null, 80); 
-        header("Cache-Control: no-store, no-cache, must-revalidate");  
-        header('Content-type: image/jpg'); 
-        imagedestroy($image); 
+        $captcha = rand(1000, 9999);
+        Utility::setSessionData("captcha", $captcha);
+        $height = 25;
+        $width = 65;
+        $image = imagecreate($width, $height);
+        imagecolorallocate($image, 0, 0, 0);
+        $white = imagecolorallocate($image, 255, 255, 255);
+        $font_size = 14;
+        imagestring($image, $font_size, 5, 5, $captcha, $white);
+        imagejpeg($image, null, 80);
+        header("Cache-Control: no-store, no-cache, must-revalidate");
+        header('Content-type: image/jpg');
+        imagedestroy($image);
     }
 
     public function login()
@@ -78,7 +78,7 @@ class HomeController extends BaseController
             $pass = $this->model->getUserPass($username);
             if ($pass == md5($this->input->post('password'))) {
                 Utility::setsessionData('login', true);
-                Utility::setSessionData("type", "user");                
+                Utility::setSessionData("type", "user");
                 Utility::setSessionData("id", $username);
                 $this->redirect("user/home");
             } else {
@@ -97,7 +97,7 @@ class HomeController extends BaseController
         $rules = [
             'mail' => 'mailValidation',
             'fullName' => 'alphaSpaceValidation',
-            'username' => "expressValidation /^[A-Za-z0-9_]*$/", 
+            'username' => "expressValidation /^[A-Za-z0-9_]*$/",
             'password' => "lengthValidation 6",
             'mobile' => 'mobileNumberValidation'
         ];

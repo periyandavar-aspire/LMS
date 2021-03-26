@@ -59,7 +59,7 @@ class Route
     {
         $pathMatch = false;
         $methodMatch = false;
-
+        global $config;
         foreach ($routes as $route) {
             $expression = '#^' . $route['expression'] . '$#';
 
@@ -87,23 +87,37 @@ class Route
                 break;
             }
         }
-
-        
         if (!$pathMatch) {
             if (self::$pathNotFound) {
                 self::$pathNotAllowed();
-            } else {
-                header('HTTP/1.1 404 Not Found');
-                die('404 - The file  not found');
+                return;
+            } elseif (isset($config['error_ctrl'])) {
+                $controllerName = $config['error_ctrl'];
+                if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
+                    if (method_exists($controllerName, 'pageNotFound')) {
+                        (new $controllerName)->pageNotFound();
+                        $methodMatch = true;
+                    }
+                }
             }
+            header('HTTP/1.1 404 Not Found');
+            die('404 - The file  not found');
         }
         if (!$methodMatch) {
             if (self::$methodNotAllowed) {
                 self::$methodNotAllowed();
-            } else {
-                header('HTTP/1.1 404 Not Found');
-                die('404 - The method not allowed');
+                return;
+            } elseif (isset($config['error_ctrl'])) {
+                $controllerName = $config['error_ctrl'];
+                if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
+                    if (method_exists($controllerName, 'invalidRequest')) {
+                        (new $controllerName)->invalidRequest();
+                        $methodMatch = true;
+                    }
+                }
             }
+            header('HTTP/1.1 404 Not Found');
+            die('404 - The method not allowed');
         }
     }
 

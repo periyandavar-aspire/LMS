@@ -76,7 +76,37 @@ Route::add('/user/logout', null, 'get', function () {
     }
 });
 
+Route::add('/user/login', 'login/admin');
+
 Route::add('/librarian/home');
 Route::add('/librarian/profile');
+Route::add('/admin/login', 'login/admin');
 
-Route::add('/admin/profile');
+Route::add('/admin/login', 'login/adminLogin', 'post');
+
+Route::add('/admin/profile', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/home', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/logout', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});

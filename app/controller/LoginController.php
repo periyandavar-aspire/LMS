@@ -3,7 +3,12 @@ class LoginController extends BaseController
 {
     public function __construct()
     {
-        parent::__construct();
+        parent::__construct(new LoginModel());
+    }
+
+    public function admin()
+    {
+        $this->loadView("admin");
     }
 
     public function adminLogin()
@@ -17,14 +22,14 @@ class LoginController extends BaseController
             return;
         }
         if ($pass == md5($this->input->post('password'))) {
-            setSessionData("user", "admin");
-            setSessionData("id", $user);
-            $this->redirect("user/home");
+            Utility::setsessionData('login', true);
+            Utility::setSessionData("type", "admin");
+            Utility::setSessionData("id", $user);
+            $this->redirect("admin/home");
         }
         $data["msg"] = "Login failed..!";
         $this->loadView("admin", $data);
     }
-
 
     public function librarianLogin()
     {
@@ -43,15 +48,5 @@ class LoginController extends BaseController
         }
         $data["msg"] = "Login failed..!";
         $this->loadView("librarian", $data);
-    }
-
-    public function admin()
-    {
-        $this->loadView("admin");
-    }
-
-    public function librarian()
-    {
-        $this->loadView("librarian");
     }
 }
