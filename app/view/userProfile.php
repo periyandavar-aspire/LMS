@@ -25,8 +25,12 @@
                 <label>Select Your Gender <span class="required-star">*</span></label>
                 <select class="form-control select-input" name="gender" id="gender" placeholder="Full Name..." required="">
                     <option value="" style="display: none;">Select Gender</option>
-                    <option value="m" <?php if ($result->gender=='1') echo "selected"; ?>>Male</option>
-                    <option value="f" <?php if ($result->gender=='2') echo "selected"; ?>>Female</option>
+                    <option value="m" <?php if ($result->gender=='1') {
+    echo "selected";
+} ?>>Male</option>
+                    <option value="f" <?php if ($result->gender=='2') {
+    echo "selected";
+} ?>>Female</option>
                 </select>
             </div>
             <div class="form-input-div">
@@ -50,7 +54,9 @@
                 <span id="errormsg" style="color:red"></span>
             </div>  
             <div class="msg">
-                <?php if(isset($msg)) echo $msg; ?>
+                <?php if (isset($msg)) {
+    echo $msg;
+} ?>
             </div>                                 
             <div class="form-buttons">
                 <button type="submit" class="btn-link">Update</button>

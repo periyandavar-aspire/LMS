@@ -6,31 +6,31 @@
 spl_autoload_register(function ($className) {
     global $config;
     if (Utility::endsWith(strtolower($className), 'controller')) {
-        $ctrlPath = $config['controllers'];
+        $ctrlPath = $config['controller'];
         $file = $ctrlPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
     } elseif (Utility::endsWith(strtolower($className), 'model')) {
-        $ModelPath = $config['models'];
+        $ModelPath = $config['model'];
         $file = $ModelPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
     } elseif (Utility::endsWith(strtolower($className), 'service')) {
-        $ModelPath = $config['services'];
+        $ModelPath = $config['service'];
         $file = $ModelPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
     } elseif (Utility::endsWith(strtolower($className), 'handler')) {
-        $DBPath = $config['db_handlers'];
+        $DBPath = $config['db_handler'];
         $file = $DBPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;
         }
     } elseif (Utility::endsWith(strtolower($className), 'view')) {
-        $ViewPath = $config['views'];
+        $ViewPath = $config['view'];
         $file = $ViewPath . $className . ".php";
         if (file_exists($file)) {
             require_once $file;

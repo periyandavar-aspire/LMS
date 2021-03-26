@@ -7,27 +7,27 @@ $config['base_url'] = "http://lms.com";
 /**
  * Path to views Directory
  */
-$config['views'] = "app/view/";
+$config['view'] = "app/view/";
 /**
  * Path to Models Directory
  */
-$config['models'] = "app/model/";
+$config['model'] = "app/model/";
 /**
  * Path to Controllers Directory
  */
-$config['controllers'] ="app/controller/";
+$config['controller'] ="app/controller/";
 /**
  * Path to Layout Directory
  */
-$config['layouts'] = "static/layout/";
+$config['layout'] = "static/layout/";
 /**
  * Path to custom db handlers
  */
-$config['db_handlers'] = "app/dbHandler/";
+$config['db_handler'] = "app/dbHandler/";
 /**
  * Path to custom db handlers
  */
-$config['services'] = "app/service/";
+$config['service'] = "app/service/";
 /**
  * Default page index page
  */
@@ -35,7 +35,7 @@ $config['default_page'] = "/home";
 /**
  * set the name of the controller handles errors
  */
-$config['error_ctrl'] = "errors";
+$config['error_ctrl'] = "errorsController";
 // /**
 //  * add any core files to be autoload
 //  * ex: $config['conf-dir'] = 'pdf-core,img-core';
