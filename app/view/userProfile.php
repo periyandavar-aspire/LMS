@@ -2,6 +2,7 @@
     if (!isset($result)) {
         return;
     }
+    print_r($result);
 ?>
 <article class="main">
     <section>
@@ -25,10 +26,10 @@
                 <label>Select Your Gender <span class="required-star">*</span></label>
                 <select class="form-control select-input" name="gender" id="gender" placeholder="Full Name..." required="">
                     <option value="" style="display: none;">Select Gender</option>
-                    <option value="m" <?php if ($result->gender=='1') {
+                    <option value="Male" <?php if ($result->gender=='Male') {
     echo "selected";
 } ?>>Male</option>
-                    <option value="f" <?php if ($result->gender=='2') {
+                    <option value="Female" <?php if ($result->gender=='Female') {
     echo "selected";
 } ?>>Female</option>
                 </select>
@@ -39,7 +40,7 @@
             </div>                                                    
             <div class="form-input-div">
                 <label>Email <span class="required-star">*</span></label>
-                <input class="form-control" disabled type="email" value="<?php echo $result->mail; ?>" name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
+                <input class="form-control" disabled type="email" value="<?php echo $result->email; ?>" name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
                 <span id="user-availability-status" style="font-size:12px;"></span> 
             </div>                    
             <div class="form-input-div">
@@ -54,6 +55,7 @@
                 <span id="errormsg" style="color:red"></span>
             </div>  
             <div class="msg">
+            <i>last updation on <?php echo $result->updatedAt ?><i><br><br>
                 <?php if (isset($msg)) {
     echo $msg;
 } ?>

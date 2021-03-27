@@ -37,19 +37,19 @@ class UserController extends BaseController
         $fields->setRequiredFields('gender', 'mobileno', 'fullname');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $data['msg'] = "Invalid $field..!";
+            $msg = "Invalid $field..!";
         } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
-            $data['msg'] = "Unable to update the profile..!";
+            $msg = "toast('Unable to update the profile..!', 'danger');";
         } else {
-            $data['msg'] = "Profile updated successfully..!";
+            $msg = "toast('Profile updated successfully..!', 'success');";
         }
         $password = $this->input->post('password');
         if ($password != '') {
             if (strlen($password) < 6) {
-                $data['msg'] .= "Your password is too short..!";
+                $msg .= "toast('Your password is too short & not updated..!', 'danger');";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
-                    $data['msg'] .= "Unable to update password..!";
+                    $msg .= "toast('Unable to update password..!', 'danger');";
                 }
             }
         }
@@ -57,6 +57,7 @@ class UserController extends BaseController
         $this->loadLayout("userHeader.html");
         $this->loadView("userProfile", $data);
         $this->loadLayout("userFooter.html");
+        $this->addScript($msg);
     }
 
     public function logout()

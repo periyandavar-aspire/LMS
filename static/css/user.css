@@ -1,195 +1,209 @@
 /* Navigation Bar Design */
-nav{
+
+nav {
     float: left;
-    margin-top: 53px;
-    background-color: #1976D2;
-    margin-left: -8px;
+    top: 0;
+    background: #0a2534;
+    /* margin-left: -8px; */
+    left: 0;
     width: 18%;
-    /* padding: 5px; */
-    padding-bottom:12px ;
+    padding-bottom: 12px;
     height: 100%;
     position: fixed;
-    z-index: 0;
+    z-index: 4;
     overflow: auto;
+    padding: 0;
 }
-nav >ul{
-    margin-bottom: 100px;
+
+nav ul {
+    margin: 15px;
 }
-nav ul li{
+
+nav ul li {
     list-style: none;
     margin: 1px;
     margin-left: -41px;
     /* height: 26px; */
-    padding: 10px;
-    font-size: 21px;
+    padding: 12px;
+    font-size: 17px;
     cursor: pointer;
-}
-.mobNav{
-    display: none;
-}
-nav ul li a{
     color: white;
-    font-family: monospace;
-    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 400;
+}
+
+nav ul li a {
+    font-family: sans-serif;
+    /* text-transform: uppercase; */
     display: inline-block;
     width: 100%;
-}
-nav ul li:hover{
-    background-color: black;
-}
-#nav-drop-down ul li a:hover{
-    color: #1eafe8;
-}
-/* Main Content Design */
-.main{
-    margin-left: 19%;
-    padding-top: 63px;
-    min-height: calc(100vh - 108px);
-}
-/* Table Design */
-.tab_design {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-  }
-.tab_design th{
-    background-color: #0ea5de;
-}  
-.tab_design th,.tab_design td {
-    text-align: left;
-    padding: 8px;
-    border-style:groove ;
-}
-tr:nth-child(odd){
-    background-color: #f9f9f9;
-}
-tr:nth-child(even){
-    background-color: #d4dce1;
-}
-/* Div card design */
-.div-card{
-    border: #ddd solid 1px;
-    margin: 1px;
-    overflow: auto;
-    display: block;
-    background-color: white;
-    margin-bottom: 15px;
-    margin-top: 12px;
-}
-.div-card-header{
-    background-color: #7da6e3;
-    padding: 10px;
-    font-size: 20px;
-    font-style: normal;
-    font-family: fangsong;
-    border-color: #ddd;
-}
-.div-card-body{
-    padding: 14px;
-}
-.left-panel{
-    float: left;
-    padding: 9px;
-    max-width: 40%;
-}
-.right-panel{
-    float: right;
-    padding: 9px;
-    max-width: 45%;
-}
-.right-panel input{
-    width: 73%;
-}
-/* pagination buttons */
-.pagination{
-    list-style: none;
-    margin-left: -57px;
-    margin-top: -5px;
-}
-.pagination li{
-    margin-left: 0;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    position: relative;
-    float: left;
-    padding: 6px 12px;
-    margin-left: -1px;
-    line-height: 1.42857143;
-    color: #428bca;
     text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    cursor: pointer;
+    /* color: white; */
 }
-.pagination .disable{
-    color: #777;
-    cursor: not-allowed;
-    background-color: #fff;
-    border-color: #ddd;
+
+nav a {
+    color: white;
 }
-ul .active{
-    background-color: #414344;
+
+nav ul li a:hover {
+    color: dodgerblue;
 }
-ul .active:hover{
-    background-color: #414344;   
+
+#nav-bar-top {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/7.jpg) center center no-repeat;
+    background-size: cover;
+    height: 150px;
 }
-ul .active li:hover{
+
+header {
+    background: #012534;
+    height: 62px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+    box-shadow: -7px 7px 12px 2px rgb(35 33 33);
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+#searchBar {
+    margin-left: 20%;
+    padding: 8px;
+}
+
+#searchBar button {
+    height: 36px;
+    margin-left: -4px;
+}
+
+#searchBar input {
+    padding: 6px 9px;
+    height: 20px;
+    width: 138px;
+}
+
+header .symbols {
+    font-size: 26px;
+    padding: 17px;
+    color: white;
+}
+
+header .symbols:hover {
+    color: dodgerblue;
+}
+
+.main {
+    margin-left: 18%;
+    padding: 24px;
+    min-height: calc(100vh - 100px);
+}
+
+footer {
+    padding: 5px;
+    margin-left: 17%;
     background-color: black;
 }
-.pagination .active{
-    color: #fff;
-    cursor: default;
-    background-color: #428bca;
-    border-color: #428bca;
+
+header {
+    margin-left: 17%;
 }
-.left-panel-select{
-    height:28px;
+
+#user-drop-down {
+    display: none;
 }
-.left-panel-input{
-    height: 15px;
+
+p {
+    font-size: 15px;
+    line-height: 21px;
+    text-indent: 37px;
+    font-family: sans-serif;
+    font-weight: 400;
 }
-.panel{
-    padding-top:9px ;
+
+section .container {
+    width: unset;
 }
-.card{
-    padding: 1px 21px;
-    margin: 12px 2px;
-    border: #ddd solid 1px;
-    overflow: auto;
-    display: block;
-    background-color: white;
+
+footer .container {
+    text-align: center;
 }
-.icon-btn{
-    width: 37px;
-    font-size: 17px;
-    margin: 1px;
-    padding: 5px;
+
+.dashboard-icons {
+    font-size: 21px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 400;
+    display: inline-block;
+    margin: 15px;
 }
-.checkbox{
-    width: 45px;
+
+.dashboard-icons i {
+    font-size: 75px;
+    color: #31708f;
 }
-input[type=checkbox]{
-    width: 25px;
-    height: 30px;
-    cursor: pointer;
+
+nav .active {
+    color: dodgerblue;
 }
-/* Media Queries */
-@media all and (max-width:800px){
-    nav{
+
+.dashboard-icons a {
+    text-decoration: none;
+    color: unset;
+    line-height: 40px;
+}
+
+label {
+    color: black !important;
+}
+
+@media screen and (min-width: 992px) {
+    #searchBar input {
+        width: 275px;
+    }
+    #searchBar button {
+        padding: 8px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .navbar-img {
         display: none;
     }
-    .mobNav{
-        display: inline-block;
-    }
-    #nav-drop-down{
-        width: 182px;
-    }
-    .shortMenu{
+    .closed-nav {
         display: none;
     }
-    .main{
-        margin-left: 3px;
+    .main {
+        margin-left: unset;
+    }
+    #footer {
+        margin-left: -8px;
+    }
+    nav {
+        height: unset;
+        overflow: visible;
+    }
+    .nav-menu {
+        background-color: #012534;
+        align-items: center;
+        width: 100vh;
+        position: relative;
+        padding: 4px;
+        margin-top: -4px;
+    }
+    header .navbar-logo {
+        display: none;
+    }
+    header {
+        padding: 2px;
+        margin: unset;
     }
 }

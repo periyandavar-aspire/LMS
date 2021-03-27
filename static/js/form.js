@@ -6,13 +6,14 @@ const regexMail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})
 const regexAlpha = /^[A-Za-z]+$/;
 const regexAlphaSpace = /^[A-Za-z ]+$/;
 const regexPhone = /^[789]\d{9}$/;
+
 function passStrength(password) {
     document.querySelector("#pass1str").style.display = "block";
     document.querySelector("#pass1msg").style.display = "block";
     runPassword(document.querySelector("#" + password).value);
 }
 
-const loginFormValidator = function (event) {
+const loginFormValidator = function(event) {
     if (!new RegExp(/^[A-Za-z0-9_]*$/).test(document.getElementById("username").value)) {
         toast('danger', "Invalid username..!");
         event.preventDefault();
@@ -20,7 +21,7 @@ const loginFormValidator = function (event) {
     }
 };
 
-const registrationFormValidator = function (event) {
+const registrationFormValidator = function(event) {
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
     if (!regexAlphaSpace.test(document.getElementById("fullname").value)) {
@@ -63,7 +64,7 @@ const registrationFormValidator = function (event) {
 
 }
 
-const editProfileValidator = function (event) {
+const editProfileValidator = function(event) {
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
     if (!regexAlphaSpace.test(document.getElementById("fullname").value)) {
@@ -81,10 +82,10 @@ const editProfileValidator = function (event) {
         toast("Invalid Mobile..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
-    } else if (document.getElementById("gender").value != 'm' && document.getElementById("gender").value != 'f') {
-        toast("Please select your gender..!", "danger", "Invalid Input");
-        event.preventDefault();
-        return false;
+        // } else if (document.getElementById("gender").value != 'm' && document.getElementById("gender").value != 'f') {
+        //     toast("Please select your gender..!", "danger", "Invalid Input");
+        //     event.preventDefault();
+        //     return false;
     } else if (password != confirmPassword) {
         toast("Please confirm your password..!", "danger", "Invalid Input");
         event.preventDefault();
@@ -163,6 +164,7 @@ function checkPassword(strPassword) {
     }
     return nScore;
 }
+
 function runPassword(str) {
     var nScore = checkPassword(str);
     var color = 'black';
@@ -204,8 +206,7 @@ function runPassword(str) {
     if (str.length == 0) {
         document.querySelector("#pass1str").style.display = "none";
         document.querySelector("#pass1msg").style.display = "none";
-    }
-    else {
+    } else {
         document.querySelector("#pass1str").style.display = "block"
         document.querySelector("#pass1str").value = nScore;
         document.querySelector("#pass1msg").style.color = color;
@@ -222,12 +223,14 @@ function countContain(strPassword, strCheck) {
     }
     return nCount;
 }
+
 function checkConfirm(ele1, ele2, target) {
     if (document.querySelector("#" + ele1).value != document.querySelector("#" + ele2).value)
         document.querySelector("#" + target).innerHTML = "Passwords Dismatch...!";
     else
         document.querySelector("#" + target).innerHTML = "";
 }
+
 function changePreview(event) {
     let ele = event.target.parentElement;
     let reader = new FileReader();
@@ -237,7 +240,7 @@ function changePreview(event) {
             alert("Please upload a image file..");
             event.target.value = "";
         } else {
-            reader.onload = function () {
+            reader.onload = function() {
                 preview = document.createElement("img");
                 preview.src = reader.result;
                 preview.className = "file-preview";

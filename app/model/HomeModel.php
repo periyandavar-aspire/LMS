@@ -20,7 +20,7 @@ class HomeModel extends BaseModel
 
     public function getUserPass(string $username)
     {
-        $this->db->select('username', 'password');
+        $this->db->select('password');
         $this->db->from('user');
         $this->db->where('username', '=', $username);
         $this->db->execute();
