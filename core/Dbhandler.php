@@ -71,6 +71,18 @@ abstract class Dbhandler
      */
     private $where;
     /**
+     * @var string $join will store join condition
+     */
+    private $join;
+    /**
+     * @var string $groupby
+     */
+    private $groupby;
+    /**
+     * @var string $having
+     */
+    private $having;
+    /**
      * return executed query in execute function
      */
     public function getSQL()
@@ -113,7 +125,7 @@ abstract class Dbhandler
     public function execute()
     {
         if ($this->sql == '') {
-            $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->where . $this->limit . $this->orderBy;
+            $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->limit . $this->orderBy;
         } else {
             $this->query  = $this->sql . $this->where;
         }
@@ -133,6 +145,9 @@ abstract class Dbhandler
         $this->limit = null;
         $this->orderBy = null;
         $this->where = null;
+        $this->join = null;
+        $this->groupby = null;
+        $this->having = null;
     }
     /**
      * delete function used to build delete query
@@ -207,9 +222,18 @@ abstract class Dbhandler
         $columns = func_get_args();
         for ($i = 0; $i < count($columns); $i++) {
             $columns[$i] = trim($columns[$i]);
+            if (strpos($columns[$i], " ")) {
+                $columns[$i] = explode(" ", $columns[$i]);
+                $columns[$i] = "`" . $columns[$i][0] . "` " . $columns[$i][1];
+            } elseif (strpos($columns[$i], ".")) {
+                $columns[$i] = explode(".", $columns[$i]);
+                $columns[$i] = "`" . $columns[$i][0] . "`." . $columns[$i][1];
+            } else {
+                $columns[$i] = '`' . $columns[$i] . '`';
+            }
         }
-        $columns = implode('`, `', $columns);
-        $this->columns = "`$columns`";
+        $columns = implode(', ', $columns);
+        $this->columns .= "$columns";
         return $this;
     }
     /**
@@ -219,14 +243,23 @@ abstract class Dbhandler
      */
     public function selectAs(array $selectData)
     {
-        $fields = array_keys($selectData);
-        $as = array_values($selectData);
         $columns = [];
-        for ($i = 0; $i < count($fields); $i++) {
-            $column[] = trim($fields[$i]) . " AS " . trim($as[$i]);
+        foreach ($selectData as $field => $as) {
+            $field = trim($field);
+            if (strpos($field, " ")) {
+                $field = explode(" ", $field);
+                $field = "`" . $field[0] . "` " . $field[1];
+            } elseif (strpos($field, ".")) {
+                $field = explode(".", $field);
+                $field = "`" . $field[0] . "`." . $field[1];
+            } else {
+                $field = '`' . $field . '`';
+            }
+            $columns[] = $field . " AS " . trim($as);
         }
-        $columns = implode('`, `', $columns);
-        $this->columns = "`$columns`";
+        $columns = implode(', ', $columns);
+        $columns = ($this->columns == null) ? ($columns) : (", " . $columns);
+        $this->columns .= $columns;
         return $this;
     }
     /**
@@ -244,6 +277,12 @@ abstract class Dbhandler
      */
     public function from($tableName)
     {
+        if (strpos($tableName, " ")) {
+            $tableName = explode(" ", $tableName);
+            $tableName = '`' . $tableName[0] . '` ' . $tableName[1];
+        } else {
+            $tableName = '`' . $tableName . '`';
+        }
         $this->table = $tableName;
         return $this;
     }
@@ -402,5 +441,116 @@ abstract class Dbhandler
     public function getQuery()
     {
         return $this->query;
+    }
+    /**
+     * @param string $tableName
+     *
+     * @return DbHandler
+     *  this function used to build inner join
+     */
+    public function innerJoin(string $tableName)
+    {
+        if (strpos($tableName, " ")) {
+            $tableName = explode(" ", $tableName);
+            $tableName = '`' . $tableName[0] . '` ' . $tableName[1];
+        } else {
+            $tableName = '`' . $tableName . '`';
+        }
+        $this->join = " INNER JOIN " . $tableName;
+        return $this;
+    }
+    /**
+     * @param string $tableName
+     *
+     * @return DbHandler
+     *
+     * this function used to build left join
+     */
+    public function leftJoin(string $tableName)
+    {
+        if (strpos($tableName, " ")) {
+            $tableName = explode(" ", $tableName);
+            $tableName = '`' . $tableName[0] . '` ' . $tableName[1];
+        } else {
+            $tableName = '`' . $tableName . '`';
+        }
+        $this->join = " LEFT JOIN " . $tableName;
+        return $this;
+    }
+
+    /**
+     * @param string $tableName
+     *
+     * @return DbHandler
+     *
+     * this function used to build right join
+     */
+    public function rightJoin(string $tableName)
+    {
+        if (strpos($tableName, " ")) {
+            $tableName = explode(" ", $tableName);
+            $tableName = '`' . $tableName[0] . '` ' . $tableName[1];
+        } else {
+            $tableName = '`' . $tableName . '`';
+        }
+        $this->join = " Right JOIN " . $tableName;
+        return $this;
+    }
+
+    /**
+     * @param string $table
+     *
+     * @return DbHandler
+     *
+     * this function used to build cross join
+     */
+    public function crossJoin(string $tableName)
+    {
+        if (strpos($tableName, " ")) {
+            $tableName = explode(" ", $tableName);
+            $tableName = '`' . $tableName[0] . '` ' . $tableName[1];
+        } else {
+            $tableName = '`' . $tableName . '`';
+        }
+        $this->join = " CROS JOIN " . $tableName;
+        return $this;
+    }
+
+    /**
+     * @param string $condition
+     *
+     * @return DbHandler
+     *
+     * this function used to set join condition with on
+     */
+    public function on(string $condition)
+    {
+        $this->join .= ' ON ' . $condition;
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     *
+     * @return DbHandler
+     *
+     * this function used to set join condition with using
+     */
+    public function using(string $field)
+    {
+        $this->join .= ' USING(' . $field . ')';
+        return $this;
+    }
+
+    /**
+     * @return DbHandler
+     * used to perform group by
+     */
+    public function groubBy(): DbHandler
+    {
+        $fields = func_get_args();
+        $fields = explode(", ", $fields);
+        $this->groupby = $fields;
+        return $this;
     }
 }

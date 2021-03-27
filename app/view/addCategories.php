@@ -1,4 +1,5 @@
-<section class="card">
+<article class="main">
+<section>
     <h1>New Category</h1>
     <hr>
     <form action="#" onsubmit="event.preventDefault(); registrationFormValidator(event);" method="POST">
@@ -40,6 +41,7 @@
         </div>
     </form>
 </section>
+</article>
 <script>
     document.getElementById('categories').className+=" active";
 </script>

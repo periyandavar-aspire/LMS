@@ -11,15 +11,18 @@
     padding-top: 43px;
     padding-bottom: 17px;
 }
+
 .row {
     margin-right: auto;
     margin-left: auto;
 }
-section .container{
+
+section .container {
     width: unset;
 }
+
 body {
-    background: #1287cc; 
+    background: #1287cc;
     background: -webkit-linear-gradient(to right, #1CB5E0, #1287cc);
     background: linear-gradient(to right, #1CB5E0, #1287cc);
 }
@@ -40,6 +43,7 @@ body {
 .img-container {
     padding: 12px;
 }
+
 .login-wrapper h3 {
     font-weight: 400;
     font-size: 18px;
@@ -49,31 +53,71 @@ body {
     text-align: center;
     margin-bottom: 4px;
 }
+
 .login-wrapper p {
     margin-top: 0;
     margin-bottom: 3px;
-    color: rgba(255,255,255,.5);
+    color: rgba(255, 255, 255, .5);
     text-align: center;
     margin: 0;
     font-size: 14px;
     padding-bottom: 17px;
 }
+
 .login-wrapper .form-control {
     border: 0px;
     border-bottom: 1px solid #1e88e5;
     background: transparent;
     color: white;
+    display: inline;
+    width: 83%;
 }
+
 .login-wrapper .form-control:focus {
     border: 0px;
     border-bottom: 1px solid #b689b0;
     background: transparent;
 }
 
+.login-wrapper .form-control::placeholder {
+    color: white;
+}
+
+.form-input-div input.verfcode::placeholder {
+    color: white;
+}
+
+.form-input-div input.verfcode {
+    width: 144px;
+    height: 25px;
+    border: none;
+    border-bottom: 1px solid dodgerblue;
+    background: transparent;
+    border-radius: 4px;
+    color: white;
+}
+
+.form-input-div i {
+    color: white;
+}
+
+@media screen and (max-width:394px) {
+    .login-wrapper .form-control {
+        /* display: none; */
+        width: 62%;
+    }
+    .form-input-div input.verfcode {
+        width: 62%;
+    }
+}
+
+
 /* .container {
     margin-top: 5vh;
     margin-bottom: 5vh;
 } */
+
+
 /* .left-panel-login img{
     float: left;
     height: 100%;

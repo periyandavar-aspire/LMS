@@ -2,14 +2,10 @@
 
 class UserModel extends BaseModel
 {
-    // public function __construct()
-    // {
-    //     parent::__construct();
-    // }
-
     public function getProfile(string $username)
     {
-        $this->db->selectAll()->from('user')->where('username', '=', $username)->execute();
+        $this->db->select('fullName', 'userName', 'value gender', 'mobile', 'email', 'updatedAt')->from('user u');
+        $this->db->innerJoin('gender g')->on('g.code = u.gender')->where('username', '=', $username)->execute();
         $result = $this->db->fetch();
         return $result;
     }

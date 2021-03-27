@@ -8,22 +8,27 @@ label {
     padding: 2px;
     font-weight: 200;
 }
+
 input:disabled {
     cursor: not-allowed;
     background-color: rgb(99 92 92 / 30%);
     border-color: rgba(118, 118, 118, 0.3);
 }
+
 .form-buttons {
     text-align: center;
     margin-top: 12px;
 }
-.form-input-div{
+
+.form-input-div {
     margin-bottom: 21px;
 }
-meter{
+
+meter {
     width: 100%;
 }
-.form-control{
+
+.form-control {
     display: block;
     width: 96%;
     height: 24px;
@@ -34,21 +39,24 @@ meter{
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-bottom:21px ;
+    margin-bottom: 21px;
 }
-.form-control:focus-within{
+
+.form-control:focus-within {
     border-color: skyblue;
 }
-.select-input{
+
+.select-input {
     font-size: 17px;
     height: 37px;
     width: 100%;
 }
-.button-control{
+
+.button-control {
     display: inline-block;
     /* width: 10%;
     height: 36px; */
-    padding: 6px 12px;
+    padding: 2px 8px;
     font-size: 14px;
     line-height: 1.5;
     cursor: pointer;
@@ -56,34 +64,51 @@ meter{
     border: 2px solid #131212;
     border-radius: 4px;
     color: white;
-    margin-bottom: 12px;
+    /* margin-bottom: 12px; */
 }
-.modal .button-control{
+
+.checkbox {
+    width: 45px;
+}
+
+input[type=checkbox] {
+    width: 25px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.modal .button-control {
     width: 17%;
 }
 
-.form-control:focus,.form-control:focus-visible,.form-control:focus-within {
+.form-control:focus,
+.form-control:focus-visible,
+.form-control:focus-within {
     border-color: #29afd6;
 }
-.form-control:invalid{
+
+.form-control:invalid {
     /* border: red;
     color:red; */
     border-color: red;
 }
-.form-control :valid{
+
+.form-control :valid {
     border-color: #29afd6;
 }
+
 span.required-star {
     color: red;
 }
-@media(max-width:900px){
-    .button-control{
+
+@media(max-width:900px) {
+    .button-control {
         width: 38%;
     }
-    .form-control{
+    .form-control {
         width: 90%;
     }
-    .select-input{
+    .select-input {
         width: 99%;
     }
 }

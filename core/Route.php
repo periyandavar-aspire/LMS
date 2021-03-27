@@ -8,6 +8,7 @@ class Route
 
     private static $methodNotAllowed = null;
     private static $pathNotFound = null;
+    private static $onError = null;
 
     public static function add(string $expression, ?string $route = null, string $method = 'get', ?callable $filter = null)
     {
@@ -38,6 +39,11 @@ class Route
     public static function setPathNotFound(callable $callback)
     {
         self::$pathNotFound = $callback;
+    }
+
+    public static function setOnError(callable $callback)
+    {
+        self::$onError = $callback;
     }
 
     public static function run(bool $caseSensitive = false)
@@ -97,6 +103,7 @@ class Route
                     if (method_exists($controllerName, 'pageNotFound')) {
                         (new $controllerName)->pageNotFound();
                         $methodMatch = true;
+                        return;
                     }
                 }
             }
@@ -112,11 +119,11 @@ class Route
                 if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
                     if (method_exists($controllerName, 'invalidRequest')) {
                         (new $controllerName)->invalidRequest();
-                        $methodMatch = true;
+                        return;
                     }
                 }
             }
-            header('HTTP/1.1 404 Not Found');
+            header('HTTP/1.1 400 Bad Request');
             die('404 - The method not allowed');
         }
     }
@@ -131,5 +138,25 @@ class Route
         } else {
             self::handleRequest($path, self::$otherRoutes, $caseSensitive);
         }
+    }
+
+    public static function error()
+    {
+        global $config;
+        $data = func_get_args();
+        if (self::$onError) {
+            self::$onError($data);
+            return;
+        } elseif (isset($config['error_ctrl'])) {
+            $controllerName = $config['error_ctrl'];
+            if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
+                if (method_exists($controllerName, 'serverError')) {
+                    (new $controllerName)->serverError($data);
+                    return;
+                }
+            }
+        }
+        header('HTTP/1.1 500 Internal Server Error');
+        die('500 - Server Error');
     }
 }

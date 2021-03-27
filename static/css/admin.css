@@ -1,0 +1,5 @@
+#nav-bar-top {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/admin-nav-banar.jpg) center center no-repeat;
+    background-size: cover;
+    height: 122px;
+}

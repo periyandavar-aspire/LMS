@@ -13,6 +13,5 @@ require_once 'core/utilities/Utility.php';
 try {
     Route::run();
 } catch (Error $e) {
-    echo "Error 500";
-    print_r($e);
+    Route::error($e);
 }
