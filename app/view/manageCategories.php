@@ -26,51 +26,31 @@
                     <table class="tab_design">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>Sl. No</th>
                                 <th>Category</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
-                                <th>Active</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>PHP And MySql programming</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td><div class="checkbox"><input type="checkbox"></div></td>
-                                <td>
-                                    <button type="button" class="button-control icon-btn" title="view"><i class="fa fa-eye"></i></button>
-                                    <button type="button" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button>
-                                    <button type="button" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
-                                </td>
-                            </tr> 
-                            <tr>
-                                <td>1</td>
-                                <td>PHP And MySql programming</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td><div class="checkbox"><input type="checkbox"></div></td>
-                                <td>
-                                    <button type="button" class="button-control icon-btn" title="view"><i class="fa fa-eye"></i></button>
-                                    <button type="button" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button>
-                                    <button type="button" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
-                                </td>
-                            </tr> 
-                            <tr>
-                                <td>1</td>
-                                <td>PHP And MySql programming</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td><div class="checkbox"><input type="checkbox"></div></td>
-                                <td>
-                                    <button type="button" class="button-control icon-btn" title="view"><i class="fa fa-eye"></i></button>
-                                    <button type="button" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button>
-                                    <button type="button" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
-                                </td>
-                            </tr> 
+                            <?php $i=0; if (isset($categories)): ?>
+                                
+                                <?php foreach($categories as $category):?>
+                                    <tr>
+                                        <td><?php echo ++$i;?></td>
+                                        <td><?php echo $category['name'];?></td>
+                                        <td><?php echo $category['createdAt'];?></td>
+                                        <td><?php echo $category['updatedAt'];?></td>
+                                        <td><div class="checkbox"><input type="checkbox"></div></td>
+                                        <td>
+                                            <a type="button" href="/admin/categories/edit/<?php echo $category['id'];?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <a type="button" href="/admin/categories/edit/<?php echo $category['id'];?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                        </td>
+                                    </tr> 
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </tbody>
                     </table>
                 </div>
@@ -95,7 +75,7 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Category</h1>
                 <hr><br>
-                <form action="/admin/categories/add" method="post">
+                <form action="/admin/categories" method="post">
                     <div class="form-input-div">
                         <label>Category Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name" autocomplete="off" placeholder="Category Name..." required="">

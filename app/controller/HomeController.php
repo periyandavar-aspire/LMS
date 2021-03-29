@@ -93,28 +93,30 @@ class HomeController extends BaseController
     {
         $data = [];
         $fdv = new FormDataValidation();
-        $fields = new fields(['mail', 'username', 'fullname', 'password', 'gender', 'mobile']);
+        $genCodes = implode(" ",$this->model->getGenderCodes());
+        $fields = new fields(['email', 'username', 'fullname', 'password', 'gender', 'mobile']);
         $rules = [
-            'mail' => 'mailValidation',
+            'email' => 'mailValidation',
             'fullName' => 'alphaSpaceValidation',
             'username' => "expressValidation /^[A-Za-z0-9_]*$/",
             'password' => "lengthValidation 6",
-            'mobile' => 'mobileNumberValidation'
+            'mobile' => 'mobileNumberValidation',
+            'gender' => "valuesInValidation $genCodes"
         ];
         $fields->addRule($rules);
-        $fields->addCustomeRule(
-            'gender',
-            new class implements ValidationRule {
-                public function validate(?string $data): ?bool
-                {
-                    if ($data == 'm' || $data == 'f') {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        );
+        // $fields->addCustomeRule(
+        //     'gender',
+        //     new class implements ValidationRule {
+        //         public function validate(?string $data): ?bool
+        //         {
+        //             if ($data == 'm' || $data == 'f') {
+        //                 return true;
+        //             } else {
+        //                 return false;
+        //             }
+        //         }
+        //     }
+        // );
         $fields->addValues($this->input->post());
         if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
             $data["msg"] = "Invalid captcha..!";
@@ -130,13 +132,15 @@ class HomeController extends BaseController
             return;
         }
         $this->loadLayout("header.html");
+        $data['dropdownGen'] = $this->model->getGender();
         $this->loadView("registration", $data);
         $this->loadLayout("footer.html");
     }
     public function registration()
     {
         $this->loadLayout("header.html");
-        $this->loadView("registration");
+        $data['dropdownGen'] = $this->model->getGender();
+        $this->loadView("registration", $data);
         $this->loadLayout("footer.html");
     }
 }

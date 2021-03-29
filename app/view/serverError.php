@@ -11,7 +11,7 @@
                             <?php if (isset($data)) {
     print_r($data);
 } ?></p>
-                            <a class="btn-link" href="home/home">GO TO HOME</a>
+                            <a class="btn-link" href="/home">GO TO HOME</a>
                         </div>
                     </div>
                 </div> 

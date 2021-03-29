@@ -124,12 +124,19 @@ abstract class Dbhandler
      */
     public function execute()
     {
+        $result = true;
         if ($this->sql == '') {
             $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->limit . $this->orderBy;
         } else {
             $this->query  = $this->sql . $this->where;
         }
-        $result = $this->executeQuery();
+
+        try {
+            $result = $this->executeQuery();
+        } catch (Exception $e) {
+            return false;
+        }
+        
         return $result;
     }
     /**

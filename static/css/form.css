@@ -87,11 +87,22 @@ input[type=checkbox] {
     border-color: #29afd6;
 }
 
-.form-control:invalid {
-    /* border: red;
-    color:red; */
-    border-color: red;
+textarea.form-control {
+    height: 77px;
 }
+
+
+/* .form-control:invalid { */
+
+
+/* border: red;
+    color:red; */
+
+
+/* border-color: red; */
+
+
+/* } */
 
 .form-control :valid {
     border-color: #29afd6;
@@ -102,9 +113,9 @@ span.required-star {
 }
 
 @media(max-width:900px) {
-    .button-control {
+    /* .button-control {
         width: 38%;
-    }
+    } */
     .form-control {
         width: 90%;
     }

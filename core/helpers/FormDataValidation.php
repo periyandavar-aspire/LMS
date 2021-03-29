@@ -6,9 +6,20 @@ class FormDataValidation
      * @param string $data data to be validate
      * @param ValidationRule $vr ValidationRule Object defining custom validation and format
      */
-    public function customValidation(?string $data, ValidationRule $vr): bool
+    public function customValidation(string $data, ValidationRule $vr): bool
     {
         return $vr->validate($data);
+    }
+
+    /**
+     * @param string $data
+     * @param mixed ...$value
+     * check the value in given set of values
+     * @return [type]
+     */
+    public function valuesInValidation(string $data,  ...$value)
+    {
+        return in_array($data, $value);
     }
 
     /**
@@ -90,8 +101,6 @@ class FormDataValidation
                         if ($newValue === false) {
                             $invalidField = $fieldName;
                             return false;
-                        } else {
-                            $fields->setData($fieldName, $newValue);
                         }
                     } else {
                         $params = explode(" ", $rule);

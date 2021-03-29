@@ -129,7 +129,7 @@ Route::add('/admin/categories', null, 'get', function () {
     }
 });
 
-Route::add('/admin/categories/add', 'admin/addCategory', 'post', function () {
+Route::add('/admin/categories', 'admin/addCategory', 'post', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'admin') {
         return true;
@@ -137,6 +137,63 @@ Route::add('/admin/categories/add', 'admin/addCategory', 'post', function () {
         Utility::redirectURL('admin/login');
     }
 });
+
+Route::add('/admin/authors', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/authors', 'admin/addAuthor', 'post', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+
+Route::add('/admin/settings', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/settings', '/admin/updateSettings', 'post', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+
+Route::add('/admin/cms', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/cms', '/admin/updateCms', 'post', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
 Route::add('/admin/logout', null, 'get', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'admin') {

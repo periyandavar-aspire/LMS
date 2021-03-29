@@ -514,11 +514,11 @@ a {
     width: 42%;
     /* height: 124px; */
     padding: 30px;
-    text-align: center;
+    /* text-align: center; */
     position: relative;
     overflow: auto;
     display: block;
-    margin-top: 8%;
+    margin-top: 10%;
     max-height: 90%;
     margin-left: 24%;
     margin-bottom: 8%;
@@ -530,7 +530,8 @@ a {
     cursor: pointer;
     color: orangered;
     margin-top: -25px;
-    margin-left: 41%;
+    /* margin-left: 41%; */
+    right: 9px;
 }
 
 .modal-shadow {
@@ -766,5 +767,6 @@ article section:nth-of-type(2) {
     .modal {
         margin-left: 5%;
         width: 70%;
+        margin-top: 30%;
     }
 }

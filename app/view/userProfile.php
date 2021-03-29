@@ -2,7 +2,6 @@
     if (!isset($result)) {
         return;
     }
-    print_r($result);
 ?>
 <article class="main">
     <section>
