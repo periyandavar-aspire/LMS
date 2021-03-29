@@ -1,5 +1,5 @@
 <?php
 interface ValidationRule
 {
-    public function validate(?string $data): ?bool;
+    public function validate(string $data): ?bool;
 }

@@ -7,6 +7,7 @@
  	    <link rel="icon" type="image/png" href="<?php echo Utility::baseURL()?>/static/img/favicon.png"/>
         <link rel="stylesheet" type="text/css" href="<?php echo Utility::baseURL()?>/static/css/form.css">
         <link rel="stylesheet" type="text/css" href="<?php echo Utility::baseURL()?>/static/css/core.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo Utility::baseURL()?>/static/css/toast.css">
         <link rel="stylesheet" type="text/css" href="<?php echo Utility::baseURL()?>/static/css/login.css">
         <link rel="stylesheet" type="text/css" href="/static/css/font-awesome-4.7.0/css/font-awesome.min.css">
     </head>
@@ -23,10 +24,10 @@
                                 </div>
                                 <h3>WELCOME</h3>
                                 <p> Sign in with your login credentials here..</p><br>
-                                <form action="/admin/login" method="post">
+                                <form action="/admin/login" onsubmit="adminLoginFormValidator(event);" method="post">
                                     <div class="form-input-div">
                                         <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;
-                                        <input class="form-control" type="email" name="email" id="mailid" placeholder="Email ID" autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
+                                        <input class="form-control" type="email" name="email" id="emailid" placeholder="Email ID" autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
                                         <span id="user-availability-status" style="font-size:12px;"></span> 
                                     </div>
                                     <div class="form-input-div">
@@ -55,5 +56,7 @@
                 </div>
             </section>
         </article>
+        <script src="../static/js/form.js"></script>
+        <script src="../static/js/core.js"></script>
     </body>
 </html>

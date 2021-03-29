@@ -15,7 +15,15 @@ function passStrength(password) {
 
 const loginFormValidator = function(event) {
     if (!new RegExp(/^[A-Za-z0-9_]*$/).test(document.getElementById("username").value)) {
-        toast('danger', "Invalid username..!");
+        toast("Invalid username..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+};
+
+const adminLoginFormValidator = function(event) {
+    if (!regexMail.test(document.getElementById("emailid").value)) {
+        toast("Invalid Email..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
     }
@@ -29,11 +37,11 @@ const registrationFormValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (!new RegExp(/^[A-Za-z0-9_]*$/).test(document.getElementById("username").value)) {
-        toast('danger', "Invalid username..!");
+        toast("Invalid username..!", 'danger', 'Invalid Input');
         event.preventDefault();
         return false;
     } else if (password.length < 6) {
-        toast('danger', "Password is too short.. It should be six character long..!");
+        toast("Password is too short.. It should be six character long..!", 'danger', "Invalid Input");
         event.preventDefault();
     } else if (!regexMail.test(document.getElementById("emailid").value)) {
         toast("Invalid Email..!", "danger", "Invalid Input");
@@ -41,10 +49,6 @@ const registrationFormValidator = function(event) {
         return false;
     } else if (!regexPhone.test(document.getElementById("mobile").value)) {
         toast("Invalid Mobile..!", "danger", "Invalid Input");
-        event.preventDefault();
-        return false;
-    } else if (document.getElementById("gender").value != 'm' && document.getElementById("gender").value != 'f') {
-        toast("Please select your gender..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
     } else if (password != confirmPassword) {
@@ -82,10 +86,6 @@ const editProfileValidator = function(event) {
         toast("Invalid Mobile..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
-        // } else if (document.getElementById("gender").value != 'm' && document.getElementById("gender").value != 'f') {
-        //     toast("Please select your gender..!", "danger", "Invalid Input");
-        //     event.preventDefault();
-        //     return false;
     } else if (password != confirmPassword) {
         toast("Please confirm your password..!", "danger", "Invalid Input");
         event.preventDefault();

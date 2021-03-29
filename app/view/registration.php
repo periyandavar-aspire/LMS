@@ -24,8 +24,13 @@
                                     <label>Select Your Gender <span class="required-star">*</span></label>
                                     <select class="form-control select-input" name="gender" id="gender" placeholder="Full Name..." required="">
                                         <option value="" style="display: none;">Select Gender</option>
-                                        <option value="m">Male</option>
-                                        <option value="f">Female</option>
+                                        <?php if($dropdownGen != null):?>
+                                            <?php foreach ($dropdownGen as $gender):?>
+                                            <option value="<?php echo $gender['code']?>"><?php echo $gender['value']?></option>        
+                                            <?php endforeach;?>
+                                        <?php endif;?>
+                                        <!-- <option value="m">Male</option>
+                                        <option value="f">Female</option> -->
                                     </select>
                                 </div>
                                 <div class="form-input-div">
@@ -34,7 +39,7 @@
                                 </div> 
                                 <div class="form-input-div">
                                     <label>Enter Email <span class="required-star">*</span></label>
-                                    <input class="form-control" type="email" name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
+                                    <input class="form-control" type="email" name="email" id="emailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
                                     <span id="user-availability-status" style="font-size:12px;"></span> 
                                 </div>                    
                                 <div class="form-input-div">

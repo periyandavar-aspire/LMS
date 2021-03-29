@@ -7,15 +7,38 @@ class HomeModel extends BaseModel
         parent::__construct();
     }
 
-    public function getData()
-    {
-        $result = $this->db->runQuery("SELECT * FROM user");
-        $result = $this->db->fetch();
-        print_r($result);
+    // public function getData()
+    // {
+    //     $result = $this->db->runQuery("SELECT * FROM user");
+    //     $result = $this->db->fetch();
+    //     print_r($result);
 
-        $this->db->selectAll()->from('user')->execute();
-        $result = $this->db->fetch();
-        print_r($result);
+    //     $this->db->selectAll()->from('user')->execute();
+    //     $result = $this->db->fetch();
+    //     print_r($result);
+    // }
+
+    public function getGenderCodes()
+    {
+        $result = [];
+        $this->db->select('code')->from('gender')->execute();
+        while($row = $this->db->fetch()){
+            $result[] = $row->code;
+        }
+        return $result;
+    }
+
+    public function getGender()
+    {
+        $result = [];
+        $i = 0;
+        $this->db->select('code', 'value')->from('gender')->execute();
+        while($row = $this->db->fetch()){
+            $result[$i]['code'] = $row->code;
+            $result[$i]['value'] = $row->value; 
+            $i++;
+        }
+        return $result;
     }
 
     public function getUserPass(string $username)

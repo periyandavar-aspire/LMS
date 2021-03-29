@@ -1,65 +1,40 @@
-<section class="card">
-    <h1>Customize Home Page</h1>
-    <hr>
-    <form action="/admin/updatePageSettings" onsubmit="//event.preventDefault(); registrationFormValidator(event);" method="POST">
-        <div class="form-input-div">
-            <label>About Us</label>
-            <textarea class="form-control"id="aboutus" name="aboutus" required=""><?php if(isset($data['aboutus'])) echo $data['aboutus'] ?></textarea>
-        </div>
-        <div class="form-input-div">
-            <label>Address</label>
-            <textarea class="form-control"id="address" name="address" required=""><?php if(isset($data['address'])) echo $data['address'] ?></textarea>
-        </div>
-        <div class="form-input-div">
-            <label>Phone Number </label>
-            <input class="form-control" pattern="^[789]\d{9}$" type="text" id="mobile" name="mobileno" maxlength="10" placeholder="Mobile Number..." autocomplete="off" required="" value="<?php if(isset($data['mobileno'])) echo $data['mobileno'] ?>">
-        </div> 
-        <div class="form-input-div">
-            <label>Mail Id </label>
-            <input class="form-control" type="mail" id="mail" name="mail" placeholder="Mail Id..." autocomplete="off" required="" value="<?php if(isset($data['mail'])) echo $data['mail'] ?>">
-        </div>                                                     
-        <div class="form-input-div">
-            <label>Mission</label>
-            <textarea class="form-control"id="mission" name="mission" required=""><?php if(isset($data['mission'])) echo $data['mission'] ?></textarea>
-        </div>                    
-        <div class="form-input-div">
-            <label>Vision</label>
-            <textarea class="form-control"id="vision" name="vision" required=""><?php if(isset($data['vision'])) echo $data['vision'] ?></textarea>
-        </div>                                     
-        <div class="form-buttons">
-            <button type="submit" class="button-control positive">Submit</button>
-        </div>
-        <?php
-        if(isset($pageMsg))
-            echo $pageMsg;
-        ?>
-    </form>
-</section>
-<section class="card">
-    <h1>Customize logo bannar</h1>
-    <hr>
-    <form action="/admin/uploadLogo" enctype="multipart/form-data" method="POST">
-        <div class="form-input-div">
-            <label>Logo banar with library Name</label>
-            <input class="form-control" type="file" id="logobanar" name="logobanar" accept=".jpg, .png" onchange="changePreview(event);showElement('logo-upload-btn')" required="">
-            <span id="pass2msg" style="color:red"></span>
-        </div>
-        <div class="form-buttons" id="logo-upload-btn" style="display:none">
-            <button type="submit" class="button-control positive">Submit</button>
-        </div>
-        <?php
-        if(isset($msg))
-            echo $msg;
-        ?>
-    </form>
-    <!-- <h1>Customize slideshow Images</h1>
-    <hr>
-    <form action="#" enctype="multipart/form-data" onsubmit="event.preventDefault(); registrationFormValidator(event);" method="POST">
-        <div class="form-buttons" id="logo-upload-btn" style="display:none">
-            <button type="submit" class="button-control positive">Submit</button>
-        </div>
-    </form> -->
-</section>
+<?php
+    if (!isset($data)) {
+        return;
+    }
+?>
+<article class="main">
+    <section>
+        <h1>Settings</h1>
+        <hr>
+        <form action="/admin/settings" onsubmit="//event.preventDefault(); registrationFormValidator(event);" method="POST">
+            <div class="form-input-div">
+                <label>Maximum Book Lend </label>
+                <input class="form-control" type="number" id="maxbookLend" name="maxBookLend" maxlength="2" placeholder="Maximum Book Lend" autocomplete="off" required="" value="<?php echo $data->maxBookLend; ?>">
+            </div> 
+            <div class="form-input-div">
+                <label>Maximum Lend Days</label>
+                <input class="form-control" type="number" id="maxLendDays" name="maxLendDays" maxlength="2" placeholder="Maximum Lend Days" required="" value="<?php echo $data->maxLendDays; ?>">
+            </div>   
+            <div class="form-input-div">
+                <label>Maximum Book Request </label>
+                <input class="form-control" type="number" id="maxBookRequest" name="maxBookRequest" maxlength="2" placeholder="Maximum Book Request" required="" value="<?php echo $data->maxBookRequest; ?>">
+            </div> 
+            <div class="form-input-div">
+                <label>Fine Amout per day</label>
+                <input class="form-control" type="number" id="fineAmtPerDay" name="fineAmtPerDay" placeholder="Fine Amount per day" $maxlength="2" required="" value="<?php echo $data->fineAmtPerDay; ?>">
+            </div>                                                     
+            <div class="msg">
+            <i>last updation on <?php echo $data->updatedAt ?><i><br>
+                
+            </div>                                  
+            <div class="form-buttons">
+                <button type="submit" class="btn-link">Submit</button>
+            </div>
+        </form>
+    </section>
+    
+</article>
 <script>
     document.getElementById('settings').className += " active";
 </script>

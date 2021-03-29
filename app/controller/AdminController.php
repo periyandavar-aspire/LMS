@@ -65,16 +65,112 @@ class AdminController extends BaseController
 
     public function categories()
     {
+        $data['categories'] = $this->model->getCategories();
         $this->loadLayout("adminHeader.html");
-        $this->loadView("manageCategories");
+        $this->loadView("manageCategories", $data);
         $this->loadLayout("adminFooter.html");
     }
 
     public function addCategory()
     {
+        $fdv = new FormDataValidation();
+        $fields = new Fields(['name']);
+        $fields->setRequiredFields('name');
+        $fields->addValues($this->input->post());
+        if (!$fdv->validate($fields, $field)) {
+            $script = "toast('Invalid $field..!', 'danger');";
+        } elseif (!$this->model->addCategory($fields->getValues())) {
+            $script = "toast('Unable to add new category..!', 'danger');";
+        } else {
+            $script = "toast('New category is added successfully..!', 'success');";
+        }
         $this->loadLayout("adminHeader.html");
         $this->loadView("manageCategories");
         $this->loadLayout("adminFooter.html");
-        $this->addScript("toast('Unable to add new category..!', 'danger');");
+        $this->addScript($script);
+    }
+
+    public function authors()
+    {
+        $data['authors'] = $this->model->getAuthors();
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("manageAuthors", $data);
+        $this->loadLayout("adminFooter.html");
+    }
+
+    public function addAuthor()
+    {
+        $fdv = new FormDataValidation();
+        $fields = new Fields(['name']);
+        $fields->setRequiredFields('name');
+        $fields->addValues($this->input->post());
+        if (!$fdv->validate($fields, $field)) {
+            $script = "toast('Invalid $field..!', 'danger');";
+        } elseif (!$this->model->addAuthor($fields->getValues())) {
+            $script = "toast('Unable to add new author..!', 'danger');";
+        } else {
+            $script = "toast('New author is added successfully..!', 'success');";
+        }
+        $this->loadLayout("adminHeader.html");
+        $data['authors'] = $this->model->getAuthors();
+        $this->loadView("manageAuthors", $data);
+        $this->loadLayout("adminFooter.html");
+        $this->addScript($script);
+    }
+
+    public function settings()
+    {
+        $data['data'] = $this->model->getConfigs();
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("settings", $data);
+        $this->loadLayout("adminFooter.html");
+    }
+
+    public function updateSettings()
+    {
+        $fdv = new FormDataValidation();
+        $fields = new Fields(['maxBookLend', 'maxLendDays', 'maxBookRequest', 'fineAmtPerDay']);
+        $fields->setRequiredFields('maxBookLend', 'maxLendDays', 'maxBookRequest', 'fineAmtPerDay');
+        $fields->addValues($this->input->post());
+        if (!$fdv->validate($fields, $field)) {
+            $script = "toast('Invalid $field..!', 'danger');";
+        } elseif (!$this->model->updateSettings($fields->getValues())) {
+            $script = "toast('Unable to update the settings..!', 'danger');";
+        } else {
+            $script = "toast('Settings updated successfully..!', 'success');";
+        }
+        $data['data'] = $this->model->getConfigs();
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("settings", $data);
+        $this->loadLayout("adminFooter.html");
+        $this->addScript($script);
+    }
+
+    public function cms()
+    {
+        $data['data'] = $this->model->getCmsConfigs();
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("cms", $data);
+        $this->loadLayout("adminFooter.html");
+    }
+
+    public function updateCms()
+    {
+        $fdv = new FormDataValidation();
+        $fields = new Fields(['aboutus', 'address', 'email', 'fbUrl', 'ytUrl', 'instaUrl', 'vision', 'mission']);
+        $fields->setRequiredFields('aboutus', 'address', 'email', 'fbUrl', 'ytUrl', 'instaUrl', 'vision', 'mission');
+        $fields->addValues($this->input->post());
+        if (!$fdv->validate($fields, $field)) {
+            $script = "toast('Invalid $field..!', 'danger');";
+        } elseif (!$this->model->updateCmsConfigs($fields->getValues())) {
+            $script = "toast('Unable to update the settings..!', 'danger');";
+        } else {
+            $script = "toast('Settings updated successfully..!', 'success');";
+        }
+        $data['data'] = $this->model->getCmsConfigs();
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("cms", $data);
+        $this->loadLayout("adminFooter.html");
+        $this->addScript($script);
     }
 }

@@ -8,7 +8,7 @@
                         <div class='msg-card'>
                             <h1>404 Page Not Found</h1><br>
                             <p class="heading-para"><?php echo $msg; ?></p>
-                            <a class="btn-link" href="home/home">GO TO HOME</a>
+                            <a class="btn-link" href="/home">GO TO HOME</a>
                         </div>    
                     </div>
                 </div> 
