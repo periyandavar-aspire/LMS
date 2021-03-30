@@ -105,7 +105,7 @@ class Fields implements Iterator
     /**
      * renmae the field
      */
-    public function changeFieldName(string $oldName, string $newName)
+    public function renameFieldName(string $oldName, string $newName)
     {
         if (array_key_exists($oldName, $this->fields)) {
             $this->fields[$newName] = $this->fields[$oldName];

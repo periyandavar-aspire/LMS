@@ -62,6 +62,21 @@ class AdminModel extends BaseModel
         return $result;
     }
 
+    // public function getBooks()
+    // {
+    //     $book = [];
+    //     $result = $this->db->select("id", "name", "location", "publication", "isbnNumber", "stack", "available", "createdAt", "updatedAt", "status")->from('book')->execute();
+    //     while($row = $this->db->fetch()) {
+    //         $book[] = $row;
+    //     }
+    //     return $book;
+    // }
+    // public function addBook(array $book)
+    // {
+    //     $result = $this->db->insert('book', $book)->execute();
+    //     return $result;
+    // }
+
     public function getConfigs()
     {
         $result = $this->db->select("maxBookLend", "maxLendDays", "fineAmtPerDay", "maxBookRequest", "updatedAt")->from("core_config")->where('id=1')->execute();

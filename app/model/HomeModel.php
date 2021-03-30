@@ -61,4 +61,43 @@ class HomeModel extends BaseModel
         $flag = $this->db->insert('user', $fields)->execute();
         return  $flag;
     }
+
+    public function getFooterData()
+    {
+        $this->db->select('aboutUs','address','mobile','email','fbUrl','ytUrl','instaUrl')->from('cms');
+        $this->db->where('id','=',1)->limit(1)->execute();
+        $result = $this->db->fetch();
+        return $result;
+    }
+    public function getBooks()
+    {
+        $book = [];
+        $this->db->select('b.id id', 'b.name name', 'a.name author', 'description', 'available', 'coverPic')->from('book b');
+        $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')->innerJoin('author a')->on('ba.authorId = a.id');
+        $this->db->where('b.status', '=', 1)->execute();
+        while ($row = $this->db->fetch()){
+            $book[] = $row;
+        }
+        return $book;
+    }
+    public function getVision()
+    {
+        $this->db->select('vision')->from('cms')->where('id','=',1)->limit(1)->execute();
+        $result = $this->db->fetch();
+        return $result->vision;
+    }
+
+    public function getMission()
+    {
+        $this->db->select('mission')->from('cms')->where('id','=',1)->limit(1)->execute();
+        $result = $this->db->fetch();
+        return $result->mission;
+    }
+    
+    // public function getAboutUs()
+    // {
+    //     $this->db->select('aboutUs')->from('cms')->where('id','=',1)->limit(1)->execute();
+    //     $result = $this->db->fetch();
+    //     return $result->aboutUs;
+    // }
 }

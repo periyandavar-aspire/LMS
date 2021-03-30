@@ -7,6 +7,8 @@ class PdoDbHandler extends DbHandler
         $this->con = new PDO("$driver:host=$host;dbname=$db;", $user, $pass);
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $this->con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+
     }
 
     public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
@@ -37,6 +39,7 @@ class PdoDbHandler extends DbHandler
         if ($flag == true) {
             $this->result = $stmt;
         }
+
         return $flag;
     }
 
@@ -121,5 +124,15 @@ class PdoDbHandler extends DbHandler
     public function close()
     {
         $this->con = null;
+    }
+
+    public function insertId(): int
+    {
+
+        return $this->con->lastInsertId();
+    }
+    public function begin()
+    {
+        $this->con->beginTransaction(); 
     }
 }
