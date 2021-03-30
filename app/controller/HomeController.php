@@ -8,28 +8,32 @@ class HomeController extends BaseController
     public function index()
     {
         $this->loadLayout("header.html");
-        $this->loadView("index");
-        $this->loadLayout("footer.html");
-        // setSessionData("user","user");
+        $homeData['vision'] = $this->model->getVision();
+        $homeData['mission'] = $this->model->getMission();
+        $this->loadView("index", $homeData);
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("footer", $data);
     }
 
     public function home()
     {
-        // $this->index();
         $this->model->getData();
     }
 
     public function books()
     {
         $this->loadLayout("header.html");
-        $this->loadView("books");
-        $this->loadLayout("footer.html");
+        $books['books'] = $this->model->getBooks();
+        $this->loadView("books", $books);
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("footer", $data);
     }
     public function aboutus()
     {
         $this->loadLayout("header.html");
-        $this->loadView("aboutus");
-        $this->loadLayout("footer.html");
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
+        $this->loadView("footer", $data);
     }
     public function captcha()
     {
@@ -52,7 +56,8 @@ class HomeController extends BaseController
     {
         $this->loadLayout("header.html");
         $this->loadView("login");
-        $this->loadLayout("footer.html");
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("footer", $data);
     }
 
     public function dologin()
@@ -87,13 +92,14 @@ class HomeController extends BaseController
         }
         $this->loadLayout("header.html");
         $this->loadView("login", $data);
-        $this->loadLayout("footer.html");
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("footer", $data);
     }
     public function createAccount()
     {
         $data = [];
         $fdv = new FormDataValidation();
-        $genCodes = implode(" ",$this->model->getGenderCodes());
+        $genCodes = implode(" ", $this->model->getGenderCodes());
         $fields = new fields(['email', 'username', 'fullname', 'password', 'gender', 'mobile']);
         $rules = [
             'email' => 'mailValidation',
@@ -127,20 +133,22 @@ class HomeController extends BaseController
         } else {
             $this->loadLayout("header.html");
             $this->loadView("login");
-            $this->loadLayout("footer.html");
+            $this->loadView("footer");
             $this->addScript("toast('Your Account is created successfully..!', 'success');");
             return;
         }
         $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
         $this->loadView("registration", $data);
-        $this->loadLayout("footer.html");
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("footer", $data);
     }
     public function registration()
     {
         $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
         $this->loadView("registration", $data);
-        $this->loadLayout("footer.html");
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadView("footer", $data);
     }
 }

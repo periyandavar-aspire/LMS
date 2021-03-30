@@ -40,7 +40,7 @@ class AdminController extends BaseController
         $fields->setRequiredFields('fullname');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $msg = "Invalid $field..!";
+            $msg = "toast('Invalid $field..!', 'danger');";
         } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
             $msg = "toast('Unable to update the profile..!', 'danger');";
         } else {
@@ -85,7 +85,8 @@ class AdminController extends BaseController
             $script = "toast('New category is added successfully..!', 'success');";
         }
         $this->loadLayout("adminHeader.html");
-        $this->loadView("manageCategories");
+        $data['categories'] = $this->model->getCategories();
+        $this->loadView("manageCategories", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }
@@ -117,6 +118,8 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }
+
+    
 
     public function settings()
     {

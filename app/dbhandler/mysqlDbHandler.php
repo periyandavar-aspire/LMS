@@ -110,4 +110,8 @@ class MysqlDbHandler extends DbHandler
         }
         $this->con = null;
     }
+    public function insertId(): int
+    {
+        return $this->con->insert_id;
+    }
 }

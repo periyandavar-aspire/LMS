@@ -83,20 +83,36 @@ class BaseController
             echo "$path layout is missing";
         }
     }
+    
     /**
-     * This functions load the style sheet
-     * @param $style style sheet filename with extension
-     * @param bool $staticPath optional default:true if its true this function will load
+     * This functions include the script file
+     * @param $script filename with extension
+     * @param bool $path optional default:true if its true this function will include
      * css from static directory
      *
      */
-    // public function addCSS($style,$staticPath){
-    //     $path = ($staticPath) ? (STATIC_DIR."/".$style) : $style;
-    //     if(file_exists($path))
-    //         readfile($path);
-    //     else
-    //         echo "$path style sheet is missing";
-    // }
+    public function includeScript($script, ?string $path= null)
+    {
+        global $config;
+        $path = $path ?? ($config['static'] . '/static' . '/js');
+        $script = $path."/".$script;
+        echo "<script src='$script'></script>";
+    }
+    
+    /**
+     * This functions include the style sheet
+     * @param $style style sheet filename with extension
+     * @param bool $path optional default:true if its true this function will include
+     * css from static directory
+     *
+     */
+    public function includeSheet($sheet, ?string $path= null)
+    {
+        global $config;
+        $path = $path ?? ($config['static']=='' ? 'static' : $config['static'].'/static').'/css';
+        $sheet = $path."/".$sheet;
+        echo "<link rel='stylesheet' type='text/css' href='$sheet'>";
+    }
     
     
     /**
@@ -108,6 +124,17 @@ class BaseController
     public function addScript(string $script)
     {
         echo "<script>" . $script . "</script>";
+    }
+
+    /**
+     * adds the CSS style on the view
+     * @param string $style
+     *
+     * @return void
+     */
+    public function addStyle(string $style)
+    {
+        echo "<style>" . $style . "</style>";
     }
     
     protected static function getMyInstance(?Model $model = null)

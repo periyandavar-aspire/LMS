@@ -24,6 +24,11 @@ input:disabled {
     margin-bottom: 21px;
 }
 
+.form-input-div img {
+    vertical-align: middle;
+    width: 172px;
+}
+
 meter {
     width: 100%;
 }

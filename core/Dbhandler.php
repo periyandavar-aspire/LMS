@@ -110,7 +110,12 @@ abstract class Dbhandler
         $result = $this->runQuery($this->query, $this->bindValues);
         return $result;
     }
-
+    /**
+     * to get last insert id
+     * @return int
+     */
+    abstract public function insertId(): int;
+    
     // public function get()
     // {
     //     // $this->query  = "SELECT " . $this->columns . " FROM " . $this->table . $this->where . $this->limit . $this->orderBy;
@@ -130,13 +135,11 @@ abstract class Dbhandler
         } else {
             $this->query  = $this->sql . $this->where;
         }
-
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {
             return false;
         }
-        
         return $result;
     }
     /**
@@ -229,12 +232,16 @@ abstract class Dbhandler
         $columns = func_get_args();
         for ($i = 0; $i < count($columns); $i++) {
             $columns[$i] = trim($columns[$i]);
-            if (strpos($columns[$i], " ")) {
+            if (strpos($columns[$i], " ") && strpos($columns[$i], ".")) {
+                $columns[$i] = explode(" ", $columns[$i]);
+                $columns[$i][0] = explode(".", $columns[$i][0]);
+                $columns[$i] = "`" . $columns[$i][0][0] . "` .`" . $columns[$i][0][1] .'` '. $columns[$i][1];
+            } elseif (strpos($columns[$i], " ")) {
                 $columns[$i] = explode(" ", $columns[$i]);
                 $columns[$i] = "`" . $columns[$i][0] . "` " . $columns[$i][1];
             } elseif (strpos($columns[$i], ".")) {
                 $columns[$i] = explode(".", $columns[$i]);
-                $columns[$i] = "`" . $columns[$i][0] . "`." . $columns[$i][1];
+                $columns[$i] = "`" . $columns[$i][0] . "`." . $columns[$i][1] .'`';
             } else {
                 $columns[$i] = '`' . $columns[$i] . '`';
             }
@@ -346,7 +353,12 @@ abstract class Dbhandler
             $this->where .= $args[0];
             $this->bindValues[] = $args[1];
         } elseif ($count == 3) {
-            $this->where .= "`" . trim($args[0]) . "`" . $args[1] . " ?";
+            $field =  trim($args[0]);
+            if (strpos($field, ".")) {
+                $field = explode(".", $field);
+                $field =  $field[0] . "`.`" . $field[1];
+            }
+            $this->where .= "`" . $field . "`" . $args[1] . " ?";
             $this->bindValues[] = $args[2];
         }
         return $this;
@@ -463,7 +475,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join = " INNER JOIN " . $tableName;
+        $this->join .= " INNER JOIN " . $tableName;
         return $this;
     }
     /**
@@ -481,7 +493,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join = " LEFT JOIN " . $tableName;
+        $this->join .= " LEFT JOIN " . $tableName;
         return $this;
     }
 
@@ -500,7 +512,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join = " Right JOIN " . $tableName;
+        $this->join .= " Right JOIN " . $tableName;
         return $this;
     }
 
@@ -519,7 +531,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join = " CROS JOIN " . $tableName;
+        $this->join .= " CROS JOIN " . $tableName;
         return $this;
     }
 
@@ -559,5 +571,47 @@ abstract class Dbhandler
         $fields = explode(", ", $fields);
         $this->groupby = $fields;
         return $this;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     *
+     * used to set the variable in database
+     *
+     * @return bool
+     */
+    public function set(string $name, string $value): bool
+    {
+        $this->query = "SET " . $name . " = " . $value;
+        return $this->executeQuery();
+    }
+
+    /**
+     * start the transactions
+     *
+     */
+    public function begin()
+    {
+        $this->query = "START TRANSACTION";
+        return $this->executeQuery();
+    }
+
+    /**
+     * commit the transaction
+     * @return bool
+     */
+    public function commit(): bool
+    {
+        return $this->runQuery("COMMIT");
+    }
+    
+    /**
+     * rollback the transaction
+     * @return bool
+     */
+    public function rollback(): bool
+    {
+        return $this->runQuery("ROLLBACK");
     }
 }

@@ -25,9 +25,17 @@ $config['layout'] = "static/layout/";
  */
 $config['db_handler'] = "app/dbHandler/";
 /**
- * Path to custom db handlers
+ * Path to services
  */
 $config['service'] = "app/service/";
+/**
+ * Path to static folder
+ */
+$config['static'] = "";
+/**
+ * Path to upload folders
+ */
+$config['upload'] = "";
 /**
  * Default page index page
  */
