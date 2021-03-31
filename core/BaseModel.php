@@ -14,8 +14,4 @@ class BaseModel
         }
     }
 
-    public function __destruct()
-    {
-        $this->db->close();
-    }
 }

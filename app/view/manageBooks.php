@@ -48,7 +48,7 @@
                                         <td><?php echo $book->name;?></td>
                                         <td><?php echo $book->createdAt?></td>
                                         <td><?php echo $book->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" <?php if ($book->status == 1) echo "checked";?>></div></td>
+                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $book->id;?>" <?php if ($book->status == 1) echo "checked";?>></div></td>
                                         <td>
                                             <a type="button" href="/admin/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
                                             <a type="button" href="/admin/books/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
@@ -130,7 +130,7 @@
                     </div>
                     <div class="form-input-div">
                         <label>Cover Pic</label>
-                        <input class="form-control" type="file" id="coverPic" name="coverPic" accept=".jpg, .png" onchange="changePreview(event);showElement('logo-upload-btn')" required="">
+                        <input class="form-control" type="file" id="coverPic" name="coverPic" accept=".jpg, .png" onchange="changePreview(event);" required="">
                     </div>
                     <div class="form-buttons">
                         <button type="submit" class="btn-link">Add</button>

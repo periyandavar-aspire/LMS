@@ -40,7 +40,7 @@ Route::add('/user/profile/update', 'user/updateProfile', 'post', function () {
     }
 });
 
-Route::add('/user/availbleBooks', 'Books/available', 'get', function () {
+Route::add('/user/availbleBooks', 'Book/available', 'get', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'user') {
         return true;
@@ -174,6 +174,35 @@ Route::add('/admin/books', 'book/add', 'post', function () {
     }
 });
 
+Route::add('/admin/issuedBooks', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+
+
+Route::add('/admin/manageUsers', null, 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/userRequest', 'admin/manageUserRequest', 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
 Route::add('/admin/settings', null, 'get', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'admin') {
@@ -219,6 +248,10 @@ Route::add('/admin/logout', null, 'get', function () {
         Utility::redirectURL('admin/login');
     }
 });
+
+
+
+
 
 Route::add('/book/categories', 'book/getCategories');
 Route::add('/book/authors', 'book/getAuthors');

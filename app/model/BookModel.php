@@ -55,5 +55,15 @@ class BookModel extends BaseModel
         return $book;
     }
     
-
+    public function getAvailableBooks()
+    {
+        $book = [];
+        $this->db->select('b.id id', 'b.name name', 'a.name author', 'description', 'available', 'coverPic')->from('book b');
+        $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')->innerJoin('author a')->on('ba.authorId = a.id');
+        $this->db->where('b.status', '=', 1)->orderby('RAND()')->execute();
+        while ($row = $this->db->fetch()){
+            $book[] = $row;
+        }
+        return $book;
+    }
 }

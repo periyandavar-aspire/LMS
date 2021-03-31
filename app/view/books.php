@@ -35,14 +35,16 @@
             <?php if (isset($books)):?>
                 <?php foreach ($books as $book): ?>
                     <div class="card cols">
-                        <div class="card-image img-container">
+                        <!-- <div class="card-image img-container"> -->
                             <!-- <div class="img-container"> -->
-                                <img src="<?php echo Utility::baseURL()?>/upload/books/<?php echo $book->coverPic;?>" alt="alternative">
+                                <!-- <img src="/upload/books/" alt="alternative">
                                 <div class="overlay">
-                                    <div class="details">"<?php echo $book->name; ?>" <br><br> by <?php echo $book->author;?></div>
-                                </div>
-                            <!-- </div> -->
-                        </div>
+                                    <div class="details">"" <br><br> by </div>
+                                </div> -->
+                            <!-- </div></div> -->
+                            <book-element cover="<?php echo Utility::baseURL()?>/upload/books/<?php echo $book->coverPic;?>" book="<?php echo $book->name; ?>" author="<?php echo $book->author;?>" id="<?php echo $book->id;?>">
+                        </book-element>
+                        
                         <div class="card-content">
                             <h3><?php echo $book->name?></h3>
                             <div class="text-author"><?php echo $book->author;?></div>
@@ -55,12 +57,11 @@
                     </div>
                 <?php endforeach;?>
             <?php endif;?>
-        
-            <!-- show more button -->
-            <div class="btn-container">
-                <a class="btn-link" href="#">SHOW MORE</a>
-            </div>
         </div> 
+        <!-- show more button -->
+        <div class="btn-container" id="loadMore">
+                <a class="btn-link" href="#">SHOW MORE</a>
+        </div>
     </section>
 </article>
 <script>

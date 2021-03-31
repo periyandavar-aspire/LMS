@@ -28,15 +28,9 @@ class AdminModel extends BaseModel
     public function getCategories()
     {
         $category = [];
-        $i = 0;
         $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('category')->execute();
         while($row = $this->db->fetch()) {
-            $category[$i]['name'] = $row->name;
-            $category[$i]['createdAt'] = $row->createdAt;
-            $category[$i]['updatedAt'] = $row->updatedAt;
-            $category[$i]['status'] = $row->status;
-            $category[$i]['id'] = $row->id;
-            $i++;
+            $category[] = $row;
         }
         return $category;
     }
@@ -44,15 +38,9 @@ class AdminModel extends BaseModel
     public function getAuthors()
     {
         $author = [];
-        $i = 0;
         $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author')->execute();
         while($row = $this->db->fetch()) {
-            $author[$i]['name'] = $row->name;
-            $author[$i]['createdAt'] = $row->createdAt;
-            $author[$i]['updatedAt'] = $row->updatedAt;
-            $author[$i]['status'] = $row->status;
-            $author[$i]['id'] = $row->id;
-            $i++;
+            $author[] = $row;
         }
         return $author;
     }

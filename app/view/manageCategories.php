@@ -40,13 +40,13 @@
                                 <?php foreach($categories as $category):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
-                                        <td><?php echo $category['name'];?></td>
-                                        <td><?php echo $category['createdAt'];?></td>
-                                        <td><?php echo $category['updatedAt'];?></td>
-                                        <td><div class="checkbox"><input type="checkbox"></div></td>
+                                        <td><?php echo $category->name?></td>
+                                        <td><?php echo $category->createdAt;?></td>
+                                        <td><?php echo $category->updatedAt;?></td>
+                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $category->id;?>" <?php if ($category->status == 1) echo "checked";?>></div></td>
                                         <td>
-                                            <a type="button" href="/admin/categories/edit/<?php echo $category['id'];?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/categories/edit/<?php echo $category['id'];?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/admin/categories/edit/<?php echo $category->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <a type="button" href="/admin/categories/edit/<?php echo $category->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
