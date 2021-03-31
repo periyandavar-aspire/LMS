@@ -24,7 +24,7 @@ input:disabled {
     margin-bottom: 21px;
 }
 
-.form-input-div img {
+.form-input-div .file-preview {
     vertical-align: middle;
     width: 172px;
 }

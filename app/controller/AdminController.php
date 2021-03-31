@@ -176,4 +176,25 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }
+
+    public function issuedBooks()
+    {
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("manageIssuedbooks");
+        $this->loadLayout("adminFooter.html");
+    }
+
+    public function manageUsers()
+    {
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("manageUsers");
+        $this->loadLayout("adminFooter.html");
+    }
+
+    public function manageUserRequest()
+    {
+        $this->loadLayout("adminHeader.html");
+        $this->loadView("manageUserRequest");
+        $this->loadLayout("adminFooter.html");
+    }
 }

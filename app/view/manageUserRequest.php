@@ -1,9 +1,14 @@
+<?php
+    // if (!isset($books)) {
+    //     return;
+    // }
+?>
 <article class="main">    
     <section>
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Authors &nbsp;<a class="btn-link" onclick="openModal('addRecord');">Add</a></h1><hr>
+                    <h1>User Request for Books <hr>
                 </div>
             </div>
             <div class="div-card-body">
@@ -27,26 +32,26 @@
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
-                                <th>Author</th>
-                                <th>Created at</th>
-                                <th>Updated at</th>
-                                <th>Status</th>
+                                <th>ISBN Number</th>
+                                <th>Book Name</th>
+                                <th>User Name</th>
+                                <th>Requested Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($authors)): ?>
+                            <?php $i=0; if (isset($books)): ?>
                                 
-                                <?php foreach($authors as $author):?>
+                                <?php foreach($books as $book):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
-                                        <td><?php echo $author->name;?></td>
-                                        <td><?php echo $author->createdAt;?></td>
-                                        <td><?php echo $author->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $author->id;?>" <?php if ($author->status == 1) echo "checked";?>></div></td>
+                                        <td><?php echo $book->name;?></td>
+                                        <td><?php echo $book->createdAt?></td>
+                                        <td><?php echo $book->updatedAt;?></td>
+                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $book->id;?>" <?php if ($book->status == 1) echo "checked";?>></div></td>
                                         <td>
-                                            <a type="button" href="/admin/authors/edit/<?php echo $author->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/authors/edit/<?php echo $author->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/admin/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <a type="button" href="/admin/books/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -70,25 +75,11 @@
                 </div>
             </div>
         </div>
-        <div class="modal-shadow" id="addRecord">
-            <div class="modal">
-                <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
-                <h1>Add New Author</h1>
-                <hr><br>
-                <form action="/admin/authors" method="post">
-                    <div class="form-input-div">
-                        <label>Author Name</label>
-                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name" autocomplete="off" placeholder="Author Name..." required="">
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        
     </section>
 </article>
 
 <script>
-    document.getElementById('authors').className += " active";
+    document.getElementById('request').className += " active";
 </script>
+<!-- <script src="<?php echo Utility::baseURL();?>/static/js/bookstatus.js"></script> -->

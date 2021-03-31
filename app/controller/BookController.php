@@ -100,4 +100,13 @@ class BookController extends BaseController
             }
         }
     }
+
+    public function available()
+    {
+        $this->loadLayout("userHeader.html");
+        $data['books'] = $this->model->getAvailableBooks();
+        $this->loadView("availablebooks", $data);
+        $this->loadLayout("userFooter.html");
+        $this->includeScript('bookElement.js');
+    }
 }

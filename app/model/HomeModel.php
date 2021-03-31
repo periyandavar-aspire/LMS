@@ -69,17 +69,7 @@ class HomeModel extends BaseModel
         $result = $this->db->fetch();
         return $result;
     }
-    public function getBooks()
-    {
-        $book = [];
-        $this->db->select('b.id id', 'b.name name', 'a.name author', 'description', 'available', 'coverPic')->from('book b');
-        $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')->innerJoin('author a')->on('ba.authorId = a.id');
-        $this->db->where('b.status', '=', 1)->execute();
-        while ($row = $this->db->fetch()){
-            $book[] = $row;
-        }
-        return $book;
-    }
+    
     public function getVision()
     {
         $this->db->select('vision')->from('cms')->where('id','=',1)->limit(1)->execute();

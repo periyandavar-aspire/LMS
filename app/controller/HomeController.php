@@ -10,9 +10,11 @@ class HomeController extends BaseController
         $this->loadLayout("header.html");
         $homeData['vision'] = $this->model->getVision();
         $homeData['mission'] = $this->model->getMission();
+        $homeData['books'] = (new BookModel)->getAvailableBooks();
         $this->loadView("index", $homeData);
         $data['footer'] = $this->model->getFooterData();
         $this->loadView("footer", $data);
+        $this->includeScript('bookElement.js');
     }
 
     public function home()
@@ -23,10 +25,11 @@ class HomeController extends BaseController
     public function books()
     {
         $this->loadLayout("header.html");
-        $books['books'] = $this->model->getBooks();
+        $books['books'] = (new BookModel)->getAvailableBooks();
         $this->loadView("books", $books);
         $data['footer'] = $this->model->getFooterData();
         $this->loadView("footer", $data);
+        $this->includeScript('bookElement.js');
     }
     public function aboutus()
     {

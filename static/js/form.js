@@ -226,7 +226,7 @@ function countContain(strPassword, strCheck) {
 
 function checkConfirm(ele1, ele2, target) {
     if (document.querySelector("#" + ele1).value != document.querySelector("#" + ele2).value)
-        document.querySelector("#" + target).innerHTML = "Passwords Dismatch...!";
+        document.querySelector("#" + target).innerHTML = "Passwords mismatch...!";
     else
         document.querySelector("#" + target).innerHTML = "";
 }
@@ -244,6 +244,11 @@ function changePreview(event) {
                 preview = document.createElement("img");
                 preview.src = reader.result;
                 preview.className = "file-preview";
+                preview.id = "file-preview";
+                oldEle = document.getElementById('file-preview');
+                if (oldEle != null && ele.contains(oldEle)) {
+                    oldEle.remove();
+                }
                 ele.appendChild(preview);
             };
             reader.readAsDataURL(event.target.files[0]);

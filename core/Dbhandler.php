@@ -11,7 +11,7 @@ abstract class Dbhandler
      */
     protected $result;
     /**
-     * abstract function which should implemented in the handler class to close db connection which called by __destruct()
+     * abstract function which should implemented in the handler class to close db connection 
      */
     abstract public function close();
     /**
@@ -89,15 +89,7 @@ abstract class Dbhandler
     {
         return $this->sql;
     }
-    /**
-     * will close db connection on object destruction
-     */
-    public function __destruct()
-    {
-        if ($this->con != null) {
-            $this->close();
-        }
-    }
+   
     /**
      * quert function to run directly raw query with or without bind values
      */
