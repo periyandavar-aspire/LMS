@@ -63,63 +63,6 @@ class AdminController extends BaseController
         $this->addScript($msg);
     }
 
-    public function categories()
-    {
-        $data['categories'] = $this->model->getCategories();
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("manageCategories", $data);
-        $this->loadLayout("adminFooter.html");
-    }
-
-    public function addCategory()
-    {
-        $fdv = new FormDataValidation();
-        $fields = new Fields(['name']);
-        $fields->setRequiredFields('name');
-        $fields->addValues($this->input->post());
-        if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
-        } elseif (!$this->model->addCategory($fields->getValues())) {
-            $script = "toast('Unable to add new category..!', 'danger');";
-        } else {
-            $script = "toast('New category is added successfully..!', 'success');";
-        }
-        $this->loadLayout("adminHeader.html");
-        $data['categories'] = $this->model->getCategories();
-        $this->loadView("manageCategories", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->addScript($script);
-    }
-
-    public function authors()
-    {
-        $data['authors'] = $this->model->getAuthors();
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("manageAuthors", $data);
-        $this->loadLayout("adminFooter.html");
-    }
-
-    public function addAuthor()
-    {
-        $fdv = new FormDataValidation();
-        $fields = new Fields(['name']);
-        $fields->setRequiredFields('name');
-        $fields->addValues($this->input->post());
-        if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
-        } elseif (!$this->model->addAuthor($fields->getValues())) {
-            $script = "toast('Unable to add new author..!', 'danger');";
-        } else {
-            $script = "toast('New author is added successfully..!', 'success');";
-        }
-        $this->loadLayout("adminHeader.html");
-        $data['authors'] = $this->model->getAuthors();
-        $this->loadView("manageAuthors", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->addScript($script);
-    }
-
-    
 
     public function settings()
     {
@@ -184,12 +127,6 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
     }
 
-    public function manageUsers()
-    {
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("manageUsers");
-        $this->loadLayout("adminFooter.html");
-    }
 
     public function manageUserRequest()
     {

@@ -80,7 +80,7 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Book</h1>
                 <hr><br>
-                <form action="/admin/books" enctype="multipart/form-data" method="post">
+                <form action="/books/add" enctype="multipart/form-data" method="post">
                     <div class="form-input-div">
                         <label>Name</label>
                         <input class="form-control" type="text" id="bookname" name="name" autocomplete="off" placeholder="Book Name" required="">

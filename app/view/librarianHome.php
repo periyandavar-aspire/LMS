@@ -1,45 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-	    <title>Library</title>
-	    <meta charset="utf-8">
-	    <meta name="viewport" content="width=device-width,initial-scale=1.0">
- 	    <link rel="icon" type="image/png" href="<?php echo Utility::baseURL()?>/static/img/favicon.png"/>
-         <link rel="stylesheet" type="text/css" href="<?php echo Utility::baseURL()?>/static/css/form.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo Utility::baseURL()?>/static/css/login.css">
-    </head>
-    <body>
-        <article>
-            <!-- <section class="left-panel-login">
-                <img src="img/login.jpg">
-            </section> -->
-            <section class="right-panel-login">
-                <div class="login-wrapper">
-                    <img class="logo-banar"  src="<?php echo Utility::baseURL()?>/static/img/lms-logo.jpg">
-                    <h1>Login Page</h1>
-                    <hr>
-                <form>
-                    <div class="form-input-div">
-                        <label>Enter Email ID</label>
-                        <input class="form-control" type="email" name="email" id="mailid" placeholder="Email..." autocomplete="off" required="">  <!--onblur="checkAvailability()"-->
-                        <span id="user-availability-status" style="font-size:12px;"></span> 
-                    </div>
-                    <div class="form-input-div">
-                        <label>Enter Password</label>
-                        <input class="form-control" type="password" id="pass" name="password" placeholder="Enter Password..." autocomplete="off" required="">
-                        <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
-		                <span id="pass1msg" style="display:none"></span>
-                    </div>
-                    <div class="form-input-div">
-                        <label>Verification code : </label>
-                        <input type="text" name="verfcode" maxlength="5" autocomplete="off" placeholder="Verification Code..." required="" style="width: 150px; height: 25px;">&nbsp;<img src="captcha.php">
-                    </div> 
-                    <div class="form-buttons">
-                        <button type="button" class="button-control positive">Login</button>
-                    </div>
-                </form>
+<article class="main">
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="cols col-1 div-card dashboard-icons"> 
+                    <a href="/librarian/profile"  id="profile"><i class="fa fa-user-circle" aria-hidden="true"></i><br>Profile</a>
                 </div>
-            </section>
-        </article>
-    </body>
-</html>
+                <div class="cols col-1 div-card dashboard-icons"> 
+                <a href="/librarian/categories"  id="categories"><i class="fa fa-list-alt" aria-hidden="true"></i><br>Categories</a>
+                </div>
+                <div class="cols col-1 div-card dashboard-icons"> 
+                <a href="/librarian/authors"  id="authors"><i class="fa fa-user-o" aria-hidden="true"></i><br>Authors</a>
+                </div>
+                <div class="cols col-1 div-card dashboard-icons">
+                <a href="/librarian/books" id="books"><i class="fa fa-book" aria-hidden="true"></i><br>Books</a>
+                </div>
+                <div class="cols col-1 div-card dashboard-icons"> 
+                <a href="/librarian/issuedBooks" id="issued"><i class="fa fa-table" aria-hidden="true"></i><br>Issued Books</a>
+                </div>
+                <div class="cols col-1 div-card dashboard-icons"> 
+                <a href="/librarian/userRequest" id="request"><i class="fa fa-list" aria-hidden="true"></i><br>User Request</a>
+                </div>
+                <div class="cols col-1 div-card dashboard-icons"> 
+                <a href="/librarian/manageUsers" id="request"><i class="fa fa-users" aria-hidden="true"></i><br>Users</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+<script>
+    document.getElementById('home').className += " active";
+</script>

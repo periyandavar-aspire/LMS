@@ -19,12 +19,14 @@ class BookController extends BaseController
 
     public function manageBooks()
     {
+        $user = $this->input->session('type');
         $data['books'] = $this->model->getBooks();
-        $this->loadLayout("adminHeader.html");
+        $this->loadLayout($user . "Header.html");
         $this->loadView("manageBooks", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->includeScript("book.js");
+        $this->loadLayout($user . "Footer.html");
+        $this->includeScript("populate.js");
     }
+
 
     // public function addBook()
     // {
@@ -49,6 +51,7 @@ class BookController extends BaseController
     public function add()
     {
         $fdv = new FormDataValidation();
+        $user = $this->input->session('type');
         $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'keywords', 'price']);
         // $rules = [
         //     'fullName' => 'alphaSpaceValidation',
@@ -60,8 +63,9 @@ class BookController extends BaseController
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
-            $coverPic = $book['name'] . uniqid() . '.jpg';
-            if ($fields->uploadFile($this->input->files('coverPic'), $coverPic, 'books')) {
+            $uploadfile = $this->input->files('coverPic');
+            $coverPic = uniqid() . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
+            if ($fields->uploadFile($uploadfile, $coverPic, 'books')) {
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
                     $script = "toast('New book added successfully..!', 'success');";
@@ -73,12 +77,12 @@ class BookController extends BaseController
             }
         } else {
             $script = "toast('Invalid $field..!', 'danger');";
-        } 
+        }
         $data['books'] = $this->model->getBooks();
-        $this->loadLayout("adminHeader.html");
+        $this->loadLayout($user . "Header.html");
         $this->loadView("manageBooks", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->includeScript("book.js");
+        $this->loadLayout($user . "Footer.html");
+        $this->includeScript("populate.js");
         $this->addScript($script);
     }
     public function bookstatus()

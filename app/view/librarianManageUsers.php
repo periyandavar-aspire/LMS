@@ -1,9 +1,14 @@
+<?php
+    // if (!isset($books)) {
+    //     return;
+    // }
+?>
 <article class="main">    
     <section>
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Categories &nbsp;<a class="btn-link" onclick="openModal('addRecord');">Add</a></h1><hr>
+                    <h1>Users</h1><hr>
                 </div>
             </div>
             <div class="div-card-body">
@@ -27,26 +32,28 @@
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
-                                <th>Category</th>
-                                <th>Created at</th>
-                                <th>Updated at</th>
-                                <th>Status</th>
+                                <th>Full Name</th>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Mobile No</th>
+                                <th>Registered At</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($categories)): ?>
+                            <?php $i=0; if (isset($users)): ?>
                                 
-                                <?php foreach($categories as $category):?>
+                                <?php foreach($users as $user):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
-                                        <td><?php echo $category->name?></td>
-                                        <td><?php echo $category->createdAt;?></td>
-                                        <td><?php echo $category->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $category->id;?>" <?php if ($category->status == 1) echo "checked";?>></div></td>
+                                        <td><?php echo $user->fullName;?></td>
+                                        <td><?php echo $user->userName;?></td>
+                                        <td><?php echo $user->email;?></td>
+                                        <td><?php echo $user->mobile;?></td>
+                                        <td><?php echo $user->createdAt?></td>
                                         <td>
-                                            <a type="button" href="/admin/categories/edit/<?php echo $category->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/categories/edit/<?php echo $category->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/admin/user/edit/<?php echo $user->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <a type="button" href="/admin/user/delete/<?php echo $user->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -70,25 +77,10 @@
                 </div>
             </div>
         </div>
-        <div class="modal-shadow" id="addRecord">
-            <div class="modal">
-                <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
-                <h1>Add New Category</h1>
-                <hr><br>
-                <form action="/categories/add" method="post">
-                    <div class="form-input-div">
-                        <label>Category Name</label>
-                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name" autocomplete="off" placeholder="Category Name..." required="">
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </section>
 </article>
 
 <script>
-    document.getElementById('categories').className += " active";
+    document.getElementById('manageUsers').className += " active";
 </script>
+<!-- <script src="<?php echo Utility::baseURL();?>/static/js/bookstatus.js"></script> -->
