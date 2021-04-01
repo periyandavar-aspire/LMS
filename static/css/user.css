@@ -55,6 +55,12 @@ nav ul li a:hover {
     height: 150px;
 }
 
+#nav-bar-top-lib {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/10.jpg) center center no-repeat;
+    background-size: cover;
+    height: 150px;
+}
+
 header {
     background: #012534;
     height: 62px;

@@ -26,7 +26,7 @@ class LoginController extends BaseController
                 Utility::setsessionData('login', true);
                 Utility::setSessionData("type", $result->type);
                 Utility::setSessionData("id", $user);
-                $this->redirect("admin/home");
+                $this->redirect($result->type . "/home");
             }
         }
         $data["msg"] = "Login failed..!";

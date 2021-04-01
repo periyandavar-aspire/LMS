@@ -75,7 +75,7 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Author</h1>
                 <hr><br>
-                <form action="/admin/authors" method="post">
+                <form action="/authors/add" method="post">
                     <div class="form-input-div">
                         <label>Author Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name" autocomplete="off" placeholder="Author Name..." required="">

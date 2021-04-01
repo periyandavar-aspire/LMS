@@ -20,35 +20,7 @@ class AdminModel extends BaseModel
         $result = $this->db->update('admin_user', ['password' => md5($password)])->where('email', '=', $email)->execute();
         return $result;
     }
-    public function addCategory(array $category)
-    {
-        $result = $this->db->insert('category', $category)->execute();
-        return $result;
-    }
-    public function getCategories()
-    {
-        $category = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('category')->execute();
-        while($row = $this->db->fetch()) {
-            $category[] = $row;
-        }
-        return $category;
-    }
-
-    public function getAuthors()
-    {
-        $author = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author')->execute();
-        while($row = $this->db->fetch()) {
-            $author[] = $row;
-        }
-        return $author;
-    }
-    public function addAuthor(array $author)
-    {
-        $result = $this->db->insert('author', $author)->execute();
-        return $result;
-    }
+    
 
     // public function getBooks()
     // {

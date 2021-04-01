@@ -10,6 +10,13 @@ function loadAuthors() {
         .then(data => populateSelect(document.getElementById('author'), data));
 }
 
+
+function loadRoles() {
+    fetch("/user/allRoles", { headers: { response: "application/json" } })
+        .then(response => { return response.json() })
+        .then(data => populateSelect(document.getElementById('role'), data));
+}
+
 function populateSelect(target, data) {
     for (var i = 0; i < data.length; i++) {
         target.innerHTML = target.innerHTML +

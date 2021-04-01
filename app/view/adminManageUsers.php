@@ -8,7 +8,7 @@
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Users &nbsp;<a class="btn-link" onclick="openModal('addRecord');">New User</a></h1><hr>
+                    <h1>Users &nbsp;<a class="btn-link" onclick="openModal('addRecord');loadRoles();">New User</a></h1><hr>
                 </div>
             </div>
             <div class="div-card-body">
@@ -33,26 +33,29 @@
                             <tr>
                                 <th>Sl. No</th>
                                 <th>Full Name</th>
+                                <th>User Name</th>
                                 <th>Email</th>
-                                <th>User Type</th>
                                 <th>Mobile No</th>
+                                <th>User Type</th>
                                 <th>Registered At</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($books)): ?>
+                            <?php $i=0; if (isset($users)): ?>
                                 
-                                <?php foreach($books as $book):?>
+                                <?php foreach($users as $user):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
-                                        <td><?php echo $book->name;?></td>
-                                        <td><?php echo $book->createdAt?></td>
-                                        <td><?php echo $book->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $book->id;?>" <?php if ($book->status == 1) echo "checked";?>></div></td>
+                                        <td><?php echo $user->fullName;?></td>
+                                        <td><?php echo $user->userName;?></td>
+                                        <td><?php echo $user->email;?></td>
+                                        <td><?php echo $user->mobile;?></td>
+                                        <td><?php echo $user->role;?></td>
+                                        <td><?php echo $user->createdAt?></td>
                                         <td>
-                                            <a type="button" href="/admin/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/books/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/admin/user/edit/<?php echo $user->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <a type="button" href="/admin/user/delete/<?php echo $user->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -81,20 +84,20 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Book</h1>
                 <hr><br>
-                <form action="/admin/books" enctype="multipart/form-data" method="post">
+                <form action="/admin/manageUsers" method="post">
                     <div class="form-input-div">
                         <label>Full Name</label>
-                        <input class="form-control" type="text" id="bookname" name="name" autocomplete="off" placeholder="Book Name" required="">
+                        <input class="form-control" type="text" id="fullname" name="fullName" autocomplete="off" placeholder="Full Name" required="">
                     </div>
                     <div class="form-input-div">
                         <label>Email</label>
-                        <input class="form-control" type="text" id="location" name="location" autocomplete="off" placeholder="Book Location" required="">
+                        <input class="form-control" type="email" id="email" name="email" autocomplete="off" placeholder="email" required="">
                     </div>
 
                     <div class="form-input-div">
                         <label>Role</label>
-                        <select class="form-control" type="text" id="author" name="author" required="">
-                            <option style="display:none">Select Author</option>
+                        <select class="form-control" type="text" id="role" name="role" required="">
+                            <option style="display:none">Select Role</option>
                         </select>
                     </div>
 

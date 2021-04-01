@@ -46,4 +46,20 @@ class Utility
         $len = strlen($startStr);
         return (substr($str, 0, $len) === $startStr);
     }
+
+    public static function dispatch($url)
+    {
+        global $config;
+        $url = ltrim($url, "/");
+        $url = explode("/", $url);
+        $controller = $url[0] . "Controller";
+        $method = $url[1];
+        if (file_exists($config['controller']) . "/" . $controller . ".php") {
+            if (method_exists($controller, $method)) {
+                (new $controller)->$method();
+                exit();
+            }
+        }
+        Route::error();
+    }
 }
