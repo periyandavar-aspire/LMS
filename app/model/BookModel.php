@@ -66,4 +66,12 @@ class BookModel extends BaseModel
         }
         return $book;
     }
+
+    public function getBookDetails(int $bookId)
+    {
+        $this->db->select('id', 'name', 'author', 'description', 'available', 'coverpic', 'category', 'location', 'isbnNumber')->from('book_detail');
+        $this->db->where('id', '=', $bookId)->execute();
+        $result = $this->db->fetch();
+        return $result;
+    }
 }

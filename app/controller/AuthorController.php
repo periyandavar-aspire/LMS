@@ -12,7 +12,11 @@ class AuthorController extends BaseController
         $this->loadView("manageAuthors", $data);
         $this->loadLayout("adminFooter.html");
     }
-
+    public function getAuthors()
+    {
+        $result = $this->model->getAuthors();
+        echo json_encode($result);
+    }
     public function add()
     {
         $fdv = new FormDataValidation();

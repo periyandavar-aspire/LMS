@@ -5,7 +5,7 @@ class ManageUserModel extends BaseModel
     public function getAllUsers(string $email)
     {
         $users = [];
-        $this->db->select('id', 'fullName', 'userName', 'email', 'role', 'mobile', 'createdAt')->from('all_users');
+        $this->db->select('id', 'fullName', 'userName', 'email', 'role', 'mobile', 'createdAt')->from('all_user');
         $result = $this->db->where('email', '!=', $email)->orderby('id')->execute();
         while ($row = $this->db->fetch()) {
             $users[] = $row;
@@ -15,7 +15,7 @@ class ManageUserModel extends BaseModel
     public function getRegUsers()
     {
         $users = [];
-        $this->db->select('id', 'fullName', 'userName', 'email', 'mobile', 'createdAt')->from('all_users');
+        $this->db->select('id', 'fullName', 'userName', 'email', 'mobile', 'createdAt')->from('all_user');
         $result = $this->db->where('role', '=', 'user')->orderby('id')->execute();
         while ($row = $this->db->fetch()) {
             $users[] = $row;

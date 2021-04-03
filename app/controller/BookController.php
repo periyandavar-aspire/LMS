@@ -6,17 +6,6 @@ class BookController extends BaseController
         parent::__construct(new BookModel());
     }
     
-    public function getAuthors()
-    {
-        $result = $this->model->getAuthors();
-        echo json_encode($result);
-    }
-    public function getCategories()
-    {
-        $result = $this->model->getCategories();
-        echo json_encode($result);
-    }
-
     public function manageBooks()
     {
         $user = $this->input->session('type');
@@ -27,6 +16,14 @@ class BookController extends BaseController
         $this->includeScript("populate.js");
     }
 
+    public function get()
+    {
+        $id = func_get_arg(0);
+        $data['book'] = $this->model->getBookDetails($id);
+        $this->loadLayout('header.html');
+        $this->loadView("book", $data);
+        $this->loadLayout('footer.html');
+    }
 
     // public function addBook()
     // {
@@ -65,7 +62,7 @@ class BookController extends BaseController
             $book = $fields->getValues();
             $uploadfile = $this->input->files('coverPic');
             $coverPic = uniqid() . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
-            if ($fields->uploadFile($uploadfile, $coverPic, 'books')) {
+            if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
                     $script = "toast('New book added successfully..!', 'success');";

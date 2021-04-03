@@ -109,7 +109,7 @@ class BaseController
     public function includeSheet($sheet, ?string $path= null)
     {
         global $config;
-        $path = $path ?? ($config['static']=='' ? 'static' : $config['static'].'/static').'/css';
+        $path = $path ?? ($config['static'] . '/static/css');
         $sheet = $path."/".$sheet;
         echo "<link rel='stylesheet' type='text/css' href='$sheet'>";
     }

@@ -13,6 +13,8 @@ Route::add('/home/captcha');
 
 Route::add('/home/home');
 
+Route::add('/home/book/view/([1-9]{1}[1-9]*)', 'book/get');
+
 Route::add('/user/home', null, 'get', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'user') {
@@ -381,9 +383,9 @@ Route::add('/authors/add', 'author/add', 'post', function () {
 
 
 
-Route::add('/book/categories', 'book/getCategories');
-Route::add('/book/authors', 'book/getAuthors');
-Route::add('/user/allRoles', 'manageUser/getUserRoles', 'get',  function () {
+Route::add('/book/categories', 'category/getCategories');
+Route::add('/book/authors', 'author/getAuthors');
+Route::add('/user/allRoles', 'manageUser/getUserRoles', 'get', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'admin') {
         return true;

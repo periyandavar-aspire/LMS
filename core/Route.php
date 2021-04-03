@@ -80,6 +80,7 @@ class Route
                         return;
                     }
                 }
+                array_shift($matches);
                 $requestCtrl = $route['route'] ?? $path;
                 $requestCtrl = explode('/', trim($requestCtrl, "/"));
                 $ctrl = $requestCtrl[0];
@@ -87,7 +88,7 @@ class Route
                 $controllerName = ucfirst($ctrl) . "Controller";
                 $controllerObj = new $controllerName();
                 if (method_exists($controllerName, $method)) {
-                    $controllerObj->$method($matches);
+                    $controllerObj->$method(...$matches);
                     $methodMatch = true;
                 }
                 break;

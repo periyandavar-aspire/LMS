@@ -14,6 +14,11 @@ class CategoryController extends BaseController
         $this->loadView("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
     }
+    public function getCategories()
+    {
+        $result = $this->model->getCategories();
+        echo json_encode($result);
+    }
 
     public function add()
     {

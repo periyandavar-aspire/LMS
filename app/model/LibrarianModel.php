@@ -20,6 +20,4 @@ class LibrarianModel extends BaseModel
         $result = $this->db->update('admin_user', ['password' => md5($password)])->where('email', '=', $email)->execute();
         return $result;
     }
-    
-
 }
