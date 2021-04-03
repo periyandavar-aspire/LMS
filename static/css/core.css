@@ -70,6 +70,11 @@ header {
     background-size: cover;
 }
 
+.view-book-container {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/8.jpg) center center no-repeat;
+    background-size: cover;
+}
+
 .err-404-container {
     background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/13.jpg) center center no-repeat;
     background-size: cover;
@@ -273,9 +278,23 @@ header h1 {
     /* color: #fff; */
 }
 
+.row-container {
+    text-align: center;
+    padding: 10px;
+}
+
 .btn-container {
     margin-top: 8px;
     text-align: center;
+}
+
+.view-book-container h1 {
+    color: dodgerblue;
+}
+
+.view-book-container .header-content {
+    padding-top: 100px;
+    padding-bottom: 100px;
 }
 
 .image-container img {
@@ -522,6 +541,62 @@ a {
     max-height: 90%;
     margin-left: 30%;
     margin-bottom: 8%;
+}
+
+p.stack-msg {
+    font-size: 18px;
+    color: red;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.img-cover img {
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.img-cover {
+    text-align: left;
+    color: white;
+}
+
+.img-cover h3 {
+    color: dodgerblue;
+    text-align: left;
+}
+
+.img-cover p {
+    font-weight: 400;
+    font-family: sans-serif;
+    font-size: 15px;
+    text-indent: 34px;
+    line-height: 21px;
+    letter-spacing: 1px;
+}
+
+.img-details {
+    color: white;
+    text-align: left;
+    padding-top: 0;
+}
+
+.img-details .text-author {
+    color: #9c9f99;
+}
+
+.img-details p {
+    color: white;
+    font-style: italic;
+}
+
+.styled-list li {
+    padding: 8px;
+    margin-top: 5px;
+}
+
+.styled-list {
+    list-style-image: url(../img/symbols/icon-background.svg);
 }
 
 .close-modal {

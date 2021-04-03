@@ -6,7 +6,7 @@ class AuthorModel extends BaseModel
     {
         $author = [];
         $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author')->execute();
-        while($row = $this->db->fetch()) {
+        while ($row = $this->db->fetch()) {
             $author[] = $row;
         }
         return $author;

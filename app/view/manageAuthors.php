@@ -37,13 +37,15 @@
                         <tbody>
                             <?php $i=0; if (isset($authors)): ?>
                                 
-                                <?php foreach($authors as $author):?>
+                                <?php foreach ($authors as $author):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $author->name;?></td>
                                         <td><?php echo $author->createdAt;?></td>
                                         <td><?php echo $author->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $author->id;?>" <?php if ($author->status == 1) echo "checked";?>></div></td>
+                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $author->id;?>" <?php if ($author->status == 1) {
+    echo "checked";
+}?>></div></td>
                                         <td>
                                             <a type="button" href="/admin/authors/edit/<?php echo $author->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
                                             <a type="button" href="/admin/authors/edit/<?php echo $author->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>

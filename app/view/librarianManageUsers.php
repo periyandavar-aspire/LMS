@@ -43,7 +43,7 @@
                         <tbody>
                             <?php $i=0; if (isset($users)): ?>
                                 
-                                <?php foreach($users as $user):?>
+                                <?php foreach ($users as $user):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $user->fullName;?></td>

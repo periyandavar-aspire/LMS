@@ -1,7 +1,7 @@
 class Bookinput extends HTMLElement {
     constructor() {
         super();
-        var book, author;
+        let book, author;
         const imgCard = document.createElement('div');
         const imgElem = document.createElement('img');
         const overlayElem = document.createElement('div');
