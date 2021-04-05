@@ -233,7 +233,7 @@ abstract class Dbhandler
                 $columns[$i] = "`" . $columns[$i][0] . "` " . $columns[$i][1];
             } elseif (strpos($columns[$i], ".")) {
                 $columns[$i] = explode(".", $columns[$i]);
-                $columns[$i] = "`" . $columns[$i][0] . "`." . $columns[$i][1] .'`';
+                $columns[$i] = "`" . $columns[$i][0] . "`.`" . $columns[$i][1] .'`';
             } else {
                 $columns[$i] = '`' . $columns[$i] . '`';
             }

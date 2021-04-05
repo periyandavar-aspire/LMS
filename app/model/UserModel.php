@@ -21,4 +21,16 @@ class UserModel extends BaseModel
         $result = $this->db->update('user', ['password' => md5($password)])->where('username', '=', $username)->execute();
         return $result;
     }
+
+    public function getLentBooks(string $username)
+    {
+        $books = [];
+        $this->db->select('isbnNumber', 'name bookName', "IFNULL(issuedAt,'')", "IFNULL(returnAt,'NotReturnYet')", 'issued_book.id', 'fine');
+        $this->db->from('issued_book')->innerJoin('book')->using('isbnNumber')->innerJoin('user')->using('userName');
+        $this->db->where('userName', '=', $username)->limit(10, 0)->execute();
+        while ($row = $this->db->fetch()) {
+            $books[] = $row;
+        }
+        return $books;
+    }
 }

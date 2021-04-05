@@ -18,7 +18,7 @@
                                     <div class="details">"" <br><br> by </div>
                                 </div> -->
                             <!-- </div></div> -->
-                            <book-element cover="<?php echo Utility::baseURL()?>/upload/books/<?php echo $book->coverPic;?>" book="<?php echo $book->name; ?>" author="<?php echo $book->author;?>" id="<?php echo $book->id;?>">
+                            <book-element cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>" book="<?php echo $book->name; ?>" author="<?php echo $book->author;?>" id="<?php echo $book->id;?>">
                         </book-element>
                         
                         <div class="card-content">
@@ -27,7 +27,7 @@
                             <p><?php echo $book->description;?></p>
                             <p>only <?php echo $book->available;?> books available</p>
                             <div class="btn-container">
-                                <a class="btn-link" href="/home/books/lend/<?php echo $book->id;?>">LEND NOW</a>
+                                <a class="btn-link" href="/home/books/lend/<?php echo $book->id;?>">REQUEST TO LEND</a>
                             </div>
                         </div>
                     </div>

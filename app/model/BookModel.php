@@ -74,4 +74,6 @@ class BookModel extends BaseModel
         $result = $this->db->fetch();
         return $result;
     }
+
+    
 }

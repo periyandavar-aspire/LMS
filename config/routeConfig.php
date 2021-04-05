@@ -270,7 +270,7 @@ Route::add('/admin/books', 'book/manageBooks', 'get', function () {
     }
 });
 
-Route::add('/admin/books', 'book/add', 'post', function () {
+Route::add('/admin/books/add', 'book/newBook', 'get', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'admin') {
         return true;
@@ -279,7 +279,7 @@ Route::add('/admin/books', 'book/add', 'post', function () {
     }
 });
 
-Route::add('/admin/issuedBooks', null, 'get', function () {
+Route::add('/admin/books/add', 'book/add', 'post', function () {
     $id = new InputData();
     if ($id->session('login') == true && $id->session('type') == 'admin') {
         return true;
@@ -287,6 +287,53 @@ Route::add('/admin/issuedBooks', null, 'get', function () {
         Utility::redirectURL('admin/login');
     }
 });
+
+// Route::add('/admin/issuedBooks', null, 'get', function () {
+//     $id = new InputData();
+//     if ($id->session('login') == true && $id->session('type') == 'admin') {
+//         return true;
+//     } else {
+//         Utility::redirectURL('admin/login');
+//     }
+// });
+
+Route::add('/admin/userDetails/([a-zA-Z0-9_]+)', 'issuedBooks/getUserDetails', 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/bookDetails/([0-9]+)', 'issuedBooks/getBookDetails', 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+
+Route::add('/admin/issuedBooks', 'issuedBooks/issue', 'get', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/admin/issueBook', 'issuedBooks/add', 'post', function () {
+    $id = new InputData();
+    if ($id->session('login') == true && $id->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
 
 Route::add('/admin/manageUsers', 'manageUser/getAllUsers', 'get', function () {
     $id = new InputData();

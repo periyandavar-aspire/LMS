@@ -68,8 +68,10 @@ class UserController extends BaseController
 
     public function lent()
     {
+        $user = $this->input->session('id');
+        $data["books"] = $this->model->getLentBooks($user);
         $this->loadLayout("userHeader.html");
-        $this->loadView("lentBooks");
+        $this->loadView("lentBooks", $data);
         $this->loadLayout("userFooter.html");
     }
 

@@ -41,6 +41,15 @@ nav ul li a {
     /* color: white; */
 }
 
+.div-like-textarea .text-wrapper {
+    padding-left: 70px;
+}
+
+.img-wrapper {
+    height: 100%;
+    float: left;
+}
+
 nav a {
     color: white;
 }
@@ -59,6 +68,12 @@ nav ul li a:hover {
     background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/cover/10.jpg) center center no-repeat;
     background-size: cover;
     height: 150px;
+}
+
+section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: white;
 }
 
 header {

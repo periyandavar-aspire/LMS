@@ -8,7 +8,7 @@
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Books &nbsp;<a class="btn-link" onclick="openModal('addRecord');loadCategories();loadAuthors();">Add</a></h1><hr>
+                    <h1>Books &nbsp;<a class="btn-link" href="/admin/books/add">Add</a></h1><hr>
                 </div>
             </div>
             <div class="div-card-body">
@@ -75,69 +75,6 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal-shadow" id="addRecord">
-            <div class="modal">
-                <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
-                <h1>Add New Book</h1>
-                <hr><br>
-                <form action="/books/add" enctype="multipart/form-data" method="post">
-                    <div class="form-input-div">
-                        <label>Name</label>
-                        <input class="form-control" type="text" id="bookname" name="name" autocomplete="off" placeholder="Book Name" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Location</label>
-                        <input class="form-control" type="text" id="location" name="location" autocomplete="off" placeholder="Book Location" required="">
-                    </div>
-
-                    <div class="form-input-div">
-                        <label>Author</label>
-                        <select class="form-control" type="text" id="author" name="author" required="">
-                            <option style="display:none">Select Author</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-div">
-                        <label>Category</label>
-                        <select class="form-control" type="text" id="category" name="category"required="">
-                            <option style="display:none">Select Category</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-div">
-                        <label>Publication</label>
-                        <input class="form-control" type="text" id="publication" name="publication" autocomplete="off" placeholder="Book Publication" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>ISBN</label>
-                        <input class="form-control" type="text" id="isbn" name="isbn" autocomplete="off" placeholder="ISBN Number" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Price</label>
-                        <input class="form-control" type="text" id="price" name="price" autocomplete="off" placeholder="Price" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Stack</label>
-                        <input class="form-control" type="text" id="stack" name="stack" autocomplete="off" placeholder="stack" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Description</label>
-                        <input class="form-control" type="text" id="description" name="description" autocomplete="off" placeholder="description" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Keywords</label>
-                        <input class="form-control" type="text" id="keywords" name="keywords" autocomplete="off" placeholder="keywords" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Cover Pic</label>
-                        <input class="form-control" type="file" id="coverPic" name="coverPic" accept=".jpg, .png" onchange="changePreview(event);" required="">
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
-                    </div>
-                </form>
             </div>
         </div>
     </section>
