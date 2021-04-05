@@ -35,30 +35,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>PHP And MySql programming</td>
-                                <td>222333</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td><span style="color:red">Not Return Yet</span></td>
-                                <td></td>
-                            </tr> 
-                            <tr>
-                                <td>1</td>
-                                <td>PHP And MySql programming</td>
-                                <td>222333</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td><span style="color:red">Not Return Yet</span></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>PHP And MySql programming</td>
-                                <td>222333</td>
-                                <td>2017-07-15 16:29:26</td>
-                                <td><span style="color:red">Not Return Yet</span></td>
-                                <td></td>
-                            </tr>
+                        <?php $i=0; if (isset($books)): ?>
+                                
+                                <?php foreach($books as $book):?>
+                                    <tr>
+                                        <td><?php echo ++$i;?></td>
+                                        <td><?php echo $book->isbnNumber;?></td>
+                                        <td><?php echo $book->bookName?></td>
+                                        <td><?php echo $book->issuedAt;?></td>
+                                        <td><?php echo $book->returnAt;?></td>
+                                        <td>
+                                        <?php echo $book->fine;?>
+                                            <!-- <a type="button" href="/admin/issuedBooks/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a> -->
+                                        </td>
+                                    </tr> 
+                                <?php endforeach;?>
+                            <?php endif;?>
                         </tbody>
                     </table>
                 </div>

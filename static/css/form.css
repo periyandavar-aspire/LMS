@@ -15,6 +15,12 @@ input:disabled {
     border-color: rgba(118, 118, 118, 0.3);
 }
 
+textarea:disabled {
+    cursor: not-allowed;
+    background-color: rgb(99 92 92 / 30%);
+    border-color: rgba(118, 118, 118, 0.3);
+}
+
 .form-buttons {
     text-align: center;
     margin-top: 12px;

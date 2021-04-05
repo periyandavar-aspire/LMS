@@ -283,6 +283,24 @@ header h1 {
     padding: 10px;
 }
 
+.img-wrapper {
+    height: 100%;
+}
+
+.img-wrapper img {
+    height: 100%;
+}
+
+.div-like-textarea {
+    height: 77px;
+}
+
+.disabled {
+    cursor: not-allowed;
+    background-color: rgb(99 92 92 / 30%);
+    border-color: rgba(118, 118, 118, 0.3);
+}
+
 .btn-container {
     margin-top: 8px;
     text-align: center;

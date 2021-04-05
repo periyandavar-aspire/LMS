@@ -13,7 +13,16 @@ class BookController extends BaseController
         $this->loadLayout($user . "Header.html");
         $this->loadView("manageBooks", $data);
         $this->loadLayout($user . "Footer.html");
-        $this->includeScript("populate.js");
+    }
+
+    public function newBook()
+    {
+        $user = $this->input->session('type');
+        $data['categories'] = $this->model->getCategories();
+        $data['authors'] = $this->model->getAuthors();
+        $this->loadLayout($user . "Header.html");
+        $this->loadView("newBook", $data);
+        $this->loadLayout($user . "Footer.html");
     }
 
     public function get()

@@ -3,12 +3,67 @@
     //     return;
     // }
 ?>
-<article class="main">    
+<article class="main">   
+<section>
+        <div class="container div-card">
+            <div class="row">
+                <div class="cols col-9">
+                    <h1>Issued Book Entry</h1><hr>
+                </div>
+            </div>
+        
+            <form action="/admin/books/add" enctype="multipart/form-data" method="post">
+                <div class="row">
+                    <div class="cols col-4">
+                <div class="form-input-div">
+                    <label>User name</label>
+                    <input class="form-control" type="text" id="username" name="user" placeholder="User Name" required="">
+                </div>
+                </div>
+                
+                    <div class="cols col-4">
+                <div class="form-input-div">
+                    <label>User Details</label>
+                    <textarea disabled class="form-control" id="userdetails" name="userDetails" placeholder="User details" required=""></textarea>
+                </div>
+                </div>
+                
+                    <div class="cols col-4">
+                <div class="form-input-div">
+                    <label>Book name</label>
+                    <input class="form-control" type="text" id="bookname" name="book" placeholder="Book Name" required="">
+                </div>
+                </div>
+               
+                    <div class="cols col-4">
+                <div class="form-input-div">
+                    <label>Book Details</label>
+                    <textarea disabled class="form-control" id="bookdetails" name="bookDetails" placeholder="Book details" required=""></textarea>
+                </div>
+                </div>
+                
+                    <div class="cols col-9">
+               <div class="form-input-div">
+                    <label>Comments (if any)</label>
+                    <textarea class="form-control" id="comments" name="comments" placeholder="comments" required=""></textarea>
+                </div>
+                </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn-link">Add</button>
+                </div>
+                </div>
+            </form>
+        </div>
+    </section>
+ 
     <section>
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Issued Books &nbsp;<a class="btn-link" onclick="openModal('addRecord');loadCategories();loadAuthors();">New Entry</a></h1><hr>
+                    <h1>Issued Books
+                         <!-- &nbsp;<a class="btn-link" href="/admin/issueBook">New Entry</a> -->
+                        </h1><hr>
                 </div>
             </div>
             <div class="div-card-body">
@@ -41,18 +96,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($books)): ?>
+                            <?php $i=0; if (isset($issuedBooks)): ?>
                                 
-                                <?php foreach($books as $book):?>
+                                <?php foreach($issuedBooks as $issued):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
-                                        <td><?php echo $book->name;?></td>
-                                        <td><?php echo $book->createdAt?></td>
-                                        <td><?php echo $book->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $book->id;?>" <?php if ($book->status == 1) echo "checked";?>></div></td>
+                                        <td><?php echo $issued->isbnNumber;?></td>
+                                        <td><?php echo $issued->bookName?></td>
+                                        <td><?php echo $issued->userName;?></td>
+                                        <td><?php echo $issued->issuedAt;?></td>
+                                        <td><?php echo $issued->returnAt;?></td>
                                         <td>
-                                            <a type="button" href="/admin/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/books/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/admin/issuedBooks/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <!-- <a type="button" href="/admin/issuedBooks/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a> -->
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -76,72 +132,11 @@
                 </div>
             </div>
         </div>
-        <div class="modal-shadow" id="addRecord">
-            <div class="modal">
-                <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
-                <h1>Add New Book</h1>
-                <hr><br>
-                <form action="/admin/books" enctype="multipart/form-data" method="post">
-                    <div class="form-input-div">
-                        <label>Name</label>
-                        <input class="form-control" type="text" id="bookname" name="name" autocomplete="off" placeholder="Book Name" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Location</label>
-                        <input class="form-control" type="text" id="location" name="location" autocomplete="off" placeholder="Book Location" required="">
-                    </div>
-
-                    <div class="form-input-div">
-                        <label>Author</label>
-                        <select class="form-control" type="text" id="author" name="author" required="">
-                            <option style="display:none">Select Author</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-div">
-                        <label>Category</label>
-                        <select class="form-control" type="text" id="category" name="category"required="">
-                            <option style="display:none">Select Category</option>
-                        </select>
-                    </div>
-
-                    <div class="form-input-div">
-                        <label>Publication</label>
-                        <input class="form-control" type="text" id="publication" name="publication" autocomplete="off" placeholder="Book Publication" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>ISBN</label>
-                        <input class="form-control" type="text" id="isbn" name="isbn" autocomplete="off" placeholder="ISBN Number" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Price</label>
-                        <input class="form-control" type="text" id="price" name="price" autocomplete="off" placeholder="Price" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Stack</label>
-                        <input class="form-control" type="text" id="stack" name="stack" autocomplete="off" placeholder="stack" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Description</label>
-                        <input class="form-control" type="text" id="description" name="description" autocomplete="off" placeholder="description" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Keywords</label>
-                        <input class="form-control" type="text" id="keywords" name="keywords" autocomplete="off" placeholder="keywords" required="">
-                    </div>
-                    <div class="form-input-div">
-                        <label>Cover Pic</label>
-                        <input class="form-control" type="file" id="coverPic" name="coverPic" accept=".jpg, .png" onchange="changePreview(event);" required="">
-                    </div>
-                    <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </section>
-</article>
-
+    </article>
+<script>
+    document.getElementById('issued').className += " active";
+</script>
 <script>
     document.getElementById('issued').className += " active";
 </script>
