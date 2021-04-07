@@ -2,18 +2,35 @@
 
 class AuthorModel extends BaseModel
 {
-    public function getAuthors()
+    public function getAll()
     {
-        $author = [];
+        $authors = [];
         $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author')->execute();
         while ($row = $this->db->fetch()) {
-            $author[] = $row;
+            $authors[] = $row;
         }
-        return $author;
+        return $authors;
     }
-    public function addAuthor(array $author)
+    public function add(array $author)
     {
         $result = $this->db->insert('author', $author)->execute();
         return $result;
+    }
+    public function get(int $id)
+    {
+        $this->db->select('id', 'name')->from('author')->where('id', '=', $id)->limit(1)->execute();
+        return $this->db->fetch();
+    }
+
+    public function delete(int $id)
+    {
+        $this->db->delete('author')->where('id', '=', $id);
+        return $this->db->execute();
+    }
+
+    public function update(array $fields, int $id)
+    {
+        $this->db->update('author', $fields)->where('id', '=', $id);
+        return $this->db->execute();
     }
 }

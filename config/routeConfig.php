@@ -13,11 +13,11 @@ Route::add('/home/captcha');
 
 Route::add('/home/home');
 
-Route::add('/home/book/view/([1-9]{1}[1-9]*)', 'book/get');
+Route::add('/home/book/view/([1-9]{1}[0-9]*)', 'book/get');
 
 Route::add('/user/home', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -25,8 +25,8 @@ Route::add('/user/home', null, 'get', function () {
 });
 
 Route::add('/user/profile', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -34,8 +34,8 @@ Route::add('/user/profile', null, 'get', function () {
 });
 
 Route::add('/user/profile/update', 'user/updateProfile', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -43,8 +43,8 @@ Route::add('/user/profile/update', 'user/updateProfile', 'post', function () {
 });
 
 Route::add('/user/availbleBooks', 'Book/available', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -52,8 +52,8 @@ Route::add('/user/availbleBooks', 'Book/available', 'get', function () {
 });
 
 Route::add('/user/lent', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -61,8 +61,8 @@ Route::add('/user/lent', null, 'get', function () {
 });
 
 Route::add('/user/booked', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -70,8 +70,8 @@ Route::add('/user/booked', null, 'get', function () {
 });
 
 Route::add('/user/logout', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'user') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
     } else {
         Utility::redirectURL('login');
@@ -83,8 +83,8 @@ Route::add('/user/login', 'login/admin');
 Route::add('/librarian/login', 'login/login');
 
 Route::add('/librarian/home', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -92,8 +92,8 @@ Route::add('/librarian/home', null, 'get', function () {
 });
 
 Route::add('/librarian/profile', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -101,8 +101,8 @@ Route::add('/librarian/profile', null, 'get', function () {
 });
 
 Route::add('/librarian/profile', 'librarian/updateProfile', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -111,8 +111,8 @@ Route::add('/librarian/profile', 'librarian/updateProfile', 'post', function () 
 
 
 Route::add('/librarian/categories', 'category/getAll', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -121,8 +121,8 @@ Route::add('/librarian/categories', 'category/getAll', 'get', function () {
 
 
 Route::add('/librarian/authors', 'author/getAll', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -130,8 +130,8 @@ Route::add('/librarian/authors', 'author/getAll', 'get', function () {
 });
 
 Route::add('/librarian/books', 'book/manageBooks', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -139,8 +139,8 @@ Route::add('/librarian/books', 'book/manageBooks', 'get', function () {
 });
 
 Route::add('/librarian/books', 'book/add', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -149,8 +149,8 @@ Route::add('/librarian/books', 'book/add', 'post', function () {
 
 
 Route::add('/librarian/issuedBooks', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -158,8 +158,8 @@ Route::add('/librarian/issuedBooks', null, 'get', function () {
 });
 
 Route::add('/librarian/userRequest', 'librarian/manageUserRequest', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -167,8 +167,8 @@ Route::add('/librarian/userRequest', 'librarian/manageUserRequest', 'get', funct
 });
 
 Route::add('/librarian/manageUsers', 'manageUser/getRegUsers', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -176,8 +176,8 @@ Route::add('/librarian/manageUsers', 'manageUser/getRegUsers', 'get', function (
 });
 
 Route::add('/librarian/logout', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'librarian') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'librarian') {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -190,8 +190,8 @@ Route::add('/admin/login', 'login/login');
 Route::add('/admin/login', 'login/dologin', 'post');
 
 Route::add('/admin/profile', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -199,8 +199,8 @@ Route::add('/admin/profile', null, 'get', function () {
 });
 
 Route::add('/admin/profile/update', 'admin/updateProfile', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -208,8 +208,8 @@ Route::add('/admin/profile/update', 'admin/updateProfile', 'post', function () {
 });
 
 Route::add('/admin/home', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -217,80 +217,40 @@ Route::add('/admin/home', null, 'get', function () {
 });
 
 Route::add('/admin', 'admin/home', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
     }
 });
 
-Route::add('/admin/categories', 'category/getAll', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
-        return true;
-    } else {
-        Utility::redirectURL('admin/login');
-    }
-});
 
 // Route::add('/admin/categories', 'admin/addCategory', 'post', function () {
-//     $id = new InputData();
-//     if ($id->session('login') == true && $id->session('type') == 'admin') {
+//     $input = new InputData();
+//     if ($input->session('login') == true && $input->session('type') == 'admin') {
 //         return true;
 //     } else {
 //         Utility::redirectURL('admin/login');
 //     }
 // });
 
-Route::add('/admin/authors', 'author/getAll', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
-        return true;
-    } else {
-        Utility::redirectURL('admin/login');
-    }
-});
+
 
 // Route::add('/admin/authors', 'admin/addAuthor', 'post', function () {
-//     $id = new InputData();
-//     if ($id->session('login') == true && $id->session('type') == 'admin') {
+//     $input = new InputData();
+//     if ($input->session('login') == true && $input->session('type') == 'admin') {
 //         return true;
 //     } else {
 //         Utility::redirectURL('admin/login');
 //     }
 // });
 
-Route::add('/admin/books', 'book/manageBooks', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
-        return true;
-    } else {
-        Utility::redirectURL('admin/login');
-    }
-});
 
-Route::add('/admin/books/add', 'book/newBook', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
-        return true;
-    } else {
-        Utility::redirectURL('admin/login');
-    }
-});
-
-Route::add('/admin/books/add', 'book/add', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
-        return true;
-    } else {
-        Utility::redirectURL('admin/login');
-    }
-});
 
 // Route::add('/admin/issuedBooks', null, 'get', function () {
-//     $id = new InputData();
-//     if ($id->session('login') == true && $id->session('type') == 'admin') {
+//     $input = new InputData();
+//     if ($input->session('login') == true && $input->session('type') == 'admin') {
 //         return true;
 //     } else {
 //         Utility::redirectURL('admin/login');
@@ -298,17 +258,17 @@ Route::add('/admin/books/add', 'book/add', 'post', function () {
 // });
 
 Route::add('/admin/userDetails/([a-zA-Z0-9_]+)', 'issuedBooks/getUserDetails', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
     }
 });
 
-Route::add('/admin/bookDetails/([0-9]+)', 'issuedBooks/getBookDetails', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+Route::add('/admin/bookDetails/([1-9]{1}[0-9]*)', 'issuedBooks/getBookDetails', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -317,8 +277,8 @@ Route::add('/admin/bookDetails/([0-9]+)', 'issuedBooks/getBookDetails', 'get', f
 
 
 Route::add('/admin/issuedBooks', 'issuedBooks/issue', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -326,8 +286,8 @@ Route::add('/admin/issuedBooks', 'issuedBooks/issue', 'get', function () {
 });
 
 Route::add('/admin/issueBook', 'issuedBooks/add', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -336,8 +296,8 @@ Route::add('/admin/issueBook', 'issuedBooks/add', 'post', function () {
 
 
 Route::add('/admin/manageUsers', 'manageUser/getAllUsers', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -345,8 +305,8 @@ Route::add('/admin/manageUsers', 'manageUser/getAllUsers', 'get', function () {
 });
 
 Route::add('/admin/manageUsers', 'manageUser/addUser', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -354,8 +314,8 @@ Route::add('/admin/manageUsers', 'manageUser/addUser', 'post', function () {
 });
 
 Route::add('/admin/userRequest', 'admin/manageUserRequest', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -363,8 +323,8 @@ Route::add('/admin/userRequest', 'admin/manageUserRequest', 'get', function () {
 });
 
 Route::add('/admin/settings', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -372,8 +332,8 @@ Route::add('/admin/settings', null, 'get', function () {
 });
 
 Route::add('/admin/settings', '/admin/updateSettings', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -382,8 +342,8 @@ Route::add('/admin/settings', '/admin/updateSettings', 'post', function () {
 
 
 Route::add('/admin/cms', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -391,8 +351,8 @@ Route::add('/admin/cms', null, 'get', function () {
 });
 
 Route::add('/admin/cms', '/admin/updateCms', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -400,8 +360,17 @@ Route::add('/admin/cms', '/admin/updateCms', 'post', function () {
 });
 
 Route::add('/admin/logout', null, 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/categories', 'category/getAll', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -409,32 +378,148 @@ Route::add('/admin/logout', null, 'get', function () {
 });
 
 
+Route::add('/categories', null, 'post', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        $action = $input->post('action');
+        $action == null ? Utility::redirectURL('categories') : Utility::dispatch("/category/$action") ;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
 
-Route::add('/categories/add', 'Category/add', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && ($id->session('type') == 'librarian' ||$id->session('type') == 'admin')) {
+// Route::add('/categories', 'Category/update', 'post', function () {
+//     $input = new InputData();
+//     if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+//         return true;
+//     } else {
+//         Utility::redirectURL('librarian/login');
+//     }
+// });
+
+Route::add('/categories/delete/([1-9]{1}[0-9]*)', 'Category/delete', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
     }
 });
 
-Route::add('/authors/add', 'author/add', 'post', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && ($id->session('type') == 'librarian' || $id->session('type') == 'admin')) {
+Route::add('/categories/edit/([1-9]{1}[0-9]*)', 'Category/get', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
     }
 });
 
+Route::add('/authors', 'author/getAll', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
 
+Route::add('/authors', null, 'post', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        $action = $input->post('action');
+        $action == null ? Utility::redirectURL('authors') : Utility::dispatch("/author/$action") ;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
+
+Route::add('/authors/edit/([1-9]{1}[0-9]*)', 'author/get', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        return true;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
+
+Route::add('/authors/delete/([1-9]{1}[0-9]*)', 'author/delete', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        return true;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
+
+// Route::add('/authors/add', 'author/add', 'post', function () {
+//     $input = new InputData();
+//     if ($input->session('login') == true && ($input->session('type') == 'librarian' || $input->session('type') == 'admin')) {
+//         return true;
+//     } else {
+//         Utility::redirectURL('librarian/login');
+//     }
+// });
+
+Route::add('/books', 'book/manageBooks', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/books/add', 'book/newBook', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/books/add', 'book/add', 'post', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
+        return true;
+    } else {
+        Utility::redirectURL('admin/login');
+    }
+});
+
+Route::add('/books/edit/([1-9]{1}[0-9]*)', 'book/edit', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        return true;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
+
+Route::add('/books/edit/([1-9]{1}[0-9]*)', 'book/update', 'post', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        return true;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
+
+Route::add('/books/delete/([1-9]{1}[0-9]*)', 'book/delete', 'get', function () {
+    $input = new InputData();
+    if ($input->session('login') == true && ($input->session('type') == 'librarian' ||$input->session('type') == 'admin')) {
+        return true;
+    } else {
+        Utility::redirectURL('librarian/login');
+    }
+});
 
 Route::add('/book/categories', 'category/getCategories');
 Route::add('/book/authors', 'author/getAuthors');
 Route::add('/user/allRoles', 'manageUser/getUserRoles', 'get', function () {
-    $id = new InputData();
-    if ($id->session('login') == true && $id->session('type') == 'admin') {
+    $input = new InputData();
+    if ($input->session('login') == true && $input->session('type') == 'admin') {
         return true;
     } else {
         echo "Invalid Request";
