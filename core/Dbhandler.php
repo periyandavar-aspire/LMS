@@ -11,7 +11,7 @@ abstract class Dbhandler
      */
     protected $result;
     /**
-     * abstract function which should implemented in the handler class to close db connection 
+     * abstract function which should implemented in the handler class to close db connection
      */
     abstract public function close();
     /**
@@ -127,6 +127,7 @@ abstract class Dbhandler
         } else {
             $this->query  = $this->sql . $this->where;
         }
+        
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {
@@ -168,7 +169,7 @@ abstract class Dbhandler
     /**
      * update function used to build update query
      * we can call this in any one of the following ways
-     * update('table', 'id = 1') or update('table')->where('id = 1');
+     * update('table', ["name"=>"Raja"] ,'id = 1') or update('table',  ["name"=>"Raja"] )->where('id = 1');
      */
     public function update(string $table, array $fields = [], ?string $where = null)
     {

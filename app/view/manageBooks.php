@@ -8,7 +8,7 @@
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Books &nbsp;<a class="btn-link" href="/admin/books/add">Add</a></h1><hr>
+                    <h1>Books &nbsp;<a class="btn-link" href="/books/add">Add</a></h1><hr>
                 </div>
             </div>
             <div class="div-card-body">
@@ -43,7 +43,7 @@
                             <?php $i=0; if (isset($books)): ?>
                                 
                                 <?php foreach ($books as $book):?>
-                                    <tr>
+                                    <tr id="<?php echo $book->id;?>">
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $book->name;?></td>
                                         <td><?php echo $book->createdAt?></td>
@@ -52,8 +52,8 @@
     echo "checked";
 }?>></div></td>
                                         <td>
-                                            <a type="button" href="/admin/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/books/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <button type="button" onclick="deleteItem('/books/delete/<?php echo $book->id;?>');" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>

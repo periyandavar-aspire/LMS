@@ -38,7 +38,7 @@
                             <?php $i=0; if (isset($categories)): ?>
                                 
                                 <?php foreach ($categories as $category):?>
-                                    <tr>
+                                    <tr id="<?php echo $category->id;?>">
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $category->name?></td>
                                         <td><?php echo $category->createdAt;?></td>
@@ -47,8 +47,8 @@
     echo "checked";
 }?>></div></td>
                                         <td>
-                                            <a type="button" href="/admin/categories/edit/<?php echo $category->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/categories/edit/<?php echo $category->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <button type="button" onclick="editItem('/categories/edit/<?php echo $category->id;?>');" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button>
+                                            <button type="button" onclick="deleteItem('/categories/delete/<?php echo $category->id;?>');" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -77,13 +77,30 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Category</h1>
                 <hr><br>
-                <form action="/categories/add" method="post">
+                <form action="/categories" id="add" method="post">
                     <div class="form-input-div">
                         <label>Category Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name" autocomplete="off" placeholder="Category Name..." required="">
                     </div>
                     <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
+                        <button type="submit" name="action" value="add" class="btn-link">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-shadow" id="editRecord">
+            <div class="modal">
+                <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
+                <h1>Edit Category</h1>
+                <hr><br>
+                <form action="/categories" id="edit" onsubmit="updateItem(event);" method="post">
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="form-input-div">
+                        <label>Category Name</label>
+                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="edit-name" name="name" autocomplete="off" placeholder="Category Name..." required="">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" name="action" value="update" class="btn-link">Update</button>
                     </div>
                 </form>
             </div>

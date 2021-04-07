@@ -38,7 +38,7 @@
                             <?php $i=0; if (isset($authors)): ?>
                                 
                                 <?php foreach ($authors as $author):?>
-                                    <tr>
+                                    <tr id="<?php echo $author->id;?>">
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $author->name;?></td>
                                         <td><?php echo $author->createdAt;?></td>
@@ -47,8 +47,8 @@
     echo "checked";
 }?>></div></td>
                                         <td>
-                                            <a type="button" href="/admin/authors/edit/<?php echo $author->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/authors/edit/<?php echo $author->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <button type="button" onclick="editItem('/authors/edit/<?php echo $author->id;?>');" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button>
+                                            <button type="button" onclick="deleteItem('/authors/delete/<?php echo $author->id;?>');" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -77,13 +77,30 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Author</h1>
                 <hr><br>
-                <form action="/authors/add" method="post">
+                <form action="/authors" id="add" method="post">
                     <div class="form-input-div">
                         <label>Author Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name" autocomplete="off" placeholder="Author Name..." required="">
                     </div>
                     <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
+                        <button type="submit" name="action" value="add" class="btn-link">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-shadow" id="editRecord">
+            <div class="modal">
+                <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
+                <h1>Add New Author</h1>
+                <hr><br>
+                <form action="/authors" id="edit" method="post">
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="form-input-div">
+                        <label>Author Name</label>
+                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="edit-name" name="name" autocomplete="off" placeholder="Author Name..." required="">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" name="action" value="update" class="btn-link">Update</button>
                     </div>
                 </form>
             </div>

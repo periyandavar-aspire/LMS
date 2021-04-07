@@ -109,10 +109,10 @@ class FormDataValidation
                             if (count($params) == 0) {
                                 if ($data == null) {
                                     if (in_array("required", (array)$rules)) {
-                                        continue;
-                                    } else {
                                         $invalidField = $fieldName;
                                         return false;
+                                    } else {
+                                        continue;
                                     }
                                 } elseif (!$this->$rule($data)) {
                                     $invalidField = $fieldName;
@@ -121,10 +121,10 @@ class FormDataValidation
                             } elseif (count($params) != 0) {
                                 if ($data == null) {
                                     if (in_array("required", (array)$rules)) {
-                                        continue;
-                                    } else {
                                         $invalidField = $fieldName;
                                         return false;
+                                    } else {
+                                        continue;
                                     }
                                 } elseif (!$this->$rule($data, ...$params)) {
                                     $invalidField = $fieldName;

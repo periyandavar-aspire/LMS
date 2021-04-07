@@ -7,16 +7,16 @@ class AuthorController extends BaseController
     }
     public function getAll()
     {
-        $data['authors'] = $this->model->getAuthors();
+        $data['authors'] = $this->model->getAll();
         $this->loadLayout("adminHeader.html");
         $this->loadView("manageAuthors", $data);
         $this->loadLayout("adminFooter.html");
     }
-    public function getAuthors()
-    {
-        $result = $this->model->getAuthors();
-        echo json_encode($result);
-    }
+    // public function getAll()
+    // {
+    //     $result = $this->model->getAuthors();
+    //     echo json_encode($result);
+    // }
     public function add()
     {
         $fdv = new FormDataValidation();
@@ -31,9 +31,42 @@ class AuthorController extends BaseController
             $script = "toast('New author is added successfully..!', 'success');";
         }
         $this->loadLayout("adminHeader.html");
-        $data['authors'] = $this->model->getAuthors();
+        $data['authors'] = $this->model->getAll();
         $this->loadView("manageAuthors", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
+    }
+    
+    public function get()
+    {
+        $id = func_get_arg(0);
+        $result['data'] = $this->model->get($id);
+        echo json_encode($result);
+    }
+
+    public function update()
+    {
+        $fdv = new FormDataValidation();
+        $user = $this->input->session('type');
+        $fields = new Fields(['name']);
+        $fields->addValues($this->input->post());
+        if (!$fdv->validate($fields, $field)) {
+            $script = "toast('Invalid $field..!', 'danger);";
+        } elseif (!$this->model->update($fields->getValues(), $this->input->post('id'))) {
+            $script = "toast('Unable to update..!', 'danger');";
+        } else {
+            $script = "toast('Author is updated successfully..!', 'success');";
+        }
+        $this->loadLayout($user."Header.html");
+        $data['authors'] = $this->model->getAll();
+        $this->loadView("manageAuthors", $data);
+        $this->loadLayout($user."Footer.html");
+        $this->addScript($script);
+    }
+    public function delete()
+    {
+        $id = func_get_arg(0);
+        $result['result'] = $this->model->delete($id);
+        echo json_encode($result);
     }
 }
