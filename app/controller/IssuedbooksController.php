@@ -19,7 +19,7 @@ class IssuedBooksController extends BaseController
         $user = $this->input->session('type');
         $data['issuedBooks'] = $this->model->getIssuedBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadView('manageIssuedbooks', $data);
+        $this->loadView('manageissuedbooks', $data);
         $this->loadLayout($user . "Footer.html");
         $this->includeScript("issuedbook.js");
     }
@@ -53,13 +53,13 @@ class IssuedBooksController extends BaseController
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!')";
         } elseif (!$this->model->addIssuedBook($fields->getValues())) {
-            $script = "toast('Unable to Add Entry..!')";
+            $script = "toast('Unable to Add Entry..!','danger')";
         } else {
-            $script = "toast('New Entry Added Successfully..!')";
+            $script = "toast('New Entry Added Successfully..!','success')";
         }
-        // $data['books'] = $this->model->getBooks();
+        $data['issuedBooks'] = $this->model->getIssuedBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadView("issueBook");
+        $this->loadView("manageissuedbooks", $data);
         $this->loadLayout($user . "Footer.html");
         $this->includeScript("issuedbook.js");
         $this->addScript($script);

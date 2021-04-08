@@ -37,7 +37,6 @@
                                 <th>Email</th>
                                 <th>Mobile No</th>
                                 <th>Registered At</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,10 +50,6 @@
                                         <td><?php echo $user->email;?></td>
                                         <td><?php echo $user->mobile;?></td>
                                         <td><?php echo $user->createdAt?></td>
-                                        <td>
-                                            <a type="button" href="/admin/user/edit/<?php echo $user->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/user/delete/<?php echo $user->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
-                                        </td>
                                     </tr> 
                                 <?php endforeach;?>
                             <?php endif;?>

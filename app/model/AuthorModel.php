@@ -5,7 +5,8 @@ class AuthorModel extends BaseModel
     public function getAll()
     {
         $authors = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author')->execute();
+        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "isDeleted status")->from('author');
+        $this->db->where('isDeleted', '!=', 2)->execute();
         while ($row = $this->db->fetch()) {
             $authors[] = $row;
         }
@@ -18,7 +19,8 @@ class AuthorModel extends BaseModel
     }
     public function get(int $id)
     {
-        $this->db->select('id', 'name')->from('author')->where('id', '=', $id)->limit(1)->execute();
+        $this->db->select('id', 'name')->from('author')->where('id', '=', $id);
+        $this->db->where('isDeleted', '!=', 2)->limit(1)->execute();
         return $this->db->fetch();
     }
 

@@ -10,7 +10,7 @@ class HomeController extends BaseController
         $this->loadLayout("header.html");
         $homeData['vision'] = $this->model->getVision();
         $homeData['mission'] = $this->model->getMission();
-        $homeData['books'] = (new BookModel)->getAvailableBooks();
+        $homeData['books'] = $this->model->getAvailableBooks();
         $this->loadView("index", $homeData);
         $data['footer'] = $this->model->getFooterData();
         $this->loadView("footer", $data);
@@ -25,7 +25,7 @@ class HomeController extends BaseController
     public function books()
     {
         $this->loadLayout("header.html");
-        $books['books'] = (new BookModel)->getAvailableBooks();
+        $books['books'] = $this->model->getAvailableBooks();
         $this->loadView("books", $books);
         $data['footer'] = $this->model->getFooterData();
         $this->loadView("footer", $data);
@@ -69,7 +69,7 @@ class HomeController extends BaseController
         $username = $this->input->post('username');
         $fdv = new FormDataValidation();
         $fields = new fields(['username', 'captcha']);
-        $fields->addRule(['username' => "expressValidation /^[A-Za-z0-9_]*$/"]);
+        $fields->addRule(['username' => ["expressValidation /^[A-Za-z0-9_]*$/", 'required']]);
         $fields->addCustomeRule(
             'captcha',
             new class implements ValidationRule {
@@ -105,12 +105,12 @@ class HomeController extends BaseController
         $genCodes = implode(" ", $this->model->getGenderCodes());
         $fields = new fields(['email', 'username', 'fullname', 'password', 'gender', 'mobile']);
         $rules = [
-            'email' => 'mailValidation',
-            'fullName' => 'alphaSpaceValidation',
-            'username' => "expressValidation /^[A-Za-z0-9_]*$/",
-            'password' => "lengthValidation 6",
-            'mobile' => 'mobileNumberValidation',
-            'gender' => "valuesInValidation $genCodes"
+            'email' => ['mailValidation', 'required'],
+            'fullname' => ['alphaSpaceValidation', 'required'],
+            'username' => ["expressValidation /^[A-Za-z0-9_]*$/", 'required'],
+            'password' => ["lengthValidation 6", 'required'],
+            'mobile' => ['mobileNumberValidation', 'required'],
+            'gender' => ["valuesInValidation $genCodes", 'required']
         ];
         $fields->addRule($rules);
         // $fields->addCustomeRule(
@@ -127,23 +127,24 @@ class HomeController extends BaseController
         //     }
         // );
         $fields->addValues($this->input->post());
-        if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
-            $data["msg"] = "Invalid captcha..!";
-        } elseif (!$fdv->validate($fields, $field)) {
+        // if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
+        //     $data["msg"] = "Invalid captcha..!";
+        // } else
+        $data['footer'] = $this->model->getFooterData();
+        if (!$fdv->validate($fields, $field)) {
             $data["msg"] = "Invalid $field..!";
         } elseif (!$this->model->createAccount($fields->getValues())) {
             $data["msg"] = "Unable to create an account..!";
         } else {
             $this->loadLayout("header.html");
             $this->loadView("login");
-            $this->loadView("footer");
+            $this->loadView("footer", $data);
             $this->addScript("toast('Your Account is created successfully..!', 'success');");
             return;
         }
         $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
         $this->loadView("registration", $data);
-        $data['footer'] = $this->model->getFooterData();
         $this->loadView("footer", $data);
     }
     public function registration()

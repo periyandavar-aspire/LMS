@@ -48,7 +48,7 @@
                                         <td><?php echo $book->name;?></td>
                                         <td><?php echo $book->createdAt?></td>
                                         <td><?php echo $book->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $book->id;?>" <?php if ($book->status == 1) {
+                                        <td><div class="checkbox"><input type="checkbox" onchange="changeStatus(event,'/books/changeStatus/<?php echo $book->id;?>');" <?php if ($book->status == 1) {
     echo "checked";
 }?>></div></td>
                                         <td>

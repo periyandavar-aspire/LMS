@@ -45,7 +45,7 @@
                             <?php $i=0; if (isset($users)): ?>
                                 
                                 <?php foreach ($users as $user):?>
-                                    <tr>
+                                    <tr id="<?php echo $user->id;?>">
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $user->fullName;?></td>
                                         <td><?php echo $user->userName;?></td>
@@ -54,8 +54,7 @@
                                         <td><?php echo $user->role;?></td>
                                         <td><?php echo $user->createdAt?></td>
                                         <td>
-                                            <a type="button" href="/admin/user/edit/<?php echo $user->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/user/delete/<?php echo $user->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                        <button type="button" onclick="deleteItem('/user/delete/<?php echo $user->role; ?>/<?php echo $user->id;?>');" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>

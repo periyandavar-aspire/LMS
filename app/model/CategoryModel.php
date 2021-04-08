@@ -10,7 +10,8 @@ class CategoryModel extends BaseModel
     public function getAll()
     {
         $category = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('category')->execute();
+        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "isDeleted status")->from('category');
+        $this->db->where('isDeleted', '!=', 2)->execute();
         while ($row = $this->db->fetch()) {
             $category[] = $row;
         }
@@ -19,7 +20,8 @@ class CategoryModel extends BaseModel
 
     public function get(int $id)
     {
-        $this->db->select('id', 'name')->from('category')->where('id', '=', $id)->limit(1)->execute();
+        $this->db->select('id', 'name')->from('category')->where('id', '=', $id);
+        $this->db->where('isDeleted', '!=', 2)->limit(1)->execute();
         return $this->db->fetch();
     }
 

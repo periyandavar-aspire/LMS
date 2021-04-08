@@ -4,7 +4,8 @@ class AdminModel extends BaseModel
 {
     public function getProfile(string $email)
     {
-        $this->db->select('fullName', 'email', 'updatedAt')->from('admin_user')->where('email', '=', $email)->execute();
+        $this->db->select('fullName', 'email', 'updatedAt')->from('admin_user')->where('email', '=', $email);
+        $this->db->where('isDeleted', '=', 0)->execute();
         $result = $this->db->fetch();
         return $result;
     }

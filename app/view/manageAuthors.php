@@ -43,7 +43,7 @@
                                         <td><?php echo $author->name;?></td>
                                         <td><?php echo $author->createdAt;?></td>
                                         <td><?php echo $author->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $author->id;?>" <?php if ($author->status == 1) {
+                                        <td><div class="checkbox"><input type="checkbox" onchange="changeStatus(event,'/authors/changeStatus/<?php echo $author->id;?>');" <?php if ($author->status == 1) {
     echo "checked";
 }?>></div></td>
                                         <td>

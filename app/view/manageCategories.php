@@ -43,7 +43,7 @@
                                         <td><?php echo $category->name?></td>
                                         <td><?php echo $category->createdAt;?></td>
                                         <td><?php echo $category->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $category->id;?>" <?php if ($category->status == 1) {
+                                        <td><div class="checkbox"><input type="checkbox" onchange="changeStatus(event,'/categories/changeStatus/<?php echo $category->id;?>');" <?php if ($category->status == 1) {
     echo "checked";
 }?>></div></td>
                                         <td>

@@ -103,7 +103,14 @@ class BookController extends BaseController
         $this->includeScript("populate.js");
         $this->addScript($script);
     }
-
+    public function changeStatus()
+    {
+        $id = func_get_arg(0);
+        $status = func_get_arg(1);
+        $values = ['status' => $status];
+        $result['result'] = $this->model->updateBook($values, $id);
+        echo json_encode($result);
+    }
     public function update()
     {
         $fdv = new FormDataValidation();

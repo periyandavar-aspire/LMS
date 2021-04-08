@@ -127,7 +127,6 @@ abstract class Dbhandler
         } else {
             $this->query  = $this->sql . $this->where;
         }
-        
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {

@@ -8,9 +8,10 @@ class AuthorController extends BaseController
     public function getAll()
     {
         $data['authors'] = $this->model->getAll();
-        $this->loadLayout("adminHeader.html");
+        $user = $this->input->session('type');
+        $this->loadLayout($user."Header.html");
         $this->loadView("manageAuthors", $data);
-        $this->loadLayout("adminFooter.html");
+        $this->loadLayout($user."Footer.html");
     }
     // public function getAll()
     // {
@@ -21,6 +22,7 @@ class AuthorController extends BaseController
     {
         $fdv = new FormDataValidation();
         $fields = new Fields(['name']);
+        $user = $this->input->session('type');
         $fields->setRequiredFields('name');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
@@ -30,10 +32,10 @@ class AuthorController extends BaseController
         } else {
             $script = "toast('New author is added successfully..!', 'success');";
         }
-        $this->loadLayout("adminHeader.html");
+        $this->loadLayout($user."Header.html");
         $data['authors'] = $this->model->getAll();
         $this->loadView("manageAuthors", $data);
-        $this->loadLayout("adminFooter.html");
+        $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
     
@@ -41,6 +43,15 @@ class AuthorController extends BaseController
     {
         $id = func_get_arg(0);
         $result['data'] = $this->model->get($id);
+        echo json_encode($result);
+    }
+
+    public function changeStatus()
+    {
+        $id = func_get_arg(0);
+        $status = func_get_arg(1);
+        $values = ['status' => $status];
+        $result['result'] = $this->model->update($values, $id);
         echo json_encode($result);
     }
 

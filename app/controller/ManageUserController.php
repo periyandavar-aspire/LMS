@@ -32,6 +32,13 @@ class ManageUserController extends BaseController
         echo json_encode($result);
     }
 
+    public function delete()
+    {
+        $role = func_get_arg(0);
+        $id = func_get_arg(1);
+        $result['result'] = $this->model->delete($role, $id);
+        echo json_encode($result);
+    }
     public function addUser()
     {
         $fdv = new FormDataValidation();
@@ -52,7 +59,7 @@ class ManageUserController extends BaseController
         $currentUser = $this->input->session('id');
         $data['users'] = $this->model->getAllUsers($currentUser);
         $this->loadLayout("adminHeader.html");
-        $this->loadView("manageUsers", $data);
+        $this->loadView("adminmanageUsers", $data);
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
         $this->addScript($script);

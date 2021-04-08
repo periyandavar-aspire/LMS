@@ -178,3 +178,18 @@ function editItem(editUrl, element = "editRecord") {
             }
         });
 }
+
+function changeStatus(event, statusChangeUrl) {
+    flag = event.target.checked ? 1 : 0;
+    statusChangeUrl += "/" + flag;
+    fetch(statusChangeUrl, { headers: { response: "application/json" } })
+        .then(response => { return response.json() })
+        .then(data => {
+            if (data.result == 1) {
+                toast("The status updated successfully..!", 'success');
+            } else {
+                event.target.checked = !(event.target.checked);
+                toast("Unable to upate the status..!", 'danger');
+            }
+        });
+}

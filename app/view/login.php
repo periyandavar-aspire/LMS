@@ -11,7 +11,7 @@
                         <section class="form-card">
                             <h1>User Login</h1>
                             <hr>
-                            <form action="login" method="POST">                                     
+                            <form action="/login" method="POST">                                     
                                 <div class="form-input-div">
                                     <label>Enter User Name <span class="required-star">*</span></label>
                                     <input class="form-control" type="text" pattern="^[a-zA-Z0-9_]+$" id="username" name="username" autocomplete="off" placeholder="User Name..." required="">
