@@ -16,11 +16,11 @@
                 </div>
                 </div>
                 
-                    <div class="cols col-4">
-                <div class="form-input-div">
-                    <label>User Details</label>
-                    <textarea disabled class="form-control" id="userdetails" name="userDetails" placeholder="User details" required=""></textarea>
-                </div>
+                <div class="cols col-4">
+                    <div class="form-input-div">
+                        <label>User Details</label>
+                        <textarea disabled class="form-control" id="userdetails" name="userDetails" placeholder="User details" required=""></textarea>
+                    </div>
                 </div>
                 
                     <div class="cols col-4">

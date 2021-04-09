@@ -17,7 +17,7 @@ class FormDataValidation
      * check the value in given set of values
      * @return [type]
      */
-    public function valuesInValidation(string $data,  ...$value)
+    public function valuesInValidation(string $data, ...$value)
     {
         return in_array($data, $value);
     }
@@ -46,6 +46,38 @@ class FormDataValidation
         return preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $data);
     }
 
+    /**
+     * performs numeric validation and range validation
+     *
+     * @param string $data
+     * @param integer|null $start
+     * @param integer|null $end
+     * @return boolean
+     */
+    public function numericValidation(string $data, ?int $start = null, ?int $end = null): bool
+    {
+        $flag = is_numeric($data);
+        if ($flag) {
+            if (isset($start)) {
+                $flag = (int)$data > $start;
+            }
+            if (isset($end)) {
+                $flag = (int)$flag && ($data < $end);
+            }
+        }
+        return $flag;
+    }
+
+    /**
+     *
+     * @param string $data
+     *
+     * @return [type]
+     */
+    public function positiveNumberValidation(string $data)
+    {
+        return $this->numericValidation($data, -1);
+    }
     /**
      * performs custom reqular expression validation
      */

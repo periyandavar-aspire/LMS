@@ -23,11 +23,64 @@ const loginFormValidator = function(event) {
 
 const adminLoginFormValidator = function(event) {
     if (!regexMail.test(document.getElementById("emailid").value)) {
-        toast("Invalid Email..!", 'danger', "Invalid Input");
+        toast("Invalid email..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
     }
 };
+
+const bookFormValidator = function(event) {
+    if ((document.getElementById("price").value) <= 0) {
+        toast("Invalid price..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if ((document.getElementById("stack").value) <= 0) {
+        toast("Invalid stack..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!new RegExp(/^[1-9]{1}[0-9,]*$/).test(document.getElementById("selected-author").value)) {
+        toast("Please select Authors..!" + document.getElementById("selected-author").value, 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!new RegExp(/^[1-9]{1}[0-9,]*$/).test(document.getElementById("selected-category").value)) {
+        toast("Please select categories..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("bookname").value == '') {
+        toast("Please enter the book name..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("location").value == '') {
+        toast("Please enter the book location..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("publication").value == '') {
+        toast("Please enter the publication name..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("isbn").value == '') {
+        toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("stack").value == '') {
+        toast("Please enter the stack..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("description").value == '') {
+        toast("Please enter the book's description..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("price").value == '') {
+        toast("Please enter the book price..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("coverPic").value == '') {
+        toast("Please select cover picture..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+};
+
 
 const registrationFormValidator = function(event) {
     let password = document.getElementById("password").value;
@@ -44,11 +97,11 @@ const registrationFormValidator = function(event) {
         toast("Password is too short.. It should be six character long..!", 'danger', "Invalid Input");
         event.preventDefault();
     } else if (!regexMail.test(document.getElementById("emailid").value)) {
-        toast("Invalid Email..!", "danger", "Invalid Input");
+        toast("Invalid email..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
     } else if (!regexPhone.test(document.getElementById("mobile").value)) {
-        toast("Invalid Mobile..!", "danger", "Invalid Input");
+        toast("Invalid mobile..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
     } else if (password != confirmPassword) {
@@ -79,11 +132,11 @@ const editProfileValidator = function(event) {
         toast('danger', "Password is too short.. It should be six character long..!");
         event.preventDefault();
     } else if (!regexMail.test(document.getElementById("emailid").value)) {
-        toast("Invalid Email..!", "danger", "Invalid Input");
+        toast("Invalid email..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
     } else if (!regexPhone.test(document.getElementById("mobile").value)) {
-        toast("Invalid Mobile..!", "danger", "Invalid Input");
+        toast("Invalid mobile..!", "danger", "Invalid Input");
         event.preventDefault();
         return false;
     } else if (password != confirmPassword) {
@@ -91,7 +144,7 @@ const editProfileValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (checkPassword(password) <= 50 && password != '') {
-        toast("Please select a strong Password..!", "danger", "Warning");
+        toast("Please select a strong password..!", "danger", "Warning");
         event.preventDefault();
         return false;
     }

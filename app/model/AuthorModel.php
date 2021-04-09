@@ -35,4 +35,18 @@ class AuthorModel extends BaseModel
         $this->db->update('author', $fields)->where('id', '=', $id);
         return $this->db->execute();
     }
+
+    public function getAuthorLike(string $Searchkey, string $ignoreList)
+    {
+        $result = [];
+        $this->db->select("id code","name value")->from('author')->where('name', 'LIKE', "%" . $Searchkey . "%");
+        $this->db->where('isDeleted', '!=', 2);
+        $this->db->where("NOT find_in_set(id, '$ignoreList')");
+        $orderClause = "case when name like '$Searchkey%' THEN 0 WHEN name like '% %$Searchkey% %' THEN 1 WHEN name like '%$Searchkey' THEN 2 else 3 end, name";
+        $this->db->orderBy($orderClause)->execute();
+        while ($row = $this->db->fetch()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
 }

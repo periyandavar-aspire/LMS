@@ -73,4 +73,12 @@ class CategoryController extends BaseController
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
+
+    public function searchCategory()
+    {
+        $searchKey = func_get_arg(0);
+        $ignoreList = func_get_arg(1);
+        $result['result'] = $this->model->getCategoryLike($searchKey, $ignoreList);
+        echo json_encode($result);
+    }
 }

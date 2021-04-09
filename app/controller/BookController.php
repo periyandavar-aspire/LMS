@@ -18,8 +18,6 @@ class BookController extends BaseController
     public function newBook()
     {
         $user = $this->input->session('type');
-        $data['categories'] = $this->model->getCategories();
-        $data['authors'] = $this->model->getAuthors();
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
@@ -30,8 +28,6 @@ class BookController extends BaseController
         $id = func_get_arg(0);
         $data['book'] = $this->model->get($id);
         $user = $this->input->session('type');
-        $data['categories'] = $this->model->getCategories();
-        $data['authors'] = $this->model->getAuthors();
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
@@ -70,19 +66,23 @@ class BookController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
-        $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'keywords', 'price']);
-        // $rules = [
-        //     'fullName' => 'alphaSpaceValidation',
-        // ];
-        // $fields->addRule($rules);
-        $fields->setRequiredFields('name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'keywords', 'price');
+        $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'price', 'stack', 'description']);
+        $rules = [
+            'author' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
+            'category' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
+            'isbn' => '',
+            'price' => 'positiveNumberValidation',
+            'stack' => 'positiveNumberValidation'
+        ];
+        $fields->addRule($rules);
+        $fields->setRequiredFields('name', 'location', 'author', 'category', 'publication', 'isbn', 'price', 'stack', 'description');
         $fields->addValues($this->input->post());
         $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
             $uploadfile = $this->input->files('coverPic');
-            $coverPic = uniqid() . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
+            $coverPic = uniqid() . "." . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
             if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
@@ -98,7 +98,7 @@ class BookController extends BaseController
         }
         $data['books'] = $this->model->getBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadView("manageBooks", $data);
+        $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
         $this->includeScript("populate.js");
         $this->addScript($script);
@@ -149,6 +149,8 @@ class BookController extends BaseController
         $this->loadLayout($user . "Footer.html");
         $this->addScript($script);
     }
+
+    
     
     public function bookstatus()
     {

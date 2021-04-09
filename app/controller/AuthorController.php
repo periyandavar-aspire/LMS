@@ -80,4 +80,11 @@ class AuthorController extends BaseController
         $result['result'] = $this->model->delete($id);
         echo json_encode($result);
     }
+    public function searchAuthor()
+    {
+        $searchKey = func_get_arg(0);
+        $ignoreList = func_get_arg(1);
+        $result['result'] = $this->model->getAuthorLike($searchKey, $ignoreList);
+        echo json_encode($result);
+    }
 }

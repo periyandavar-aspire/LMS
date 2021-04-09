@@ -153,6 +153,9 @@ function showElement(id) {
     document.getElementById(id).style.display = 'block';
 }
 
+
+
+
 function deleteItem(delUrl) {
     AskConfirm("Are sure to delete..?", () => fetch(delUrl, { headers: { response: "application/json" } })
         .then(response => { return response.json() })

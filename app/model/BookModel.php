@@ -87,10 +87,9 @@ class BookModel extends BaseModel
     }
     public function get(int $id)
     {
-        $this->db->select('b.id id', 'b.name name', 'a.name author', 'publication', 'isbnNumber', 'location', 'price', 'stack', 'description', 'available', 'keywords', 'coverPic')->from('book b');
-        $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')->innerJoin('author a')->on('ba.authorId = a.id');
-        $this->db->where("b.id=$id");
-        $this->db->where('isDeleted', '!=', 2)->execute();
+        $this->db->select('id', 'name', 'publication', 'isbnNumber', 'location', 'price', 'stack', 'description', 'available', 'coverPic','authors', 'authorCodes','categories','categoryCodes')->from('book_detail');
+        $this->db->where('id', '=', $id)->execute();
+        // $this->db->where('b.isDeleted', '!=', 2)->execute();
         return $this->db->fetch();
     }
     public function update(array $book, int $bookId)

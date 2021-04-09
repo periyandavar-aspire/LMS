@@ -540,6 +540,10 @@ Route::add('/books/changeStatus/([1-9]{1}[0-9]*)/([0,1]{1})', 'book/changeStatus
     }
 });
 
+Route::add('/book/authors/([A-Za-z ]+)/([0-9 ,]*)', 'author/searchAuthor');
+
+Route::add('/book/categories/([A-Za-z ]+)/([0-9 ,]*)', 'category/searchCategory');
+
 Route::add('/book/categories', 'category/getCategories');
 Route::add('/book/authors', 'author/getAuthors');
 Route::add('/user/allRoles', 'manageUser/getUserRoles', 'get', function () {
