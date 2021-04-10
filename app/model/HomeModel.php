@@ -22,7 +22,7 @@ class HomeModel extends BaseModel
     {
         $result = [];
         $this->db->select('code')->from('gender');
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
             $result[] = $row->code;
         }
@@ -34,7 +34,7 @@ class HomeModel extends BaseModel
         $book = [];
         $this->db->select('b.id id', 'b.name name', 'a.name author', 'description', 'available', 'coverPic')->from('book b');
         $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')->innerJoin('author a')->on('ba.authorId = a.id');
-        $this->db->where('b.isDeleted', '=', 0)->orderby('RAND()')->execute();
+        $this->db->where('b.deletionToken', '=', "N/A")->where('b.status', '=', 1)->orderby('RAND()')->execute();
         while ($row = $this->db->fetch()) {
             $book[] = $row;
         }
@@ -46,7 +46,7 @@ class HomeModel extends BaseModel
         $result = [];
         $i = 0;
         $this->db->select('code', 'value')->from('gender');
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
             $result[$i]['code'] = $row->code;
             $result[$i]['value'] = $row->value;
@@ -60,7 +60,7 @@ class HomeModel extends BaseModel
         $this->db->select('password');
         $this->db->from('user');
         $this->db->where('username', '=', $username);
-        $this->db->where('isDeleted', '=', 0);
+        $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
         $this->db->execute();
         $result = $this->db->fetch();
         if ($result != null) {

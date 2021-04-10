@@ -116,25 +116,25 @@ class BookController extends BaseController
         $fdv = new FormDataValidation();
         $id = func_get_arg(0);
         $user = $this->input->session('type');
-        $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'keywords', 'price']);
+        $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'price']);
         // $rules = [
         //     'fullName' => 'alphaSpaceValidation',
         // ];
         // $fields->addRule($rules);
-        $fields->setRequiredFields('name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'keywords', 'price');
+        $fields->setRequiredFields('name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'price');
         $fields->addValues($this->input->post());
         $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
             $uploadfile = $this->input->files('coverPic');
-            $coverPic = uniqid() . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
+            $coverPic = uniqid() . '.' . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
             if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
                 $book['coverPic'] = $coverPic;
-                if ($this->model->update($book)) {
-                    $script = "toast('New book added successfully..!', 'success');";
+                if ($this->model->update($book, $id)) {
+                    $script = "toast('Book updated successfully..!', 'success');";
                 } else {
-                    $script = "toast('Unable to add new book..!', 'danger');";
+                    $script = "toast('Unable to update the book..!', 'danger');";
                 }
             } else {
                 $script = "toast('Error occured in file uploading and book not added..!', 'danger');";
@@ -172,6 +172,16 @@ class BookController extends BaseController
         }
     }
 
+    public function view()
+    {
+        $id = func_get_arg(0);
+        $user = $this->input->session('type');
+        $data['book'] = $this->model->getBookDetails($id);
+        $this->loadLayout($user . 'header.html');
+        $this->loadView("bookdetail", $data);
+        $this->loadLayout($user . 'footer.html');
+    }
+
     public function available()
     {
         $this->loadLayout("userHeader.html");
@@ -185,6 +195,13 @@ class BookController extends BaseController
     {
         $id = func_get_arg(0);
         $result['result'] = $this->model->delete($id);
+        echo json_encode($result);
+    }
+
+    public function search()
+    {
+        $searchKey = func_get_arg(0);
+        $result['result'] = $this->model->getBooksLike($searchKey);
         echo json_encode($result);
     }
 }

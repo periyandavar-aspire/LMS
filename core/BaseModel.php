@@ -13,5 +13,4 @@ class BaseModel
             $this->db = $handler::getInstance($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['database'], $dbConfig['driver']);
         }
     }
-
 }

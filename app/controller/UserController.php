@@ -77,8 +77,17 @@ class UserController extends BaseController
 
     public function booked()
     {
+        $user = $this->input->session('id');
+        $data["books"] = $this->model->getRequestedBooks($user);
         $this->loadLayout("userHeader.html");
-        $this->loadView("booked");
+        $this->loadView("booked", $data);
         $this->loadLayout("userFooter.html");
+    }
+
+    public function search()
+    {
+        $searchKey = func_get_arg(0);
+        $result['result'] = $this->model->getUsersLike($searchKey);
+        echo json_encode($result);
     }
 }

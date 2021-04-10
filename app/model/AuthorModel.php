@@ -5,8 +5,8 @@ class AuthorModel extends BaseModel
     public function getAll()
     {
         $authors = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "isDeleted status")->from('author');
-        $this->db->where('isDeleted', '!=', 2)->execute();
+        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author');
+        $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
             $authors[] = $row;
         }
@@ -20,27 +20,30 @@ class AuthorModel extends BaseModel
     public function get(int $id)
     {
         $this->db->select('id', 'name')->from('author')->where('id', '=', $id);
-        $this->db->where('isDeleted', '!=', 2)->limit(1)->execute();
+        $this->db->where('deletionToken', '=', 'N/A')->limit(1)->execute();
         return $this->db->fetch();
     }
 
     public function delete(int $id)
     {
-        $this->db->delete('author')->where('id', '=', $id);
+        $deletionToken = uniqid();
+        $field = [ 'deletionToken' => $deletionToken];
+        $this->db->update('author', $field)->where('id', '=', $id);
         return $this->db->execute();
     }
 
     public function update(array $fields, int $id)
     {
         $this->db->update('author', $fields)->where('id', '=', $id);
+        $this->db->where('deletionToken', '=', 'N/A');
         return $this->db->execute();
     }
 
-    public function getAuthorLike(string $Searchkey, string $ignoreList)
+    public function getAuthorsLike(string $Searchkey, string $ignoreList)
     {
         $result = [];
-        $this->db->select("id code","name value")->from('author')->where('name', 'LIKE', "%" . $Searchkey . "%");
-        $this->db->where('isDeleted', '!=', 2);
+        $this->db->select("id code", "name value")->from('author')->where('name', 'LIKE', "%" . $Searchkey . "%");
+        $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
         $this->db->where("NOT find_in_set(id, '$ignoreList')");
         $orderClause = "case when name like '$Searchkey%' THEN 0 WHEN name like '% %$Searchkey% %' THEN 1 WHEN name like '%$Searchkey' THEN 2 else 3 end, name";
         $this->db->orderBy($orderClause)->execute();

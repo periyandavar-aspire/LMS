@@ -126,12 +126,4 @@ class AdminController extends BaseController
         $this->loadView("manageIssuedbooks");
         $this->loadLayout("adminFooter.html");
     }
-
-
-    public function manageUserRequest()
-    {
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("manageUserRequest");
-        $this->loadLayout("adminFooter.html");
-    }
 }

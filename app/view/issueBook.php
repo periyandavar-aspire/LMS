@@ -12,7 +12,7 @@
                     <div class="cols col-4">
                 <div class="form-input-div">
                     <label>User name</label>
-                    <input onchange="loadUserDetails(event)" class="form-control" type="text" id="username" name="username" placeholder="User Name" required="">
+                    <input class="form-control" type="text" id="username" name="username" placeholder="User Name" required="">
                 </div>
                 </div>
                 
@@ -26,7 +26,7 @@
                     <div class="cols col-4">
                 <div class="form-input-div">
                     <label>ISBN Number</label>
-                    <input onchange="loadBookDetails(event);" class="form-control" type="text" id="bookname" name="isbnNumber" placeholder="Book Name" required="">
+                    <input class="form-control" type="text" id="isbnNumber" name="isbnNumber" placeholder="Book Name" required="">
                 </div>
                 </div>
                
@@ -54,4 +54,6 @@
 </article>
 <script>
     document.getElementById('issued').className += " active";
+    autocomplete(document.getElementById("username"), document.getElementById("authorslist"), "/book/authors/");
+    autocomplete(document.getElementById("isbnNumber"), document.getElementById("catlist"), "/book/categories/");
 </script>

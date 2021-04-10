@@ -10,8 +10,8 @@ class BookModel extends BaseModel
     public function getCategories()
     {
         $category = [];
-        $this->db->select('id code', 'name value')->from('category')->where('isDeleted', '=', 0);
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->select('id code', 'name value')->from('category')->where('deletionToken', '=', 'N/A');
+        $this->db->where('status', '=', 1)->execute();
         while ($row = $this->db->fetch()) {
             $category[] = $row;
         }
@@ -20,8 +20,8 @@ class BookModel extends BaseModel
     public function getAuthors()
     {
         $author = [];
-        $this->db->select('id code', 'name value')->from('author')->where('isDeleted', '=', 0);
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->select('id code', 'name value')->from('author')->where('deletionToken', '=', "N/A");
+        $this->db->where('status', '=', 1)->execute();
         while ($row = $this->db->fetch()) {
             $author[] = $row;
         }
@@ -37,10 +37,25 @@ class BookModel extends BaseModel
         $this->db->begin();
         $flag1 = $this->db->insert('book', $book)->execute();
         $bookId = $this->db->insertId();
-        $category = ['bookId' => $bookId, 'catId' => $categoryId];
-        $flag2 = $this->db->insert('book_category', $category)->execute();
-        $author = ['bookId' => $bookId, 'authorId' => $authorId];
-        $flag3 = $this->db->insert('book_author', $author)->execute();
+        if ($flag2) {
+            foreach ($categories as $categoryId) {
+                $category = ['bookId' => $bookId, 'catId' => $categoryId];
+                $flag2 = $this->db->insert('book_category', $category)->execute();
+                if (!$flag2) {
+                    break;
+                }
+            }
+        }
+        $flag3 = $this->db->delete('book_author')->where('bookId', '=', $bookId)->execute();
+        if ($flag3) {
+            foreach ($authors as $authorId) {
+                $author = ['bookId' => $bookId, 'authorId' => $authorId];
+                $flag3 = $this->db->insert('book_author', $author)->execute();
+                if (!$flag3) {
+                    break;
+                }
+            }
+        }
         if ($flag1 && $flag2 && $flag3) {
             return $this->db->commit();
         }
@@ -50,8 +65,8 @@ class BookModel extends BaseModel
     public function getBooks()
     {
         $book = [];
-        $result = $this->db->select("id", "name", "location", "publication", "isbnNumber", "stack", "available", "createdAt", "updatedAt", "isDeleted status")->from('book');
-        $this->db->where('isDeleted', '!=', 2)->execute();
+        $result = $this->db->select("id", "name", "location", "publication", "isbnNumber", "stack", "available", "createdAt", "updatedAt", "status")->from('book');
+        $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
             $book[] = $row;
         }
@@ -63,7 +78,7 @@ class BookModel extends BaseModel
         $book = [];
         $this->db->select('b.id id', 'b.name name', 'a.name author', 'description', 'available', 'coverPic')->from('book b');
         $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')->innerJoin('author a')->on('ba.authorId = a.id');
-        $this->db->where('b.isDeleted', '=', 0)->orderby('RAND()')->execute();
+        $this->db->where('b.status', '=', 1)->where('b.deletionToken', '=', 'N/A')->orderby('RAND()')->execute();
         while ($row = $this->db->fetch()) {
             $book[] = $row;
         }
@@ -72,39 +87,56 @@ class BookModel extends BaseModel
 
     public function getBookDetails(int $bookId)
     {
-        $this->db->select('id', 'name', 'author', 'description', 'available', 'coverpic', 'category', 'location', 'isbnNumber')->from('book_detail');
+        $this->db->select('id', 'name', 'authors', 'description', 'available', 'coverpic', 'categories', 'location', 'isbnNumber')->from('book_detail');
         $this->db->where('id', '=', $bookId);
-        $this->db->where('isDeleted', '!=', 2)->execute();
+        $this->db->where('status', '=', '1')->execute();
         $result = $this->db->fetch();
         return $result;
     }
 
     public function delete(int $id)
     {
-        $this->db->delete('book')->where('id', '=', $id);
-        $this->db->where('isDeleted', '=', 0);
+        $deletionToken = uniqid();
+        $field = [ 'deletionToken' => $deletionToken];
+        $this->db->update('book', $field)->where('id', '=', $id);
         return $this->db->execute();
     }
     public function get(int $id)
     {
-        $this->db->select('id', 'name', 'publication', 'isbnNumber', 'location', 'price', 'stack', 'description', 'available', 'coverPic','authors', 'authorCodes','categories','categoryCodes')->from('book_detail');
+        $this->db->select('id', 'name', 'publication', 'isbnNumber', 'location', 'price', 'stack', 'description', 'available', 'coverPic', 'authors', 'authorCodes', 'categories', 'categoryCodes')->from('book_detail');
         $this->db->where('id', '=', $id)->execute();
-        // $this->db->where('b.isDeleted', '!=', 2)->execute();
         return $this->db->fetch();
     }
     public function update(array $book, int $bookId)
     {
-        $categoryId = $book['category'];
-        $authorId = $book['author'];
+        print_r($book);
+        $categories = explode(",", $book['category']);
+        $authors = explode(",", $book['author']);
         unset($book['category']);
         unset($book['author']);
         $this->db->set("autocommit", 0);
         $this->db->begin();
         $flag1 = $this->db->update('book', $book)->where('id', '=', $bookId)->execute();
-        $category = ['bookId' => $bookId, 'catId' => $categoryId];
-        $flag2 = $this->db->update('book_category', $category)->execute();
-        $author = ['bookId' => $bookId, 'authorId' => $authorId];
-        $flag3 = $this->db->insert('book_author', $author)->execute();
+        $flag2 = $this->db->delete('book_category')->where('bookId', '=', $bookId)->execute();
+        if ($flag2) {
+            foreach ($categories as $categoryId) {
+                $category = ['bookId' => $bookId, 'catId' => $categoryId];
+                $flag2 = $this->db->insert('book_category', $category)->execute();
+                if (!$flag2) {
+                    break;
+                }
+            }
+        }
+        $flag3 = $this->db->delete('book_author')->where('bookId', '=', $bookId)->execute();
+        if ($flag3) {
+            foreach ($authors as $authorId) {
+                $author = ['bookId' => $bookId, 'authorId' => $authorId];
+                $flag3 = $this->db->insert('book_author', $author)->execute();
+                if (!$flag3) {
+                    break;
+                }
+            }
+        }
         if ($flag1 && $flag2 && $flag3) {
             return $this->db->commit();
         }
@@ -115,5 +147,17 @@ class BookModel extends BaseModel
     {
         $this->db->update('book', $fields)->where('id', '=', $id);
         return $this->db->execute();
+    }
+    public function getBooksLike(string $Searchkey)
+    {
+        $result = [];
+        $this->db->select("id code", "isbnNumber value")->from('book')->where('isbnNumber', 'LIKE', "%" . $Searchkey . "%");
+        $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
+        $orderClause = "case when isbnNumber like '$Searchkey%' THEN 0 WHEN isbnNumber like '% %$Searchkey% %' THEN 1 WHEN isbnNumber like '%$Searchkey' THEN 2 else 3 end, isbnNumber";
+        $this->db->orderBy($orderClause)->execute();
+        while ($row = $this->db->fetch()) {
+            $result[] = $row;
+        }
+        return $result;
     }
 }

@@ -29,6 +29,26 @@ const adminLoginFormValidator = function(event) {
     }
 };
 
+const issueBookFormValidator = function(event) {
+    if (document.getElementById('username').value == '') {
+        toast("Please enter the User Name..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById('isbnNumber').value == '') {
+        toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById('user-condition').value == '0') {
+        toast("This user can't lend a book ..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById('book-condition').value == '0') {
+        toast("This book is not available to lend ..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+}
+
 const bookFormValidator = function(event) {
     if ((document.getElementById("price").value) <= 0) {
         toast("Invalid price..!", 'danger', "Invalid Input");

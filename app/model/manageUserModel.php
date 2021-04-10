@@ -5,9 +5,8 @@ class ManageUserModel extends BaseModel
     public function getAllUsers(string $email)
     {
         $users = [];
-        $this->db->select('id', 'fullName', 'userName', 'email', 'role', 'mobile', 'createdAt')->from('all_user');
-        $result = $this->db->where('email', '!=', $email)->orderby('id');
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->select('id', 'fullName', 'userName', 'email', 'role', 'mobile', 'createdAt', 'status')->from('all_user');
+        $this->db->where('email', '!=', $email)->orderBy('id')->execute();
         while ($row = $this->db->fetch()) {
             $users[] = $row;
         }
@@ -18,7 +17,7 @@ class ManageUserModel extends BaseModel
         $users = [];
         $this->db->select('id', 'fullName', 'userName', 'email', 'mobile', 'createdAt')->from('all_user');
         $result = $this->db->where('role', '=', 'user')->orderby('id');
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->execute();
         while ($row = $this->db->fetch()) {
             $users[] = $row;
         }
@@ -27,8 +26,7 @@ class ManageUserModel extends BaseModel
     public function getAllRoles()
     {
         $roles = [];
-        $this->db->select('code', 'value')->from('role');
-        $this->db->where('isDeleted', '=', 0)->execute();
+        $this->db->select('code', 'value')->from('role')->execute();
         while ($row = $this->db->fetch()) {
             $author[] = $row;
         }
@@ -43,8 +41,10 @@ class ManageUserModel extends BaseModel
     
     public function delete(string $role, int $id)
     {
-        $table = ($role == "user") ? "user" : "admin_user";
-        $this->db->delete($table)->where('id', '=', $id);
+        $deletionToken = uniqid();
+        $field = [ 'deletionToken' => $deletionToken];
+        $table = ($role == "User") ? "user" : "admin_user";
+        $this->db->update($table, $field)->where('id', '=', $id);
         return $this->db->execute();
     }
 }

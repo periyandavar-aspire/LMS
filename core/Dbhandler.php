@@ -127,7 +127,8 @@ abstract class Dbhandler
         } else {
             $this->query  = $this->sql . $this->where;
         }
-        
+        echo $this->query;
+        print_r($this->bindValues);
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {
@@ -164,6 +165,18 @@ abstract class Dbhandler
         if (isset($where)) {
             $this->where = " WHERE $where";
         }
+        return $this;
+    }
+
+    /**
+     * set the values in update query
+     * @return DbHandler
+     */
+    public function setTo(): DbHandler
+    {
+        $args = func_get_args();
+        $change = implode(",", $args);
+        $this->sql .= $change;
         return $this;
     }
     /**
@@ -248,25 +261,27 @@ abstract class Dbhandler
      * call this function by
      * selectAs(['field1' => 'as1', 'field2' => 'as2'])
      */
-    public function selectAs(array $selectData)
+    public function selectAs()
     {
-        $columns = [];
-        foreach ($selectData as $field => $as) {
-            $field = trim($field);
-            if (strpos($field, " ")) {
-                $field = explode(" ", $field);
-                $field = "`" . $field[0] . "` " . $field[1];
-            } elseif (strpos($field, ".")) {
-                $field = explode(".", $field);
-                $field = "`" . $field[0] . "`." . $field[1];
-            } else {
-                $field = '`' . $field . '`';
-            }
-            $columns[] = $field . " AS " . trim($as);
-        }
-        $columns = implode(', ', $columns);
-        $columns = ($this->columns == null) ? ($columns) : (", " . $columns);
-        $this->columns .= $columns;
+        // $columns = [];
+        // foreach ($selectData as $field => $as) {
+        //     $field = trim($field);
+        //     if (strpos($field, " ")) {
+        //         $field = explode(" ", $field);
+        //         $field = "`" . $field[0] . "` " . $field[1];
+        //     } elseif (strpos($field, ".")) {
+        //         $field = explode(".", $field);
+        //         $field = "`" . $field[0] . "`." . $field[1];
+        //     } else {
+        //         $field = '`' . $field . '`';
+        //     }
+        //     $columns[] = $field . " AS " . trim($as);
+        // }
+        // $columns = implode(', ', $columns);
+        // $columns = ($this->columns == null) ? ($columns) : (", " . $columns);
+        $selectData = func_get_args();
+        $selectData = implode(",", $selectData);
+        $this->columns .= ", " . $selectData;
         return $this;
     }
     /**

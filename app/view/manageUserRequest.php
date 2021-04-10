@@ -28,30 +28,31 @@
                     </div>
                 </div>
                 <div style="overflow-x:auto;">
-                    <table class="tab_design">
+                <table class="tab_design">
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
                                 <th>ISBN Number</th>
                                 <th>Book Name</th>
                                 <th>User Name</th>
-                                <th>Requested Date</th>
+                                <th>Issued Date</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($books)): ?>
+                            <?php $i=0; if (isset($issuedBooks)): ?>
                                 
-                                <?php foreach($books as $book):?>
+                                <?php foreach($issuedBooks as $issued):?>
                                     <tr>
                                         <td><?php echo ++$i;?></td>
-                                        <td><?php echo $book->name;?></td>
-                                        <td><?php echo $book->createdAt?></td>
-                                        <td><?php echo $book->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $book->id;?>" <?php if ($book->status == 1) echo "checked";?>></div></td>
+                                        <td><?php echo $issued->isbnNumber;?></td>
+                                        <td><?php echo $issued->bookName?></td>
+                                        <td><?php echo $issued->userName;?></td>
+                                        <td><?php echo $issued->issuedAt;?></td>
+                                        <td><?php echo $issued->status;?></td>
                                         <td>
-                                            <a type="button" href="/admin/books/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <a type="button" href="/admin/books/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a>
+                                            <a type="button" href="/admin/issuedBooks/edit/<?php echo $issued->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>

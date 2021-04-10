@@ -22,7 +22,7 @@ if(!isset($book)) {
                                         <div class='text-author'>
                                         <ul class="styled-list">
                                             <?php 
-                                                foreach (explode(",", $book->author) as $author) {
+                                                foreach (explode(",", $book->authors) as $author) {
                                                     echo "<li>  $author </li>";
                                                 }
                                             ?>
@@ -33,7 +33,7 @@ if(!isset($book)) {
                                         <h3> Categories </h3>
                                         <ul class="styled-list">
                                             <?php 
-                                                foreach (explode(",", $book->category) as $category) {
+                                                foreach (explode(",", $book->categories) as $category) {
                                                     echo "<li>  $category </li>";
                                                 }
                                             ?>

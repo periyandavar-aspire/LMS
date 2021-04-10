@@ -11,26 +11,27 @@
                     <h1>Issued Book Entry</h1><hr>
                 </div>
             </div>
-            <form action="/admin/issueBook" enctype="multipart/form-data" method="post">
+            <form action="/issueBook" onsubmit="issueBookFormValidator(event);" enctype="multipart/form-data" method="post">
                 <div class="row">
                     <div class="cols col-4">
                 <div class="form-input-div">
-                    <label>User name</label>
-                    <input onchange="loadUserDetails(event)" class="form-control" type="text" id="username" name="username" placeholder="User Name" required="">
+                    <label>User Name <span class="required-star">*</span></label>
+                    <input class="form-control" autocomplete="off" type="text" id="username" name="username" placeholder="User Name" required="">
                 </div>
                 </div>
                 
                     <div class="cols col-4">
                 <div class="form-input-div">
                     <label>User Details</label>
-                    <textarea disabled class="form-control" id="userdetails" name="userDetails" placeholder="User details" required=""></textarea>
+                    <div class="form-control div-like-textarea disabled" id="userdetails"></div>
+                    <input type="hidden" value="0" id="user-condition">
                 </div>
                 </div>
                 
                     <div class="cols col-4">
                 <div class="form-input-div">
-                    <label>ISBN Number</label>
-                    <input onchange="loadBookDetails(event);" class="form-control" type="text" id="bookname" name="isbnNumber" placeholder="Book Name" required="">
+                    <label>ISBN Number <span class="required-star">*</span></label>
+                    <input pattern="^[0-9]+$" class="form-control" autocomplete="off" type="text" id="isbnNumber" name="isbnNumber" placeholder="Book Name" required="">
                 </div>
                 </div>
                
@@ -38,13 +39,14 @@
                 <div class="form-input-div">
                     <label>Book Details</label>
                     <div class="form-control div-like-textarea disabled" id="bookdetails"></div>
+                    <input type="hidden" value="0" id="book-condition">
                 </div>
                 </div>
                 
                     <div class="cols col-9">
                <div class="form-input-div">
-                    <label>Comments (if any)</label>
-                    <textarea class="form-control" id="comments" name="comments" placeholder="comments" required=""></textarea>
+                    <label>Comments (If any)</label>
+                    <textarea class="form-control" id="comments" name="comments" placeholder="comments"></textarea>
                 </div>
                 </div>
                 </div>
@@ -53,49 +55,6 @@
                 </div>
                 </div>
             </form>
-        
-            <!-- <form action="/admin/books/add" enctype="multipart/form-data" method="post">
-                <div class="row">
-                    <div class="cols col-4">
-                <div class="form-input-div">
-                    <label>User name</label>
-                    <input class="form-control" type="text" id="username" name="user" placeholder="User Name" required="">
-                </div>
-                </div>
-                
-                    <div class="cols col-4">
-                <div class="form-input-div">
-                    <label>User Details</label>
-                    <textarea disabled class="form-control" id="userdetails" name="userDetails" placeholder="User details" required=""></textarea>
-                </div>
-                </div>
-                
-                    <div class="cols col-4">
-                <div class="form-input-div">
-                    <label>Book name</label>
-                    <input class="form-control" type="text" id="bookname" name="book" placeholder="Book Name" required="">
-                </div>
-                </div>
-               
-                    <div class="cols col-4">
-                <div class="form-input-div">
-                    <label>Book Details</label>
-                    <textarea disabled class="form-control" id="bookdetails" name="bookDetails" placeholder="Book details" required=""></textarea>
-                </div>
-                </div>
-                
-                    <div class="cols col-9">
-               <div class="form-input-div">
-                    <label>Comments (if any)</label>
-                    <textarea class="form-control" id="comments" name="comments" placeholder="comments" required=""></textarea>
-                </div>
-                </div>
-                </div>
-                <div class="form-buttons">
-                    <button type="submit" class="btn-link">Add</button>
-                </div>
-                </div>
-            </form> -->
         </div>
     </section>
  
@@ -133,7 +92,7 @@
                                 <th>Book Name</th>
                                 <th>User Name</th>
                                 <th>Issued Date</th>
-                                <th>Return Date</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -147,10 +106,9 @@
                                         <td><?php echo $issued->bookName?></td>
                                         <td><?php echo $issued->userName;?></td>
                                         <td><?php echo $issued->issuedAt;?></td>
-                                        <td><?php echo $issued->returnAt;?></td>
+                                        <td><?php echo $issued->status;?></td>
                                         <td>
-                                            <a type="button" href="/admin/issuedBooks/edit/<?php echo $book->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
-                                            <!-- <a type="button" href="/admin/issuedBooks/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a> -->
+                                            <a type="button" href="/admin/issuedBooks/edit/<?php echo $issued->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>
@@ -178,8 +136,6 @@
     </article>
 <script>
     document.getElementById('issued').className += " active";
+    autocomplete(document.getElementById("username"), null, "/user/get/", loadUserDetails);
+    autocomplete(document.getElementById("isbnNumber"), null, "/book/get/", loadBookDetails);
 </script>
-<script>
-    document.getElementById('issued').className += " active";
-</script>
-<!-- <script src="<?php echo Utility::baseURL();?>/static/js/bookstatus.js"></script> -->

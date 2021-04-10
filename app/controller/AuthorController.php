@@ -27,7 +27,7 @@ class AuthorController extends BaseController
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger');";
-        } elseif (!$this->model->addAuthor($fields->getValues())) {
+        } elseif (!$this->model->add($fields->getValues())) {
             $script = "toast('Unable to add new author..!', 'danger');";
         } else {
             $script = "toast('New author is added successfully..!', 'success');";
@@ -80,11 +80,11 @@ class AuthorController extends BaseController
         $result['result'] = $this->model->delete($id);
         echo json_encode($result);
     }
-    public function searchAuthor()
+    public function search()
     {
         $searchKey = func_get_arg(0);
         $ignoreList = func_get_arg(1);
-        $result['result'] = $this->model->getAuthorLike($searchKey, $ignoreList);
+        $result['result'] = $this->model->getAuthorsLike($searchKey, $ignoreList);
         echo json_encode($result);
     }
 }

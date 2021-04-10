@@ -27,7 +27,7 @@
                             <p><?php echo $book->description;?></p>
                             <p>only <?php echo $book->available;?> books available</p>
                             <div class="btn-container">
-                                <a class="btn-link" href="/home/books/lend/<?php echo $book->id;?>">REQUEST TO LEND</a>
+                                <a class="btn-link" href="/book/view/<?php echo $book->id;?>">View Book</a>
                             </div>
                         </div>
                     </div>

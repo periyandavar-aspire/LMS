@@ -74,11 +74,11 @@ class CategoryController extends BaseController
         $this->addScript($script);
     }
 
-    public function searchCategory()
+    public function search()
     {
         $searchKey = func_get_arg(0);
         $ignoreList = func_get_arg(1);
-        $result['result'] = $this->model->getCategoryLike($searchKey, $ignoreList);
+        $result['result'] = $this->model->getCategoriesLike($searchKey, $ignoreList);
         echo json_encode($result);
     }
 }
