@@ -93,22 +93,24 @@
                                 <th>User Name</th>
                                 <th>Issued Date</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th>Fine Amount</th>
+                                <th>Mark as Returned</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $i=0; if (isset($issuedBooks)): ?>
                                 
                                 <?php foreach($issuedBooks as $issued):?>
-                                    <tr>
+                                    <tr id="<?php echo $issued->id ?>">
                                         <td><?php echo ++$i;?></td>
                                         <td><?php echo $issued->isbnNumber;?></td>
                                         <td><?php echo $issued->bookName?></td>
                                         <td><?php echo $issued->userName;?></td>
                                         <td><?php echo $issued->issuedAt;?></td>
                                         <td><?php echo $issued->status;?></td>
+                                        <td><?php echo $issued->fine;?></td>
                                         <td>
-                                            <a type="button" href="/admin/issuedBooks/edit/<?php echo $issued->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <button type="button" onclick="MarkasReturn(<?php echo $issued->id;?>);" class="button-control icon-btn positive" title="edit"><i class="fa fa-check" aria-hidden="true"></i></button>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>

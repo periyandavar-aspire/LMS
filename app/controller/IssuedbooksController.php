@@ -17,13 +17,21 @@ class IssuedBooksController extends BaseController
     public function issue()
     {
         $user = $this->input->session('type');
-        $data['issuedBooks'] = $this->model->getIssuedBooks();
+        $issuedBooks = $this->model->getIssuedBooks();
+        $fineSettings = $this->model->getFineConfigs();
+        $data['issuedBooks'] = $this->service->calculateFine($issuedBooks, $fineSettings);
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
         $this->loadView('manageissuedbooks', $data);
         $this->loadLayout($user . "Footer.html");
     }
 
+    public function markAsReturn()
+    {
+        $id = func_get_arg(0);
+        $result['result'] = $this->model->bookReturned($id);
+        echo json_encode($result);
+    }
     public function manageUserRequest()
     {
         $user = $this->input->session('type');
@@ -32,6 +40,10 @@ class IssuedBooksController extends BaseController
         $this->includeScript("issuedbook.js");
         $this->loadView('manageUserRequest', $data);
         $this->loadLayout($user . "Footer.html");
+        if ($this->input->session('msg') != null) {
+            $this->addScript("toast('" . $this->input->session('msg') . "')");
+            Utility::setSessionData('msg', null);
+        }
     }
 
     public function getUserDetails()
@@ -47,6 +59,31 @@ class IssuedBooksController extends BaseController
         $isbnNumber = func_get_arg(0);
         $result = $this->model->getBookDetails($isbnNumber);
         echo json_encode($result);
+    }
+
+    public function manageRequest()
+    {
+        $id = func_get_arg(0);
+        $user = $this->input->session('type');
+        $result = $this->model->getRequestDetails($id);
+        $data['user'] = $this->model->getUserDetails($result->userName);
+        $data['book'] = $this->model->getBookDetails($result->isbnNumber);
+        $data['comments'] = $result->comments;
+        $data['id'] = $id;
+        $this->loadLayout($user . "Header.html");
+        $this->includeScript("issuedbook.js");
+        $this->loadView('userRequest', $data);
+        $this->loadLayout($user . "Footer.html");
+    }
+
+    public function updateRequest()
+    {
+        $id = func_get_arg(0);
+        $updateTo = $this->input->post('status');
+        $flag = $this->model->updateRequest($id, $updateTo, $this->input->post(comments));
+        $script = $flag == true ? 'Success..!':'Failed..!';
+        Utility::setSessionData('msg', $script);
+        $this->redirect('userRequest');
     }
 
     public function add()
@@ -76,7 +113,9 @@ class IssuedBooksController extends BaseController
                 $script = "toast('New Entry Added Successfully..!','success')";
             }
         }
-        $data['issuedBooks'] = $this->model->getIssuedBooks();
+        $issuedBooks = $this->model->getIssuedBooks();
+        $fineSettings = $this->model->getFineConfigs();
+        $data['issuedBooks'] = $this->service->calculateFine($issuedBooks, $fineSettings);
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
         print_r($this->input->post());

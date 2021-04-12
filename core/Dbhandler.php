@@ -123,12 +123,12 @@ abstract class Dbhandler
     {
         $result = true;
         if ($this->sql == '') {
-            $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->limit . $this->orderBy;
+            $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->orderBy . $this->limit;
         } else {
             $this->query  = $this->sql . $this->where;
         }
-        echo $this->query;
-        print_r($this->bindValues);
+        // echo $this->query;
+        // print_r($this->bindValues);
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {
@@ -176,6 +176,7 @@ abstract class Dbhandler
     {
         $args = func_get_args();
         $change = implode(",", $args);
+        $this->sql .= Utility::endsWith($this->sql, 'SET ') ? '' : ',';
         $this->sql .= $change;
         return $this;
     }
@@ -206,9 +207,9 @@ abstract class Dbhandler
     /**
      * insert function used to build insert query
      * we can call this by the following way
-     * insert(table, ['field' => 'value', 'fild1' => 'value1', 'field2' => 'value2'])
+     * insert(table, ['field' => 'value', 'fild1' => 'value1', 'field2' => 'value2'], ['field' => CURDATE()])
      */
-    public function insert(string $table, array $fields = [])
+    public function insert(string $table, array $fields = [], array $funcfields = [])
     {
         $this->resetQuery();
         $keys = implode('`, `', array_keys($fields));
@@ -222,7 +223,16 @@ abstract class Dbhandler
             }
             $index++;
         }
-
+        $values = ($values != '' && count($funcfields) > 0) ? $values . ', ' : $values;
+        $index = 1;
+        foreach ($funcfields as $column => $value) {
+            $values .= $value;
+            $keys = $keys . '`, `' . $column;
+            if ($index < count($funcfields)) {
+                $values .= ',';
+            }
+            $index++;
+        }
         $this->sql = "INSERT INTO $table (`$keys`) VALUES ({$values})";
         return $this;
     }
@@ -308,6 +318,14 @@ abstract class Dbhandler
         $this->table = $tableName;
         return $this;
     }
+
+    public function appendWhere(string $where)
+    {
+        $this->where = $this->where==null ? '' : $this->where;
+        $this->where .= $where;
+        return $this;
+    }
+
     /**
      * where function to add where condition with AND
      * we can use this in there ways
@@ -424,7 +442,12 @@ abstract class Dbhandler
             $this->where .= $args[0];
             $this->bindValues[] = $args[1];
         } elseif ($count == 3) {
-            $this->where .= "`" . trim($args[0]) . "`" . $args[1] . " ?";
+            $field =  trim($args[0]);
+            if (strpos($field, ".")) {
+                $field = explode(".", $field);
+                $field =  $field[0] . "`.`" . $field[1];
+            }
+            $this->where .= "`" . $field . "`" . $args[1] . " ?";
             $this->bindValues[] = $args[2];
         }
         return $this;
@@ -465,9 +488,39 @@ abstract class Dbhandler
     /**
      * return query value
      */
-    public function getQuery()
+    public function getExectedQuery()
     {
         return $this->query;
+    }
+
+    /**
+     * return build query
+     */
+    public function getQuery(): string
+    {
+        $query = ($this->sql == '') ? "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->limit . $this->orderBy : $this->sql . $this->where;
+        return $query;
+    }
+
+    /**
+     * return bindValues
+     *
+     * @return array
+     */
+    public function getBindValues():array
+    {
+        return $this->bindValues;
+    }
+
+    /** 
+     * insert bind values
+     */
+    public function appendBindValues($values): DbHandler
+    {
+        foreach ($values as $value) {
+            $this->bindValues[] = $value;
+        }
+        return $this;
     }
     /**
      * @param string $tableName
@@ -573,11 +626,11 @@ abstract class Dbhandler
      * @return DbHandler
      * used to perform group by
      */
-    public function groubBy(): DbHandler
+    public function groupBy(): DbHandler
     {
         $fields = func_get_args();
-        $fields = explode(", ", $fields);
-        $this->groupby = $fields;
+        $fields = implode(", ", $fields);
+        $this->groupby = " GROUP BY " . $fields;
         return $this;
     }
 

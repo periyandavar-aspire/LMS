@@ -30,8 +30,8 @@
                                 <th>Book Name</th>
                                 <th>ISBN </th>
                                 <th>Requested Date</th>
-                                <th>Status</th>
                                 <th>Comments</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,11 +43,8 @@
                                         <td><?php echo $book->isbnNumber;?></td>
                                         <td><?php echo $book->bookName?></td>
                                         <td><?php echo $book->requestedAt;?></td>
+                                        <td><?php echo $book->comments;?></td>
                                         <td><?php echo $book->status;?></td>
-                                        <td>
-                                        <?php echo $book->comments;?>
-                                            <!-- <a type="button" href="/admin/issuedBooks/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a> -->
-                                        </td>
                                     </tr> 
                                 <?php endforeach;?>
                             <?php endif;?>

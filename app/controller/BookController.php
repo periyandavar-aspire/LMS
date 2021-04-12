@@ -42,25 +42,16 @@ class BookController extends BaseController
         $this->loadLayout('footer.html');
     }
 
-    // public function addBook()
-    // {
-    //     $fdv = new FormDataValidation();
-    //     $fields = new Fields(['name']);
-    //     $fields->setRequiredFields('name');
-    //     $fields->addValues($this->input->post());
-    //     if (!$fdv->validate($fields, $field)) {
-    //         $script = "toast('Invalid $field..!', 'danger');";
-    //     } elseif (!$this->model->addAuthor($fields->getValues())) {
-    //         $script = "toast('Unable to add new author..!', 'danger');";
-    //     } else {
-    //         $script = "toast('New author is added successfully..!', 'success');";
-    //     }
-    //     $this->loadLayout("adminHeader.html");
-    //     $data['authors'] = $this->model->getAuthors();
-    //     $this->loadView("manageAuthors", $data);
-    //     $this->loadLayout("adminFooter.html");
-    //     $this->addScript($script);
-    // }
+    public function findBook()
+    {
+        $user = $this->input->session('type');
+        $keyword = $this->input->post('search') ?? '';
+        $data['books'] = $this->model->searchBook($keyword);
+        $this->loadLayout($user.'header.html');
+        $this->loadView("searchBook", $data);
+        $this->loadLayout($user.'footer.html');
+        $this->includeScript('bookElement.js');
+    }
 
     public function add()
     {
@@ -177,6 +168,7 @@ class BookController extends BaseController
         $id = func_get_arg(0);
         $user = $this->input->session('type');
         $data['book'] = $this->model->getBookDetails($id);
+        $data['user'] = $user;
         $this->loadLayout($user . 'header.html');
         $this->loadView("bookdetail", $data);
         $this->loadLayout($user . 'footer.html');

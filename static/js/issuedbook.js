@@ -40,13 +40,28 @@ function updateBookDetails(elem, data) {
         imgElem = document.createElement('img');
         imgElem.src = "/upload/book/" + data['coverPic'];
         value += data['name'];
-        value += "<br>" + data['location'];
+        value += "<br>location: " + data['location'];
         value += "<br>" + data['publication'];
-        value += "<br> Rs." + data['publication'];
+        available = data['available'] == 0 ? 'no' : data['available'];
+        available += data['available'] == 1 ? ' copy' : ' copies';
+        value += "<br>" + available + " available";
         txtContainer.innerHTML = value;
         imgContainer.appendChild(imgElem);
         elem.appendChild(imgContainer);
         elem.appendChild(txtContainer);
         document.getElementById('book-condition').value = 1;
     }
+}
+
+function MarkasReturn(id) {
+    fetch('/issuedBook/returned/' + id, { headers: { response: "application/json" } })
+        .then(response => { return response.json() })
+        .then(data => {
+            if (data.result == 1) {
+                document.getElementById(id).remove();
+                toast("Success..!", 'success');
+            } else {
+                toast("Failed..!", 'danger');
+            }
+        });
 }

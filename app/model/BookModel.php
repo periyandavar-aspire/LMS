@@ -87,7 +87,7 @@ class BookModel extends BaseModel
 
     public function getBookDetails(int $bookId)
     {
-        $this->db->select('id', 'name', 'authors', 'description', 'available', 'coverpic', 'categories', 'location', 'isbnNumber')->from('book_detail');
+        $this->db->select('id', 'name', 'authors', 'description', 'available', 'coverpic', 'categories', 'location', 'isbnNumber', 'stack')->from('book_detail');
         $this->db->where('id', '=', $bookId);
         $this->db->where('status', '=', '1')->execute();
         $result = $this->db->fetch();
@@ -159,5 +159,28 @@ class BookModel extends BaseModel
             $result[] = $row;
         }
         return $result;
+    }
+
+    public function searchBook($Searchkey)
+    {
+        $books = [];
+        $this->db->select('b.id', 'b.name', 'publication', 'isbnNumber', 'location', 'price', 'stack', 'description', 'available', 'coverPic');
+        $this->db->selectAs('GROUP_CONCAT(DISTINCT `a`.`name` SEPARATOR ",") `author`', 'GROUP_CONCAT(DISTINCT `c`.`name` SEPARATOR ",") `category`')->from('book b');
+        $this->db->leftJoin('book_author ba')->on('b.id = ba.id');
+        $this->db->innerJoin('author a')->on('(`ba`.`authorId` = `a`.`id`) AND(`a`.`status` = 1)');
+        $this->db->leftJoin('book_category bc')->on('`b`.`id` = `bc`.`bookId`');
+        $this->db->innerJoin('category c')->on('(`bc`.`catId` = `c`.`id`) AND(`c`.`status` = 1)');
+        $this->db->where('b.status', '=', 1);
+        $this->db->where('b.deletionToken', '=', 'N/A');
+        $this->db->where("(MATCH(b.name, description, publication, isbnNumber) AGAINST ('$Searchkey')");
+        $this->db->orWhere("a.name", "LIKE", "%$Searchkey%");
+        $this->db->orWhere("c.name", "LIKE", "%$Searchkey%");
+        $this->db->appendWhere(')');
+        $this->db->groupBy('b.id');
+        $this->db->execute();
+        while($row = $this->db->fetch()) {
+            $books[] = $row;
+        }
+        return $books;
     }
 }

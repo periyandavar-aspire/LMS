@@ -9,10 +9,14 @@ class Utility
         return $config['base_url'];
     }
 
-    public static function setSessionData(string $key, string $value)
+    public static function setSessionData(string $key, ?string $value)
     {
-        $value = base64_encode($value);
-        $_SESSION[$key] = $value;
+        if ($value == null) {
+            unset($_SESSION[$key]);
+        } else {
+            $value = base64_encode($value);
+            $_SESSION[$key] = $value;
+        }
     }
 
     public static function validateSession(string $key): bool

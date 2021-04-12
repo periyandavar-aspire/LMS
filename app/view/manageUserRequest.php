@@ -35,7 +35,8 @@
                                 <th>ISBN Number</th>
                                 <th>Book Name</th>
                                 <th>User Name</th>
-                                <th>Issued Date</th>
+                                <th>Requested Date</th>
+                                <th>Comments</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -49,10 +50,11 @@
                                         <td><?php echo $issued->isbnNumber;?></td>
                                         <td><?php echo $issued->bookName?></td>
                                         <td><?php echo $issued->userName;?></td>
-                                        <td><?php echo $issued->issuedAt;?></td>
+                                        <td><?php echo $issued->requestedAt;?></td>
+                                        <td><?php echo $issued->comments;?></td>
                                         <td><?php echo $issued->status;?></td>
                                         <td>
-                                            <a type="button" href="/admin/issuedBooks/edit/<?php echo $issued->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
+                                            <a type="button" href="/userRequest/<?php echo $issued->id;?>" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>

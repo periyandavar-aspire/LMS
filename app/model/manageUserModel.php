@@ -47,4 +47,15 @@ class ManageUserModel extends BaseModel
         $this->db->update($table, $field)->where('id', '=', $id);
         return $this->db->execute();
     }
+
+    public function getRoleCodes()
+    {
+        $result = [];
+        $this->db->select('code')->from('role');
+        $this->db->where('deletionToken', '=', 'N/A')->execute();
+        while ($row = $this->db->fetch()) {
+            $result[] = $row->code;
+        }
+        return $result;
+    }
 }

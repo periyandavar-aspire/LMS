@@ -34,4 +34,12 @@ class IssuedBooksService extends BaseService
         }
         return true;
     }
+
+    public function calculateFine($issuedBooks, $fineSettings)
+    {
+        foreach ($issuedBooks as $issuedBook) {
+            $issuedBook->fine = ($issuedBook->days > $fineSettings->maxLendDays) ? "Rs. " . (($issuedBook->days - $fineSettings->maxLendDays) * $fineSettings->fineAmtPerDay) : "-";
+        }
+        return $issuedBooks;
+    }
 }

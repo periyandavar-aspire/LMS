@@ -43,10 +43,14 @@ class ManageUserController extends BaseController
     {
         $fdv = new FormDataValidation();
         $fields = new Fields(['fullName', 'email', 'role', 'password']);
-        // $rules = [
-        //     'fullName' => 'alphaSpaceValidation',
-        // ];
-        // $fields->addRule($rules);
+        $roleCodes = implode(" ", $this->model->getRoleCodes());
+        $rules = [
+            'email' => ['mailValidation', 'required'],
+            'fullname' => ['alphaSpaceValidation', 'required'],
+            'password' => ["lengthValidation 6", 'required'],
+            'role' => ["valuesInValidation $roleCodes", 'required']
+        ];
+        $fields->addRule($rules);
         $fields->setRequiredFields('fullName', 'email', 'role', 'password');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {

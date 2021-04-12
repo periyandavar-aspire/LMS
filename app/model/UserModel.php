@@ -28,7 +28,7 @@ class UserModel extends BaseModel
         $books = [];
         $this->db->select('isbnNumber', 'name bookName', 'issued_book.id')->selectAs("IFNULL (issuedAt,'') issuedAt", "IF(returnAt='0000-00-00','Not Return Yet', returnAt) returnAt", "IFNULL(fine,'-') fine");
         $this->db->from('issued_book')->innerJoin('book')->using('isbnNumber')->innerJoin('user')->using('userName');
-        $this->db->where('userName', '=', $username)->where('issuedAt', '!=', '0000-00-00')->limit(10, 0)->execute();
+        $this->db->where('userName', '=', $username)->where('issuedAt', '!=', '0000-00-00')->orderby('returnAt')->limit(10, 0)->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
         }

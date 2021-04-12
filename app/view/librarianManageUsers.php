@@ -1,7 +1,7 @@
 <?php
-    // if (!isset($books)) {
-    //     return;
-    // }
+    if (!isset($users)) {
+        return;
+    }
 ?>
 <article class="main">    
     <section>

@@ -83,7 +83,7 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Book</h1>
                 <hr><br>
-                <form action="/admin/manageUsers" method="post">
+                <form action="/admin/manageUsers" onsubmit="createUserFormValidator(event);" method="post">
                     <div class="form-input-div">
                         <label>Full Name</label>
                         <input class="form-control" type="text" id="fullname" name="fullName" autocomplete="off" placeholder="Full Name" required="">
@@ -96,21 +96,21 @@
                     <div class="form-input-div">
                         <label>Role</label>
                         <select class="form-control" type="text" id="role" name="role" required="">
-                            <option style="display:none">Select Role</option>
+                            <option style="display:none" value=''>Select Role</option>
                         </select>
                     </div>
 
                     <div class="form-input-div">
-                <label>Password </label>
-                <input class="form-control" onkeyup="passStrength('password')" type="password" id="password" name="password" placeholder="********" autocomplete="off">
-                <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
-                <span id="pass1msg" style="display:none"></span>
-            </div>    
-            <div class="form-input-div">
-                <label>Confirm Password </label>
-                <input class="form-control"  onkeyup="checkConfirm('password','confirmPassword','errormsg')" type="password" id="confirmPassword" name="confirmpassword" placeholder="********" autocomplete="off">
-                <span id="errormsg" style="color:red"></span>
-            </div> 
+                        <label>Password </label>
+                        <input class="form-control" onkeyup="passStrength('password')" type="password" id="password" name="password" placeholder="********" autocomplete="off">
+                        <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none" value="0"></meter>
+                        <span id="pass1msg" style="display:none"></span>
+                    </div>    
+                    <div class="form-input-div">
+                        <label>Confirm Password </label>
+                        <input class="form-control"  onkeyup="checkConfirm('password','confirmPassword','errormsg')" type="password" id="confirmPassword" name="confirmpassword" placeholder="********" autocomplete="off">
+                        <span id="errormsg" style="color:red"></span>
+                    </div> 
                     <div class="form-buttons">
                         <button type="submit" class="btn-link">Add</button>
                     </div>
