@@ -1,10 +1,22 @@
 <?php
+/**
+ * Handles the request related to author
+ */
 class AuthorController extends BaseController
 {
+    /**
+     * Instantiate a new AuthorController instance.
+     */
     public function __construct()
     {
         parent::__construct(new AuthorModel());
     }
+
+    /**
+     * Displays all authors request
+     *
+     * @return void
+     */
     public function getAll()
     {
         $data['authors'] = $this->model->getAll();
@@ -13,11 +25,12 @@ class AuthorController extends BaseController
         $this->loadView("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
     }
-    // public function getAll()
-    // {
-    //     $result = $this->model->getAuthors();
-    //     echo json_encode($result);
-    // }
+    
+    /**
+     * Add new author and display available authors
+     *
+     * @return void
+     */
     public function add()
     {
         $fdv = new FormDataValidation();
@@ -39,14 +52,26 @@ class AuthorController extends BaseController
         $this->addScript($script);
     }
     
-    public function get()
+    /**
+     * Get the author details by id and display it in JSON format
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function get(int $id)
     {
-        $id = func_get_arg(0);
         $result['data'] = $this->model->get($id);
         echo json_encode($result);
     }
-
-    public function changeStatus()
+    
+    /**
+     * Change the status of the author and display the success/failure message in JSON
+     *
+     * @param integer $id
+     * @param integer $status
+     * @return void
+     */
+    public function changeStatus(int $id, int $status)
     {
         $id = func_get_arg(0);
         $status = func_get_arg(1);
@@ -55,6 +80,11 @@ class AuthorController extends BaseController
         echo json_encode($result);
     }
 
+    /**
+     * Update the author details
+     *
+     * @return void
+     */
     public function update()
     {
         $fdv = new FormDataValidation();
@@ -74,16 +104,28 @@ class AuthorController extends BaseController
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
+
+    /**
+     * Delete the existing author
+     *
+     * @return void
+     */
     public function delete()
     {
         $id = func_get_arg(0);
         $result['result'] = $this->model->delete($id);
         echo json_encode($result);
     }
-    public function search()
+
+    /**
+     * Search the author with given keys in $searchKey and ignore the author if his id is in $ignoreList
+     *
+     * @param integer $searchKey
+     * @param string $ignoreList
+     * @return void
+     */
+    public function search(int $searchKey, string $ignoreList = '')
     {
-        $searchKey = func_get_arg(0);
-        $ignoreList = func_get_arg(1);
         $result['result'] = $this->model->getAuthorsLike($searchKey, $ignoreList);
         echo json_encode($result);
     }

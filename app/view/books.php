@@ -51,7 +51,7 @@
                             <h3><?php echo $book->name?></h3>
                             <div class="text-author"><?php echo $book->author;?></div>
                             <p><?php echo $book->description;?></p>
-                            <p>only <?php echo $book->available;?> books available</p>
+                            <p>only <?php echo $book->available;?> <?php echo ($book->available == 1) ? "copy" : "copies"; ?> available</p>
                             <div class="btn-container">
                                 <!-- <a class="btn-link" href="/home/book/lend/<?php //echo $book->id;?>">LEND NOW</a> -->
                             </div>

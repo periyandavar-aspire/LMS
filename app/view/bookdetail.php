@@ -39,7 +39,7 @@
                         </ul>
                         <h3>ISBN Number</h3><p class="text-para"> <?php echo $book->isbnNumber; ?></p>
                         <h3>Location</h3><p> <?php echo $book->location;?></p>
-                        <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?> </i>copies available</p>
+                        <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?> </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?> available</p>
                         <?php if ($user == 'user'): ?>
                             <div class="form-buttons">
                                 <button onclick="requestBook(<?php echo $book->isbnNumber . ',' . $book->available; ?>)" class="btn-link <?php echo ($book->available == 0) ? "disabled" : ""; ?>" >Request to Lend</button>

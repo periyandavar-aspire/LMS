@@ -1,11 +1,22 @@
 <?php
+/**
+ * Handles the admin functionalities
+ */
 class AdminController extends BaseController
 {
+    /**
+     * Instantiate a new AdminController instance.
+     */
     public function __construct()
     {
         parent::__construct(new AdminModel);
     }
 
+    /**
+     * Handle the home page request
+     *
+     * @return void
+     */
     public function home()
     {
         $this->loadLayout("adminHeader.html");
@@ -13,6 +24,11 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
     }
 
+    /**
+     * Handle the profile page request
+     *
+     * @return void
+     */
     public function profile()
     {
         $this->loadLayout("adminHeader.html");
@@ -22,12 +38,22 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
     }
 
+    /**
+     * Handle logout request
+     *
+     * @return void
+     */
     public function logout()
     {
         session_destroy();
         $this->redirect("admin/login");
     }
-    
+
+    /**
+     * Update the admin profile
+     *
+     * @return void
+     */
     public function updateProfile()
     {
         $fdv = new FormDataValidation();
@@ -63,7 +89,11 @@ class AdminController extends BaseController
         $this->addScript($msg);
     }
 
-
+    /**
+     * Handle the request to the settings page
+     *
+     * @return void
+     */
     public function settings()
     {
         $data['data'] = $this->model->getConfigs();
@@ -72,6 +102,11 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
     }
 
+    /**
+     * Update the settings
+     *
+     * @return void
+     */
     public function updateSettings()
     {
         $fdv = new FormDataValidation();
@@ -92,6 +127,11 @@ class AdminController extends BaseController
         $this->addScript($script);
     }
 
+    /**
+     * Loads the cms contents
+     *
+     * @return void
+     */
     public function cms()
     {
         $data['data'] = $this->model->getCmsConfigs();
@@ -100,6 +140,11 @@ class AdminController extends BaseController
         $this->loadLayout("adminFooter.html");
     }
 
+    /**
+     * Update the cms contents
+     *
+     * @return void
+     */
     public function updateCms()
     {
         $fdv = new FormDataValidation();
@@ -118,12 +163,5 @@ class AdminController extends BaseController
         $this->loadView("cms", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
-    }
-
-    public function issuedBooks()
-    {
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("manageIssuedbooks");
-        $this->loadLayout("adminFooter.html");
     }
 }

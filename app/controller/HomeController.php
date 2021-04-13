@@ -5,7 +5,7 @@ class HomeController extends BaseController
     {
         parent::__construct(new HomeModel());
     }
-    public function index()
+    public function getIndexPage()
     {
         $this->loadLayout("header.html");
         $homeData['vision'] = $this->model->getVision();

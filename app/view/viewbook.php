@@ -32,7 +32,7 @@
                                             ?>
                                         </ul>
                                         <h3>ISBN Number</h3><p class="text-para"> <?php echo $book->isbnNumber; ?></p>
-                                        <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?> </i>copies available</p>
+                                        <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?> </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?> available</p>
                                         <div class="form-buttons">
                                             <a class="btn-link" href="/home">Request to Lend</a>
                                         </div>

@@ -1,11 +1,11 @@
 function loadUserDetails(username) {
-    fetch("/admin/userDetails/" + username, { headers: { response: "application/json" } })
+    fetch("/get/userDetails/" + username, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => updateUserDetails(document.getElementById('userdetails'), data));
 }
 
 function loadBookDetails(isbn) {
-    fetch("/admin/bookDetails/" + isbn, { headers: { response: "application/json" } })
+    fetch("/get/bookDetails/" + isbn, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => updateBookDetails(document.getElementById('bookdetails'), data));
 }

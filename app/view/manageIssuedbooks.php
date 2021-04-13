@@ -108,9 +108,11 @@
                                         <td><?php echo $issued->userName;?></td>
                                         <td><?php echo $issued->issuedAt;?></td>
                                         <td><?php echo $issued->status;?></td>
-                                        <td><?php echo $issued->fine;?></td>
+                                        <td>&#8377;<?php echo $issued->fine;?></td>
                                         <td>
-                                            <button type="button" onclick="MarkasReturn(<?php echo $issued->id;?>);" class="button-control icon-btn positive" title="edit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                            <?php if ($issued->status == "Issued"): ?>
+                                                <button type="button" onclick="MarkasReturn(<?php echo $issued->id;?>);" class="button-control icon-btn positive" title="edit"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                            <?php endif; ?>
                                         </td>
                                     </tr> 
                                 <?php endforeach;?>

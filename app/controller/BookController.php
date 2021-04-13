@@ -1,11 +1,19 @@
 <?php
 class BookController extends BaseController
 {
+    /**
+     * Instantiate a new BookController instance.
+     */
     public function __construct()
     {
         parent::__construct(new BookModel());
     }
     
+    /**
+     * Display all books with CRUD options
+     *
+     * @return void
+     */
     public function manageBooks()
     {
         $user = $this->input->session('type');
@@ -15,6 +23,11 @@ class BookController extends BaseController
         $this->loadLayout($user . "Footer.html");
     }
 
+    /**
+     * Adds a new book
+     *
+     * @return void
+     */
     public function newBook()
     {
         $user = $this->input->session('type');
@@ -23,25 +36,40 @@ class BookController extends BaseController
         $this->loadLayout($user . "Footer.html");
     }
 
-    public function edit()
+    /**
+     * Display book details to edit them
+     *
+     * @param int $id
+     * @return void
+     */
+    public function getToEdit(int $id)
     {
-        $id = func_get_arg(0);
         $data['book'] = $this->model->get($id);
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
     }
-
-    public function get()
+    
+    /**
+     * Displays the details of the given book $id
+     *
+     * @param int $id
+     * @return void
+     */
+    public function get(int $id)
     {
-        $id = func_get_arg(0);
         $data['book'] = $this->model->getBookDetails($id);
         $this->loadLayout('header.html');
         $this->loadView("book", $data);
         $this->loadLayout('footer.html');
     }
 
+    /**
+     * Handles the search form and return the search result
+     *
+     * @return void
+     */
     public function findBook()
     {
         $user = $this->input->session('type');
@@ -53,6 +81,11 @@ class BookController extends BaseController
         $this->includeScript('bookElement.js');
     }
 
+    /**
+     * Add a new book
+     *
+     * @return void
+     */
     public function add()
     {
         $fdv = new FormDataValidation();
@@ -94,18 +127,31 @@ class BookController extends BaseController
         $this->includeScript("populate.js");
         $this->addScript($script);
     }
-    public function changeStatus()
+
+    /**
+     * Update the status of the book for the book Id $id to status $status
+     *
+     * @param int $id
+     * @param int $status
+     * @return void
+     */
+    public function changeStatus(int $id, int $status)
     {
-        $id = func_get_arg(0);
         $status = func_get_arg(1);
         $values = ['status' => $status];
         $result['result'] = $this->model->updateBook($values, $id);
         echo json_encode($result);
     }
-    public function update()
+
+    /**
+     * Update the details of the book
+     *
+     * @param int $id
+     * @return void
+     */
+    public function update(int $id)
     {
         $fdv = new FormDataValidation();
-        $id = func_get_arg(0);
         $user = $this->input->session('type');
         $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'price']);
         // $rules = [
@@ -142,30 +188,34 @@ class BookController extends BaseController
     }
 
     
-    
-    public function bookstatus()
-    {
-        $lastUpdate = filemtime("log/unavailablebooks.log");
-        header("Cache-Control: no-cache");
-        header("Content-Type: text/event-stream");
-        while (true) {
-            // if ($lastUpdate != filemtime("log/unavailablebooks.log")) {
-            echo "event: $lastUpdate";
-            echo "\n\n";
-            $data = base64_decode(file_get_contents("log/unavailablebooks.log"));
-            echo 'data:'.$data."\n\n";
-            // }
-            flush();
-            sleep(10);
-            if (connection_aborted()) {
-                break;
-            }
-        }
-    }
+    // public function bookstatus()
+    // {
+    //     $lastUpdate = filemtime("log/unavailablebooks.log");
+    //     header("Cache-Control: no-cache");
+    //     header("Content-Type: text/event-stream");
+    //     while (true) {
+    //         // if ($lastUpdate != filemtime("log/unavailablebooks.log")) {
+    //         echo "event: $lastUpdate";
+    //         echo "\n\n";
+    //         $data = base64_decode(file_get_contents("log/unavailablebooks.log"));
+    //         echo 'data:'.$data."\n\n";
+    //         // }
+    //         flush();
+    //         sleep(10);
+    //         if (connection_aborted()) {
+    //             break;
+    //         }
+    //     }
+    // }
 
-    public function view()
+    /**
+     * Display the details of the single book
+     *
+     * @param int $id
+     * @return void
+     */
+    public function view(int $id)
     {
-        $id = func_get_arg(0);
         $user = $this->input->session('type');
         $data['book'] = $this->model->getBookDetails($id);
         $data['user'] = $user;
@@ -174,7 +224,12 @@ class BookController extends BaseController
         $this->loadLayout($user . 'footer.html');
     }
 
-    public function available()
+    /**
+     * Displays all the available books to the user
+     *
+     * @return void
+     */
+    public function getAvailableBooks()
     {
         $this->loadLayout("userHeader.html");
         $data['books'] = $this->model->getAvailableBooks();
@@ -183,16 +238,26 @@ class BookController extends BaseController
         $this->includeScript('bookElement.js');
     }
 
-    public function delete()
+    /**
+     * Delete the book
+     * 
+     * @param int $id
+     * @return [type]
+     */
+    public function delete(int $id)
     {
-        $id = func_get_arg(0);
         $result['result'] = $this->model->delete($id);
         echo json_encode($result);
     }
 
-    public function search()
+    /**
+     * Search for a book with given $searchKey
+     * 
+     * @param string $searchKey
+     * @return [type]
+     */
+    public function search(string $searchKey)
     {
-        $searchKey = func_get_arg(0);
         $result['result'] = $this->model->getBooksLike($searchKey);
         echo json_encode($result);
     }

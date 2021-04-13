@@ -44,10 +44,7 @@
                                         <td><?php echo $book->bookName?></td>
                                         <td><?php echo $book->issuedAt;?></td>
                                         <td><?php echo $book->returnAt;?></td>
-                                        <td>
-                                        <?php echo $book->fine;?>
-                                            <!-- <a type="button" href="/admin/issuedBooks/delete/<?php echo $book->id;?>" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></a> -->
-                                        </td>
+                                        <td>&#8377;<?php echo $book->fine;?></td>
                                     </tr> 
                                 <?php endforeach;?>
                             <?php endif;?>

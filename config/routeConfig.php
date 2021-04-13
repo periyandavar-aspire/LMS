@@ -1,8 +1,8 @@
 <?php
 
 
-Route::add('/', 'home/index');
-Route::add('/home', 'home/index');
+Route::add('/', 'home/getIndexPage');
+Route::add('/home', 'home/getIndexPage');
 Route::add('/home/books');
 Route::add('/home/aboutus');
 Route::add('/login', '/home/login');
@@ -42,7 +42,7 @@ Route::add('/user/profile/update', 'user/updateProfile', 'post', function () {
     }
 });
 
-Route::add('/user/availbleBooks', 'Book/available', 'get', function () {
+Route::add('/user/availbleBooks', 'Book/getAvailableBooks', 'get', function () {
     $input = new InputData();
     if ($input->session('login') == true && $input->session('type') == 'user') {
         return true;
@@ -268,18 +268,18 @@ Route::add('/admin', 'admin/home', 'get', function () {
 //     }
 // });
 
-Route::add('/admin/userDetails/([a-zA-Z0-9_]+)', 'issuedBooks/getUserDetails', 'get', function () {
+Route::add('/get/userDetails/([a-zA-Z0-9_]+)', 'issuedBooks/getUserDetails', 'get', function () {
     $input = new InputData();
-    if ($input->session('login') == true && $input->session('type') == 'Admin') {
+    if ($input->session('login') == true && ($input->session('type') == 'Librarian' ||$input->session('type') == 'Admin')) {
         return true;
     } else {
         Utility::redirectURL('admin/login');
     }
 });
 
-Route::add('/admin/bookDetails/([1-9]{1}[0-9]*)', 'issuedBooks/getBookDetails', 'get', function () {
+Route::add('/get/bookDetails/([1-9]{1}[0-9]*)', 'issuedBooks/getBookDetails', 'get', function () {
     $input = new InputData();
-    if ($input->session('login') == true && $input->session('type') == 'Admin') {
+    if ($input->session('login') == true && ($input->session('type') == 'Librarian' ||$input->session('type') == 'Admin')) {
         return true;
     } else {
         Utility::redirectURL('admin/login');
@@ -558,7 +558,7 @@ Route::add('/books/add', 'book/add', 'post', function () {
     }
 });
 
-Route::add('/books/edit/([1-9]{1}[0-9]*)', 'book/edit', 'get', function () {
+Route::add('/books/edit/([1-9]{1}[0-9]*)', 'book/getToEdit', 'get', function () {
     $input = new InputData();
     if ($input->session('login') == true && ($input->session('type') == 'Librarian' ||$input->session('type') == 'Admin')) {
         return true;
@@ -609,7 +609,7 @@ Route::add('/book/categories/([A-Za-z ]+)/([0-9 ,]*)', 'category/search');
 
 Route::add('/user/get/([a-zA-Z0-9_]+)', 'user/search', 'get', function () {
     $input = new InputData();
-    if ($input->session('login') == true && ($input->session('type') == 'Admin')) {
+    if ($input->session('login') == true && ($input->session('type') == 'Librarian' ||$input->session('type') == 'Admin')) {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
@@ -618,7 +618,7 @@ Route::add('/user/get/([a-zA-Z0-9_]+)', 'user/search', 'get', function () {
 
 Route::add('/book/get/([0-9]+)', 'book/search', 'get', function () {
     $input = new InputData();
-    if ($input->session('login') == true && ($input->session('type') == 'Admin')) {
+    if ($input->session('login') == true && ($input->session('type') == 'Librarian' ||$input->session('type') == 'Admin')) {
         return true;
     } else {
         Utility::redirectURL('librarian/login');
