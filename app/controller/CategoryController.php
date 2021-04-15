@@ -1,11 +1,40 @@
 <?php
+/**
+ * CategoryController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * CategoryController Class Handles the request related to the categories
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage CategoryController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
+
 class CategoryController extends BaseController
 {
+    /**
+     * Instantiate a new CategoryController instance.
+     */
     public function __construct()
     {
         parent::__construct(new CategoryModel());
     }
-
+    
+    /**
+     * Get and display all the available categories
+     *
+     * @return void
+     */
     public function getAll()
     {
         $user = $this->input->session('type');
@@ -14,26 +43,53 @@ class CategoryController extends BaseController
         $this->loadView("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
     }
-    public function delete()
+
+    /**
+     * Delete the category and displays the result in JSON
+     *
+     * @param int $id CategoryId
+     *
+     * @return void
+     */
+    public function delete(int $id)
     {
-        $id = func_get_arg(0);
         $result['result'] = $this->model->delete($id);
         echo json_encode($result);
     }
-    public function get()
+
+    /**
+     * Displays the details of the given categoryId in JSON
+     *
+     * @param int $id CategoryId
+     *
+     * @return void
+     */
+    public function get(int $id)
     {
-        $id = func_get_arg(0);
         $result['data'] = $this->model->get($id);
         echo json_encode($result);
     }
-    public function changeStatus()
+
+    /**
+     * Change the status of the category
+     *
+     * @param int $id     CategoryID
+     * @param int $status StatusId
+     *
+     * @return void
+     */
+    public function changeStatus(int $id, int $status)
     {
-        $id = func_get_arg(0);
-        $status = func_get_arg(1);
         $values = ['status' => $status];
         $result['result'] = $this->model->update($values, $id);
         echo json_encode($result);
     }
+
+    /**
+     * Update the details of the category
+     *
+     * @return void
+     */
     public function update()
     {
         $fdv = new FormDataValidation();
@@ -42,7 +98,11 @@ class CategoryController extends BaseController
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger);";
-        } elseif (!$this->model->update($fields->getValues(), $this->input->post('id'))) {
+        } elseif (!$this->model->update(
+            $fields->getValues(),
+            $this->input->post('id')
+        )
+        ) {
             $script = "toast('Unable to update..!', 'danger');";
         } else {
             $script = "toast('Category is updated successfully..!', 'success');";
@@ -53,6 +113,12 @@ class CategoryController extends BaseController
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
+
+    /**
+     * Add a new Category
+     *
+     * @return void
+     */
     public function add()
     {
         $fdv = new FormDataValidation();
@@ -74,10 +140,17 @@ class CategoryController extends BaseController
         $this->addScript($script);
     }
 
-    public function search()
+    /**
+     * Search for category with given search keys and displays the results in JSON
+     *
+     * @param string $searchKey  Search keys
+     * @param string $ignoreList Category Id list with , as seperator
+     *                           which will be ignored during search
+     *
+     * @return void
+     */
+    public function search(string $searchKey, string $ignoreList)
     {
-        $searchKey = func_get_arg(0);
-        $ignoreList = func_get_arg(1);
         $result['result'] = $this->model->getCategoriesLike($searchKey, $ignoreList);
         echo json_encode($result);
     }

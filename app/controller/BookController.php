@@ -1,4 +1,24 @@
 <?php
+/**
+ * BookController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * BookController Class Handles the requests related to the Books
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage BookController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
 class BookController extends BaseController
 {
     /**
@@ -39,7 +59,8 @@ class BookController extends BaseController
     /**
      * Display book details to edit them
      *
-     * @param int $id
+     * @param int $id BookID
+     *
      * @return void
      */
     public function getToEdit(int $id)
@@ -54,7 +75,8 @@ class BookController extends BaseController
     /**
      * Displays the details of the given book $id
      *
-     * @param int $id
+     * @param int $id BookID
+     *
      * @return void
      */
     public function get(int $id)
@@ -90,7 +112,18 @@ class BookController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
-        $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'price', 'stack', 'description']);
+        $inputFields = [
+            'name',
+            'location',
+            'author',
+            'category',
+            'publication',
+            'isbn',
+            'price',
+            'stack',
+            'description'
+        ];
+        $fields = new Fields($inputFields);
         $rules = [
             'author' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
             'category' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
@@ -99,14 +132,17 @@ class BookController extends BaseController
             'stack' => 'positiveNumberValidation'
         ];
         $fields->addRule($rules);
-        $fields->setRequiredFields('name', 'location', 'author', 'category', 'publication', 'isbn', 'price', 'stack', 'description');
+        $fields->setRequiredFields(...$inputFields);
         $fields->addValues($this->input->post());
         $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
             $uploadfile = $this->input->files('coverPic');
-            $coverPic = uniqid() . "." . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
+            $coverPic = uniqid() . "." . pathinfo(
+                $uploadfile['name'],
+                PATHINFO_EXTENSION
+            );
             if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
@@ -115,7 +151,8 @@ class BookController extends BaseController
                     $script = "toast('Unable to add new book..!', 'danger');";
                 }
             } else {
-                $script = "toast('Error occured in file uploading and book not added..!', 'danger');";
+                $script = "toast('Error occured in file uploading";
+                $script .= "and book not added..!', 'danger');";
             }
         } else {
             $script = "toast('Invalid $field..!', 'danger');";
@@ -131,13 +168,13 @@ class BookController extends BaseController
     /**
      * Update the status of the book for the book Id $id to status $status
      *
-     * @param int $id
-     * @param int $status
+     * @param int $id     BookID
+     * @param int $status StatusId
+     *
      * @return void
      */
     public function changeStatus(int $id, int $status)
     {
-        $status = func_get_arg(1);
         $values = ['status' => $status];
         $result['result'] = $this->model->updateBook($values, $id);
         echo json_encode($result);
@@ -146,26 +183,45 @@ class BookController extends BaseController
     /**
      * Update the details of the book
      *
-     * @param int $id
+     * @param int $id BookID
+     *
      * @return void
      */
     public function update(int $id)
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
-        $fields = new Fields(['name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'price']);
-        // $rules = [
-        //     'fullName' => 'alphaSpaceValidation',
-        // ];
-        // $fields->addRule($rules);
-        $fields->setRequiredFields('name', 'location', 'author', 'category', 'publication', 'isbn', 'stack', 'description', 'price');
+        $inputFields = [
+            'name',
+            'location',
+            'author',
+            'category',
+            'publication',
+            'isbn',
+            'stack',
+            'description',
+            'price'
+        ];
+        $fields = new Fields();
+        $rules = [
+            'author' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
+            'category' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
+            'isbn' => '',
+            'price' => 'positiveNumberValidation',
+            'stack' => 'positiveNumberValidation'
+        ];
+        $fields->addRule($rules);
+        $fields->setRequiredFields($inputFields);
         $fields->addValues($this->input->post());
         $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
             $uploadfile = $this->input->files('coverPic');
-            $coverPic = uniqid() . '.' . pathinfo($uploadfile['name'], PATHINFO_EXTENSION);
+            $coverPic = uniqid() . '.' . pathinfo(
+                $uploadfile['name'],
+                PATHINFO_EXTENSION
+            );
             if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
                 $book['coverPic'] = $coverPic;
                 if ($this->model->update($book, $id)) {
@@ -174,7 +230,8 @@ class BookController extends BaseController
                     $script = "toast('Unable to update the book..!', 'danger');";
                 }
             } else {
-                $script = "toast('Error occured in file uploading and book not added..!', 'danger');";
+                $script = "toast('Error in file uploading and book not added..!',";
+                $script .= "'danger');";
             }
         } else {
             $script = "toast('Invalid $field..!', 'danger');";
@@ -211,7 +268,8 @@ class BookController extends BaseController
     /**
      * Display the details of the single book
      *
-     * @param int $id
+     * @param int $id BookID
+     *
      * @return void
      */
     public function view(int $id)
@@ -240,9 +298,10 @@ class BookController extends BaseController
 
     /**
      * Delete the book
-     * 
-     * @param int $id
-     * @return [type]
+     *
+     * @param int $id BookId
+     *
+     * @return void
      */
     public function delete(int $id)
     {
@@ -252,9 +311,10 @@ class BookController extends BaseController
 
     /**
      * Search for a book with given $searchKey
-     * 
-     * @param string $searchKey
-     * @return [type]
+     *
+     * @param string $searchKey Search keys as string
+     *
+     * @return void
      */
     public function search(string $searchKey)
     {

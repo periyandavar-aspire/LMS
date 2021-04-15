@@ -1,6 +1,23 @@
 <?php
 /**
- * Handles the request related to author
+ * AuthorController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * AuthorController Class Handles the requests related to the authors
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage AuthorController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
  */
 class AuthorController extends BaseController
 {
@@ -55,7 +72,8 @@ class AuthorController extends BaseController
     /**
      * Get the author details by id and display it in JSON format
      *
-     * @param integer $id
+     * @param int $id AuthorID
+     *
      * @return void
      */
     public function get(int $id)
@@ -65,16 +83,15 @@ class AuthorController extends BaseController
     }
     
     /**
-     * Change the status of the author and display the success/failure message in JSON
+     * Change the status of the author & displays the success/failure message in JSON
      *
-     * @param integer $id
-     * @param integer $status
+     * @param int $id     AuthorID
+     * @param int $status StatusID
+     *
      * @return void
      */
     public function changeStatus(int $id, int $status)
     {
-        $id = func_get_arg(0);
-        $status = func_get_arg(1);
         $values = ['status' => $status];
         $result['result'] = $this->model->update($values, $id);
         echo json_encode($result);
@@ -93,7 +110,11 @@ class AuthorController extends BaseController
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger);";
-        } elseif (!$this->model->update($fields->getValues(), $this->input->post('id'))) {
+        } elseif (!$this->model->update(
+            $fields->getValues(),
+            $this->input->post('id')
+        )
+        ) {
             $script = "toast('Unable to update..!', 'danger');";
         } else {
             $script = "toast('Author is updated successfully..!', 'success');";
@@ -108,20 +129,23 @@ class AuthorController extends BaseController
     /**
      * Delete the existing author
      *
+     * @param int $id AuthorID
+     *
      * @return void
      */
-    public function delete()
+    public function delete(int $id)
     {
-        $id = func_get_arg(0);
         $result['result'] = $this->model->delete($id);
         echo json_encode($result);
     }
 
     /**
-     * Search the author with given keys in $searchKey and ignore the author if his id is in $ignoreList
+     * Search the author with given keys
      *
-     * @param integer $searchKey
-     * @param string $ignoreList
+     * @param int    $searchKey  Keys to search
+     * @param string $ignoreList The list of authorcodes with , seperator
+     *                           to ignore in search
+     *
      * @return void
      */
     public function search(int $searchKey, string $ignoreList = '')

@@ -1,131 +1,234 @@
 <?php
-
-abstract class Dbhandler
+/**
+ * BaseDbHandler File Doc Comment
+ * php version 7.3.5
+ *
+ * @category DbHandler
+ * @package  DbHandler
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * Super class for all DbHandler. All Dbhandlers should extend this dbhandler
+ * Dbhandler class consists of basic level functions for various purposes and
+ * query building functionality
+ *
+ * @category   DbHandler
+ * @package    Dbhandler
+ * @subpackage BaseDbHandler
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
+abstract class BaseDbhandler
 {
     /**
-     * db connection object
+     * Database connection object
      */
     protected $con;
     /**
-     * will have the result set of the select query
+     * This will have the result set of the select query
      */
     protected $result;
     /**
-     * abstract function which should implemented in the handler class to close db connection
+     * Abstract function which should implemented in the handler class
+     * to close db connection
+     *
+     * @return void
      */
-    abstract public function close();
+    abstract public function close(): void;
+
     /**
-     * This abstract function should implemented on the handlers to directly run the Query
+     * This abstract function should implemented on the handlers to
+     * directly run the Query
+     * 
+     * @param string $sql        sql
+     * @param array  $bindValues bind values
+     *
+     * @return bool
      */
     abstract public function runQuery(string $sql, array $bindValues=[]): bool;
+
     /**
-     * This abstract function should implemented on the handlers to run the Query called by execute() function
+     * This abstract function should implemented on the handlers to run the Query
+     * called by execute() function
      * It should return true on success and false on failure
-     * if the executed query has the result set the set should be stored in the $this->result
+     * if the executed query has the result set the set should be
+     * stored in the $this->result
+     *
+     * @return bool
      */
     abstract protected function executeQuery(): bool;
+
     /**
-     * This abstract function should implemented on the handlers to fetch the result set called directly from the object
+     * This abstract function should implemented on the handlers to fetch the
+     * result set called directly from the object
      * It should return a single row result as object on success and null on failure
+     *
+     * @return null|object
      */
-    abstract public function fetch();
+    abstract public function fetch(): ?object;
+
     /**
-     * This abstract function should implemented on the handlers to get the instance of the class in
+     * This abstract function should implemented on the handlers to get the
+     * instance of the class in
      * singleton approch
+     * 
+     * @param string $host   host name
+     * @param string $user   User name
+     * @param string $pass   Password
+     * @param string $db     database
+     * @param string $driver Driver
+     *
+     * @return BaseDbHandler
      */
-    abstract public static function getInstance(string $host, string $user, string $pass, string $db, string $driver);
+    abstract public static function getInstance(
+        string $host,
+        string $user,
+        string $pass,
+        string $db,
+        string $driver
+    );
+
     /**
-     * Instance of the class
+     * Current instance of the class
      */
     protected static $instance = null;
+
     /**
-     * @var string $query contains the executed full query after the execute() get executed
+     * This will contains the executed full query after the execute() get executed
+     *
+     * @var string $query
      */
-    protected $query; // $getSQL
+    protected $query;
+
     /**
-     * @var string $sql the incomplete query generally without where
+     * This will contains the incomplete query generally without where
+     *
+     * @var string $sql
      */
-    private $sql; // $getSQL incomplete query without where
+    private $_sql;
+
     /**
-     * @var array $bindValues the values to be bind
+     * This will contains the values to be bind
+     *
+     * @var array $bindValues
      */
     protected $bindValues;
+
     /**
-     * @var string $table stores table name if its select query
+     * This will has the table name if its select query
+     *
+     * @var string $table
      */
-    private $table;
+    private $_table;
+
     /**
-     * @var string $columns stores columns
+     * This will has columns
+     *
+     * @var string $columns
      */
-    private $columns;
+    private $_columns;
+
     /**
-     * @var string $limit stores limit value
+     * This will has the limit value
+     *
+     * @var string $limit
      */
-    private $limit;
+    private $_limit;
+
     /**
-     * @var string $orderBy stores order value
+     * This will has order value
+     *
+     * @var string $orderBy
      */
-    private $orderBy;
+    private $_orderBy;
+
     /**
-     * @var string $where stores where condition
+     * This will has the where condition
+     *
+     * @var string $where
      */
-    private $where;
+    private $_where;
+
     /**
-     * @var string $join will store join condition
+     * This has join condition
+     *
+     * @var string $join
      */
-    private $join;
+    private $_join;
+
     /**
+     * This will have groupby value
+     *
      * @var string $groupby
      */
-    private $groupby;
+    private $_groupby;
+
     /**
+     * This will have the groupby condition
+     *
      * @var string $having
      */
-    private $having;
+    private $_having;
+
     /**
-     * return executed query in execute function
+     * Returns executed query in execute function
+     *
+     * @return string
      */
     public function getSQL()
     {
-        return $this->sql;
+        return $this->_sql;
     }
-   
+
     /**
-     * quert function to run directly raw query with or without bind values
+     * Query function to run directly raw query with or without bind values
+     *
+     * @param string $query sql
+     * @param array  $args  bind values
+     *
+     * @return bool
      */
-    public function query($query, $args = [])
+    public function query(string $query, array $args = []): bool
     {
-        $this->resetQuery();
+        $this->_resetQuery();
         $query = trim($query);
         $this->query = $query;
         $this->bindValues = $args;
         $result = $this->runQuery($this->query, $this->bindValues);
         return $result;
     }
+
     /**
-     * to get last insert id
+     * Returns the last insert id
+     *
      * @return int
      */
     abstract public function insertId(): int;
-    
-    // public function get()
-    // {
-    //     // $this->query  = "SELECT " . $this->columns . " FROM " . $this->table . $this->where . $this->limit . $this->orderBy;
-    //     // echo $this->query. "<br>";
-    //     $result = $this->fetch();
-    //     return $result;
-    // }
+
     /**
-     * execute function will execute the earlier build query
-     * called as execute()
+     * Execute the function that will execute the earlier build query
+     *
+     * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         $result = true;
-        if ($this->sql == '') {
-            $this->query = "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->orderBy . $this->limit;
+        if ($this->_sql == '') {
+            $this->query = "SELECT " 
+                . $this->_columns 
+                . " FROM " 
+                . $this->_table 
+                . $this->_join 
+                . $this->_where 
+                . $this->_groupby 
+                . $this->_having 
+                . $this->_orderby 
+                . $this->_limit;
         } else {
-            $this->query  = $this->sql . $this->where;
+            $this->query  = $this->_sql . $this->_where;
         }
         // echo $this->query;
         // print_r($this->bindValues);
@@ -136,58 +239,80 @@ abstract class Dbhandler
         }
         return $result;
     }
+
     /**
-     * reset all the query build values
+     * Resets all the query build values
+     *
      * @access private
+     *
+     * @return void
      */
-    private function resetQuery()
+    private function _resetQuery()
     {
-        $this->table = null;
-        $this->columns = null;
-        $this->sql = null;
+        $this->_table = null;
+        $this->_columns = null;
+        $this->_sql = null;
         $this->bindValues = null;
-        $this->limit = null;
-        $this->orderBy = null;
-        $this->where = null;
-        $this->join = null;
-        $this->groupby = null;
-        $this->having = null;
+        $this->_limit = null;
+        $this->_orderby = null;
+        $this->_where = null;
+        $this->_join = null;
+        $this->_groupby = null;
+        $this->_having = null;
     }
+
     /**
-     * delete function used to build delete query
+     * Delete function used to build delete query
      * we can call this in any one of the following ways
      * delete('table', 'id = 1') or delete('table')->where('id = 1');
+     *
+     * @param string      $table Table Name
+     * @param string|null $where Where condition
+     *
+     * @return BaseDbHandler
      */
-    public function delete(string $table, ?string $where = null)
+    public function delete(string $table, ?string $where = null): BaseDbHandler
     {
-        $this->resetQuery();
-        $this->sql = "DELETE FROM `$table`";
+        $this->_resetQuery();
+        $this->_sql = "DELETE FROM `$table`";
         if (isset($where)) {
-            $this->where = " WHERE $where";
+            $this->_where = " WHERE $where";
         }
         return $this;
     }
 
     /**
-     * set the values in update query
-     * @return DbHandler
+     * Set the values in update query
+     *
+     * @return BaseDbHandler
      */
-    public function setTo(): DbHandler
+    public function setTo(): BaseDbHandler
     {
         $args = func_get_args();
         $change = implode(",", $args);
-        $this->sql .= Utility::endsWith($this->sql, 'SET ') ? '' : ',';
-        $this->sql .= $change;
+        $this->_sql .= Utility::endsWith($this->_sql, 'SET ') ? '' : ',';
+        $this->_sql .= $change;
         return $this;
     }
+
     /**
-     * update function used to build update query
+     * Updates function used to build update query
      * we can call this in any one of the following ways
-     * update('table', ["name"=>"Raja"] ,'id = 1') or update('table',  ["name"=>"Raja"] )->where('id = 1');
+     * update('table', ["name"=>"Raja"] ,'id = 1') or
+     * update('table',  ["name"=>"Raja"] )->where('id = 1');
+     *
+     * @param string      $table  Table Name
+     * @param array       $fields Fields
+     * @param string|null $where  Where condition
+     *
+     * @return BaseDbHandler
      */
-    public function update(string $table, array $fields = [], ?string $where = null)
-    {
-        $this->resetQuery();
+    public function update(
+        string $table,
+        array $fields = [],
+        ?string $where = null
+    ): BaseDbHandler {
+        $this->_resetQuery();
         $set = '';
         $index = 1;
         foreach ($fields as $column => $field) {
@@ -198,20 +323,31 @@ abstract class Dbhandler
             }
             $index++;
         }
-        $this->sql = "UPDATE $table SET " . $set;
+        $this->_sql = "UPDATE $table SET " . $set;
         if (isset($where)) {
-            $this->where = " WHERE $where";
+            $this->_where = " WHERE $where";
         }
         return $this;
     }
+
     /**
-     * insert function used to build insert query
+     * This function used to build insert query
      * we can call this by the following way
-     * insert(table, ['field' => 'value', 'fild1' => 'value1', 'field2' => 'value2'], ['field' => CURDATE()])
+     * insert(table, ['field' => 'value', 'fild1' => 'value1',
+     *  'field2' => 'value2'], ['field' => CURDATE()])
+     *
+     * @param string $table      Table
+     * @param array  $fields     Fields
+     * @param array  $funcfields Fields with function values
+     *
+     * @return BaseDbHandler
      */
-    public function insert(string $table, array $fields = [], array $funcfields = [])
-    {
-        $this->resetQuery();
+    public function insert(
+        string $table,
+        array $fields = [],
+        array $funcfields = []
+    ): BaseDbHandler {
+        $this->_resetQuery();
         $keys = implode('`, `', array_keys($fields));
         $values = '';
         $index = 1;
@@ -223,7 +359,9 @@ abstract class Dbhandler
             }
             $index++;
         }
-        $values = ($values != '' && count($funcfields) > 0) ? $values . ', ' : $values;
+        $values = ($values != '' && count($funcfields) > 0)
+            ? $values . ', '
+            : $values;
         $index = 1;
         foreach ($funcfields as $column => $value) {
             $values .= $value;
@@ -233,25 +371,32 @@ abstract class Dbhandler
             }
             $index++;
         }
-        $this->sql = "INSERT INTO $table (`$keys`) VALUES ({$values})";
+        $this->_sql = "INSERT INTO $table (`$keys`) VALUES ({$values})";
         return $this;
     }
 
     /**
-     * select function used to build select query
+     * This function used to build select query
      * we can call this in following way
      * select('field1', 'field2', 'field3');
+     *
+     * @return BaseDbHandler
      */
-    public function select()
+    public function select(): BaseDbHandler
     {
-        $this->resetQuery();
+        $this->_resetQuery();
         $columns = func_get_args();
         for ($i = 0; $i < count($columns); $i++) {
             $columns[$i] = trim($columns[$i]);
             if (strpos($columns[$i], " ") && strpos($columns[$i], ".")) {
                 $columns[$i] = explode(" ", $columns[$i]);
                 $columns[$i][0] = explode(".", $columns[$i][0]);
-                $columns[$i] = "`" . $columns[$i][0][0] . "` .`" . $columns[$i][0][1] .'` '. $columns[$i][1];
+                $columns[$i] = "`" 
+                    . $columns[$i][0][0] 
+                    . "` .`" 
+                    . $columns[$i][0][1] 
+                    .'` '
+                    . $columns[$i][1];
             } elseif (strpos($columns[$i], " ")) {
                 $columns[$i] = explode(" ", $columns[$i]);
                 $columns[$i] = "`" . $columns[$i][0] . "` " . $columns[$i][1];
@@ -263,51 +408,45 @@ abstract class Dbhandler
             }
         }
         $columns = implode(', ', $columns);
-        $this->columns .= "$columns";
+        $this->_columns .= "$columns";
         return $this;
     }
     /**
-     * selectAs used to add select fields with as value
+     * SelectAs used to add select fields with as value
      * call this function by
      * selectAs(['field1' => 'as1', 'field2' => 'as2'])
+     *
+     * @return BaseDbHandler
      */
-    public function selectAs()
+    public function selectAs(): BaseDbHandler
     {
-        // $columns = [];
-        // foreach ($selectData as $field => $as) {
-        //     $field = trim($field);
-        //     if (strpos($field, " ")) {
-        //         $field = explode(" ", $field);
-        //         $field = "`" . $field[0] . "` " . $field[1];
-        //     } elseif (strpos($field, ".")) {
-        //         $field = explode(".", $field);
-        //         $field = "`" . $field[0] . "`." . $field[1];
-        //     } else {
-        //         $field = '`' . $field . '`';
-        //     }
-        //     $columns[] = $field . " AS " . trim($as);
-        // }
-        // $columns = implode(', ', $columns);
-        // $columns = ($this->columns == null) ? ($columns) : (", " . $columns);
         $selectData = func_get_args();
         $selectData = implode(",", $selectData);
-        $this->columns .= ", " . $selectData;
+        $this->_columns .= ", " . $selectData;
         return $this;
     }
+
     /**
-     * selectAll function used to selectAll fields
+     * This function used to selectAll fields
+     *
+     * @return BaseDbHandler
      */
-    public function selectAll()
+    public function selectAll(): BaseDbHandler
     {
-        $this->resetQuery();
-        $this->columns = "*";
+        $this->_resetQuery();
+        $this->_columns = "*";
         return $this;
     }
+
     /**
-     * from used to select table in select query
+     * This function is used to select table in select query
      * use : select('field')->from('table');
+     *
+     * @param string $tableName Table Name
+     *
+     * @return BaseDbHandler
      */
-    public function from($tableName)
+    public function from(string $tableName): BaseDbHandler
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -315,19 +454,26 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->table = $tableName;
-        return $this;
-    }
-
-    public function appendWhere(string $where)
-    {
-        $this->where = $this->where==null ? '' : $this->where;
-        $this->where .= $where;
+        $this->_table = $tableName;
         return $this;
     }
 
     /**
-     * where function to add where condition with AND
+     * Appends the string to the where condition
+     *
+     * @param string $where Where condition string
+     *
+     * @return BaseDbHandler
+     */
+    public function appendWhere(string $where): BaseDbHandler
+    {
+        $this->_where = $this->_where==null ? '' : $this->_where;
+        $this->_where .= $where;
+        return $this;
+    }
+
+    /**
+     * This function to add where condition with AND
      * we can use this in there ways
      * where(str), where(str,bind), where(str,oper,bind)
      * ex:
@@ -340,17 +486,19 @@ abstract class Dbhandler
      * where($where)
      * $where = ['id', '!=', 1]
      * where($where)
+     *
+     * @return BaseDbHandler
      */
-    public function where()
+    public function where(): BaseDbHandler
     {
-        if ($this->where == null) {
-            $this->where .= " WHERE ";
+        if ($this->_where == null) {
+            $this->_where .= " WHERE ";
         } else {
-            $this->where .= " AND ";
+            $this->_where .= " AND ";
         }
         $args = func_get_args();
         $count = func_num_args();
-        
+
         if ($count == 1) {
             $arg = $args[0];
 
@@ -359,24 +507,28 @@ abstract class Dbhandler
 
                 foreach ($arg as $param) {
                     if ($x != 1) {
-                        $this->where .= " AND ";
+                        $this->_where .= " AND ";
                     }
                     $parmCount = count($param);
                     if ($countParam == 1) {
-                        $this->where .= $param;
+                        $this->_where .= $param;
                     } elseif ($countParam == 2) {
-                        $this->where .= $param[0];
+                        $this->_where .= $param[0];
                         $this->bindValues[] = $param[1];
                     } elseif ($countParam == 3) {
-                        $this->where .= "`" . trim($param[0]) . "`" . $param[1] . " ?";
+                        $this->_where .= "`" 
+                            . trim($param[0]) 
+                            . "`" 
+                            . $param[1] 
+                            . " ?";
                         $this->bindValues[] = $param[2];
                     }
                 }
             } else {
-                $this->where .= $arg;
+                $this->_where .= $arg;
             }
         } elseif ($count == 2) {
-            $this->where .= $args[0];
+            $this->_where .= $args[0];
             $this->bindValues[] = $args[1];
         } elseif ($count == 3) {
             $field =  trim($args[0]);
@@ -384,13 +536,13 @@ abstract class Dbhandler
                 $field = explode(".", $field);
                 $field =  $field[0] . "`.`" . $field[1];
             }
-            $this->where .= "`" . $field . "`" . $args[1] . " ?";
+            $this->_where .= "`" . $field . "`" . $args[1] . " ?";
             $this->bindValues[] = $args[2];
         }
         return $this;
     }
     /**
-     * orWhere function to add where condition with OR
+     * This function to add where condition with OR
      * we can use this in there ways
      * orWhere(str), orWhere(str,bind), orWhere(str,oper,bind)
      * ex:
@@ -403,17 +555,19 @@ abstract class Dbhandler
      * orWhere($orWhere)
      * $orWhere = ['id', '!=', 1]
      * orWhere($orWhere)
+     *
+     * @return BaseDbHandler
      */
-    public function orWhere()
+    public function orWhere(): BaseDbhandler
     {
-        if ($this->where == null) {
-            $this->where .= " WHERE ";
+        if ($this->_where == null) {
+            $this->_where .= " WHERE ";
         } else {
-            $this->where .= " OR ";
+            $this->_where .= " OR ";
         }
         $args = func_get_args();
         $count = func_num_args();
-        
+
         if ($count == 1) {
             $arg = $args[0];
 
@@ -422,24 +576,26 @@ abstract class Dbhandler
 
                 foreach ($arg as $param) {
                     if ($x != 1) {
-                        $this->where .= " OR ";
+                        $this->_where .= " OR ";
                     }
                     $parmCount = count($param);
                     if ($countParam == 1) {
-                        $this->where .= $param;
+                        $this->_where .= $param;
                     } elseif ($countParam == 2) {
-                        $this->where .= $param[0];
+                        $this->_where .= $param[0];
                         $this->bindValues[] = $param[1];
                     } elseif ($countParam == 3) {
-                        $this->where .= "`" . trim($param[0]) . "`" . $param[1] . " ?";
+                        $this->_where .= "`" . trim($param[0]) . "`"
+                             . $param[1]
+                             . " ?";
                         $this->bindValues[] = $param[2];
                     }
                 }
             } else {
-                $this->where .= $arg;
+                $this->_where .= $arg;
             }
         } elseif ($count == 2) {
-            $this->where .= $args[0];
+            $this->_where .= $args[0];
             $this->bindValues[] = $args[1];
         } elseif ($count == 3) {
             $field =  trim($args[0]);
@@ -447,39 +603,51 @@ abstract class Dbhandler
                 $field = explode(".", $field);
                 $field =  $field[0] . "`.`" . $field[1];
             }
-            $this->where .= "`" . $field . "`" . $args[1] . " ?";
+            $this->_where .= "`" . $field . "`" . $args[1] . " ?";
             $this->bindValues[] = $args[2];
         }
         return $this;
     }
+
     /**
-     * to set limit and offset values in select query
+     * This will sets limit and offset values in select query
+     *
+     * @param int      $limit limit
+     * @param int|null $offset Offset value
+     *
+     * @return BaseDbhandler
      */
-    public function limit(int $limit, ?int $offset=null)
+    public function limit(int $limit, ?int $offset=null): BaseDbHandler
     {
         if ($offset ==null) {
-            $this->limit = " LIMIT $limit";
+            $this->_limit = " LIMIT $limit";
         } else {
-            $this->limit = " LIMIT $limit OFFSET $offset";
+            $this->_limit = " LIMIT $limit OFFSET $offset";
         }
 
         return $this;
     }
+
     /**
-     * to perform sort
+     * Sets order by
+     *
+     * @param string $fieldName Field name
+     * @param string $order     order direction
+     *
+     * @return baseDbHandler
      */
-    public function orderBy($field_name, $order = 'ASC')
+    public function orderBy(string $fieldName, string $order = 'ASC'): baseDbHandler
     {
-        $field_name = trim($field_name);
+        $fieldName = trim($fieldName);
 
         $order =  trim(strtoupper($order));
 
         // validate it's not empty and have a proper valuse
-        if ($field_name !== null && ($order == 'ASC' || $order == 'DESC')) {
-            if ($this->orderBy ==null) {
-                $this->orderBy = " ORDER BY $field_name $order";
+        if ($fieldName !== null && ($order == 'ASC' || $order == 'DESC')) {
+            if ($this->_orderby ==null) {
+                $this->_orderby = " ORDER BY $fieldName $order";
             } else {
-                $this->orderBy .= ", $field_name $order";
+                $this->_orderby .= ", $fieldName $order";
             }
         }
 
@@ -498,7 +666,7 @@ abstract class Dbhandler
      */
     public function getQuery(): string
     {
-        $query = ($this->sql == '') ? "SELECT " . $this->columns . " FROM " . $this->table . $this->join . $this->where . $this->groupby . $this->having . $this->limit . $this->orderBy : $this->sql . $this->where;
+        $query = ($this->_sql == '') ? "SELECT " . $this->_columns . " FROM " . $this->_table . $this->_join . $this->_where . $this->_groupby . $this->_having . $this->_limit . $this->_orderby : $this->_sql . $this->_where;
         return $query;
     }
 
@@ -507,12 +675,12 @@ abstract class Dbhandler
      *
      * @return array
      */
-    public function getBindValues():array
+    public function getBindValues(): array
     {
         return $this->bindValues;
     }
 
-    /** 
+    /**
      * insert bind values
      */
     public function appendBindValues($values): DbHandler
@@ -536,7 +704,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join .= " INNER JOIN " . $tableName;
+        $this->_join .= " INNER JOIN " . $tableName;
         return $this;
     }
     /**
@@ -554,7 +722,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join .= " LEFT JOIN " . $tableName;
+        $this->_join .= " LEFT JOIN " . $tableName;
         return $this;
     }
 
@@ -573,7 +741,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join .= " Right JOIN " . $tableName;
+        $this->_join .= " Right JOIN " . $tableName;
         return $this;
     }
 
@@ -592,7 +760,7 @@ abstract class Dbhandler
         } else {
             $tableName = '`' . $tableName . '`';
         }
-        $this->join .= " CROS JOIN " . $tableName;
+        $this->_join .= " CROS JOIN " . $tableName;
         return $this;
     }
 
@@ -605,7 +773,7 @@ abstract class Dbhandler
      */
     public function on(string $condition)
     {
-        $this->join .= ' ON ' . $condition;
+        $this->_join .= ' ON ' . $condition;
         return $this;
     }
 
@@ -618,7 +786,7 @@ abstract class Dbhandler
      */
     public function using(string $field)
     {
-        $this->join .= ' USING(' . $field . ')';
+        $this->_join .= ' USING(' . $field . ')';
         return $this;
     }
 
@@ -630,7 +798,7 @@ abstract class Dbhandler
     {
         $fields = func_get_args();
         $fields = implode(", ", $fields);
-        $this->groupby = " GROUP BY " . $fields;
+        $this->_groupby = " GROUP BY " . $fields;
         return $this;
     }
 
@@ -666,7 +834,7 @@ abstract class Dbhandler
     {
         return $this->runQuery("COMMIT");
     }
-    
+
     /**
      * rollback the transaction
      * @return bool

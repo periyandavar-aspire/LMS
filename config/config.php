@@ -1,5 +1,15 @@
 <?php
-// defined('VALID_REQ') OR exit('Not a valid Request');
+/**
+ * Config File all the configurations of the applications are defined here
+ * php version 7.3.5
+ *
+ * @category Config
+ * @package  Config
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+defined('VALID_REQ') or exit('Not a valid Request');
 /**
  * Base URL of the site
  */
@@ -41,11 +51,6 @@ $config['upload'] = "";
  */
 $config['default_page'] = "/home";
 /**
- * set the name of the controller handles errors
+ * Set the name of the controller handles errors
  */
-$config['error_ctrl'] = "errorsController";
-// /**
-//  * add any core files to be autoload
-//  * ex: $config['conf-dir'] = 'pdf-core,img-core';
-//  */
-// $config['conf-dir'] = '';
+$config['error_ctrl'] = "ErrorController";

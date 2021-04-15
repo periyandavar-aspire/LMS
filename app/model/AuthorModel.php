@@ -1,30 +1,78 @@
 <?php
-
+/**
+ * AuthorModel File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Model
+ * @package  Model
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * AuthorModel Class Handles the AuthorController class data base operations
+ *
+ * @category   Model
+ * @package    Model
+ * @subpackage AuthorModel
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
 class AuthorModel extends BaseModel
 {
-    public function getAll()
+    /**
+     * Returns all available authors
+     *
+     * @return object
+     */
+    public function getAll(): object
     {
         $authors = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")->from('author');
+        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")
+            ->from('author');
         $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
             $authors[] = $row;
         }
         return $authors;
     }
-    public function add(array $author)
+    
+    /**
+     * Adds new author
+     *
+     * @param array $author Author Details
+     *
+     * @return boolean
+     */
+    public function add(array $author): bool
     {
         $result = $this->db->insert('author', $author)->execute();
         return $result;
     }
-    public function get(int $id)
+
+    /**
+     * Returns the details of the new author
+     *
+     * @param integer $id Author Id
+     *
+     * @return object
+     */
+    public function get(int $id): object
     {
         $this->db->select('id', 'name')->from('author')->where('id', '=', $id);
         $this->db->where('deletionToken', '=', 'N/A')->limit(1)->execute();
         return $this->db->fetch();
     }
 
-    public function delete(int $id)
+    /**
+     * Delete the author
+     *
+     * @param integer $id Author Id
+     *
+     * @return boolean
+     */
+    public function delete(int $id): bool
     {
         $deletionToken = uniqid();
         $field = [ 'deletionToken' => $deletionToken];
@@ -32,20 +80,41 @@ class AuthorModel extends BaseModel
         return $this->db->execute();
     }
 
-    public function update(array $fields, int $id)
+    /**
+     * Update the author details
+     *
+     * @param array $fields Author Details
+     * @param int   $id     Author Id
+     *
+     * @return boolean
+     */
+    public function update(array $fields, int $id): bool
     {
         $this->db->update('author', $fields)->where('id', '=', $id);
         $this->db->where('deletionToken', '=', 'N/A');
         return $this->db->execute();
     }
 
-    public function getAuthorsLike(string $Searchkey, string $ignoreList)
+    /**
+     * Search for the authors with given search keys
+     *
+     * @param string $Searchkey  Search keys to search author
+     * @param string $ignoreList Author codes with , seperator
+     *                           which will be ignored on search
+     *
+     * @return object
+     */
+    public function getAuthorsLike(string $Searchkey, string $ignoreList): object
     {
         $result = [];
-        $this->db->select("id code", "name value")->from('author')->where('name', 'LIKE', "%" . $Searchkey . "%");
+        $this->db->select("id code", "name value")
+            ->from('author')
+            ->where('name', 'LIKE', "%" . $Searchkey . "%");
         $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
         $this->db->where("NOT find_in_set(id, '$ignoreList')");
-        $orderClause = "case when name like '$Searchkey%' THEN 0 WHEN name like '% %$Searchkey% %' THEN 1 WHEN name like '%$Searchkey' THEN 2 else 3 end, name";
+        $orderClause = "case when name like '$Searchkey%' THEN 0";
+        $orderClause .= "WHEN name like '% %$Searchkey% %' THEN 1";
+        $orderClause .= "WHEN name like '%$Searchkey' THEN 2 else 3 end, name";
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
             $result[] = $row;

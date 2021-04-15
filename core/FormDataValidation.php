@@ -1,20 +1,49 @@
 <?php
+/**
+ * FormDataValidation File Doc Comment
+ * php version 7.3.5
+ *
+ * @category FormDataValidation
+ * @package  FormDataValidation
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * Fields Class used to store the input fields
+ * User defined Error controller should implement this interface
+ *
+ * @category FormDataValidation
+ * @package  FormDataValidation
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 class FormDataValidation
 {
     /**
-     * performs the custom validation
-     * @param string $data data to be validate
-     * @param ValidationRule $vr ValidationRule Object defining custom validation and format
+     * Performs the custom validation
+     *
+     * @param string         $data data to be validate
+     * @param ValidationRule $vr   ValidationRule Object defining custom validation
+     * @param string         $msg  where the error msg will be stored
+     *
+     * @return bool
      */
-    public function customValidation(string $data, ValidationRule $vr): bool
-    {
-        return $vr->validate($data);
+    public function customValidation(
+        string $data,
+        ValidationRule $vr,
+        ?string &$msg = null
+    ): bool {
+        return $vr->validate($data, $msg);
     }
 
     /**
-     * @param string $data
-     * @param mixed ...$value
-     * check the value in given set of values
+     * Check whether the values are in the given set of values
+     *
+     * @param string $data     data
+     * @param mixed  ...$value values set
+     *
      * @return [type]
      */
     public function valuesInValidation(string $data, ...$value)
@@ -23,7 +52,11 @@ class FormDataValidation
     }
 
     /**
-     * performs mobile number validation
+     * Performs mobile number validation
+     *
+     * @param string $data data
+     *
+     * @return bool
      */
     public function mobileNumberValidation(string $data): bool
     {
@@ -31,7 +64,11 @@ class FormDataValidation
     }
 
     /**
-     * performs mobile alpha and space validation
+     * Performs alpha and space validation
+     *
+     * @param string $data Data
+     *
+     * @return bool
      */
     public function alphaSpaceValidation(string $data): bool
     {
@@ -39,23 +76,34 @@ class FormDataValidation
     }
 
     /**
-     * performs mail validation
+     * Performs email validation
+     *
+     * @param string $data Data
+     *
+     * @return bool
      */
-    public function mailValidation(string $data): bool
+    public function emailValidation(string $data): bool
     {
-        return preg_match('/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $data);
+        return preg_match(
+            '/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/',
+            $data
+        );
     }
 
     /**
-     * performs numeric validation and range validation
+     * Performs numeric validation and range validation
      *
-     * @param string $data
-     * @param integer|null $start
-     * @param integer|null $end
+     * @param string       $data  Data
+     * @param integer|null $start Starting Index
+     * @param integer|null $end   Ending Index
+     *
      * @return boolean
      */
-    public function numericValidation(string $data, ?int $start = null, ?int $end = null): bool
-    {
+    public function numericValidation(
+        string $data,
+        ?int $start = null,
+        ?int $end = null
+    ): bool {
         $flag = is_numeric($data);
         if ($flag) {
             if (isset($start)) {
@@ -69,17 +117,24 @@ class FormDataValidation
     }
 
     /**
+     * Check whether the data is valid positive number or not
      *
-     * @param string $data
+     * @param string $data Data
      *
-     * @return [type]
+     * @return bool
      */
-    public function positiveNumberValidation(string $data)
+    public function positiveNumberValidation(string $data): bool
     {
         return $this->numericValidation($data, -1);
     }
+
     /**
-     * performs custom reqular expression validation
+     * Performs custom reqular expression validation
+     *
+     * @param string $data       Data
+     * @param string $expression Regular expression pattern
+     *
+     * @return bool
      */
     public function expressValidation(string $data, string $expression): bool
     {
@@ -87,10 +142,19 @@ class FormDataValidation
     }
 
     /**
-     * validates length
+     * Validates the length
+     *
+     * @param string $data      Data
+     * @param int    $minlength Minimum Length
+     * @param int    $maxlength Maximum Length
+     *
+     * @return bool
      */
-    public function lengthValidation(string $data, ?int $minlength, ?int $maxlength = null): bool
-    {
+    public function lengthValidation(
+        string $data,
+        ?int $minlength,
+        ?int $maxlength = null
+    ): bool {
         if ($minlength != null) {
             if (strlen($data) < $minlength) {
                 return false;
@@ -105,7 +169,11 @@ class FormDataValidation
     }
 
     /**
-     * required fields validation
+     * Required fields validation
+     *
+     * @param string $data Data
+     *
+     * @return bool
      */
     public function required(?string $data): bool
     {
@@ -117,8 +185,13 @@ class FormDataValidation
     }
 
     /**
-     * validate all the passed $fields and returns the validation result
-     * @param Fields $fields Fields object to be validate
+     * Validates all the passed $fields and returns the validation result
+     *
+     * @param Fields $fields       Fields object to be validate
+     * @param string $invalidField string refernce where the invalid field
+     *                             will be stored on this variable
+     *
+     * @return bool
      */
     public function validate(Fields $fields, &$invalidField = null): bool
     {

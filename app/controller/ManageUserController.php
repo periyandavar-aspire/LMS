@@ -1,10 +1,39 @@
 <?php
+/**
+ * ManageUserController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * ManageUserController Class allows ys to manage the users
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage ManageUserController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
 class ManageUserController extends BaseController
 {
+    /**
+     * Instantiate the new ManageUserController instance
+     */
     public function __construct()
     {
         parent::__construct(new ManageUserModel());
     }
+
+    /**
+     * Displays all the available users
+     *
+     * @return void
+     */
     public function getAllUsers()
     {
         $user = $this->input->session('type');
@@ -16,6 +45,11 @@ class ManageUserController extends BaseController
         $this->includeScript("populate.js");
     }
 
+    /**
+     * Displays all the registered users
+     *
+     * @return void
+     */
     public function getRegUsers()
     {
         $user = $this->input->session('type');
@@ -26,19 +60,36 @@ class ManageUserController extends BaseController
         $this->loadLayout("librarianFooter.html");
     }
 
+    /**
+     * Displays the roles of the user in JSON
+     *
+     * @return void
+     */
     public function getUserRoles()
     {
         $result = $this->model->getAllRoles();
         echo json_encode($result);
     }
 
-    public function delete()
+    /**
+     * Deletes the user
+     *
+     * @param string  $role User role
+     * @param integer $id   User Id
+     *
+     * @return void
+     */
+    public function delete(string $role, int $id)
     {
-        $role = func_get_arg(0);
-        $id = func_get_arg(1);
         $result['result'] = $this->model->delete($role, $id);
         echo json_encode($result);
     }
+
+    /**
+     * Creates a new admin_user account
+     *
+     * @return void
+     */
     public function addUser()
     {
         $fdv = new FormDataValidation();

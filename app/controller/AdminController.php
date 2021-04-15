@@ -1,6 +1,23 @@
 <?php
 /**
- * Handles the admin functionalities
+ * AdminController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * AdminController Class Handles the admin functionalities
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage AdminController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
  */
 class AdminController extends BaseController
 {
@@ -9,8 +26,46 @@ class AdminController extends BaseController
      */
     public function __construct()
     {
-        parent::__construct(new AdminModel);
+        parent::__construct(new AdminModel());
     }
+
+    /**
+     * Displays the login page for admin_user
+     *
+     * @return void
+     */
+    public function login()
+    {
+        $this->loadView("admin");
+    }
+
+    /**
+     * Performs admin_user login
+     *
+     * @return void
+     */
+    public function doLogin()
+    {
+        $user = $this->input->post('email');
+        $captcha = $this->input->post("verfcode");
+        if ($captcha != $this->input->session("captcha")) {
+            $data["msg"] = "Invalid captcha..!";
+            $this->loadView("admin", $data);
+            return;
+        }
+        $result = $this->model->getAdminUser($user);
+        if ($result != null) {
+            if ($result->password == md5($this->input->post('password'))) {
+                Utility::setsessionData('login', true);
+                Utility::setSessionData("type", $result->type);
+                Utility::setSessionData("id", $user);
+                $this->redirect($result->type . "/home");
+            }
+        }
+        $data["msg"] = "Login failed..!";
+        $this->loadView("admin", $data);
+    }
+
 
     /**
      * Handle the home page request
@@ -19,9 +74,10 @@ class AdminController extends BaseController
      */
     public function home()
     {
-        $this->loadLayout("adminHeader.html");
+        $user = $this->input->session('type');
+        $this->loadLayout($user . "Header.html");
         $this->loadView('Adminhome');
-        $this->loadLayout("adminFooter.html");
+        $this->loadLayout($user . "Footer.html");
     }
 
     /**
@@ -31,11 +87,12 @@ class AdminController extends BaseController
      */
     public function profile()
     {
-        $this->loadLayout("adminHeader.html");
+        $user = $this->input->session('type');
+        $this->loadLayout($user . "Header.html");
         $id = $this->input->session('id');
         $data['result'] = $this->model->getProfile($id);
-        $this->loadView('adminProfile', $data);
-        $this->loadLayout("adminFooter.html");
+        $this->loadView($user . 'Profile', $data);
+        $this->loadLayout($user . "Footer.html");
     }
 
     /**
@@ -75,7 +132,8 @@ class AdminController extends BaseController
         $password = $this->input->post('password');
         if ($password != '') {
             if (strlen($password) < 6) {
-                $msg .= "toast('Your password is too short & not updated..!', 'danger');";
+                $msg .= "toast('Your password is too short & not updated..!',
+                         'danger');";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
                     $msg .= "toast('Unable to update password..!', 'danger');";
@@ -83,9 +141,9 @@ class AdminController extends BaseController
             }
         }
         $data['result'] = $this->model->getProfile($id);
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("adminProfile", $data);
-        $this->loadLayout("adminFooter.html");
+        $this->loadLayout($user . "Header.html");
+        $this->loadView($user . "Profile", $data);
+        $this->loadLayout($user . "Footer.html");
         $this->addScript($msg);
     }
 
@@ -110,8 +168,15 @@ class AdminController extends BaseController
     public function updateSettings()
     {
         $fdv = new FormDataValidation();
-        $fields = new Fields(['maxBookLend', 'maxLendDays', 'maxBookRequest', 'fineAmtPerDay']);
-        $fields->setRequiredFields('maxBookLend', 'maxLendDays', 'maxBookRequest', 'fineAmtPerDay');
+        $fields = new Fields(
+            ['maxBookLend', 'maxLendDays', 'maxBookRequest', 'fineAmtPerDay']
+        );
+        $fields->setRequiredFields(
+            'maxBookLend',
+            'maxLendDays',
+            'maxBookRequest',
+            'fineAmtPerDay'
+        );
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger');";
@@ -148,8 +213,26 @@ class AdminController extends BaseController
     public function updateCms()
     {
         $fdv = new FormDataValidation();
-        $fields = new Fields(['aboutus', 'address', 'email', 'fbUrl', 'ytUrl', 'instaUrl', 'vision', 'mission']);
-        $fields->setRequiredFields('aboutus', 'address', 'email', 'fbUrl', 'ytUrl', 'instaUrl', 'vision', 'mission');
+        $fields = [
+            'aboutus',
+            'address',
+            'email',
+            'fbUrl',
+            'ytUrl',
+            'instaUrl',
+            'vision',
+            'mission'];
+        $fields = new Fields($fields);
+        $fields->setRequiredFields(
+            'aboutus',
+            'address',
+            'email',
+            'fbUrl',
+            'ytUrl',
+            'instaUrl',
+            'vision',
+            'mission'
+        );
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger');";

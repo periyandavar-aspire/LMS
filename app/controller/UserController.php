@@ -1,20 +1,51 @@
 <?php
+/**
+ * UserController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * UserController Class Handles the requests by user
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage UserController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
 class UserController extends BaseController
 {
+    /**
+     * Instantiates the new UserController instance
+     */
     public function __construct()
     {
         parent::__construct(new UserModel());
     }
     
+    /**
+     * Displays the home page for user
+     *
+     * @return void
+     */
     public function home()
     {
-        // $model = func_get_args()[0] ?? null;
-        // $obj = static::getMyInstance($model);
         $this->loadLayout("userHeader.html");
         $this->loadView("userHome");
         $this->loadLayout("userFooter.html");
     }
 
+    /**
+     * Displays the user profile
+     *
+     * @return void
+     */
     public function profile()
     {
         $this->loadLayout("userHeader.html");
@@ -24,6 +55,11 @@ class UserController extends BaseController
         $this->loadLayout("userFooter.html");
     }
 
+    /**
+     * Updates the user profile
+     *
+     * @return void
+     */
     public function updateProfile()
     {
         $fdv = new FormDataValidation();
@@ -46,7 +82,8 @@ class UserController extends BaseController
         $password = $this->input->post('password');
         if ($password != '') {
             if (strlen($password) < 6) {
-                $msg .= "toast('Your password is too short & not updated..!', 'danger');";
+                $msg .= "toast('Your password is too short & not updated..!',";
+                $msg .= "'danger');";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
                     $msg .= "toast('Unable to update password..!', 'danger');";
@@ -60,13 +97,23 @@ class UserController extends BaseController
         $this->addScript($msg);
     }
 
+    /**
+     * Logout the user
+     *
+     * @return void
+     */
     public function logout()
     {
         session_destroy();
         $this->redirect("/login");
     }
-
-    public function lent()
+    
+    /**
+     * Displays the lent books of the user
+     *
+     * @return void
+     */
+    public function getLentBooks()
     {
         $user = $this->input->session('id');
         $data["books"] = $this->model->getLentBooks($user);
@@ -75,7 +122,12 @@ class UserController extends BaseController
         $this->loadLayout("userFooter.html");
     }
 
-    public function booked()
+    /**
+     * Displays the books requested by the user
+     *
+     * @return void
+     */
+    public function getRequestedBooks()
     {
         $user = $this->input->session('id');
         $data["books"] = $this->model->getRequestedBooks($user);
@@ -84,9 +136,15 @@ class UserController extends BaseController
         $this->loadLayout("userFooter.html");
     }
 
-    public function search()
+    /**
+     * Search for the user with the given search key
+     *
+     * @param string $searchKey Search keys
+     *
+     * @return void
+     */
+    public function search(string $searchKey)
     {
-        $searchKey = func_get_arg(0);
         $result['result'] = $this->model->getUsersLike($searchKey);
         echo json_encode($result);
     }

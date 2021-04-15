@@ -1,20 +1,68 @@
 <?php
-
-class MysqlDbHandler extends DbHandler
+/**
+ * MysqlDbHandler File Doc Comment
+ * php version 7.3.5
+ *
+ * @category DbHandler
+ * @package  DbHandler
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * MysqlDbHandler Class performs database operations with mysqli connection
+ *
+ * @category   DbHandler
+ * @package    DbHandler
+ * @subpackage MysqlDbHandler
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
+class MysqlDbHandler extends BaseDbHandler
 {
+    /**
+     * Instantiate a new MysqlDbHandler instance
+     *
+     * @param string $host Host
+     * @param string $user Username
+     * @param string $pass Password
+     * @param string $db   Database Name
+     */
     public function __construct(string $host, string $user, string $pass, string $db)
     {
-        $this->con = new mysqli($host, $user, $pass, $db) or print "err";
+        $this->con = new mysqli($host, $user, $pass, $db);
     }
 
-    public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
-    {
+    /**
+     * Returns the same instance of the MysqlDbHandler to performs Singleton
+     *
+     * @param string $host   Host
+     * @param string $user   UserName
+     * @param string $pass   Password
+     * @param string $db     DatabaseName
+     * @param string $driver DriverName
+     *
+     * @return MysqlDbHandler
+     */
+    public static function getInstance(
+        string $host,
+        string $user,
+        string $pass,
+        string $db,
+        string $driver
+    ): MysqlDbHandler {
         if (!self::$instance) {
             self::$instance = new static($host, $user, $pass, $db);
         }
         return self::$instance;
     }
 
+    /**
+     * Executes the query
+     *
+     * @return bool
+     */
     public function executeQuery(): bool
     {
         $stmt = $this->con->prepare($this->query);
@@ -47,7 +95,12 @@ class MysqlDbHandler extends DbHandler
         return $flag;
     }
 
-    public function fetch()
+    /**
+     * Fetch the records
+     *
+     * @return object|null
+     */
+    public function fetch(): ?object
     {
         if ($this->result != null) {
             $obj = $this->result->fetch_object();
@@ -57,6 +110,14 @@ class MysqlDbHandler extends DbHandler
         }
     }
 
+    /**
+     * Directly run the passed query value
+     *
+     * @param string $sql        Query
+     * @param array  $bindValues Values to be bind
+     *
+     * @return bool
+     */
     public function runQuery(string $sql, array $bindValues=[]): bool
     {
         $stmt = $this->con->prepare($sql);
@@ -87,29 +148,26 @@ class MysqlDbHandler extends DbHandler
         return $flag;
     }
 
-    // public function getValues(string $table, ?array $fields, ?array $conditions)
-    // {
-    //     if ($fields == null) {
-    //         $selectFields = "*";
-    //     } else {
-    //         $selectFields = implode(", ", $fields);
-    //     }
-    //     $where = '';
-    //     foreach ($conditions as $key => $value) {
-    //         $where .= $key . " = '$value' ";
-    //     }
-    //     $query = "SELECT $selectFields FROM $table WHERE $where";
-    //     // echo $query;
-    //     return $this->executeQuery($query);
-    // }
-
+    /**
+     * Close the Database Connection
+     *
+     * @return void
+     */
     public function close()
     {
-        if (is_resource($this->con) && get_resource_type($this->con)==='mysql link') {
+        if (is_resource($this->con)
+            && get_resource_type($this->con)==='mysql link'
+        ) {
             $this->con->close();
         }
         $this->con = null;
     }
+
+    /**
+     * Returns the last insert Id
+     *
+     * @return int
+     */
     public function insertId(): int
     {
         return $this->con->insert_id;

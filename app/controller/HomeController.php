@@ -1,10 +1,40 @@
 <?php
+/**
+ * HomeController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Controller
+ * @package  Controller
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * HomeController Class Handles all the request to the home page
+ *
+ * @category   Controller
+ * @package    Controller
+ * @subpackage HomeController
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
+
 class HomeController extends BaseController
 {
+    /**
+     * Instantiate the new HomeController Instance
+     */
     public function __construct()
     {
         parent::__construct(new HomeModel());
     }
+
+    /**
+     * Displays the index page of the website
+     *
+     * @return void
+     */
     public function getIndexPage()
     {
         $this->loadLayout("header.html");
@@ -17,11 +47,11 @@ class HomeController extends BaseController
         $this->includeScript('bookElement.js');
     }
 
-    public function home()
-    {
-        $this->model->getData();
-    }
-
+    /**
+     * Displays the available books
+     *
+     * @return void
+     */
     public function books()
     {
         $this->loadLayout("header.html");
@@ -31,6 +61,12 @@ class HomeController extends BaseController
         $this->loadView("footer", $data);
         $this->includeScript('bookElement.js');
     }
+
+    /**
+     * Displays aboutus page
+     *
+     * @return void
+     */
     public function aboutus()
     {
         $this->loadLayout("header.html");
@@ -38,6 +74,12 @@ class HomeController extends BaseController
         $this->loadView("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
         $this->loadView("footer", $data);
     }
+
+    /**
+     * Generates captcha
+     *
+     * @return void
+     */
     public function captcha()
     {
         $captcha = rand(1000, 9999);
@@ -55,6 +97,11 @@ class HomeController extends BaseController
         imagedestroy($image);
     }
 
+    /**
+     * Displays login page
+     *
+     * @return void
+     */
     public function login()
     {
         $this->loadLayout("header.html");
@@ -63,19 +110,44 @@ class HomeController extends BaseController
         $this->loadView("footer", $data);
     }
 
+    /**
+     * Performs user login
+     *
+     * @return void
+     */
     public function dologin()
     {
         $data = [];
         $username = $this->input->post('username');
         $fdv = new FormDataValidation();
         $fields = new fields(['username', 'captcha']);
-        $fields->addRule(['username' => ["expressValidation /^[A-Za-z0-9_]*$/", 'required']]);
+        $fields->addRule(
+            [
+            'username' => [
+                "expressValidation /^[A-Za-z0-9_]*$/",
+                'required'
+                ]
+            ]
+        );
         $fields->addCustomeRule(
             'captcha',
             new class implements ValidationRule {
-                public function validate(?string $data): ?bool
+                /**
+                 * Validates the captcha
+                 *
+                 * @param string $data data to be validated
+                 * @param string $msg  where the error msg will be stored
+                 *
+                 * @return boolean|null
+                 */
+                public function validate(string $data, ?string &$msg = null): ?bool
                 {
-                    return $data == (new InputData())->session("captcha") ? true : false;
+                    if ($data == (new InputData())->session("captcha")) {
+                        return true;
+                    } else {
+                        $msg = "Invalid captcha";
+                        return false;
+                    }
                 }
             }
         );
@@ -98,12 +170,27 @@ class HomeController extends BaseController
         $data['footer'] = $this->model->getFooterData();
         $this->loadView("footer", $data);
     }
+
+    /**
+     * Creates an account for the user
+     *
+     * @return void
+     */
     public function createAccount()
     {
         $data = [];
         $fdv = new FormDataValidation();
         $genCodes = implode(" ", $this->model->getGenderCodes());
-        $fields = new fields(['email', 'username', 'fullname', 'password', 'gender', 'mobile']);
+        $fields = new fields(
+            [
+                'email',
+                'username',
+                'fullname',
+                'password',
+                'gender',
+                'mobile'
+            ]
+        );
         $rules = [
             'email' => ['mailValidation', 'required'],
             'fullname' => ['alphaSpaceValidation', 'required'],
@@ -113,25 +200,11 @@ class HomeController extends BaseController
             'gender' => ["valuesInValidation $genCodes", 'required']
         ];
         $fields->addRule($rules);
-        // $fields->addCustomeRule(
-        //     'gender',
-        //     new class implements ValidationRule {
-        //         public function validate(?string $data): ?bool
-        //         {
-        //             if ($data == 'm' || $data == 'f') {
-        //                 return true;
-        //             } else {
-        //                 return false;
-        //             }
-        //         }
-        //     }
-        // );
         $fields->addValues($this->input->post());
-        // if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
-        //     $data["msg"] = "Invalid captcha..!";
-        // } else
         $data['footer'] = $this->model->getFooterData();
-        if (!$fdv->validate($fields, $field)) {
+        if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
+            $data["msg"] = "Invalid captcha..!";
+        } elseif (!$fdv->validate($fields, $field)) {
             $data["msg"] = "Invalid $field..!";
         } elseif (!$this->model->createAccount($fields->getValues())) {
             $data["msg"] = "Unable to create an account..!";
@@ -139,7 +212,9 @@ class HomeController extends BaseController
             $this->loadLayout("header.html");
             $this->loadView("login");
             $this->loadView("footer", $data);
-            $this->addScript("toast('Your Account is created successfully..!', 'success');");
+            $this->addScript(
+                "toast('Your Account is created successfully..!', 'success');"
+            );
             return;
         }
         $this->loadLayout("header.html");
@@ -147,6 +222,12 @@ class HomeController extends BaseController
         $this->loadView("registration", $data);
         $this->loadView("footer", $data);
     }
+
+    /**
+     * Displays the registration page
+     *
+     * @return void
+     */
     public function registration()
     {
         $this->loadLayout("header.html");

@@ -1,112 +1,80 @@
 <?php
+/**
+ * IssuedBookController File Doc Comment
+ * php version 7.3.5
+ *
+ * @category   Core
+ * @package    Core
+ * @subpackage Autoload
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
 
 /**
- * This autoload function loads all the controller, model, service, handlers, view classes from core directory on need
+ * This autoload function loads controllers, models, services, dbhandlers
+ * and views on need
  */
-spl_autoload_register(function ($className) {
-    global $config;
-    if (Utility::endsWith(strtolower($className), 'controller')) {
-        $ctrlPath = $config['controller'];
-        $file = $ctrlPath . $className . ".php";
-        if (file_exists($file)) {
-            require_once $file;
-        }
-    } elseif (Utility::endsWith(strtolower($className), 'model')) {
-        $ModelPath = $config['model'];
-        $file = $ModelPath . $className . ".php";
-        if (file_exists($file)) {
-            require_once $file;
-        }
-    } elseif (Utility::endsWith(strtolower($className), 'service')) {
-        $ModelPath = $config['service'];
-        $file = $ModelPath . $className . ".php";
-        if (file_exists($file)) {
-            require_once $file;
-        }
-    } elseif (Utility::endsWith(strtolower($className), 'handler')) {
-        $DBPath = $config['db_handler'];
-        $file = $DBPath . $className . ".php";
-        if (file_exists($file)) {
-            require_once $file;
-        }
-    } elseif (Utility::endsWith(strtolower($className), 'view')) {
-        $ViewPath = $config['view'];
-        $file = $ViewPath . $className . ".php";
-        if (file_exists($file)) {
-            require_once $file;
+spl_autoload_register(
+    function ($className) {
+        global $config;
+        if (Utility::endsWith(strtolower($className), 'controller')) {
+            $ctrlPath = $config['controller'];
+            $file = $ctrlPath . $className . ".php";
+            if (file_exists($file)) {
+                include_once $file;
+            }
+        } elseif (Utility::endsWith(strtolower($className), 'model')) {
+            $ModelPath = $config['model'];
+            $file = $ModelPath . $className . ".php";
+            if (file_exists($file)) {
+                include_once $file;
+            }
+        } elseif (Utility::endsWith(strtolower($className), 'service')) {
+            $ModelPath = $config['service'];
+            $file = $ModelPath . $className . ".php";
+            if (file_exists($file)) {
+                include_once $file;
+            }
+        } elseif (Utility::endsWith(strtolower($className), 'handler')) {
+            $DBPath = $config['db_handler'];
+            $file = $DBPath . $className . ".php";
+            if (file_exists($file)) {
+                include_once $file;
+            }
+        } elseif (Utility::endsWith(strtolower($className), 'view')) {
+            $ViewPath = $config['view'];
+            $file = $ViewPath . $className . ".php";
+            if (file_exists($file)) {
+                include_once $file;
+            }
         }
     }
-});
+);
+
+/**
+ * This autoload function loads all the core base classes from core directory on need
+ */
+spl_autoload_register(
+    function ($className) {
+        $file = 'core/base/' . $className . ".php";
+        if (file_exists($file)) {
+            include_once $file;
+        }
+    }
+);
 
 /**
  * This autoload function loads all the core classes from core directory on need
  */
-spl_autoload_register(function ($className) {
-    $file = 'core/' . $className . ".php";
-    if (file_exists($file)) {
-        require_once $file;
+spl_autoload_register(
+    function ($className) {
+        $file = 'core/' . $className . ".php";
+        if (file_exists($file)) {
+            include_once $file;
+        }
     }
-});
-
-
-
-/**
- * This autoload function loads all the classes from helpers directory on need
- */
-spl_autoload_register(function ($className) {
-    $file = 'core/helpers/' . $className . ".php";
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});
-
-/**
- * This autoload function loads all the controllers from controllers directory on need
- */
-// spl_autoload_register(function ($className) {
-//     global $config;
-//     $ctrlPath = $config['controllers'];
-//     $file = $ctrlPath . $className . ".php";
-//     if (file_exists($file)) {
-//         require_once $file;
-//     }
-// });
-
-/**
- * This will loads the models form models directory on need
- */
-// spl_autoload_register(function ($className) {
-//     global $config;
-//     $ModelPath = $config['models'];
-//     $file = $ModelPath . $className . ".php";
-//     if (file_exists($file)) {
-//         require_once $file;
-//     }
-// });
-
-/**
- * This will loads the models form models directory on need
- */
-// spl_autoload_register(function ($className) {
-//     global $config;
-//     $ModelPath = $config['services'];
-//     $file = $ModelPath . $className . ".php";
-//     if (file_exists($file)) {
-//         require_once $file;
-//     }
-// });
-
-/**
- * This will loads the dbhandlers form dbhandlers directory on need
- */
-// spl_autoload_register(function ($className) {
-//     global $config;
-//     $DBPath = $config['db_handlers'];
-//     $file = $DBPath . $className . ".php";
-//     if (file_exists($file)) {
-//         require_once $file;
-//     }
-// });
+);
 
 /**
  * This function will load all files from config directory
