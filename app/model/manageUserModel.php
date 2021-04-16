@@ -38,8 +38,9 @@ class ManageUserModel extends BaseModel
             'email',
             'role',
             'mobile',
-            'createdAt',
             'status'
+        )->selectAs(
+            "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
         $this->db->where('email', '!=', $email)->orderBy('id')->execute();
         while ($row = $this->db->fetch()) {
@@ -62,7 +63,8 @@ class ManageUserModel extends BaseModel
             'userName',
             'email',
             'mobile',
-            'createdAt'
+        )->selectAs(
+            "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
         $result = $this->db->where('role', '=', 'user')->orderby('id');
         $this->db->execute();
@@ -100,7 +102,7 @@ class ManageUserModel extends BaseModel
         $flag = $this->db->insert('admin_user', $user)->execute();
         return  $flag;
     }
-    
+
     /**
      * Deletes the user
      *
@@ -127,7 +129,7 @@ class ManageUserModel extends BaseModel
     {
         $result = [];
         $this->db->select('code')->from('role');
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
+        $this->db->execute();
         while ($row = $this->db->fetch()) {
             $result[] = $row->code;
         }

@@ -24,12 +24,16 @@ class AuthorModel extends BaseModel
     /**
      * Returns all available authors
      *
-     * @return object
+     * @return array
      */
-    public function getAll(): object
+    public function getAll(): array
     {
         $authors = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")
+        $result = $this->db->select("id", "name", "status")
+            ->selectAs(
+                "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
+                "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
+            )
             ->from('author');
         $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
@@ -37,7 +41,7 @@ class AuthorModel extends BaseModel
         }
         return $authors;
     }
-    
+
     /**
      * Adds new author
      *
@@ -102,9 +106,9 @@ class AuthorModel extends BaseModel
      * @param string $ignoreList Author codes with , seperator
      *                           which will be ignored on search
      *
-     * @return object
+     * @return array
      */
-    public function getAuthorsLike(string $Searchkey, string $ignoreList): object
+    public function getAuthorsLike(string $Searchkey, string $ignoreList): array
     {
         $result = [];
         $this->db->select("id code", "name value")
@@ -112,8 +116,8 @@ class AuthorModel extends BaseModel
             ->where('name', 'LIKE', "%" . $Searchkey . "%");
         $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
         $this->db->where("NOT find_in_set(id, '$ignoreList')");
-        $orderClause = "case when name like '$Searchkey%' THEN 0";
-        $orderClause .= "WHEN name like '% %$Searchkey% %' THEN 1";
+        $orderClause = "case when name like '$Searchkey%' THEN 0 ";
+        $orderClause .= "WHEN name like '% %$Searchkey% %' THEN 1 ";
         $orderClause .= "WHEN name like '%$Searchkey' THEN 2 else 3 end, name";
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {

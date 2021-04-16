@@ -10,11 +10,11 @@
  * @link     http://url.com
  */
 /**
- * IssuedBookService Class Handles the IssuedBookService class data base operations
+ * IssuedBookService Class Handles the IssuedBookService class logical operations
  *
- * @category   Model
- * @package    Model
- * @subpackage IssuedBookModel
+ * @category   Service
+ * @package    Service
+ * @subpackage IssuedBookService
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
@@ -28,9 +28,9 @@ class IssuedBookService extends BaseService
      * @param object $user        User
      * @param int    $maxLendBook Maximum number of books can user lend
      *
-     * @return void
+     * @return bool
      */
-    public function checkUserCondition(object $user, int $maxLendBook)
+    public function checkUserCondition(object $user, int $maxLendBook): bool
     {
         return ($user->lent < $maxLendBook);
     }
@@ -99,12 +99,12 @@ class IssuedBookService extends BaseService
     /**
      * Calculates the fine amount for the issued books
      *
-     * @param object $issuedBooks  Issued books
+     * @param array  $issuedBooks  Issued books
      * @param object $fineSettings Fine Amount and Maximum lend days
      *
-     * @return object
+     * @return array
      */
-    public function calculateFine(object $issuedBooks, object $fineSettings): object
+    public function calculateFine(array $issuedBooks, object $fineSettings): array
     {
         foreach ($issuedBooks as $issuedBook) {
             if ($issuedBook->status == "Issued") {

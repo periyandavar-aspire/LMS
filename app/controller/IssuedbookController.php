@@ -29,7 +29,7 @@ class IssuedBookController extends BaseController
     {
         parent::__construct(new IssuedBookModel(), new IssuedBookService());
     }
-    
+
     // /**
     //  * Displays the list of issued books with option to add new issue book entry
     //  *
@@ -39,7 +39,7 @@ class IssuedBookController extends BaseController
     // {
     //     $user = $this->input->session('type');
     //     $this->loadLayout($user . "Header.html");
-    //     $this->loadView('manageIssuedbooks');
+    //     $this->loadTemplate('manageIssuedbooks');
     //     $this->loadLayout($user . "Footer.html");
     // }
 
@@ -59,7 +59,7 @@ class IssuedBookController extends BaseController
         );
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadView('manageissuedbooks', $data);
+        $this->loadTemplate('manageissuedbooks', $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -87,7 +87,7 @@ class IssuedBookController extends BaseController
         $data['issuedBooks'] = $this->model->getRequestBooks();
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadView('manageUserRequest', $data);
+        $this->loadTemplate('manageUserRequest', $data);
         $this->loadLayout($user . "Footer.html");
         if ($this->input->session('msg') != null) {
             $this->addScript("toast('" . $this->input->session('msg') . "')");
@@ -111,7 +111,7 @@ class IssuedBookController extends BaseController
         );
         echo json_encode($result);
     }
-    
+
     /**
      * Displays the book details of the given ISBN Number in JSON
      *
@@ -142,7 +142,7 @@ class IssuedBookController extends BaseController
         $data['id'] = $id;
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadView('userRequest', $data);
+        $this->loadTemplate('userRequest', $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -161,7 +161,7 @@ class IssuedBookController extends BaseController
             $updateTo,
             $this->input->post(comments)
         );
-        $script = $flag == true ? 'Success..!':'Failed..!';
+        $script = $flag == true ? 'Success..!' : 'Failed..!';
         Utility::setSessionData('msg', $script);
         $this->redirect('userRequest');
     }
@@ -213,8 +213,7 @@ class IssuedBookController extends BaseController
         );
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        print_r($this->input->post());
-        $this->loadView("manageissuedbooks", $data);
+        $this->loadTemplate("manageissuedbooks", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($script);
     }

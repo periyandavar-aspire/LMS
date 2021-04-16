@@ -30,7 +30,8 @@ class AdminModel extends BaseModel
      */
     public function getProfile(string $email): object
     {
-        $this->db->select('fullName', 'email', 'updatedAt')
+        $this->db->select('fullName', 'email')
+            ->selectAs("date_format(updatedat, '%d-%m-%Y %h:%i:%s') updatedAt")
             ->from('admin_user')
             ->where('email', '=', $email);
         $this->db->where('deletionToken', '=', 'N/A')->execute();
@@ -69,7 +70,7 @@ class AdminModel extends BaseModel
             ->execute();
         return $result;
     }
-    
+
     /**
      * Returns the details of the admin_user
      *
@@ -101,7 +102,8 @@ class AdminModel extends BaseModel
             "maxLendDays",
             "fineAmtPerDay",
             "maxBookRequest",
-            "updatedAt"
+        )->selectAs(
+            "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
         )->from("core_config")->where('id=1')->execute();
         return $this->db->fetch();
     }
@@ -123,7 +125,8 @@ class AdminModel extends BaseModel
             "instaUrl",
             "vision",
             "mission",
-            "updatedAt"
+        )->selectAs(
+            "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
         )->from("cms")->where('id=1')->execute();
         return $this->db->fetch();
     }
@@ -137,8 +140,8 @@ class AdminModel extends BaseModel
      */
     public function updateSettings(array $data): bool
     {
-        $result = $this->db->update('core_config', $data)->where('id', '=', 1);
-        $this->db->execute();
+        $this->db->update('core_config', $data)->where('id', '=', 1);
+        $result = $this->db->execute();
         return $result;
     }
 

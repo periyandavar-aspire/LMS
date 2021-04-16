@@ -42,7 +42,11 @@ class CategoryModel extends BaseModel
     public function getAll(): array
     {
         $category = [];
-        $result = $this->db->select("id", "name", "createdAt", "updatedAt", "status")
+        $result = $this->db->select("id", "name", "status")
+            ->selectAs(
+                "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
+                "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
+            )
             ->from('category');
         $this->db->where('deletionToken', '=', "N/A")->execute();
         while ($row = $this->db->fetch()) {
@@ -113,7 +117,7 @@ class CategoryModel extends BaseModel
         $this->db->where('deletionToken', '=', "N/A")
             ->where('status', '=', 1);
         $this->db->where("NOT find_in_set(id, '$ignoreList')");
-        $orderClause = "case when name like '$Searchkey%' THEN 0"
+        $orderClause = "case when name like '$Searchkey%' THEN 0 "
             . "WHEN name like '% %$Searchkey% %' THEN 1 "
             . "WHEN name like '%$Searchkey' THEN 2 "
             . "else 3 end, name";

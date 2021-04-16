@@ -40,11 +40,11 @@ class HomeModel extends BaseModel
     /**
      * Returns all the available books
      *
-     * @return object
+     * @return array
      */
-    public function getAvailableBooks(): object
+    public function getAvailableBooks(): array
     {
-        $book = [];
+        $books = [];
         $this->db->select(
             'b.id id',
             'b.name name',
@@ -62,9 +62,9 @@ class HomeModel extends BaseModel
             ->where('b.status', '=', 1)
             ->orderby('RAND()')->execute();
         while ($row = $this->db->fetch()) {
-            $book[] = $row;
+            $books[] = $row;
         }
-        return $book;
+        return $books;
     }
 
     /**
@@ -142,13 +142,13 @@ class HomeModel extends BaseModel
         $result = $this->db->fetch();
         return $result;
     }
-    
+
     /**
      * Returns the Vision
      *
-     * @return object
+     * @return string
      */
-    public function getVision(): object
+    public function getVision(): string
     {
         $this->db->select('vision')
             ->from('cms')
@@ -162,9 +162,9 @@ class HomeModel extends BaseModel
     /**
      * Returns the Mission
      *
-     * @return object
+     * @return string
      */
-    public function getMission(): object
+    public function getMission(): string
     {
         $this->db->select('mission')
             ->from('cms')

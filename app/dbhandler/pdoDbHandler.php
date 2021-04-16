@@ -31,8 +31,13 @@ class PdoDbHandler extends BaseDbHandler
      * @param string $db     Database Name
      * @param string $driver Driver Name
      */
-    public function __construct(string $host, string $user, string $pass, string $db, string $driver)
-    {
+    public function __construct(
+        string $host,
+        string $user,
+        string $pass,
+        string $db,
+        string $driver
+    ) {
         $this->con = new PDO("$driver:host=$host;dbname=$db;", $user, $pass);
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
@@ -47,10 +52,16 @@ class PdoDbHandler extends BaseDbHandler
      * @param string $pass   Password
      * @param string $db     Database Name
      * @param string $driver Driver Name
+     *
      * @return PdoDbHandler
      */
-    public static function getInstance(string $host, string $user, string $pass, string $db, string $driver)
-    {
+    public static function getInstance(
+        string $host,
+        string $user,
+        string $pass,
+        string $db,
+        string $driver
+    ) {
         if (!self::$instance) {
             self::$instance = new static($host, $user, $pass, $db, $driver);
         }
@@ -68,12 +79,12 @@ class PdoDbHandler extends BaseDbHandler
         $index = 1;
         foreach ((array)$this->bindValues as $bindValue) {
             switch (gettype($bindValue)) {
-                case 'integer':
-                    $paramType = PDO::PARAM_INT;
-                    break;
-                default:
-                    $paramType = PDO::PARAM_STR;
-                    break;
+            case 'integer':
+                $paramType = PDO::PARAM_INT;
+                break;
+            default:
+                $paramType = PDO::PARAM_STR;
+                break;
             }
             $stmt->bindValue($index, $bindValue, $paramType);
             $index++;
@@ -89,9 +100,9 @@ class PdoDbHandler extends BaseDbHandler
     /**
      * Fetch the records
      *
-     * @return object|null
+     * @return object|bool|null
      */
-    public function fetch(): ?object
+    public function fetch() //:object|bool|null
     {
         if ($this->result != null) {
             return $this->result->fetch(PDO::FETCH_OBJ);
@@ -114,12 +125,12 @@ class PdoDbHandler extends BaseDbHandler
         $index = 1;
         foreach ($bindValues as $bindValue) {
             switch (gettype($bindValue)) {
-                case 'integer':
-                    $paramType = PDO::PARAM_INT;
-                    break;
-                default:
-                    $paramType = PDO::PARAM_STR;
-                    break;
+            case 'integer':
+                $paramType = PDO::PARAM_INT;
+                break;
+            default:
+                $paramType = PDO::PARAM_STR;
+                break;
             }
             $stmt->bindValue($index, $value, $paramType);
             $index++;
@@ -152,13 +163,12 @@ class PdoDbHandler extends BaseDbHandler
     }
 
     /**
-     * begin the transaction
+     * Begin the transaction
      *
-     * @return PdoDbHandler
+     * @return bool
      */
-    public function begin(): PdoDbHandler
+    public function begin(): bool
     {
-        $this->con->beginTransaction();
-        return $this;
+        return $this->con->beginTransaction();
     }
 }

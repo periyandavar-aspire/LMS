@@ -109,6 +109,20 @@ Route::add(
 );
 
 Route::add(
+    '/userRequest/delete/([1-9]{1}[0-9]*)',
+    'user/removeRequest',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == true && $input->session('type') == 'user') {
+            return true;
+        } else {
+            Utility::redirectURL('/login');
+        }
+    }
+);
+
+Route::add(
     '/user/logout',
     null,
     'get',
@@ -189,89 +203,6 @@ Route::add(
     '/librarian/profile',
     'admin/updateProfile',
     'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == true
-            && $input->session('type') == 'Librarian'
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-
-Route::add(
-    '/librarian/categories',
-    'category/getAll',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == true
-            && $input->session('type') == 'Librarian'
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-
-Route::add(
-    '/librarian/authors',
-    'author/getAll',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == true
-            && $input->session('type') == 'Librarian'
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/librarian/books',
-    'book/manageBooks',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == true
-            && $input->session('type') == 'Librarian'
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/librarian/books',
-    'book/add',
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == true
-            && $input->session('type') == 'Librarian'
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-
-Route::add(
-    '/librarian/issuedBooks',
-    'admin/issuedBooks',
-    'get',
     function () {
         $input = new InputData();
         if ($input->session('login') == true

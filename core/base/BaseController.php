@@ -9,9 +9,10 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') OR exit('Not a valid Request');
 /**
  * Super class for all controller. All controllers should extend this controller
- * Controller class consists of basic level functions for various purposes
+ * BaseController class consists of basic level functions for various purposes
  *
  * @category   Controller
  * @package    Controller
@@ -39,6 +40,13 @@ class BaseController
     protected $input;
 
     /**
+     * View object
+     * 
+     * @var BaseView
+     */
+    protected $view;
+
+    /**
      * Service class object that will offers the services(bussiness logics)
      *
      * @var Service $service
@@ -56,6 +64,19 @@ class BaseController
         $this->model = $model;
         $this->input = new InputData();
         $this->service = $service;
+        $this->view = null;
+    }
+
+    /**
+     * Sets the view object
+     *
+     * @param BaseView $view View Object
+     * 
+     * @return void
+     */
+    public function setView(BaseView $view)
+    {
+        $this->view = $view;
     }
 
     /**
@@ -68,10 +89,10 @@ class BaseController
      *
      * @return void
      */
-    protected function loadView(string $file, ?array $data = null)
+    protected function loadTemplate(string $file, ?array $data = null)
     {
         global $config;
-        $path = $config['view'] . '' . $file . ".php";
+        $path = $config['template'] . '' . $file . ".php";
         if (file_exists($path)) {
             if ($data != null) {
                 foreach ($data as $key => $value) {
@@ -217,7 +238,7 @@ class BaseController
      */
     public function __call(string $name, array $args)
     {
-        echo "error the page is not found..!";
+        echo "Error the page $name is not found..!";
     }
 
     /**

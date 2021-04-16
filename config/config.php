@@ -15,9 +15,13 @@ defined('VALID_REQ') or exit('Not a valid Request');
  */
 $config['base_url'] = "http://lms.com";
 /**
- * Path to views Directory
+ * Path to Views Directory
  */
 $config['view'] = "app/view/";
+/**
+ * Path to Templates Directory
+ */
+$config['template'] = "app/view/template/";
 /**
  * Path to Models Directory
  */

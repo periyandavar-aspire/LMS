@@ -21,7 +21,6 @@
  */
 class BookModel extends BaseModel
 {
-    
     /**
      * Returns all the enabled categories
      *
@@ -118,9 +117,10 @@ class BookModel extends BaseModel
             "isbnNumber",
             "stack",
             "available",
-            "createdAt",
-            "updatedAt",
             "status"
+        )->selectAs(
+            "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
+            "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
         )->from('book');
         $this->db->where('deletionToken', '=', 'N/A')->execute();
         while ($row = $this->db->fetch()) {
@@ -128,7 +128,7 @@ class BookModel extends BaseModel
         }
         return $books;
     }
-    
+
     /**
      * Returns enabled books
      *
@@ -163,7 +163,7 @@ class BookModel extends BaseModel
      *
      * @return object
      */
-    public function getBookDetails(int $bookId):object
+    public function getBookDetails(int $bookId): object
     {
         $this->db->select(
             'id',
@@ -305,12 +305,38 @@ class BookModel extends BaseModel
             ->from('book')
             ->where('isbnNumber', 'LIKE', "%" . $Searchkey . "%");
         $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
-        $orderClause = "case when isbnNumber like '$Searchkey%' THEN 0";
-        $orderClause .= "WHEN isbnNumber like '% %$Searchkey% %' THEN 1";
+        $orderClause = "case when isbnNumber like '$Searchkey%' THEN 0 ";
+        $orderClause .= "WHEN isbnNumber like '% %$Searchkey% %' THEN 1 ";
         $orderClause .= "WHEN isbnNumber like '%$Searchkey' THEN 2 else 3 end,";
         $orderClause .= "isbnNumber";
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
+            $result[] = $row;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the books issued and requested users list
+     *
+     * @param int $bookId Book Id
+     * 
+     * @return array
+     */
+    public function getIssuedUsers(int $bookId): array
+    {
+        $result = [];
+        $this->db->select('username', 'status.value status')
+            ->from('issued_book')
+            ->innerJoin('status')
+            ->on('status.code = issued_book.status')
+            ->innerJoin('book')
+            ->using('isbnNumber')
+            ->where('book.id', '=', $bookId)
+            ->where('status.value', '!=', 'Returned')
+            ->where('status.value', '!=', 'Deleted Request')
+            ->execute();
+        if ($row = $this->db->fetch()) {
             $result[] = $row;
         }
         return $result;

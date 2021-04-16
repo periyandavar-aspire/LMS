@@ -19,33 +19,36 @@
  * @license    http://license.com license
  * @link       http://url.com
  */
-class IssuedBooksModel extends BaseModel
+class IssuedBookModel extends BaseModel
 {
     /**
      * Returns the user details
      *
      * @param string $username User Name
      *
-     * @return object
+     * @return null|object
      */
-    public function getUserDetails(string $username): object
+    public function getUserDetails(string $username): ?object
     {
-        $this->db->select('user.id', 'userName', 'fullName', 'mobile', 'email')
+        $this->db->select('user.id id', 'userName', 'fullName', 'mobile', 'email')
             ->selectAs(
-                'COUNT(`ib`.`id`) lent',
-                "SUM(IF(`issuedAt`='0000-00-00', 1, 0)) request"
+                "SUM(IF(`status`.`value` LIKE 'Request%', 1, 0)) request",
+                "SUM(IF(`status`.`value` = 'Issued', 1, 0)) lent"
             );
         $this->db->from('user')
             ->innerJoin('issued_book ib')
-            ->using('username')
+            ->on('ib.userid = user.id')
+            ->innerJoin('status')
+            ->on('status.code = ib.status')
             ->where('returnAt', '=', '0000-00-00')
             ->where('username', '=', $username)
             ->where('user.status', '=', 1)
-            ->where('deletionToken', '=', 'N/A')
+            ->where('user.deletionToken', '=', 'N/A')
             ->limit(1)
             ->execute();
+        
         $user = $this->db->fetch();
-        $user->lent = ($user->lent) - ($user->request);
+        // print_r($user);
         return $user;
     }
 
@@ -126,15 +129,32 @@ class IssuedBooksModel extends BaseModel
         $this->db->select('code')
             ->from('status')
             ->where('value', '=', 'Issued')
+            ->limit(1)
             ->execute();
         $book['status'] = $this->db->fetch()->code;
+        $this->db->select('id')
+            ->from('user')
+            ->where('username', '=', $book['username'])
+            ->where('user.deletionToken', '=', 'N/A')
+            ->limit(1)
+            ->execute();
+        unset($book['username']);
+        $book['userId'] = $this->db->fetch()->id;
+        $this->db->select('id')
+            ->from('book')
+            ->where('isbnNumber', '=', $book['isbnNumber'])
+            ->where('book.deletionToken', '=', 'N/A')
+            ->limit(1)
+            ->execute();
+        unset($book['isbnNumber']);
+        $book['bookId'] = $this->db->fetch()->id;
         $this->db->set("autocommit", 0);
         $this->db->begin();
         $flag1 = $this->db->insert('issued_book', $book, ['issuedAt' => 'NOW()'])
             ->execute();
         $this->db->update('book')
             ->setTo('available = available - 1')
-            ->where('isbnNumber', '=', $book['isbnNumber']);
+            ->where('id', '=', $book['bookId']);
         $flag2 = $this->db->where('deletionToken', '=', 'N/A')->execute();
         if ($flag1 && $flag2) {
             return $this->db->commit();
@@ -146,15 +166,29 @@ class IssuedBooksModel extends BaseModel
     /**
      * Add the details of the requested book
      *
-     * @param string $user       Username
+     * @param string $userName   User Name
      * @param string $isbnNumber ISBN Number
      *
      * @return boolean
      */
-    public function requestBook(string $user, string $isbnNumber): bool
+    public function requestBook(string $userName, string $isbnNumber): bool
     {
-        $fields = ['isbnNumber' => $isbnNumber, 'username' => $user];
-        $flag = $this->db->insert('issued_book', $fields)->execute();
+        $userId = $this->db->select('id')
+            ->from('user')
+            ->where('username', '=', $userName)
+            ->where('deletionToken', '=', 'N/A')
+            ->limit(1)
+            ->getQuery();
+        $bookId = $this->db->select('id')
+            ->from('book')
+            ->where('isbnNumber', '=', $isbnNumber)
+            ->where('deletionToken', '=', 'N/A')
+            ->limit(1)
+            ->getQuery();
+        $fields = ['userId' => $userId, 'bookId' => $bookId];
+        $flag = $this->db->insert('issued_book', [], $fields)
+            ->appendBindValues([$userName, 'N/A', $isbnNumber, 'N/A'])
+            ->execute();
         return $flag;
     }
 
@@ -167,23 +201,27 @@ class IssuedBooksModel extends BaseModel
     {
         $issuedBooks = [];
         $this->db->select(
-            'isbnNumber',
+            'book.isbnNumber',
             'name bookName',
-            'userName',
-            'issuedAt',
+            'user.userName',
             'ib.status',
             'ib.id',
             'status.value status',
             'fine'
+        )->selectAs(
+            "date_format(issuedAt, '%d-%m-%Y %h:%i:%s') issuedAt",
+            "IF(returnAt != '0000-00-00', "
+                ."date_format(returnAt, '%d-%m-%Y %h:%i:%s') "
+                .",'Not Yet Returned') returnedAt"
         );
         $this->db->selectAs('DATEDIFF(NOW(), issuedAt) days');
         $this->db->from('issued_book ib')
             ->innerJoin('status')
             ->on('status.code = ib.status')
             ->innerJoin('book')
-            ->using('isbnNumber')
+            ->on('book.id = ib.bookId')
             ->innerJoin('user')
-            ->using('userName')
+            ->on('user.id = ib.userId')
             ->where('ib.issuedAt', '!=', '0000-00-00')
             ->orderby('returnAt');
         $this->db->limit(10, 0)->execute();
@@ -202,23 +240,24 @@ class IssuedBooksModel extends BaseModel
     {
         $issuedBooks = [];
         $this->db->select(
-            'isbnNumber',
+            'book.isbnNumber',
             'name bookName',
-            'userName',
-            'requestedAt',
+            'user.userName',
             'comments',
-            'issued_book.status',
-            'issued_book.id',
+            'ib.status',
+            'ib.id',
             'status.value status'
+        )->selectAs(
+            "date_format(requestedAt, '%d-%m-%Y %h:%i:%s') requestedAt",
         );
-        $this->db->from('issued_book')
+        $this->db->from('issued_book ib')
             ->innerJoin('status')
-            ->on('status.code = issued_book.status')
+            ->on('status.code = ib.status')
             ->innerJoin('book')
-            ->using('isbnNumber')
+            ->on('book.id = ib.bookId')
             ->innerJoin('user')
-            ->using('userName');
-        $this->db->where('status.value', 'LIKE', '%Request%');
+            ->on('user.id = ib.userId');
+        $this->db->where('status.value', 'LIKE', 'Request%');
         $this->db->limit(10, 0)->execute();
         while ($row = $this->db->fetch()) {
             $issuedBooks[] = $row;
@@ -231,13 +270,17 @@ class IssuedBooksModel extends BaseModel
      *
      * @param int $id Request Id
      *
-     * @return object
+     * @return null|object
      */
-    public function getRequestDetails(int $id): object
+    public function getRequestDetails(int $id): ?object
     {
         $this->db->select('userName', 'isbnNumber', 'comments')
-            ->from('issued_book')
-            ->where('id', '=', $id)
+            ->from('issued_book ib')
+            ->innerJoin('user')
+            ->on('user.id = ib.userId')
+            ->innerJoin('book')
+            ->on('book.id = ib.bookId')
+            ->where('ib.id', '=', $id)
             ->limit(1);
         $this->db->execute();
         $result = $this->db->fetch();

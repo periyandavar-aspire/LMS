@@ -36,7 +36,7 @@ class UserModel extends BaseModel
             'value gender',
             'mobile',
             'email',
-            'updatedAt'
+            'u.updatedAt'
         )->from('user u');
         $this->db->innerJoin('gender g')
             ->on('g.code = u.gender')
@@ -88,17 +88,17 @@ class UserModel extends BaseModel
     public function getLentBooks(string $username): array
     {
         $books = [];
-        $this->db->select('isbnNumber', 'name bookName', 'issued_book.id')
+        $this->db->select('isbnNumber', 'name bookName', 'ib.id')
             ->selectAs(
                 "IFNULL (issuedAt,'') issuedAt",
                 "IF(returnAt='0000-00-00','Not Return Yet', returnAt) returnAt",
                 "IFNULL(fine,'-') fine"
             );
-        $this->db->from('issued_book')
+        $this->db->from('issued_book ib')
             ->innerJoin('book')
-            ->using('isbnNumber')
+            ->on('book.id = ib.bookId')
             ->innerJoin('user')
-            ->using('userName');
+            ->on('user.id = ib.userId');
         $this->db->where('userName', '=', $username)
             ->where('issuedAt', '!=', '0000-00-00')
             ->orderby('returnAt')->limit(10, 0)
@@ -122,20 +122,20 @@ class UserModel extends BaseModel
         $this->db->select(
             'isbnNumber',
             'name bookName',
-            'issued_book.id',
+            'ib.id',
             'requestedAt',
             'status.value status',
             'comments'
         );
-        $this->db->from('issued_book');
+        $this->db->from('issued_book ib');
         $this->db->innerJoin('status')
-            ->on('status.code = issued_book.status')
+            ->on('status.code = ib.status')
             ->innerJoin('book')
-            ->using('isbnNumber')
+            ->on('book.id = ib.bookId')
             ->innerJoin('user')
-            ->using('userName');
+            ->on('user.id = ib.userId');
         $this->db->where('userName', '=', $username)
-            ->where('issuedAt', '=', '0000-00-00')
+            ->where('status.value', 'LIKE', 'Requested%')
             ->limit(10, 0)
             ->execute();
         while ($row = $this->db->fetch()) {
@@ -143,7 +143,7 @@ class UserModel extends BaseModel
         }
         return $books;
     }
-    
+
     /**
      * Returns the users matching given search keys
      *
@@ -164,6 +164,34 @@ class UserModel extends BaseModel
         while ($row = $this->db->fetch()) {
             $result[] = $row;
         }
+        return $result;
+    }
+
+    /**
+     * Removes user request
+     *
+     * @param integer $id   User request id
+     * @param string  $user UserName
+     *
+     * @return bool
+     */
+    public function removeRequest(int $id, string $user): bool
+    {
+        $this->db->select('code')
+            ->from('status')
+            ->where('value', '=', 'Deleted Request')
+            ->execute();
+        $data['ib.status'] = $this->db->fetch()->code;
+        $data['ib.deletionToken'] = uniqid();
+        $this->db->update(
+            'issued_book ib',
+            $data,
+            null,
+            'Inner Join user on ib.userId = user.id'
+        );
+        $result = $this->db->where('ib.id', '=', $id)
+            ->where('userName', '=', $user)
+            ->execute();
         return $result;
     }
 }

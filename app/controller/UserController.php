@@ -28,7 +28,7 @@ class UserController extends BaseController
     {
         parent::__construct(new UserModel());
     }
-    
+
     /**
      * Displays the home page for user
      *
@@ -37,7 +37,7 @@ class UserController extends BaseController
     public function home()
     {
         $this->loadLayout("userHeader.html");
-        $this->loadView("userHome");
+        $this->loadTemplate("userHome");
         $this->loadLayout("userFooter.html");
     }
 
@@ -51,7 +51,7 @@ class UserController extends BaseController
         $this->loadLayout("userHeader.html");
         $id = $this->input->session('id');
         $data['result'] = $this->model->getProfile($id);
-        $this->loadView("userProfile", $data);
+        $this->loadTemplate("userProfile", $data);
         $this->loadLayout("userFooter.html");
     }
 
@@ -92,7 +92,7 @@ class UserController extends BaseController
         }
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout("userHeader.html");
-        $this->loadView("userProfile", $data);
+        $this->loadTemplate("userProfile", $data);
         $this->loadLayout("userFooter.html");
         $this->addScript($msg);
     }
@@ -105,9 +105,9 @@ class UserController extends BaseController
     public function logout()
     {
         session_destroy();
-        $this->redirect("/login");
+        $this->redirect("login");
     }
-    
+
     /**
      * Displays the lent books of the user
      *
@@ -118,7 +118,7 @@ class UserController extends BaseController
         $user = $this->input->session('id');
         $data["books"] = $this->model->getLentBooks($user);
         $this->loadLayout("userHeader.html");
-        $this->loadView("lentBooks", $data);
+        $this->loadTemplate("lentBooks", $data);
         $this->loadLayout("userFooter.html");
     }
 
@@ -132,8 +132,22 @@ class UserController extends BaseController
         $user = $this->input->session('id');
         $data["books"] = $this->model->getRequestedBooks($user);
         $this->loadLayout("userHeader.html");
-        $this->loadView("booked", $data);
+        $this->loadTemplate("booked", $data);
         $this->loadLayout("userFooter.html");
+    }
+
+    /**
+     * Removes the user book request
+     *
+     * @param integer $id userRequestId
+     * 
+     * @return void
+     */
+    public function removeRequest(int $id)
+    {
+        $user = $this->input->session('id');
+        $result['result'] = $this->model->removeRequest($id, $user);
+        echo json_encode($result);
     }
 
     /**

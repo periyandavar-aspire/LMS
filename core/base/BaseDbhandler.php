@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') OR exit('Not a valid Request');
 /**
  * Super class for all DbHandler. All Dbhandlers should extend this dbhandler
  * Dbhandler class consists of basic level functions for various purposes and
@@ -37,12 +38,12 @@ abstract class BaseDbhandler
      *
      * @return void
      */
-    abstract public function close(): void;
+    abstract public function close();
 
     /**
      * This abstract function should implemented on the handlers to
      * directly run the Query
-     * 
+     *
      * @param string $sql        sql
      * @param array  $bindValues bind values
      *
@@ -66,15 +67,15 @@ abstract class BaseDbhandler
      * result set called directly from the object
      * It should return a single row result as object on success and null on failure
      *
-     * @return null|object
+     * @return :object|bool|null
      */
-    abstract public function fetch(): ?object;
+    abstract public function fetch(); //:object|bool|null;
 
     /**
      * This abstract function should implemented on the handlers to get the
      * instance of the class in
      * singleton approch
-     * 
+     *
      * @param string $host   host name
      * @param string $user   User name
      * @param string $pass   Password
@@ -217,15 +218,15 @@ abstract class BaseDbhandler
     {
         $result = true;
         if ($this->_sql == '') {
-            $this->query = "SELECT " 
-                . $this->_columns 
-                . " FROM " 
-                . $this->_table 
-                . $this->_join 
-                . $this->_where 
-                . $this->_groupby 
-                . $this->_having 
-                . $this->_orderby 
+            $this->query = "SELECT "
+                . $this->_columns
+                . " FROM "
+                . $this->_table
+                . $this->_join
+                . $this->_where
+                . $this->_groupby
+                . $this->_having
+                . $this->_orderby
                 . $this->_limit;
         } else {
             $this->query  = $this->_sql . $this->_where;
@@ -304,18 +305,25 @@ abstract class BaseDbhandler
      * @param string      $table  Table Name
      * @param array       $fields Fields
      * @param string|null $where  Where condition
+     * @param string|null $join   Join condition
      *
      * @return BaseDbHandler
      */
     public function update(
         string $table,
         array $fields = [],
-        ?string $where = null
+        ?string $where = null,
+        ?string $join = null
     ): BaseDbHandler {
         $this->_resetQuery();
         $set = '';
         $index = 1;
         foreach ($fields as $column => $field) {
+            $column = trim($column);
+            if (strpos($column, ".")) {
+                $column = explode(".", $column);
+                $column = $column[0] . "`.`" . $column[1];
+            }
             $set .= "`$column` = ?";
             $this->bindValues[] = $field;
             if ($index < count($fields)) {
@@ -323,7 +331,7 @@ abstract class BaseDbhandler
             }
             $index++;
         }
-        $this->_sql = "UPDATE $table SET " . $set;
+        $this->_sql = "UPDATE $table " . $join . " SET " . $set;
         if (isset($where)) {
             $this->_where = " WHERE $where";
         }
@@ -348,7 +356,10 @@ abstract class BaseDbhandler
         array $funcfields = []
     ): BaseDbHandler {
         $this->_resetQuery();
-        $keys = implode('`, `', array_keys($fields));
+        $keys = '';
+        if (count($fields) > 0) {
+            $keys = implode('`, `', array_keys($fields));
+        }
         $values = '';
         $index = 1;
         foreach ($fields as $column => $value) {
@@ -364,8 +375,10 @@ abstract class BaseDbhandler
             : $values;
         $index = 1;
         foreach ($funcfields as $column => $value) {
-            $values .= $value;
-            $keys = $keys . '`, `' . $column;
+            $values .= "($value)";
+            $keys = $keys != '' 
+                ? $keys . '`, `' . $column
+                : $column;
             if ($index < count($funcfields)) {
                 $values .= ',';
             }
@@ -391,10 +404,10 @@ abstract class BaseDbhandler
             if (strpos($columns[$i], " ") && strpos($columns[$i], ".")) {
                 $columns[$i] = explode(" ", $columns[$i]);
                 $columns[$i][0] = explode(".", $columns[$i][0]);
-                $columns[$i] = "`" 
-                    . $columns[$i][0][0] 
-                    . "` .`" 
-                    . $columns[$i][0][1] 
+                $columns[$i] = "`"
+                    . $columns[$i][0][0]
+                    . "` .`"
+                    . $columns[$i][0][1]
                     .'` '
                     . $columns[$i][1];
             } elseif (strpos($columns[$i], " ")) {
@@ -516,10 +529,10 @@ abstract class BaseDbhandler
                         $this->_where .= $param[0];
                         $this->bindValues[] = $param[1];
                     } elseif ($countParam == 3) {
-                        $this->_where .= "`" 
-                            . trim($param[0]) 
-                            . "`" 
-                            . $param[1] 
+                        $this->_where .= "`"
+                            . trim($param[0])
+                            . "`"
+                            . $param[1]
                             . " ?";
                         $this->bindValues[] = $param[2];
                     }
@@ -612,7 +625,7 @@ abstract class BaseDbhandler
     /**
      * This will sets limit and offset values in select query
      *
-     * @param int      $limit limit
+     * @param int      $limit  limit
      * @param int|null $offset Offset value
      *
      * @return BaseDbhandler
@@ -654,24 +667,40 @@ abstract class BaseDbhandler
         return $this;
     }
     /**
-     * return query value
+     * Returns the query value
+     *
+     * @return string
      */
-    public function getExectedQuery()
+    public function getExectedQuery(): string
     {
         return $this->query;
     }
 
     /**
-     * return build query
+     * Returns build query
+     *
+     * @return string
      */
     public function getQuery(): string
     {
-        $query = ($this->_sql == '') ? "SELECT " . $this->_columns . " FROM " . $this->_table . $this->_join . $this->_where . $this->_groupby . $this->_having . $this->_limit . $this->_orderby : $this->_sql . $this->_where;
+        $query = ($this->_sql == '')
+            ? "SELECT "
+                . $this->_columns
+                . " FROM "
+                . $this->_table
+                . $this->_join
+                . $this->_where
+                . $this->_groupby
+                . $this->_having
+                . $this->_limit
+                . $this->_orderby
+            : $this->_sql
+                . $this->_where;
         return $query;
     }
 
     /**
-     * return bindValues
+     * Returns bindValues
      *
      * @return array
      */
@@ -681,22 +710,28 @@ abstract class BaseDbhandler
     }
 
     /**
-     * insert bind values
+     * Appends new value to bind values array
+     *
+     * @param array $values values
+     *
+     * @return BaseDbHandler
      */
-    public function appendBindValues($values): DbHandler
+    public function appendBindValues(array $values): BaseDbHandler
     {
         foreach ($values as $value) {
             $this->bindValues[] = $value;
         }
         return $this;
     }
+
     /**
-     * @param string $tableName
+     * This function used to build inner join
      *
-     * @return DbHandler
-     *  this function used to build inner join
+     * @param string $tableName Table Name
+     *
+     * @return BaseDbHandler
      */
-    public function innerJoin(string $tableName)
+    public function innerJoin(string $tableName): BaseDbHandler
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -707,14 +742,15 @@ abstract class BaseDbhandler
         $this->_join .= " INNER JOIN " . $tableName;
         return $this;
     }
+
     /**
-     * @param string $tableName
+     * This function used to build left join
      *
-     * @return DbHandler
+     * @param string $tableName Table Name
      *
-     * this function used to build left join
+     * @return BaseDbHandler
      */
-    public function leftJoin(string $tableName)
+    public function leftJoin(string $tableName): BaseDbHandler
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -727,13 +763,13 @@ abstract class BaseDbhandler
     }
 
     /**
-     * @param string $tableName
+     * This function used to build right join
      *
-     * @return DbHandler
+     * @param string $tableName TableName
      *
-     * this function used to build right join
+     * @return BaseDbHandler
      */
-    public function rightJoin(string $tableName)
+    public function rightJoin(string $tableName): BaseDbHandler
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -746,13 +782,13 @@ abstract class BaseDbhandler
     }
 
     /**
-     * @param string $table
+     * This function used to build cross join
      *
-     * @return DbHandler
+     * @param string $tableName Table Name
      *
-     * this function used to build cross join
+     * @return BaseDbHandler
      */
-    public function crossJoin(string $tableName)
+    public function crossJoin(string $tableName): BaseDbHandler
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -765,36 +801,37 @@ abstract class BaseDbhandler
     }
 
     /**
-     * @param string $condition
+     * This function used to set join condition with on
      *
-     * @return DbHandler
+     * @param string $condition On condition
      *
-     * this function used to set join condition with on
+     * @return BaseDbHandler
      */
-    public function on(string $condition)
+    public function on(string $condition): BaseDbHandler
     {
         $this->_join .= ' ON ' . $condition;
         return $this;
     }
 
     /**
-     * @param string $field
+     * This function used to set join condition with using
      *
-     * @return DbHandler
+     * @param string $field Field Name
      *
-     * this function used to set join condition with using
+     * @return BaseDbHandler
      */
-    public function using(string $field)
+    public function using(string $field): BaseDbHandler
     {
         $this->_join .= ' USING(' . $field . ')';
         return $this;
     }
 
     /**
-     * @return DbHandler
-     * used to perform group by
+     * This function is used to perform group by
+     *
+     * @return BaseDbHandler
      */
-    public function groupBy(): DbHandler
+    public function groupBy(): BaseDbHandler
     {
         $fields = func_get_args();
         $fields = implode(", ", $fields);
@@ -803,10 +840,10 @@ abstract class BaseDbhandler
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * This is used to set the variable in database
      *
-     * used to set the variable in database
+     * @param string $name  Variable Name
+     * @param string $value Variable Value
      *
      * @return bool
      */
@@ -817,17 +854,19 @@ abstract class BaseDbhandler
     }
 
     /**
-     * start the transactions
+     * Starts the transactions
      *
+     * @return bool
      */
-    public function begin()
+    public function begin(): bool
     {
         $this->query = "START TRANSACTION";
         return $this->executeQuery();
     }
 
     /**
-     * commit the transaction
+     * Commits the transaction
+     *
      * @return bool
      */
     public function commit(): bool
@@ -836,7 +875,8 @@ abstract class BaseDbhandler
     }
 
     /**
-     * rollback the transaction
+     * Rollbacks the transaction
+     *
      * @return bool
      */
     public function rollback(): bool

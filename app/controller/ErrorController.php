@@ -34,7 +34,7 @@ class ErrorController extends BaseController implements ErrorHandler
         $data['msg'] = "The Page you're looking for isn't here.";
         $data['msg'] .= "This may be missing or temporarily unavailable.";
         $data['msg'] .= "You can click the button below to go back to the homepage.";
-        $this->loadView("pageNotFound", $data);
+        $this->loadTemplate("pageNotFound", $data);
         $this->loadLayout("footer.html");
     }
 
@@ -49,25 +49,25 @@ class ErrorController extends BaseController implements ErrorHandler
         $this->loadLayout("header.html");
         $data['msg'] = "Your request is invalid or that service is removed.";
         $data['msg'] = "Please try again later...";
-        $this->loadView("pageNotFound", $data);
+        $this->loadTemplate("pageNotFound", $data);
         $this->loadLayout("footer.html");
     }
 
     /**
      * Handles the internal server error
      *
-     * @param string $msg Error msg
+     * @param array $error Error array
      *
      * @return void
      */
-    public function serverError(string $msg = "")
+    public function serverError(array $error = [])
     {
         header('HTTP/1.1 500 Internal Server Error');
         $this->loadLayout("header.html");
         $data['msg'] = "On error occured while proccessing your request..!";
         $data['msg'] .= "Please check later and retry again...";
-        $data['data'] = $msg;
-        $this->loadView("serverError", $data);
+        $data['data'] = $error;
+        $this->loadTemplate("serverError", $data);
         $this->loadLayout("footer.html");
     }
 }

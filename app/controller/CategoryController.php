@@ -29,7 +29,7 @@ class CategoryController extends BaseController
     {
         parent::__construct(new CategoryModel());
     }
-    
+
     /**
      * Get and display all the available categories
      *
@@ -40,7 +40,7 @@ class CategoryController extends BaseController
         $user = $this->input->session('type');
         $data['categories'] = $this->model->getAll();
         $this->loadLayout($user."Header.html");
-        $this->loadView("manageCategories", $data);
+        $this->loadTemplate("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
     }
 
@@ -109,7 +109,7 @@ class CategoryController extends BaseController
         }
         $this->loadLayout($user."Header.html");
         $data['categories'] = $this->model->getAll();
-        $this->loadView("manageCategories", $data);
+        $this->loadTemplate("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
@@ -135,7 +135,7 @@ class CategoryController extends BaseController
         }
         $this->loadLayout($user."Header.html");
         $data['categories'] = $this->model->getAll();
-        $this->loadView("manageCategories", $data);
+        $this->loadTemplate("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }

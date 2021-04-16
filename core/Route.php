@@ -1,78 +1,169 @@
 <?php
-
+/**
+ * Route File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Route
+ * @package  Route
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+/**
+ * Route Class handles routing
+ *
+ * @category Route
+ * @package  Route
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 class Route
 {
-    private static $getMethodRoutes = [];
-    private static $postMethodRoutes = [];
-    private static $otherRoutes = [];
+    /**
+     * GET method Routes
+     *
+     * @var array
+     */
+    private static $_getMethodRoutes = [];
 
-    private static $methodNotAllowed = null;
-    private static $pathNotFound = null;
-    private static $onError = null;
+    /**
+     * POST method routes
+     *
+     * @var array
+     */
+    private static $_postMethodRoutes = [];
 
-    public static function add(string $expression, ?string $route = null, string $method = 'get', ?callable $filter = null)
-    {
+    /**
+     * Other method routes
+     *
+     * @var array
+     */
+    private static $_otherRoutes = [];
+
+    private static $_methodNotAllowed = null;
+
+    private static $_pathNotFound = null;
+
+    private static $_onError = null;
+
+    /**
+     * Adds new Route
+     *
+     * @param string        $route      route
+     * @param string|null   $expression execution value (controller/method)
+     * @param string        $method     method Name
+     * @param callable|null $filter     filter function
+     *
+     * @return void
+     */
+    public static function add(
+        string $route,
+        ?string $expression = null,
+        string $method = Constants::METHOD_GET,
+        ?callable $filter = null
+    ) {
         $method = strtolower($method);
-        if ($method == 'get') {
+        if ($method == Constants::METHOD_GET) {
             array_push(
-                self::$getMethodRoutes,
-                [ 'expression' => $expression, 'route' => $route,'rule' => $filter]
+                self::$_getMethodRoutes,
+                [ 'route' => $route, 'expression' => $expression,'rule' => $filter]
             );
-        } elseif ($method == 'post') {
+        } elseif ($method == Constants::METHOD_POST) {
             array_push(
-                self::$postMethodRoutes,
-                [ 'expression' => $expression, 'route' => $route,'rule' => $filter]
+                self::$_postMethodRoutes,
+                [ 'route' => $route, 'expression' => $expression,'rule' => $filter]
             );
         } else {
             array_push(
-                self::$otherRoutes,
-                [ 'expression' => $expression, 'route' => $route,'rule' => $filter]
+                self::$_otherRoutes,
+                [ 'route' => $route, 'expression' => $expression,'rule' => $filter]
             );
         }
     }
 
+    /**
+     * Sets not allowed method
+     *
+     * @param callable $callback method
+     *
+     * @return void
+     */
     public static function setMethodNotAllowed(callable $callback)
     {
-        self::$methodNotAllowed = $callback;
+        self::$_methodNotAllowed = $callback;
     }
 
+    /**
+     * Sets path not found method
+     *
+     * @param callable $callback method
+     *
+     * @return void
+     */
     public static function setPathNotFound(callable $callback)
     {
-        self::$pathNotFound = $callback;
+        self::$_pathNotFound = $callback;
     }
 
+    /**
+     * Sets on error method
+     *
+     * @param callable $callback method
+     *
+     * @return void
+     */
     public static function setOnError(callable $callback)
     {
-        self::$onError = $callback;
+        self::$_onError = $callback;
     }
 
+    /**
+     * Runs the current route
+     *
+     * @param boolean $caseSensitive does the URL is case sensitive or not
+     *
+     * @return void
+     */
     public static function run(bool $caseSensitive = false)
     {
         $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
         $path = $parsedUrl['path'] ?? '/';
         $path = urldecode($path);
         $reqMethod = strtolower($_SERVER['REQUEST_METHOD']);
-        if ($reqMethod == 'get') {
-            self::handleRequest($path, self::$getMethodRoutes, $caseSensitive);
-        } elseif ($reqMethod == 'post') {
-            self::handleRequest($path, self::$postMethodRoutes, $caseSensitive);
+        if ($reqMethod == Constants::METHOD_GET) {
+            self::handleRequest($path, self::$_getMethodRoutes, $caseSensitive);
+        } elseif ($reqMethod == Constants::METHOD_POST) {
+            self::handleRequest($path, self::$_postMethodRoutes, $caseSensitive);
         } else {
-            self::handleRequest($path, self::$otherRoutes, $caseSensitive);
+            self::handleRequest($path, self::$_otherRoutes, $caseSensitive);
         }
     }
 
-    public static function handleRequest(string $path, array $routes, bool $caseSensitive = false)
-    {
+    /**
+     * Handles the URL request
+     *
+     * @param string  $path          Requested URL path
+     * @param array   $routes        Routes
+     * @param boolean $caseSensitive Does the URL is case sensitive or not
+     *
+     * @return void
+     */
+    public static function handleRequest(
+        string $path,
+        array $routes,
+        bool $caseSensitive = false
+    ) {
         $pathMatch = false;
         $methodMatch = false;
         global $config;
         foreach ($routes as $route) {
-            $expression = '#^' . $route['expression'] . '$#';
+            $routeUrl = '#^' . $route['route'] . '$#';
 
             if (!$caseSensitive) {
-                $expression = $expression . 'i';
+                $routeUrl = $routeUrl . 'i';
             }
-            if (preg_match($expression, $path, $matches)) {
+            if (preg_match($routeUrl, $path, $matches)) {
                 $pathMatch = true;
                 $rule = $route['rule'];
                 if ($rule != null) {
@@ -81,7 +172,7 @@ class Route
                     }
                 }
                 array_shift($matches);
-                $requestCtrl = $route['route'] ?? $path;
+                $requestCtrl = $route['expression'] ?? $path;
                 $requestCtrl = explode('/', trim($requestCtrl, "/"));
                 $ctrl = $requestCtrl[0];
                 $method = $requestCtrl[1] ?? '';
@@ -95,14 +186,15 @@ class Route
             }
         }
         if (!$pathMatch) {
-            if (self::$pathNotFound) {
+            if (self::$_pathNotFound) {
                 self::$pathNotAllowed();
                 return;
             } elseif (isset($config['error_ctrl'])) {
                 $controllerName = $config['error_ctrl'];
-                if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
+                $file = $config['controller'] . "/" . $config['error_ctrl'].".php";
+                if (file_exists($file)) {
                     if (method_exists($controllerName, 'pageNotFound')) {
-                        (new $controllerName)->pageNotFound();
+                        (new $controllerName())->pageNotFound();
                         $methodMatch = true;
                         return;
                     }
@@ -112,14 +204,15 @@ class Route
             die('404 - The file  not found');
         }
         if (!$methodMatch) {
-            if (self::$methodNotAllowed) {
-                self::$methodNotAllowed();
+            if (self::$_methodNotAllowed) {
+                self::$_methodNotAllowed();
                 return;
             } elseif (isset($config['error_ctrl'])) {
                 $controllerName = $config['error_ctrl'];
-                if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
+                $file = $config['controller'] . "/" . $config['error_ctrl'] . ".php";
+                if (file_exists($file)) {
                     if (method_exists($controllerName, 'invalidRequest')) {
-                        (new $controllerName)->invalidRequest();
+                        (new $controllerName())->invalidRequest();
                         return;
                     }
                 }
@@ -129,30 +222,48 @@ class Route
         }
     }
 
-    public static function dispatch(string $path, string $method, bool $caseSensitive)
-    {
+    /**
+     * Dispatch the Request
+     *
+     * @param string  $path          Requested URL path
+     * @param string  $method        Method Name
+     * @param boolean $caseSensitive Does the URL is case sensitive or not
+     *
+     * @return void
+     */
+    public static function dispatch(
+        string $path,
+        string $method,
+        bool $caseSensitive
+    ) {
         $method = strtolower($method);
-        if ($method == 'get') {
-            self::handleRequest($path, self::$getMethodRoutes, $caseSensitive);
-        } elseif ($method == 'post') {
-            self::handleRequest($path, self::$postMethodRoutes, $caseSensitive);
+        if ($method == Constants::METHOD_GET) {
+            self::handleRequest($path, self::$_getMethodRoutes, $caseSensitive);
+        } elseif ($method == Constants::METHOD_POST) {
+            self::handleRequest($path, self::$_postMethodRoutes, $caseSensitive);
         } else {
-            self::handleRequest($path, self::$otherRoutes, $caseSensitive);
+            self::handleRequest($path, self::$_otherRoutes, $caseSensitive);
         }
     }
 
+    /**
+     * Calls when an error occured
+     *
+     * @return void
+     */
     public static function error()
     {
         global $config;
         $data = func_get_args();
-        if (self::$onError) {
-            self::$onError($data);
+        if (self::$_onError) {
+            self::$_onError($data);
             return;
         } elseif (isset($config['error_ctrl'])) {
             $controllerName = $config['error_ctrl'];
-            if (file_exists($config['controller'])."/".$config['error_ctrl'].".php") {
+            $file = $config['controller'] . "/" . $config['error_ctrl'] . ".php";
+            if (file_exists($file)) {
                 if (method_exists($controllerName, 'serverError')) {
-                    (new $controllerName)->serverError($data);
+                    (new $controllerName())->serverError($data);
                     return;
                 }
             }

@@ -70,15 +70,15 @@ class MysqlDbHandler extends BaseDbHandler
         if (is_array($this->bindValues)) {
             foreach ($this->bindValues as $bindValue) {
                 switch (gettype($bindValue)) {
-                    case 'integer':
-                        $paramType .= "i";
-                        break;
-                    case 'double':
-                        $paramType .= "d";
-                        break;
-                    default:
-                        $paramType .= "s";
-                        break;
+                case 'integer':
+                    $paramType .= "i";
+                    break;
+                case 'double':
+                    $paramType .= "d";
+                    break;
+                default:
+                    $paramType .= "s";
+                    break;
                 }
             }
             $stmt->bind_param($paramType, ...$this->bindValues);
@@ -98,9 +98,9 @@ class MysqlDbHandler extends BaseDbHandler
     /**
      * Fetch the records
      *
-     * @return object|null
+     * @return object|bool|null
      */
-    public function fetch(): ?object
+    public function fetch() //:object|bool|null
     {
         if ($this->result != null) {
             $obj = $this->result->fetch_object();
@@ -124,15 +124,15 @@ class MysqlDbHandler extends BaseDbHandler
         $paramType = "";
         foreach ($bindValues as $bindValue) {
             switch (gettype($bindValue)) {
-                case 'integer':
-                    $paramType .= "i";
-                    break;
-                case 'double':
-                    $paramType .= "d";
-                    break;
-                default:
-                    $paramType .= "s";
-                    break;
+            case 'integer':
+                $paramType .= "i";
+                break;
+            case 'double':
+                $paramType .= "d";
+                break;
+            default:
+                $paramType .= "s";
+                break;
             }
         }
         $stmt->bind_param($paramType, ...$bindValues);

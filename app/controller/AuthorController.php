@@ -39,10 +39,10 @@ class AuthorController extends BaseController
         $data['authors'] = $this->model->getAll();
         $user = $this->input->session('type');
         $this->loadLayout($user."Header.html");
-        $this->loadView("manageAuthors", $data);
+        $this->loadTemplate("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
     }
-    
+
     /**
      * Add new author and display available authors
      *
@@ -64,11 +64,11 @@ class AuthorController extends BaseController
         }
         $this->loadLayout($user."Header.html");
         $data['authors'] = $this->model->getAll();
-        $this->loadView("manageAuthors", $data);
+        $this->loadTemplate("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
-    
+
     /**
      * Get the author details by id and display it in JSON format
      *
@@ -81,7 +81,7 @@ class AuthorController extends BaseController
         $result['data'] = $this->model->get($id);
         echo json_encode($result);
     }
-    
+
     /**
      * Change the status of the author & displays the success/failure message in JSON
      *
@@ -121,7 +121,7 @@ class AuthorController extends BaseController
         }
         $this->loadLayout($user."Header.html");
         $data['authors'] = $this->model->getAll();
-        $this->loadView("manageAuthors", $data);
+        $this->loadTemplate("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
@@ -142,13 +142,13 @@ class AuthorController extends BaseController
     /**
      * Search the author with given keys
      *
-     * @param int    $searchKey  Keys to search
+     * @param string $searchKey  Keys to search
      * @param string $ignoreList The list of authorcodes with , seperator
      *                           to ignore in search
      *
      * @return void
      */
-    public function search(int $searchKey, string $ignoreList = '')
+    public function search(string $searchKey, string $ignoreList = '')
     {
         $result['result'] = $this->model->getAuthorsLike($searchKey, $ignoreList);
         echo json_encode($result);

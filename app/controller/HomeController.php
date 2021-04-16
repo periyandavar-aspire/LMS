@@ -41,9 +41,11 @@ class HomeController extends BaseController
         $homeData['vision'] = $this->model->getVision();
         $homeData['mission'] = $this->model->getMission();
         $homeData['books'] = $this->model->getAvailableBooks();
-        $this->loadView("index", $homeData);
+        // $this->loadTemplate("index", $homeData);
+        $this->setView(new HomeView());
+        $this->view->loadIndexPage($homeData);
         $data['footer'] = $this->model->getFooterData();
-        $this->loadView("footer", $data);
+        $this->loadTemplate("footer", $data);
         $this->includeScript('bookElement.js');
     }
 
@@ -56,9 +58,9 @@ class HomeController extends BaseController
     {
         $this->loadLayout("header.html");
         $books['books'] = $this->model->getAvailableBooks();
-        $this->loadView("books", $books);
+        $this->loadTemplate("books", $books);
         $data['footer'] = $this->model->getFooterData();
-        $this->loadView("footer", $data);
+        $this->loadTemplate("footer", $data);
         $this->includeScript('bookElement.js');
     }
 
@@ -71,8 +73,8 @@ class HomeController extends BaseController
     {
         $this->loadLayout("header.html");
         $data['footer'] = $this->model->getFooterData();
-        $this->loadView("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
-        $this->loadView("footer", $data);
+        $this->loadTemplate("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
+        $this->loadTemplate("footer", $data);
     }
 
     /**
@@ -105,9 +107,9 @@ class HomeController extends BaseController
     public function login()
     {
         $this->loadLayout("header.html");
-        $this->loadView("login");
+        $this->loadTemplate("login");
         $data['footer'] = $this->model->getFooterData();
-        $this->loadView("footer", $data);
+        $this->loadTemplate("footer", $data);
     }
 
     /**
@@ -131,7 +133,7 @@ class HomeController extends BaseController
         );
         $fields->addCustomeRule(
             'captcha',
-            new class implements ValidationRule {
+            new class() implements ValidationRule {
                 /**
                  * Validates the captcha
                  *
@@ -166,9 +168,9 @@ class HomeController extends BaseController
             }
         }
         $this->loadLayout("header.html");
-        $this->loadView("login", $data);
+        $this->loadTemplate("login", $data);
         $data['footer'] = $this->model->getFooterData();
-        $this->loadView("footer", $data);
+        $this->loadTemplate("footer", $data);
     }
 
     /**
@@ -210,8 +212,8 @@ class HomeController extends BaseController
             $data["msg"] = "Unable to create an account..!";
         } else {
             $this->loadLayout("header.html");
-            $this->loadView("login");
-            $this->loadView("footer", $data);
+            $this->loadTemplate("login");
+            $this->loadTemplate("footer", $data);
             $this->addScript(
                 "toast('Your Account is created successfully..!', 'success');"
             );
@@ -219,8 +221,8 @@ class HomeController extends BaseController
         }
         $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
-        $this->loadView("registration", $data);
-        $this->loadView("footer", $data);
+        $this->loadTemplate("registration", $data);
+        $this->loadTemplate("footer", $data);
     }
 
     /**
@@ -232,8 +234,8 @@ class HomeController extends BaseController
     {
         $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
-        $this->loadView("registration", $data);
+        $this->loadTemplate("registration", $data);
         $data['footer'] = $this->model->getFooterData();
-        $this->loadView("footer", $data);
+        $this->loadTemplate("footer", $data);
     }
 }

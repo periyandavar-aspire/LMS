@@ -36,7 +36,7 @@ class AdminController extends BaseController
      */
     public function login()
     {
-        $this->loadView("admin");
+        $this->loadTemplate("admin");
     }
 
     /**
@@ -50,7 +50,7 @@ class AdminController extends BaseController
         $captcha = $this->input->post("verfcode");
         if ($captcha != $this->input->session("captcha")) {
             $data["msg"] = "Invalid captcha..!";
-            $this->loadView("admin", $data);
+            $this->loadTemplate("admin", $data);
             return;
         }
         $result = $this->model->getAdminUser($user);
@@ -63,7 +63,7 @@ class AdminController extends BaseController
             }
         }
         $data["msg"] = "Login failed..!";
-        $this->loadView("admin", $data);
+        $this->loadTemplate("admin", $data);
     }
 
 
@@ -76,7 +76,7 @@ class AdminController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadView('Adminhome');
+        $this->loadTemplate($user. 'home');
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -91,7 +91,7 @@ class AdminController extends BaseController
         $this->loadLayout($user . "Header.html");
         $id = $this->input->session('id');
         $data['result'] = $this->model->getProfile($id);
-        $this->loadView($user . 'Profile', $data);
+        $this->loadTemplate($user . 'Profile', $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -115,6 +115,7 @@ class AdminController extends BaseController
     {
         $fdv = new FormDataValidation();
         $id = $this->input->session('id');
+        $user = $this->input->session('type');
         $fields = new Fields(['fullname']);
         $rules = [
             'fullName' => 'alphaSpaceValidation',
@@ -142,7 +143,7 @@ class AdminController extends BaseController
         }
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout($user . "Header.html");
-        $this->loadView($user . "Profile", $data);
+        $this->loadTemplate($user . "Profile", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($msg);
     }
@@ -156,7 +157,7 @@ class AdminController extends BaseController
     {
         $data['data'] = $this->model->getConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadView("settings", $data);
+        $this->loadTemplate("settings", $data);
         $this->loadLayout("adminFooter.html");
     }
 
@@ -187,7 +188,7 @@ class AdminController extends BaseController
         }
         $data['data'] = $this->model->getConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadView("settings", $data);
+        $this->loadTemplate("settings", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }
@@ -201,7 +202,7 @@ class AdminController extends BaseController
     {
         $data['data'] = $this->model->getCmsConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadView("cms", $data);
+        $this->loadTemplate("cms", $data);
         $this->loadLayout("adminFooter.html");
     }
 
@@ -243,7 +244,7 @@ class AdminController extends BaseController
         }
         $data['data'] = $this->model->getCmsConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadView("cms", $data);
+        $this->loadTemplate("cms", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }

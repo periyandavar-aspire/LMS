@@ -26,9 +26,9 @@ class BookController extends BaseController
      */
     public function __construct()
     {
-        parent::__construct(new BookModel());
+        parent::__construct(new BookModel(), new BookService());
     }
-    
+
     /**
      * Display all books with CRUD options
      *
@@ -39,7 +39,7 @@ class BookController extends BaseController
         $user = $this->input->session('type');
         $data['books'] = $this->model->getBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadView("manageBooks", $data);
+        $this->loadTemplate("manageBooks", $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -52,7 +52,7 @@ class BookController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadView("newBook", $data);
+        $this->loadTemplate("newBook", $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -68,10 +68,10 @@ class BookController extends BaseController
         $data['book'] = $this->model->get($id);
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadView("newBook", $data);
+        $this->loadTemplate("newBook", $data);
         $this->loadLayout($user . "Footer.html");
     }
-    
+
     /**
      * Displays the details of the given book $id
      *
@@ -83,7 +83,7 @@ class BookController extends BaseController
     {
         $data['book'] = $this->model->getBookDetails($id);
         $this->loadLayout('header.html');
-        $this->loadView("book", $data);
+        $this->loadTemplate("book", $data);
         $this->loadLayout('footer.html');
     }
 
@@ -98,7 +98,7 @@ class BookController extends BaseController
         $keyword = $this->input->post('search') ?? '';
         $data['books'] = $this->model->searchBook($keyword);
         $this->loadLayout($user.'header.html');
-        $this->loadView("searchBook", $data);
+        $this->loadTemplate("searchBook", $data);
         $this->loadLayout($user.'footer.html');
         $this->includeScript('bookElement.js');
     }
@@ -159,7 +159,7 @@ class BookController extends BaseController
         }
         $data['books'] = $this->model->getBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadView("newBook", $data);
+        $this->loadTemplate("newBook", $data);
         $this->loadLayout($user . "Footer.html");
         $this->includeScript("populate.js");
         $this->addScript($script);
@@ -202,7 +202,7 @@ class BookController extends BaseController
             'description',
             'price'
         ];
-        $fields = new Fields();
+        $fields = new Fields($inputFields);
         $rules = [
             'author' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
             'category' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
@@ -211,7 +211,7 @@ class BookController extends BaseController
             'stack' => 'positiveNumberValidation'
         ];
         $fields->addRule($rules);
-        $fields->setRequiredFields($inputFields);
+        $fields->setRequiredFields(...$inputFields);
         $fields->addValues($this->input->post());
         $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
@@ -239,12 +239,12 @@ class BookController extends BaseController
         $data['books'] = $this->model->getBooks();
         $data['book'] = $this->model->get($id);
         $this->loadLayout($user . "Header.html");
-        $this->loadView("newBook", $data);
+        $this->loadTemplate("newBook", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($script);
     }
 
-    
+
     // public function bookstatus()
     // {
     //     $lastUpdate = filemtime("log/unavailablebooks.log");
@@ -277,8 +277,12 @@ class BookController extends BaseController
         $user = $this->input->session('type');
         $data['book'] = $this->model->getBookDetails($id);
         $data['user'] = $user;
+        if ($user != 'User') {
+            $issuedData = $this->model->getIssuedUsers($id);
+            $data['issuedUsers'] = $this->service->seperateUsers($issuedData);
+        }
         $this->loadLayout($user . 'header.html');
-        $this->loadView("bookdetail", $data);
+        $this->loadTemplate("bookdetail", $data);
         $this->loadLayout($user . 'footer.html');
     }
 
@@ -291,7 +295,7 @@ class BookController extends BaseController
     {
         $this->loadLayout("userHeader.html");
         $data['books'] = $this->model->getAvailableBooks();
-        $this->loadView("availablebooks", $data);
+        $this->loadTemplate("availablebooks", $data);
         $this->loadLayout("userFooter.html");
         $this->includeScript('bookElement.js');
     }

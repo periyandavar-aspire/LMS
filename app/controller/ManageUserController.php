@@ -40,7 +40,7 @@ class ManageUserController extends BaseController
         $currentUser = $this->input->session('id');
         $data['users'] = $this->model->getAllUsers($currentUser);
         $this->loadLayout("adminHeader.html");
-        $this->loadView("adminManageUsers", $data);
+        $this->loadTemplate("adminManageUsers", $data);
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
     }
@@ -56,7 +56,7 @@ class ManageUserController extends BaseController
         $currentUser = $this->input->session('id');
         $data['users'] = $this->model->getRegUsers();
         $this->loadLayout("librarianHeader.html");
-        $this->loadView("librarianManageUsers", $data);
+        $this->loadTemplate("librarianManageUsers", $data);
         $this->loadLayout("librarianFooter.html");
     }
 
@@ -114,7 +114,7 @@ class ManageUserController extends BaseController
         $currentUser = $this->input->session('id');
         $data['users'] = $this->model->getAllUsers($currentUser);
         $this->loadLayout("adminHeader.html");
-        $this->loadView("adminmanageUsers", $data);
+        $this->loadTemplate("adminmanageUsers", $data);
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
         $this->addScript($script);

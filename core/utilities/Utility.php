@@ -1,14 +1,45 @@
 <?php
-//defined('VALID_REQ') OR exit('Not a valid Request');
-
+/**
+ * Utility File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Utility
+ * @package  Utility
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+defined('VALID_REQ') or exit('Not a valid Request');
+/**
+ * Utility Class offers various static functions
+ *
+ * @category Utility
+ * @package  Utility
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 class Utility
 {
+    /**
+     * Returns the baseURL
+     *
+     * @return string
+     */
     public static function baseURL(): string
     {
         global $config;
         return $config['base_url'];
     }
 
+    /**
+     * Set the session value with base64 encode
+     *
+     * @param string      $key   Key Name
+     * @param string|null $value Value
+     *
+     * @return void
+     */
     public static function setSessionData(string $key, ?string $value)
     {
         if ($value == null) {
@@ -19,15 +50,29 @@ class Utility
         }
     }
 
+    /**
+     * Checks whether the given key is exists in the Session array or not
+     *
+     * @param string $key Key Name
+     *
+     * @return boolean
+     */
     public static function validateSession(string $key): bool
     {
-        $value = (new InputData)->session($key);
+        $value = (new InputData())->session($key);
         if ($value == null) {
             return false;
         }
         return true;
     }
 
+    /**
+     * Redirects to the passed URL
+     *
+     * @param string $url URL
+     *
+     * @return void
+     */
     public static function redirectURL(string $url)
     {
         if (headers_sent() === false) {
@@ -36,7 +81,15 @@ class Utility
         exit();
     }
 
-    public static function endsWith($str, $endStr)
+    /**
+     * Checks whether the string is ends with the given substring
+     *
+     * @param string $str    String
+     * @param string $endStr Substring
+     *
+     * @return bool
+     */
+    public static function endsWith(string $str, string $endStr): bool
     {
         $len = strlen($endStr);
         if ($len == 0) {
@@ -45,13 +98,28 @@ class Utility
         return (substr($str, -$len) === $endStr);
     }
 
-    public static function startsWith($str, $startStr)
+    /**
+     * Checks whether the string is starts with the given substring
+     *
+     * @param string $str      String
+     * @param string $startStr Substring
+     *
+     * @return bool
+     */
+    public static function startsWith(string $str, string $startStr): bool
     {
         $len = strlen($startStr);
         return (substr($str, 0, $len) === $startStr);
     }
 
-    public static function dispatch($url)
+    /**
+     * Performs Dispatch
+     *
+     * @param string $url URL
+     *
+     * @return void
+     */
+    public static function dispatch(string $url)
     {
         global $config;
         $url = ltrim($url, "/");
@@ -60,7 +128,7 @@ class Utility
         $method = $url[1];
         if (file_exists($config['controller']) . "/" . $controller . ".php") {
             if (method_exists($controller, $method)) {
-                (new $controller)->$method();
+                (new $controller())->$method();
                 exit();
             }
         }
