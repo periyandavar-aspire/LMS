@@ -27,3 +27,12 @@ function deleteItem(delUrl) {
             }
         }));
 }
+
+function changePagination(url) {
+    let limit = document.getElementById('recordCount').value;
+    let search = document.getElementById('recordSearch').value;
+    let offset = 0;
+    limit = isNaN(limit) ? limit : 5;
+    url = url + "/" + offset + "/" + limit + "/" + search;
+    window.location.replace(url);
+}

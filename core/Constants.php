@@ -20,13 +20,21 @@
  */
 class Constants
 {
-    public const METHOD_GET = "GET";
+    public const METHOD_GET = "get";
 
-    public const METHOD_POST = 'POST';
+    public const METHOD_POST = 'post';
 
     public const LIKE_REQUEST_STATUS = 'Request%';
 
     public const STATUS_REQUEST = "Requested";
 
     public const STATUS_ISSUED = "Issued";
+
+    public const ADMIN_USER = "Admin";
+
+    public const LIBR_USER = "Librarian";
+
+    public const REG_USER = "User";
+
+    public const VALID_LOGIN = true;
 }

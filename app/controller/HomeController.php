@@ -159,8 +159,8 @@ class HomeController extends BaseController
         } else {
             $pass = $this->model->getUserPass($username);
             if ($pass == md5($this->input->post('password'))) {
-                Utility::setsessionData('login', true);
-                Utility::setSessionData("type", "user");
+                Utility::setsessionData('login', Constants::VALID_LOGIN);
+                Utility::setSessionData("type", Constants::REG_USER);
                 Utility::setSessionData("id", $username);
                 $this->redirect("user/home");
             } else {

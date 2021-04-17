@@ -21,14 +21,14 @@
                     <book-element
                         cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                         book="<?php echo $book->name; ?>"
-                        author="<?php echo $book->author;?>"
+                        author="<?php echo $book->authors;?>"
                         id="<?php echo $book->id;?>">
                     </book-element>
 
                     <div class="card-content">
                         <h3><?php echo $book->name?>
                         </h3>
-                        <div class="text-author"><?php echo $book->author;?>
+                        <div class="text-author"><?php echo $book->authors;?>
                         </div>
                         <p><?php echo $book->description;?>
                         </p>

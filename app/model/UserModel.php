@@ -81,17 +81,27 @@ class UserModel extends BaseModel
     /**
      * Returns the lent books details
      *
-     * @param string $username Username
+     * @param string      $username Username
+     * @param null|int    $Tcount   Total Records count
+     * @param int         $offset   Offset
+     * @param int         $limit    Row count
+     * @param string|null $search   Search value
      *
      * @return array
      */
-    public function getLentBooks(string $username): array
-    {
+    public function getLentBooks(
+        string $username,
+        ?int &$Tcount = null,
+        int $offset = 0,
+        int $limit = 5,
+        ?string $search = null
+    ): array {
         $books = [];
         $this->db->select('isbnNumber', 'name bookName', 'ib.id')
             ->selectAs(
-                "IFNULL (issuedAt,'') issuedAt",
-                "IF(returnAt='0000-00-00','Not Return Yet', returnAt) returnAt",
+                "date_format(issuedAt, '%d-%m-%Y %h:%i:%s') issuedAt",
+                "IF(returnAt='0000-00-00','Not Return Yet', "
+                . "date_format(returnAt, '%d-%m-%Y %h:%i:%s')) returnAt",
                 "IFNULL(fine,'-') fine"
             );
         $this->db->from('issued_book ib')
@@ -100,12 +110,32 @@ class UserModel extends BaseModel
             ->innerJoin('user')
             ->on('user.id = ib.userId');
         $this->db->where('userName', '=', $username)
-            ->where('issuedAt', '!=', '0000-00-00')
-            ->orderby('returnAt')->limit(10, 0)
+            ->where('issuedAt', '!=', '0000-00-00');
+        if ($search != null) {
+            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?)');
+            $this->db->appendBindValues(["%$search%", "%$search%"]);
+        }
+        $this->db->orderby('returnAt')->limit($limit, $offset)
             ->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
         }
+        $this->db->selectAs(
+            "COUNT(*) tCount",
+        );
+        $this->db->from('issued_book ib')
+            ->innerJoin('book')
+            ->on('book.id = ib.bookId')
+            ->innerJoin('user')
+            ->on('user.id = ib.userId');
+        if ($search != null) {
+            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?)');
+            $this->db->appendBindValues(["%$search%", "%$search%"]);
+        }
+        $this->db->where('userName', '=', $username)
+            ->where('issuedAt', '!=', '0000-00-00')
+            ->execute();
+        $Tcount = $this->db->fetch()->tCount;
         return $books;
     }
 

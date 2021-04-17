@@ -111,12 +111,34 @@ class UserController extends BaseController
     /**
      * Displays the lent books of the user
      *
+     * @param int         $offset Offset
+     * @param int         $limit  Limit
+     * @param string|null $search Search Key
+     *
      * @return void
      */
-    public function getLentBooks()
-    {
+    public function getLentBooks(
+        int $offset = 0,
+        int $limit = 5,
+        ?string $search = null
+    ) {
         $user = $this->input->session('id');
-        $data["books"] = $this->model->getLentBooks($user);
+        $data["books"] = $this->model->getLentBooks(
+            $user,
+            $tCount,
+            $offset,
+            $limit,
+            $search
+        );
+        $data['pagination'] = [
+            "tcount" => $tCount,
+            "current" => (int)(($offset+1)/$limit)+1,
+            "start" => $offset + 1,
+            "end" => $offset + count($data['books']),
+            "limit" => $limit,
+            "search" => $search,
+            "tpages" => ceil(($tCount/$limit))
+        ];
         $this->loadLayout("userHeader.html");
         $this->loadTemplate("lentBooks", $data);
         $this->loadLayout("userFooter.html");
@@ -140,7 +162,7 @@ class UserController extends BaseController
      * Removes the user book request
      *
      * @param integer $id userRequestId
-     * 
+     *
      * @return void
      */
     public function removeRequest(int $id)

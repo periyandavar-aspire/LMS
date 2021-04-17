@@ -138,17 +138,17 @@ class BookModel extends BaseModel
     {
         $books = [];
         $this->db->select(
-            'b.id id',
-            'b.name name',
-            'a.name author',
+            'id',
+            'name',
+            'authors',
             'description',
             'available',
             'coverPic'
-        )->from('book b');
-        $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')
-            ->innerJoin('author a')
-            ->on('ba.authorId = a.id');
-        $this->db->where('b.status', '=', 1)->where('b.deletionToken', '=', 'N/A')
+        )->from('book_detail');
+        // $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')
+        //     ->innerJoin('author a')
+        //     ->on('ba.authorId = a.id');
+        $this->db->where('status', '=', 1)//->where('b.deletionToken', '=', 'N/A')
             ->orderby('RAND()')->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
@@ -180,6 +180,7 @@ class BookModel extends BaseModel
         $this->db->where('id', '=', $bookId);
         $this->db->where('status', '=', '1')->execute();
         $result = $this->db->fetch();
+        // var_export($result);
         return $result;
     }
 
@@ -327,11 +328,13 @@ class BookModel extends BaseModel
     {
         $result = [];
         $this->db->select('username', 'status.value status')
-            ->from('issued_book')
+            ->from('issued_book ib')
             ->innerJoin('status')
-            ->on('status.code = issued_book.status')
+            ->on('status.code = ib.status')
             ->innerJoin('book')
-            ->using('isbnNumber')
+            ->on('book.id = ib.bookId')
+            ->innerJoin('user')
+            ->on('user.id = ib.userId')
             ->where('book.id', '=', $bookId)
             ->where('status.value', '!=', 'Returned')
             ->where('status.value', '!=', 'Deleted Request')

@@ -231,13 +231,14 @@ abstract class BaseDbhandler
         } else {
             $this->query  = $this->_sql . $this->_where;
         }
-        // echo $this->query;
-        // print_r($this->bindValues);
+        echo $this->query;
+        print_r($this->bindValues);
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {
             return false;
         }
+        $this->_resetQuery();
         return $result;
     }
 
@@ -435,7 +436,9 @@ abstract class BaseDbhandler
     {
         $selectData = func_get_args();
         $selectData = implode(",", $selectData);
-        $this->_columns .= ", " . $selectData;
+        $this->_columns = ($this->_columns != null)
+            ? $this->_columns . ", " . $selectData
+            : $selectData;
         return $this;
     }
 
@@ -635,7 +638,7 @@ abstract class BaseDbhandler
         if ($offset ==null) {
             $this->_limit = " LIMIT $limit";
         } else {
-            $this->_limit = " LIMIT $limit OFFSET $offset";
+            $this->_limit = " LIMIT $offset,$limit";
         }
 
         return $this;

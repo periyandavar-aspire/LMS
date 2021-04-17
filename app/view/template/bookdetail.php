@@ -50,7 +50,7 @@
                         <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?>
                             </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
                             available</p>
-                        <?php if ($user == 'user'): ?>
+                        <?php if ($user == Constants::REG_USER): ?>
                         <div class="form-buttons">
                             <button
                                 onclick="requestBook(<?php echo $book->isbnNumber . ',' . $book->available; ?>)"
