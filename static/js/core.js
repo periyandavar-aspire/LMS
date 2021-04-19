@@ -152,3 +152,63 @@ function hideToast() {
 function showElement(id) {
     document.getElementById(id).style.display = 'block';
 }
+
+function loaded() {
+    document.getElementsByClassName('left-cover')[0].style.left = '100%';
+    document.getElementsByClassName('right-cover')[0].style.right = "100% ";
+    document.getElementById('loader').className += " loaded";
+}
+let offset = 0;
+let limit = 12;
+
+function loadMoreBooks(event, url) {
+    url = url != undefined ? url : '/books/load';
+    url += "/" + offset + "/" + limit;
+    fetch(url, { headers: { response: "application/json" } })
+        .then(response => { return response.json() })
+        .then(data => {
+            let divElem;
+            let target = document.getElementById('books-list');
+            if (data.books.length > 0) {
+                for (const book of data.books) {
+                    divElem = document.createElement('div');
+                    code = `<a href="/book/view/` + book.id + `">
+                            <book-element
+                                cover="/upload/book/` + book.coverPic + `"
+                                book="` + book.name + `"
+                                author="` + book.authors + `"
+                                id="` + book.id + `">
+                            </book-element>
+                            </a>
+                            <div class="card-content">
+                                <h3>` + book.name + `
+                                </h3>
+                                <div class="text-author">` + book.authors + `
+                                </div>
+                                <p>` + book.description + `
+                                </p>
+                                <p>only ` + book.available;
+                    code += book.available == 1 ? "copy" : "copies";
+                    code += `available</p>
+                                <div class="btn-container">
+                                    <a class="btn-link"
+                                        href="/book/view/` + book.id + `">View
+                                        Book</a>
+                                </div>
+                            </div>
+                        `;
+                    divElem.className = "card cols";
+                    divElem.innerHTML = code;
+                    target.appendChild(divElem);
+                }
+
+            } else {
+                // toast("Unabel to fetch data..!", 'danger');
+                event.target.remove();
+            }
+        });
+    offset += 12;
+}
+window.onload = function() {
+    setTimeout(loaded(), 10000);
+}

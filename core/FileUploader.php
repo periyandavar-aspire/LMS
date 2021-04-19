@@ -138,7 +138,7 @@ trait FileUploader
             return false;
         }
         $destination = $destination
-            ?? ($config['upload'] == "" ? 'upload' : $config['upload'] . "/upload");
+            ?? ($config['upload'] = "" ? 'upload' : $config['upload']);
         $destination .= "/" . ($subfolder ?? '');
         $destination .= '/' . $filename;
         if ($this->validateFile($file)) {
@@ -148,6 +148,7 @@ trait FileUploader
                     return false;
                 }
             }
+            print_r($destination);
             move_uploaded_file($file['tmp_name'], $destination);
             return true;
         }

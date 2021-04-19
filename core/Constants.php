@@ -37,4 +37,6 @@ class Constants
     public const REG_USER = "User";
 
     public const VALID_LOGIN = true;
+
+    public const COVER_PIC_PATH = 'book/';
 }

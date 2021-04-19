@@ -50,6 +50,7 @@ class UserController extends BaseController
     {
         $this->loadLayout("userHeader.html");
         $id = $this->input->session('id');
+        $data['dropdownGen'] = $this->model->getGender();
         $data['result'] = $this->model->getProfile($id);
         $this->loadTemplate("userProfile", $data);
         $this->loadLayout("userFooter.html");
@@ -91,6 +92,7 @@ class UserController extends BaseController
             }
         }
         $data['result'] = $this->model->getProfile($id);
+        $data['dropdownGen'] = $this->model->getGender();
         $this->loadLayout("userHeader.html");
         $this->loadTemplate("userProfile", $data);
         $this->loadLayout("userFooter.html");
@@ -132,12 +134,12 @@ class UserController extends BaseController
         );
         $data['pagination'] = [
             "tcount" => $tCount,
-            "current" => (int)(($offset+1)/$limit)+1,
+            "cpage" => floor($offset/$limit),
+            "tpages" => ceil($tCount/$limit),
             "start" => $offset + 1,
             "end" => $offset + count($data['books']),
             "limit" => $limit,
             "search" => $search,
-            "tpages" => ceil(($tCount/$limit))
         ];
         $this->loadLayout("userHeader.html");
         $this->loadTemplate("lentBooks", $data);
@@ -147,16 +149,39 @@ class UserController extends BaseController
     /**
      * Displays the books requested by the user
      *
+     * @param int         $offset Offset
+     * @param int         $limit  Limit
+     * @param string|null $search Search Key
+     * 
      * @return void
      */
-    public function getRequestedBooks()
-    {
+    public function getRequestedBooks(
+        int $offset = 0,
+        int $limit = 5,
+        ?string $search = null
+    ) {
         $user = $this->input->session('id');
-        $data["books"] = $this->model->getRequestedBooks($user);
+        $data["books"] = $this->model->getRequestedBooks(
+            $user,
+            $tCount,
+            $offset,
+            $limit,
+            $search
+        );
+        $data['pagination'] = [
+            "tcount" => $tCount,
+            "cpage" => floor($offset/$limit),
+            "tpages" => ceil($tCount/$limit),
+            "start" => $offset + 1,
+            "end" => $offset + count($data['books']),
+            "limit" => $limit,
+            "search" => $search,
+        ];
         $this->loadLayout("userHeader.html");
         $this->loadTemplate("booked", $data);
         $this->loadLayout("userFooter.html");
     }
+
 
     /**
      * Removes the user book request

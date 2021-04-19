@@ -66,26 +66,28 @@ class BookModel extends BaseModel
      */
     public function addBook(array $book): bool
     {
-        $categoryId = $book['category'];
-        $authorId = $book['author'];
+        $categories = explode(",", $book['category']);
+        $authors = explode(",", $book['author']);
         unset($book['category']);
         unset($book['author']);
+        $book['available'] = $book['stack'];
         $this->db->set("autocommit", 0);
         $this->db->begin();
+        $flag1 = $flag2 = $flag3 = false;
         $flag1 = $this->db->insert('book', $book)->execute();
         $bookId = $this->db->insertId();
-        if ($flag2) {
+        if ($flag1) {
             foreach ($categories as $categoryId) {
                 $category = ['bookId' => $bookId, 'catId' => $categoryId];
                 $flag2 = $this->db->insert('book_category', $category)->execute();
-                if (!$flag2) {
+                if (!$flag1) {
                     break;
                 }
             }
         }
-        $flag3 = $this->db->delete('book_author')->where('bookId', '=', $bookId)
+        $flag2 = $this->db->delete('book_author')->where('bookId', '=', $bookId)
             ->execute();
-        if ($flag3) {
+        if ($flag2) {
             foreach ($authors as $authorId) {
                 $author = ['bookId' => $bookId, 'authorId' => $authorId];
                 $flag3 = $this->db->insert('book_author', $author)->execute();
@@ -132,10 +134,15 @@ class BookModel extends BaseModel
     /**
      * Returns enabled books
      *
+     * @param int $offset Offset
+     * @param int $limit  Row count
+     *
      * @return array
      */
-    public function getAvailableBooks(): array
-    {
+    public function getAvailableBooks(
+        int $offset = 0,
+        int $limit = 12
+    ): array {
         $books = [];
         $this->db->select(
             'id',
@@ -149,7 +156,9 @@ class BookModel extends BaseModel
         //     ->innerJoin('author a')
         //     ->on('ba.authorId = a.id');
         $this->db->where('status', '=', 1)//->where('b.deletionToken', '=', 'N/A')
-            ->orderby('RAND()')->execute();
+            ->orderby('id', 'desc')
+            ->limit($limit, $offset)
+            ->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
         }
@@ -238,7 +247,7 @@ class BookModel extends BaseModel
      */
     public function update(array $book, int $bookId): bool
     {
-        print_r($book);
+        $flag1 = $flag2 = $flag3 = false;
         $categories = explode(",", $book['category']);
         $authors = explode(",", $book['author']);
         unset($book['category']);
@@ -275,9 +284,24 @@ class BookModel extends BaseModel
         if ($flag1 && $flag2 && $flag3) {
             return $this->db->commit();
         }
-        $this->db->rollback();
+        return $this->db->rollback();
     }
 
+    /**
+     * Returns the cover pic name of the book
+     *
+     * @param int $id BookId
+     *
+     * @return string
+     */
+    public function getCoverPic(int $id): string
+    {
+        $this->db->select("coverpic")
+            ->from("book")
+            ->where('id', '=', $id)
+            ->execute();
+        return $this->db->fetch()->coverpic;
+    }
     /**
      * Updates the book details
      *
@@ -321,7 +345,7 @@ class BookModel extends BaseModel
      * Returns the books issued and requested users list
      *
      * @param int $bookId Book Id
-     * 
+     *
      * @return array
      */
     public function getIssuedUsers(int $bookId): array
@@ -349,14 +373,19 @@ class BookModel extends BaseModel
      * Search th book and returns the search result with given search keys
      *
      * @param string $Searchkey Search key
+     * @param int    $offset    Offset
+     * @param int    $limit     Row count
      *
      * @return array
      */
-    public function searchBook(string $Searchkey): array
-    {
+    public function searchBook(
+        string $Searchkey,
+        int $offset = 0,
+        int $limit = 12
+    ): array {
         $books = [];
         $this->db->select(
-            'b.id',
+            'b.id id',
             'b.name',
             'publication',
             'isbnNumber',
@@ -387,6 +416,7 @@ class BookModel extends BaseModel
         $this->db->orWhere("c.name", "LIKE", "%$Searchkey%");
         $this->db->appendWhere(')');
         $this->db->groupBy('b.id');
+        $this->db->limit($limit, $offset);
         $this->db->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;

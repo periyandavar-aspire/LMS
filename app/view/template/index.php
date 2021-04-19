@@ -60,14 +60,14 @@
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                             book="<?php echo $book->name; ?>"
-                            author="<?php echo $book->author;?>"
+                            author="<?php echo $book->authors;?>"
                             id="<?php echo $book->id;?>">
                         </book-element>
                     </a>
                     <div class="card-content">
                         <h3><?php echo $book->name?>
                         </h3>
-                        <div class="text-author"><?php echo $book->author;?>
+                        <div class="text-author"><?php echo $book->authors;?>
                         </div>
                         <p><?php echo $book->description;?>
                         </p>
@@ -81,6 +81,9 @@
                 </div>
                 <?php endforeach;?>
                 <?php endif;?>
+            </div>
+            <div class="btn-container" id="loadMore">
+                <a class="btn-link" href="/home/books">SHOW ALL</a>
             </div>
     </section>
 </article>

@@ -22,7 +22,7 @@ Route::add('/home/captcha');
 
 Route::add('/home/home');
 
-Route::add('/home/book/view/([1-9]{1}[0-9]*)', 'book/get');
+// Route::add('/home/book/view/([1-9]{1}[0-9]*)', 'book/get');
 
 Route::add(
     '/user/home',
@@ -105,7 +105,7 @@ Route::add(
 );
 
 Route::add(
-    '/user/requestedBooks',
+    '/user/requestedBooks/?([0-9]+)?/?([0-9]+)?/?([\d\D]+)?',
     'user/getRequestedBooks',
     'get',
     function () {
@@ -118,6 +118,12 @@ Route::add(
             Utility::redirectURL('/login');
         }
     }
+);
+
+Route::add(
+    '/books/load/?([0-9]+)?/?([0-9]+)?/?([\d\D]+)?',
+    'book/loadBooks',
+    'get'
 );
 
 Route::add(
@@ -158,11 +164,11 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN) {
+        // if ($input->session('login') == Constants::VALID_LOGIN) {
             return true;
-        } else {
-            Utility::redirectURL('/login');
-        }
+        // } else {
+        //     Utility::redirectURL('/login');
+        // }
     }
 );
 
@@ -832,6 +838,20 @@ Route::add(
     '/book/search',
     'book/findBook',
     'post',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == Constants::VALID_LOGIN) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/book/search/?([^/]+)?/?([0-9]+)?/?([0-9]+)?',
+    'book/findMoreBooks',
+    'get',
     function () {
         $input = new InputData();
         if ($input->session('login') == Constants::VALID_LOGIN) {

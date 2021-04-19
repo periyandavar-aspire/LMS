@@ -78,15 +78,15 @@
                                 if ($pagination['tpages'] > 1) {
                                     $previous = ($pagination['start'] == 1)
                                     ? '<li class="disable"><a class="disable">Previous</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.(($pagination['current']-2) * $pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">Previous</a></li>';
+                                    : '<li><a href="/user/lentbooks/'.((($pagination['cpage']-1)) * $pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">Previous</a></li>';
                                     echo $previous;
                                     $first = ($pagination['start'] == 1)
-                                    ? '<li class="disable"><a class="disable">1</a></li>'
+                                    ? '<li class="active"><a>1</a></li>'
                                     : '<li><a href="/user/lentbooks/0/'.$pagination['limit'].'/'.$pagination['search'].'">1</a></li>';
                                     echo $first;
-                                    if ($pagination['tpages'] > 6 && $pagination['current'] > 4) {
-                                        $i = $pagination['current'] - 1;
-                                        $iEnd = $pagination['current'] + 1;
+                                    if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
+                                        $i = $pagination['cpage'];
+                                        $iEnd = $pagination['cpage'] + 3;
                                         $iEnd = $pagination['tpages'] < $iEnd ? $pagination['tpages'] : $iEnd;
                                     } else {
                                         $i = 2;
@@ -97,7 +97,7 @@
                                     }
                                     for (; $i < $iEnd; $i++) {
                                         $li = "<li";
-                                        $li = ($i == $pagination['current'])
+                                        $li = ($i == $pagination['cpage']+1)
                                         ? $li . " class='active'><a>$i</a></li>"
                                         : $li . "><a href='/user/lentbooks/".($pagination['limit']*($i-1))."/".$pagination['limit'].'/'.$pagination['search']."'>$i</a></li>";
                                         // $li .= "";
@@ -107,12 +107,12 @@
                                         echo "<li class='disable'>...</li>";
                                     }
                                     $last = ($pagination['end'] == $pagination['tcount'])
-                                    ? '<li class="disable"><a class="disable">'.$pagination['tpages'].'</a></li>'
+                                    ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
                                     : '<li><a href="/user/lentbooks/'.(($pagination['tpages']-1)*$pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
                                     echo $last;
                                     $next = ($pagination['end'] == $pagination['tcount'])
                                     ? '<li class="disable"><a class="disable">Next</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.($pagination['current']* $pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">Next</a></li>';
+                                    : '<li><a href="/user/lentbooks/'.((($pagination['cpage']+1)* $pagination['limit'])).'/'.$pagination['limit'].'/'.$pagination['search'].'">Next</a></li>';
                                     echo $next;
                                 }
                             ?>

@@ -46,21 +46,20 @@ class HomeModel extends BaseModel
     {
         $books = [];
         $this->db->select(
-            'b.id id',
-            'b.name name',
-            'a.name author',
+            'id',
+            'name',
+            'authors',
             'description',
             'available',
             'coverPic'
-        )
-            ->from('book b')
-            ->innerJoin('book_author ba')
-            ->on('b.id = ba.bookId')
-            ->innerJoin('author a')
-            ->on('ba.authorId = a.id')
-            ->where('b.deletionToken', '=', "N/A")
-            ->where('b.status', '=', 1)
-            ->orderby('RAND()')->execute();
+        )->from('book_detail');
+        // $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')
+        //     ->innerJoin('author a')
+        //     ->on('ba.authorId = a.id');
+        $this->db->where('status', '=', 1)//->where('b.deletionToken', '=', 'N/A')
+            ->orderby('RAND()')
+            ->limit(12)
+            ->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
         }

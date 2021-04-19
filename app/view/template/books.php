@@ -31,7 +31,7 @@
                 </div>
             </div>
             <!-- Book row -->
-            <div class="row">
+            <div class="row" id="books-list">
                 <?php if (isset($books)):?>
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
@@ -42,20 +42,19 @@
                                     <div class="details">"" <br><br> by </div>
                                 </div> -->
                     <!-- </div></div> -->
-                    <a
-                        href="/home/book/view/<?php echo $book->id; ?>">
+                    <a href="/home/book/view/<?php echo $book->id; ?>">
 
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                             book="<?php echo $book->name; ?>"
-                            author="<?php echo $book->author;?>"
+                            author="<?php echo $book->authors;?>"
                             id="<?php echo $book->id;?>">
                         </book-element>
                     </a>
                     <div class="card-content">
                         <h3><?php echo $book->name?>
                         </h3>
-                        <div class="text-author"><?php echo $book->author;?>
+                        <div class="text-author"><?php echo $book->authors;?>
                         </div>
                         <p><?php echo $book->description;?>
                         </p>
@@ -73,7 +72,7 @@
             </div>
             <!-- show more button -->
             <div class="btn-container" id="loadMore">
-                <a class="btn-link" href="#">SHOW MORE</a>
+                <a class="btn-link" onclick="loadMoreBooks(event);">SHOW MORE</a>
             </div>
     </section>
 </article>

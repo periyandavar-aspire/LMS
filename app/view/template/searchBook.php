@@ -7,19 +7,21 @@
     <!-- section 1 -->
     <section>
         <div class="container">
-            <div class="row">
+            <div class="row" id="books-list">
                 <?php if (isset($books)):?>
                 <?php if (count($books) ==0): ?>
                 <p> No Books found for your search result </p>
                 <?php else:?>
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
+                    <a href="/book/view/<?php echo $book->id;?>">
                     <book-element
                         cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                         book="<?php echo $book->name; ?>"
                         author="<?php echo $book->author;?>"
                         id="<?php echo $book->id;?>">
                     </book-element>
+                    </a>
 
                     <div class="card-content">
                         <h3><?php echo $book->name?>
@@ -43,7 +45,7 @@
             </div>
             <!-- show more button -->
             <div class="btn-container" id="loadMore">
-                <a class="btn-link" href="#">SHOW MORE</a>
+                <a class="btn-link" onclick='loadMoreBooks(event, "/book/search/<?php echo $searchKey;?>");'>SHOW MORE</a>
             </div>
             <?php endif;?>
             <?php endif;?>

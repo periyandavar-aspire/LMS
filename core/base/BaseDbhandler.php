@@ -231,8 +231,8 @@ abstract class BaseDbhandler
         } else {
             $this->query  = $this->_sql . $this->_where;
         }
-        echo $this->query;
-        print_r($this->bindValues);
+        // echo $this->query;
+        // print_r($this->bindValues);
         try {
             $result = $this->executeQuery();
         } catch (Exception $e) {

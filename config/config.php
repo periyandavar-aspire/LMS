@@ -49,7 +49,7 @@ $config['static'] = "";
 /**
  * Path to upload folders
  */
-$config['upload'] = "";
+$config['upload'] = "upload";
 /**
  * Default page index page
  */

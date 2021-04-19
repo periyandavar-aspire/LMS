@@ -101,6 +101,54 @@ const bookFormValidator = function(event) {
     }
 };
 
+const bookEditFormValidator = function(event) {
+    if ((document.getElementById("price").value) <= 0) {
+        toast("Invalid price..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if ((document.getElementById("stack").value) <= 0) {
+        toast("Invalid stack..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!new RegExp(/^[1-9]{1}[0-9,]*$/).test(document.getElementById("selected-author").value)) {
+        toast("Please select Authors..!" + document.getElementById("selected-author").value, 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!new RegExp(/^[1-9]{1}[0-9,]*$/).test(document.getElementById("selected-category").value)) {
+        toast("Please select categories..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("bookname").value == '') {
+        toast("Please enter the book name..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("location").value == '') {
+        toast("Please enter the book location..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("publication").value == '') {
+        toast("Please enter the publication name..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("isbn").value == '') {
+        toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("stack").value == '') {
+        toast("Please enter the stack..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("description").value == '') {
+        toast("Please enter the book's description..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (document.getElementById("price").value == '') {
+        toast("Please enter the book price..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+};
+
 
 const registrationFormValidator = function(event) {
     let password = document.getElementById("password").value;

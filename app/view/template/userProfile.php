@@ -33,14 +33,14 @@
                     <select class="form-control select-input" name="gender" id="gender" placeholder="Full Name..."
                         required="">
                         <option value="" style="display: none;">Select Gender</option>
-                        <option value="Male" <?php if ($result->gender=='Male') {
-    echo "selected";
-} ?>>Male
-                        </option>
-                        <option value="Female" <?php if ($result->gender=='Female') {
-    echo "selected";
-} ?>>Female
-                        </option>
+                        <?php if ($dropdownGen != null):?>
+                            <?php foreach ($dropdownGen as $gender):?>
+                            <option
+                                value="<?php echo $gender['code']?>">
+                                <?php echo $gender['value']?>
+                            </option>
+                            <?php endforeach;?>
+                        <?php endif;?>
                     </select>
                 </div>
                 <div class="form-input-div">
@@ -89,4 +89,5 @@
 
 <script>
     document.getElementById('profile').className += " active";
+    document.getElementById('gender').value = "<?php echo $result->gender; ?>";
 </script>

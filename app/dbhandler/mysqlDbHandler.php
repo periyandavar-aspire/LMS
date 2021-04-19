@@ -135,7 +135,9 @@ class MysqlDbHandler extends BaseDbHandler
                 break;
             }
         }
-        $stmt->bind_param($paramType, ...$bindValues);
+        if (count($bindValues) != 0) {
+            $stmt->bind_param($paramType, ...$bindValues);
+        }
         $flag = $stmt->execute();
         if ($flag == true) {
             $result = $stmt->get_result();
@@ -171,5 +173,16 @@ class MysqlDbHandler extends BaseDbHandler
     public function insertId(): int
     {
         return $this->con->insert_id;
+    }
+
+    
+    /**
+     * Begin the transaction
+     *
+     * @return bool
+     */
+    public function begin(): bool
+    {
+        return $this->con->begin_transaction();
     }
 }

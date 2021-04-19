@@ -8,7 +8,7 @@
                 </div>
             </div>
 
-            <form action="" enctype="multipart/form-data" onsubmit="bookFormValidator(event);" method="post">
+            <form action="" enctype="multipart/form-data" onsubmit="bookEditFormValidator(event);" method="post">
                 <div class="form-input-div">
                     <label>Name</label>
                     <input class="form-control" type="text" <?php if (isset($book->name)) {
@@ -42,7 +42,7 @@
                             }
                         ?>
                         <input type="hidden" <?php if (isset($book->authorCodes)) {
-                            echo "value='".$book->authorCodes."'";
+                            echo "value='".$book->authorCodes.",'";
                         }?>
                         name="author" required id="selected-author">
                     </div>
@@ -66,7 +66,7 @@
                             }
                         ?>
                         <input type="hidden" <?php if (isset($book->categoryCodes)) {
-                            echo "value='".$book->categoryCodes."'";
+                            echo "value='".$book->categoryCodes.",'";
                         }?>
                         name="category" required id="selected-category">
                     </div>

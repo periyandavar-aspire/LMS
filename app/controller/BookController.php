@@ -72,20 +72,20 @@ class BookController extends BaseController
         $this->loadLayout($user . "Footer.html");
     }
 
-    /**
-     * Displays the details of the given book $id
-     *
-     * @param int $id BookID
-     *
-     * @return void
-     */
-    public function get(int $id)
-    {
-        $data['book'] = $this->model->getBookDetails($id);
-        $this->loadLayout('header.html');
-        $this->loadTemplate("book", $data);
-        $this->loadLayout('footer.html');
-    }
+    // /**
+    //  * Displays the details of the given book $id
+    //  *
+    //  * @param int $id BookID
+    //  *
+    //  * @return void
+    //  */
+    // public function get(int $id)
+    // {
+    //     $data['book'] = $this->model->getBookDetails($id);
+    //     $this->loadLayout('header.html');
+    //     $this->loadTemplate("book", $data);
+    //     $this->loadLayout('footer.html');
+    // }
 
     /**
      * Handles the search form and return the search result
@@ -97,11 +97,58 @@ class BookController extends BaseController
         $user = $this->input->session('type');
         $keyword = $this->input->post('search') ?? '';
         $data['books'] = $this->model->searchBook($keyword);
+        $data['searchKey'] = $keyword;
         $this->loadLayout($user.'header.html');
         $this->loadTemplate("searchBook", $data);
         $this->loadLayout($user.'footer.html');
         $this->includeScript('bookElement.js');
     }
+
+    
+    /**
+     * Displays the books requested by the user
+     *
+     * @param int         $offset Offset
+     * @param int         $limit  Limit
+     * @param string|null $search Search Key
+     * 
+     * @return void
+     */
+    public function loadBooks(
+        int $offset = 0,
+        int $limit = 5,
+        ?string $search = null
+    ) {
+        $data["books"] = $this->model->getAvailableBooks(
+            $offset,
+            $limit,
+            $search
+        );
+        echo json_encode($data);
+    }
+
+    /**
+     * Displays the books requested by the user
+     *
+     * @param string $search Search Key
+     * @param int    $offset Offset
+     * @param int    $limit  Limit
+     * 
+     * @return void
+     */
+    public function findMoreBooks(
+        string $search,
+        int $offset = 0,
+        int $limit = 12
+    ) {
+        $data["books"] = $this->model->searchBook(
+            $search,
+            $offset,
+            $limit
+        );
+        echo json_encode($data);
+    }
+
 
     /**
      * Add a new book
@@ -189,6 +236,7 @@ class BookController extends BaseController
      */
     public function update(int $id)
     {
+        global $config;
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
         $inputFields = [
@@ -218,14 +266,26 @@ class BookController extends BaseController
         if ($flag) {
             $book = $fields->getValues();
             $uploadfile = $this->input->files('coverPic');
-            $coverPic = uniqid() . '.' . pathinfo(
-                $uploadfile['name'],
-                PATHINFO_EXTENSION
-            );
-            if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
+            if ($uploadfile['error'] == 0) {
+                $coverPic = uniqid() . '.' . pathinfo(
+                    $uploadfile['name'],
+                    PATHINFO_EXTENSION
+                );
+                $flag = $fields->uploadFile($uploadfile, $coverPic, 'book');
                 $book['coverPic'] = $coverPic;
+            }
+            if ($flag) {
+                $oldPic = $this->model->getCoverPic($id);
                 if ($this->model->update($book, $id)) {
                     $script = "toast('Book updated successfully..!', 'success');";
+                    if (isset($book['coverPic'])) {
+                        unlink(
+                            $config['upload']
+                            . '/'
+                            . Constants::COVER_PIC_PATH
+                            . $oldPic
+                        );
+                    }
                 } else {
                     $script = "toast('Unable to update the book..!', 'danger');";
                 }
@@ -282,7 +342,8 @@ class BookController extends BaseController
             $data['issuedUsers'] = $this->service->seperateUsers($issuedData);
         }
         $this->loadLayout($user . 'header.html');
-        $this->loadTemplate("bookdetail", $data);
+        $template = ($user == null) ? 'book' : 'bookdetail';
+        $this->loadTemplate($template, $data);
         $this->loadLayout($user . 'footer.html');
     }
 

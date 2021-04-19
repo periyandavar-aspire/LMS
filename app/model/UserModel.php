@@ -33,14 +33,12 @@ class UserModel extends BaseModel
         $this->db->select(
             'fullName',
             'userName',
-            'value gender',
+            'gender',
             'mobile',
             'email',
             'u.updatedAt'
         )->from('user u');
-        $this->db->innerJoin('gender g')
-            ->on('g.code = u.gender')
-            ->where('username', '=', $username);
+        $this->db->where('username', '=', $username);
         $this->db->where('u.deletionToken', '=', 'N/A')->execute();
         $result = $this->db->fetch();
         return $result;
@@ -75,6 +73,25 @@ class UserModel extends BaseModel
         $result = $this->db->update('user', ['password' => md5($password)])
             ->where('username', '=', $username)
             ->execute();
+        return $result;
+    }
+
+    /**
+     * Returns avaialbe gender values with code
+     *
+     * @return array
+     */
+    public function getGender(): array
+    {
+        $result = [];
+        $i = 0;
+        $this->db->select('code', 'value')->from('gender');
+        $this->db->where('deletionToken', '=', 'N/A')->execute();
+        while ($row = $this->db->fetch()) {
+            $result[$i]['code'] = $row->code;
+            $result[$i]['value'] = $row->value;
+            $i++;
+        }
         return $result;
     }
 
@@ -142,12 +159,21 @@ class UserModel extends BaseModel
     /**
      * Returns the requested books details
      *
-     * @param string $username Username
+     * @param string      $username Username
+     * @param null|int    $Tcount   Total Records count
+     * @param int         $offset   Offset
+     * @param int         $limit    Row count
+     * @param string|null $search   Search value
      *
      * @return array
      */
-    public function getRequestedBooks(string $username): array
-    {
+    public function getRequestedBooks(
+        string $username,
+        ?int &$Tcount = null,
+        int $offset = 0,
+        int $limit = 5,
+        ?string $search = null
+    ): array {
         $books = [];
         $this->db->select(
             'isbnNumber',
@@ -165,12 +191,36 @@ class UserModel extends BaseModel
             ->innerJoin('user')
             ->on('user.id = ib.userId');
         $this->db->where('userName', '=', $username)
-            ->where('status.value', 'LIKE', 'Requested%')
-            ->limit(10, 0)
+            ->where('status.value', 'LIKE', 'Requested%');
+        if ($search != null) {
+            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?)');
+            $this->db->appendBindValues(["%$search%", "%$search%"]);
+        }
+        $this->db->orderby('returnAt')
+            ->limit($limit, $offset)    
             ->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
         }
+        $this->db->selectAs(
+            "COUNT(*) tCount",
+        );
+        $this->db->from('issued_book ib');
+        $this->db->innerJoin('status')
+            ->on('status.code = ib.status')
+            ->innerJoin('book')
+            ->on('book.id = ib.bookId')
+            ->innerJoin('user')
+            ->on('user.id = ib.userId');
+        $this->db->where('userName', '=', $username)
+            ->where('status.value', 'LIKE', 'Requested%');
+        if ($search != null) {
+            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?)');
+            $this->db->appendBindValues(["%$search%", "%$search%"]);
+        }
+        $this->db->orderby('returnAt')
+            ->execute();
+        $Tcount = $this->db->fetch()->tCount;
         return $books;
     }
 
