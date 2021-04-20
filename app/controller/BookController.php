@@ -37,9 +37,8 @@ class BookController extends BaseController
     public function manageBooks()
     {
         $user = $this->input->session('type');
-        $data['books'] = $this->model->getBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("manageBooks", $data);
+        $this->loadTemplate("manageBooks");
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -52,7 +51,7 @@ class BookController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("newBook", $data);
+        $this->loadTemplate("newBook");
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -213,6 +212,32 @@ class BookController extends BaseController
     }
 
     /**
+     * Loads Authors
+     *
+     * @return void
+     */
+    public function load()
+    {
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $data['aaData'] = $this->model->getBooks(
+            $start,
+            $limit,
+            $sortby+1,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
+    }
+
+    /**
      * Update the status of the book for the book Id $id to status $status
      *
      * @param int $id     BookID
@@ -341,8 +366,8 @@ class BookController extends BaseController
             $issuedData = $this->model->getIssuedUsers($id);
             $data['issuedUsers'] = $this->service->seperateUsers($issuedData);
         }
-        $this->loadLayout($user . 'header.html');
         $template = ($user == null) ? 'book' : 'bookdetail';
+        $this->loadLayout($user . 'header.html');
         $this->loadTemplate($template, $data);
         $this->loadLayout($user . 'footer.html');
     }
@@ -370,7 +395,8 @@ class BookController extends BaseController
      */
     public function delete(int $id)
     {
-        $result['result'] = $this->model->delete($id);
+        $result['result'] = $this->model->delete($id, $msg);
+        $result['msg'] = $msg;
         echo json_encode($result);
     }
 

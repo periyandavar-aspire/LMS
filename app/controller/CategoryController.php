@@ -35,13 +35,38 @@ class CategoryController extends BaseController
      *
      * @return void
      */
-    public function getAll()
+    public function manage()
     {
         $user = $this->input->session('type');
-        $data['categories'] = $this->model->getAll();
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageCategories", $data);
+        $this->loadTemplate("manageCategories");
         $this->loadLayout($user."Footer.html");
+    }
+
+    /**
+     * Loads categories
+     *
+     * @return void
+     */
+    public function load()
+    {
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $data['aaData'] = $this->model->getAll(
+            $start,
+            $limit,
+            $sortby+1,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
     }
 
     /**
@@ -107,8 +132,8 @@ class CategoryController extends BaseController
         } else {
             $script = "toast('Category is updated successfully..!', 'success');";
         }
-        $this->loadLayout($user."Header.html");
         $data['categories'] = $this->model->getAll();
+        $this->loadLayout($user."Header.html");
         $this->loadTemplate("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
@@ -133,8 +158,8 @@ class CategoryController extends BaseController
         } else {
             $script = "toast('New category is added successfully..!', 'success');";
         }
-        $this->loadLayout($user."Header.html");
         $data['categories'] = $this->model->getAll();
+        $this->loadLayout($user."Header.html");
         $this->loadTemplate("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);

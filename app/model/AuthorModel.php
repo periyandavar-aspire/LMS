@@ -22,26 +22,63 @@
 class AuthorModel extends BaseModel
 {
     /**
-     * Returns all available authors
+     * Returns all available categories
      *
+     * @param integer     $start     offset
+     * @param integer     $limit     limit value
+     * @param string      $sortby    sorting column
+     * @param string      $sortDir   sorting direction
+     * @param string      $searchKey search key
+     * @param string|null $tcount    stores total records count
+     * @param string|null $tfcount   stores filtered records  count
+     * 
      * @return array
      */
-    public function getAll(): array
-    {
-        $authors = [];
+    public function getAll(
+        int $start = 0,
+        int $limit = 10,
+        string $sortby = "1",
+        string $sortDir = 'ASC',
+        string $searchKey = '',
+        ?string &$tcount = null,
+        ?string &$tfcount = null
+    ): array {
+        $author = [];
         $result = $this->db->select("id", "name", "status")
             ->selectAs(
                 "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
                 "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
             )
             ->from('author');
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
-        while ($row = $this->db->fetch()) {
-            $authors[] = $row;
+        $this->db->where('deletionToken', '=', "N/A");
+        if ($searchKey != '') {
+            $this->db->where('name', "LIKE", "%$searchKey%");
         }
-        return $authors;
+        $this->db->orderBy($sortby, $sortDir)
+            ->limit($limit, $start)
+            ->execute();
+        while ($row = $this->db->fetch()) {
+            $author[] = $row;
+        }
+        $this->db->selectAs(
+            "COUNT(*) count",
+        )->from('author');
+        $this->db->where('deletionToken', '=', "N/A")
+            ->execute();
+        $tcount = $this->db->fetch()->count;
+        if ($searchKey != '') {
+            $this->db->selectAs(
+                "COUNT(*) count",
+            )->from('author');
+            $this->db->where('deletionToken', '=', "N/A");
+            $this->db->where('name', "LIKE", "%$searchKey%")
+                ->execute();    
+            $tfcount = $this->db->fetch()->count;
+        } else {
+            $tfcount = $tcount;
+        }
+        return $author;
     }
-
     /**
      * Adds new author
      *

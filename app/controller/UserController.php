@@ -48,10 +48,10 @@ class UserController extends BaseController
      */
     public function profile()
     {
-        $this->loadLayout("userHeader.html");
         $id = $this->input->session('id');
         $data['dropdownGen'] = $this->model->getGender();
         $data['result'] = $this->model->getProfile($id);
+        $this->loadLayout("userHeader.html");
         $this->loadTemplate("userProfile", $data);
         $this->loadLayout("userFooter.html");
     }

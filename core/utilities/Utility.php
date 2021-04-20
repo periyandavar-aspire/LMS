@@ -69,13 +69,14 @@ class Utility
     /**
      * Redirects to the passed URL
      *
-     * @param string $url URL
-     *
+     * @param string $url       URL
+     * @param bool   $permanent Whether the URL is permanent or temporary
+     * 
      * @return void
      */
-    public static function redirectURL(string $url)
+    public static function redirectURL(string $url, $permanent = true)
     {
-        if (headers_sent() === false) {
+        if (!headers_sent()) {
             header('Location: ../' . $url, true, ($permanent === true) ? 301 : 302);
         }
         exit();

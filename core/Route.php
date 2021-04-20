@@ -200,7 +200,9 @@ class Route
                     }
                 }
             }
-            header('HTTP/1.1 404 Not Found');
+            if (!headers_sent()) {
+                header('HTTP/1.1 404 Not Found');
+            }
             die('404 - The file  not found');
         }
         if (!$methodMatch) {
@@ -217,7 +219,9 @@ class Route
                     }
                 }
             }
-            header('HTTP/1.1 400 Bad Request');
+            if (!headers_sent()) {
+                header('HTTP/1.1 400 Bad Request');
+            }
             die('404 - The method not allowed');
         }
     }
@@ -249,26 +253,36 @@ class Route
     /**
      * Calls when an error occured
      *
+     * @param string|null $data Error data
+     * 
      * @return void
      */
-    public static function error()
+    public static function error(?string $data = null)
     {
         global $config;
-        $data = func_get_args();
         if (self::$_onError) {
+            ob_start();
             self::$_onError($data);
-            return;
+            $content = ob_get_clean();
+            echo $content;
+            exit();
         } elseif (isset($config['error_ctrl'])) {
             $controllerName = $config['error_ctrl'];
             $file = $config['controller'] . "/" . $config['error_ctrl'] . ".php";
             if (file_exists($file)) {
                 if (method_exists($controllerName, 'serverError')) {
+                    ob_start();
                     (new $controllerName())->serverError($data);
-                    return;
+                    $content = ob_get_clean();
+                    echo $content;
+                    exit();
                 }
             }
         }
-        header('HTTP/1.1 500 Internal Server Error');
+        if (!headers_sent()) {
+            header('HTTP/1.1 500 Internal Server Error');
+        }
         die('500 - Server Error');
+        exit();
     }
 }

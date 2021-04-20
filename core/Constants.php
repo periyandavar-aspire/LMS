@@ -39,4 +39,12 @@ class Constants
     public const VALID_LOGIN = true;
 
     public const COVER_PIC_PATH = 'book/';
+
+    public const ENV_PRODUCTION = 'production';
+
+    public const ENV_TESTING = 'testing';
+
+    public const ENV_DEVELOPMENT = 'development';
+
+    public const DEFAULT_DATE_VAL = '0000-00-00';
 }

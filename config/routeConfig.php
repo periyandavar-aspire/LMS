@@ -242,7 +242,7 @@ Route::add(
 
 Route::add(
     '/librarian/manageUsers',
-    'manageUser/getRegUsers',
+    'manageUser/manageRegUsers',
     'get',
     function () {
         $input = new InputData();
@@ -378,7 +378,7 @@ Route::add(
 
 Route::add(
     '/admin/manageUsers',
-    'manageUser/getAllUsers',
+    'manageUser/manageAllUsers',
     'get',
     function () {
         $input = new InputData();
@@ -491,7 +491,24 @@ Route::add(
 
 Route::add(
     '/categories',
-    'category/getAll',
+    'category/manage',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == Constants::VALID_LOGIN
+            && ($input->session('type') == Constants::LIBR_USER
+            ||$input->session('type') == Constants::ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/category/loadData',
+    'category/load',
     'get',
     function () {
         $input = new InputData();
@@ -580,7 +597,7 @@ Route::add(
 
 Route::add(
     '/authors',
-    'author/getAll',
+    'author/manage',
     'get',
     function () {
         $input = new InputData();
@@ -594,6 +611,24 @@ Route::add(
         }
     }
 );
+
+Route::add(
+    '/author/loadData',
+    'author/load',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == Constants::VALID_LOGIN
+            && ($input->session('type') == Constants::LIBR_USER
+            ||$input->session('type') == Constants::ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
 
 Route::add(
     '/authors',
@@ -777,6 +812,57 @@ Route::add(
         if ($input->session('login') == Constants::VALID_LOGIN
             && ($input->session('type') == Constants::LIBR_USER
             || $input->session('type') == Constants::ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/book/loadData',
+    'book/load',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == Constants::VALID_LOGIN
+            && ($input->session('type') == Constants::LIBR_USER
+            ||$input->session('type') == Constants::ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/allUser/loadData',
+    'manageuser/loadAllUser',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == Constants::VALID_LOGIN
+            && ($input->session('type') == Constants::LIBR_USER
+            ||$input->session('type') == Constants::ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/allregUser/loadData',
+    'manageuser/loadRegUser',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == Constants::VALID_LOGIN
+            && ($input->session('type') == Constants::LIBR_USER
+            ||$input->session('type') == Constants::ADMIN_USER)
         ) {
             return true;
         } else {
@@ -970,7 +1056,7 @@ Route::add(
 );
 
 Route::add(
-    '/user/delete/(user|librarian)/([1-9]{1}[0-9]*)',
+    '/user/delete/(user|librarian|admin)/([1-9]{1}[0-9]*)',
     'manageuser/delete',
     'get',
     function () {

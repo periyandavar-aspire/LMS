@@ -144,7 +144,7 @@ abstract class BaseDbhandler
      *
      * @var string $orderBy
      */
-    private $_orderBy;
+    private $_orderby;
 
     /**
      * This will has the where condition
@@ -486,6 +486,16 @@ abstract class BaseDbhandler
         $this->_where = $this->_where==null ? '' : $this->_where;
         $this->_where .= $where;
         return $this;
+    }
+
+    /**
+     * Returns where condition
+     *
+     * @return string
+     */
+    public function getWhere(): string
+    {
+        return $this->where();
     }
 
     /**

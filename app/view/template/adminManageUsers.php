@@ -1,8 +1,4 @@
-<?php
-    if (!isset($users)) {
-        return;
-    }
-?>
+
 <article class="main">
     <section>
         <div class="container div-card">
@@ -13,23 +9,8 @@
                 </div>
             </div>
             <div class="div-card-body">
-                <div class='table-panel'>
-                    <div class="form-input-div">
-                        <label> Record count </label>
-                        <select class="table-form-control">
-                            <option>5</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>50</option>
-                        </select>
-                    </div>
-                    <div class="form-input-div">
-                        <label> Search </label>
-                        <input type="text" class="table-form-control">
-                    </div>
-                </div>
                 <div style="overflow-x:auto;">
-                    <table class="tab_design">
+                    <table class="tab_design" id='user-list'>
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
@@ -43,49 +24,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($users)): ?>
-
-                            <?php foreach ($users as $user):?>
-                            <tr id="<?php echo $user->id;?>">
-                                <td><?php echo ++$i;?>
-                                </td>
-                                <td><?php echo $user->fullName;?>
-                                </td>
-                                <td><?php echo $user->userName;?>
-                                </td>
-                                <td><?php echo $user->email;?>
-                                </td>
-                                <td><?php echo $user->mobile;?>
-                                </td>
-                                <td><?php echo $user->role;?>
-                                </td>
-                                <td><?php echo $user->createdAt?>
-                                </td>
-                                <td>
-                                    <button type="button"
-                                        onclick="deleteItem('/user/delete/<?php echo $user->role; ?>/<?php echo $user->id;?>');"
-                                        class="button-control icon-btn negative" title="delete"><i
-                                            class="fa fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <?php endforeach;?>
-                            <?php endif;?>
                         </tbody>
                     </table>
-                </div>
-                <div class="table-panel">
-                    <div>
-                        Showing 1 to 2 of 2 entries
-                    </div>
-                    <div>
-                        <ul class="pagination">
-                            <li class="disable"><a>Previous</a></li>
-                            <li class="active"><a>1</a></li>
-                            <li><a>2</a></li>
-                            <li><a>3</a></li>
-                            <li><a>Next</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -139,4 +79,41 @@
 
 <script>
     document.getElementById('manageUsers').className += " active";
+    column = [{
+            "render": function(data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            "data": "fullName"
+        },
+        {
+            "data": "userName"
+        },
+        {
+            "data": "email"
+        },
+        {
+            "data": "mobile"
+        },
+        {
+            "data": "role"
+        },
+        {
+            "data": "createdAt"
+        },
+        {
+            "data": null,
+            "render": function(item) {
+                code = '<button type="button"';
+                code += ' onclick="deleteItem(' + "'/user/delete/" + item.id + "');" + '"';
+                code +=
+                    'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
+                return code;
+            }
+        }
+    ]
+    $(document).ready(function() {
+        loadTableData("user-list", "/allUser/loadData", column);
+    });
 </script>

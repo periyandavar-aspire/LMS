@@ -58,3 +58,19 @@ $config['default_page'] = "/home";
  * Set the name of the controller handles errors
  */
 $config['error_ctrl'] = "ErrorController";
+/**
+ * Set Environment value
+ */
+$config['environment'] = null;
+/**
+ * Sets log file
+ */
+$config['logs'] = "log";
+/**
+ * Server email from this all mails were sent
+ */
+$config['serverEmail'] = 'admin@lms.com';
+/**
+ * Sets a mail to report errors
+ */
+$config['mailTo'] = 'someonesomeone@example.com';

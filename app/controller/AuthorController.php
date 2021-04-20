@@ -34,14 +34,40 @@ class AuthorController extends BaseController
      *
      * @return void
      */
-    public function getAll()
+    public function manage()
     {
-        $data['authors'] = $this->model->getAll();
         $user = $this->input->session('type');
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageAuthors", $data);
+        $this->loadTemplate("manageAuthors");
         $this->loadLayout($user."Footer.html");
     }
+
+    /**
+     * Loads Authors
+     *
+     * @return void
+     */
+    public function load()
+    {
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $data['aaData'] = $this->model->getAll(
+            $start,
+            $limit,
+            $sortby+1,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
+    }
+
 
     /**
      * Add new author and display available authors
@@ -62,8 +88,8 @@ class AuthorController extends BaseController
         } else {
             $script = "toast('New author is added successfully..!', 'success');";
         }
-        $this->loadLayout($user."Header.html");
         $data['authors'] = $this->model->getAll();
+        $this->loadLayout($user."Header.html");
         $this->loadTemplate("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
@@ -119,8 +145,8 @@ class AuthorController extends BaseController
         } else {
             $script = "toast('Author is updated successfully..!', 'success');";
         }
-        $this->loadLayout($user."Header.html");
         $data['authors'] = $this->model->getAll();
+        $this->loadLayout($user."Header.html");
         $this->loadTemplate("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);

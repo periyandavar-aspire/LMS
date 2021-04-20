@@ -1,0 +1,9 @@
+Error caught! [8] Undefined variable: permanent at File [C:\xampp\htdocs\LMS\core\utilities\Utility.php] line number [80] on 04/20/2021 10:55:43 AM
+Error caught! [8] Undefined variable: permanent at File [C:\xampp\htdocs\LMS\core\utilities\Utility.php] line number [80] on 04/20/2021 10:57:24 AM
+Error caught! [8] Undefined variable: offset at File [C:\xampp\htdocs\LMS\app\model\CategoryModel.php] line number [58] on 04/20/2021 12:49:38 PM
+Error caught! [8] Undefined property: MysqlDbHandler::$fetch at File [C:\xampp\htdocs\LMS\app\model\CategoryModel.php] line number [69] on 04/20/2021 01:13:24 PM
+Error caught! [8] Undefined property: MysqlDbHandler::$_orderby at File [C:\xampp\htdocs\LMS\core\base\BaseDbhandler.php] line number [229] on 04/20/2021 01:54:56 PM
+Error caught! [8] Undefined variable: data at File [C:\xampp\htdocs\LMS\app\controller\BookController.php] line number [55] on 04/20/2021 02:41:51 PM
+Error caught! [8] Undefined variable: flag3 at File [C:\xampp\htdocs\LMS\app\model\BookModel.php] line number [229] on 04/20/2021 02:46:15 PM
+Error caught! [8] Undefined variable: tcount at File [C:\xampp\htdocs\LMS\app\controller\ManageUserController.php] line number [86] on 04/20/2021 03:53:02 PM
+Error caught! [8] Undefined variable: tcount at File [C:\xampp\htdocs\LMS\app\controller\ManageUserController.php] line number [60] on 04/20/2021 04:05:52 PM

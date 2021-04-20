@@ -37,10 +37,25 @@ class CategoryModel extends BaseModel
     /**
      * Returns all available categories
      *
+     * @param integer     $start     offset
+     * @param integer     $limit     limit value
+     * @param string      $sortby    sorting column
+     * @param string      $sortDir   sorting direction
+     * @param string      $searchKey search key
+     * @param string|null $tcount    stores total records count
+     * @param string|null $tfcount   stores filtered records  count
+     * 
      * @return array
      */
-    public function getAll(): array
-    {
+    public function getAll(
+        int $start = 0,
+        int $limit = 10,
+        string $sortby = "1",
+        string $sortDir = 'ASC',
+        string $searchKey = '',
+        ?string &$tcount = null,
+        ?string &$tfcount = null
+    ): array {
         $category = [];
         $result = $this->db->select("id", "name", "status")
             ->selectAs(
@@ -48,9 +63,32 @@ class CategoryModel extends BaseModel
                 "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
             )
             ->from('category');
-        $this->db->where('deletionToken', '=', "N/A")->execute();
+        $this->db->where('deletionToken', '=', "N/A");
+        if ($searchKey != '') {
+            $this->db->where('name', "LIKE", "%$searchKey%");
+        }
+        $this->db->orderBy($sortby, $sortDir)
+            ->limit($limit, $start)
+            ->execute();
         while ($row = $this->db->fetch()) {
             $category[] = $row;
+        }
+        $this->db->selectAs(
+            "COUNT(*) count",
+        )->from('category');
+        $this->db->where('deletionToken', '=', "N/A")
+            ->execute();
+        $tcount = $this->db->fetch()->count;
+        if ($searchKey != '') {
+            $this->db->selectAs(
+                "COUNT(*) count",
+            )->from('category');
+            $this->db->where('deletionToken', '=', "N/A");
+            $this->db->where('name', "LIKE", "%$searchKey%")
+                ->execute();    
+            $tfcount = $this->db->fetch()->count;
+        } else {
+            $tfcount = $tcount;
         }
         return $category;
     }

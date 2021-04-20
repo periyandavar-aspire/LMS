@@ -41,11 +41,11 @@
     background-color: #ffffff;
 }
 
-tr:nth-child(odd) {
+.tab_design tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
 
-tr:nth-child(even) {
+.tab_design tr:nth-child(even) {
     background-color: #d8e6f7;
 }
 

@@ -86,10 +86,10 @@ class BaseView
             throw new Exception("Template " . $this->file . " doesn't exist.");
         }
         extract($this->data);
-        ob_start();
+        // ob_start();
         include $file;
-        $output = ob_get_contents();
-        ob_end_clean();
-        echo $output;
+        // $output = ob_get_contents();
+        // ob_end_clean();
+        // echo $output;
     }
 }

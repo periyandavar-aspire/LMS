@@ -144,11 +144,9 @@ trait FileUploader
         if ($this->validateFile($file)) {
             if (!$overwrite) {
                 if (file_exists($destination)) {
-                    print_r($destination);
                     return false;
                 }
             }
-            print_r($destination);
             move_uploaded_file($file['tmp_name'], $destination);
             return true;
         }

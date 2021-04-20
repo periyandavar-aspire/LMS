@@ -37,7 +37,6 @@ class HomeController extends BaseController
      */
     public function getIndexPage()
     {
-        $this->loadLayout("header.html");
         $homeData['vision'] = $this->model->getVision();
         $homeData['mission'] = $this->model->getMission();
         $homeData['books'] = $this->model->getAvailableBooks();
@@ -45,6 +44,7 @@ class HomeController extends BaseController
         $this->setView(new HomeView());
         $this->view->loadIndexPage($homeData);
         $data['footer'] = $this->model->getFooterData();
+        $this->loadLayout("header.html");
         $this->loadTemplate("footer", $data);
         $this->includeScript('bookElement.js');
     }
@@ -56,10 +56,10 @@ class HomeController extends BaseController
      */
     public function books()
     {
-        $this->loadLayout("header.html");
         $books['books'] = $this->model->getAvailableBooks();
-        $this->loadTemplate("books", $books);
         $data['footer'] = $this->model->getFooterData();
+        $this->loadLayout("header.html");
+        $this->loadTemplate("books", $books);
         $this->loadTemplate("footer", $data);
         $this->includeScript('bookElement.js');
     }
@@ -71,8 +71,8 @@ class HomeController extends BaseController
      */
     public function aboutus()
     {
-        $this->loadLayout("header.html");
         $data['footer'] = $this->model->getFooterData();
+        $this->loadLayout("header.html");
         $this->loadTemplate("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
         $this->loadTemplate("footer", $data);
     }
@@ -106,9 +106,9 @@ class HomeController extends BaseController
      */
     public function login()
     {
+        $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
         $this->loadTemplate("login");
-        $data['footer'] = $this->model->getFooterData();
         $this->loadTemplate("footer", $data);
     }
 
@@ -167,9 +167,9 @@ class HomeController extends BaseController
                 $data["msg"] = "Login failed..!";
             }
         }
+        $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
         $this->loadTemplate("login", $data);
-        $data['footer'] = $this->model->getFooterData();
         $this->loadTemplate("footer", $data);
     }
 
@@ -219,8 +219,8 @@ class HomeController extends BaseController
             );
             return;
         }
-        $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
+        $this->loadLayout("header.html");
         $this->loadTemplate("registration", $data);
         $this->loadTemplate("footer", $data);
     }
@@ -232,10 +232,10 @@ class HomeController extends BaseController
      */
     public function registration()
     {
-        $this->loadLayout("header.html");
         $data['dropdownGen'] = $this->model->getGender();
-        $this->loadTemplate("registration", $data);
         $data['footer'] = $this->model->getFooterData();
+        $this->loadLayout("header.html");
+        $this->loadTemplate("registration", $data);
         $this->loadTemplate("footer", $data);
     }
 }

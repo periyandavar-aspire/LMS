@@ -37,8 +37,10 @@ interface ErrorHandler
 
     /**
      * This function will call when an error occurs
+     * 
+     * @param string|null $msg Error msg
      *
      * @return void
      */
-    public function serverError();
+    public function serverError(?string $msg);
 }

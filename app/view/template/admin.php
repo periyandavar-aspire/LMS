@@ -6,19 +6,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" type="image/png"
-        href="<?php echo Utility::baseURL()?>/static/img/favicon.png" />
+        href="/static/img/favicon.png" />
     <link rel="stylesheet" type="text/css"
-        href="<?php echo Utility::baseURL()?>/static/css/form.css">
+        href="/static/css/form.css">
     <link rel="stylesheet" type="text/css"
-        href="<?php echo Utility::baseURL()?>/static/css/core.css">
+        href="/static/css/core.css">
     <link rel="stylesheet" type="text/css"
-        href="<?php echo Utility::baseURL()?>/static/css/toast.css">
+        href="/static/css/toast.css">
     <link rel="stylesheet" type="text/css"
-        href="<?php echo Utility::baseURL()?>/static/css/login.css">
+        href="/static/css/login.css">
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/preloader.css">
 </head>
 
 <body>
+    <div class="preloader" id="loader">
+        <div class="loader l-0">
+            <div class="loader l-1">
+                <div class="loader l-2">
+                    <div class="loader l-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="left-cover"></div>
+    <div class="right-cover"></div>
     <article>
 
         <section>

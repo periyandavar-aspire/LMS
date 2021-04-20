@@ -7,7 +7,8 @@ function deleteItem(delUrl) {
                 document.getElementById(parts[parts.length - 1]).remove();
                 toast("The item deleted successfully..!", 'success');
             } else {
-                toast("Unable to delete the item..!", 'danger');
+                msg = data.msg != undefined ? data.msg : "Unable to delete the item..!";
+                toast(msg, 'danger');
             }
         }));
 }
@@ -37,4 +38,24 @@ function changeStatus(event, statusChangeUrl) {
                 toast("Unable to upate the status..!", 'danger');
             }
         });
+}
+
+function loadTableData(id, url, columns) {
+    studentTable = jQuery('#' + id).dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "iDisplayLength": 10,
+        'destroy': true,
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "iDisplayLength": 10,
+        "bProcessing": true,
+        "bServerSide": true,
+        "rowId": "id",
+        columnDefs: [
+            { width: '40%', targets: 1 }
+        ],
+        "sAjaxSource": url,
+        "columns": columns
+    });
 }

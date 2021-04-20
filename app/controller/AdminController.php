@@ -88,9 +88,9 @@ class AdminController extends BaseController
     public function profile()
     {
         $user = $this->input->session('type');
-        $this->loadLayout($user . "Header.html");
         $id = $this->input->session('id');
         $data['result'] = $this->model->getProfile($id);
+        $this->loadLayout($user . "Header.html");
         $this->loadTemplate($user . 'Profile', $data);
         $this->loadLayout($user . "Footer.html");
     }

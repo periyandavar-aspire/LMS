@@ -104,12 +104,27 @@ class BookModel extends BaseModel
     }
 
     /**
-     * Returns the all the books
+     * Returns all books
      *
+     * @param integer     $start     offset
+     * @param integer     $limit     limit value
+     * @param string      $sortby    sorting column
+     * @param string      $sortDir   sorting direction
+     * @param string      $searchKey search key
+     * @param string|null $tcount    stores total records count
+     * @param string|null $tfcount   stores filtered records  count
+     * 
      * @return array
      */
-    public function getBooks(): array
-    {
+    public function getBooks(
+        int $start = 0,
+        int $limit = 10,
+        string $sortby = "1",
+        string $sortDir = 'ASC',
+        string $searchKey = '',
+        ?string &$tcount = null,
+        ?string &$tfcount = null
+    ): array {
         $books = [];
         $result = $this->db->select(
             "id",
@@ -124,9 +139,33 @@ class BookModel extends BaseModel
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
             "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
         )->from('book');
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
+
+        $this->db->where('deletionToken', '=', 'N/A');
+        if ($searchKey != '') {
+            $this->db->where('name', "LIKE", "%$searchKey%");
+        }
+        $this->db->orderBy($sortby, $sortDir)
+            ->limit($limit, $start)
+            ->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
+        }
+        $this->db->selectAs(
+            "COUNT(*) count",
+        )->from('book');
+        $this->db->where('deletionToken', '=', "N/A")
+            ->execute();
+        $tcount = $this->db->fetch()->count;
+        if ($searchKey != '') {
+            $this->db->selectAs(
+                "COUNT(*) count",
+            )->from('book');
+            $this->db->where('deletionToken', '=', "N/A");
+            $this->db->where('name', "LIKE", "%$searchKey%")
+                ->execute();    
+            $tfcount = $this->db->fetch()->count;
+        } else {
+            $tfcount = $tcount;
         }
         return $books;
     }
@@ -196,16 +235,41 @@ class BookModel extends BaseModel
     /**
      * Deletes the book
      *
-     * @param int $id Book Id
+     * @param int         $id  Book Id
+     * @param string|null $msg Message
      *
      * @return boolean
      */
-    public function delete(int $id): bool
+    public function delete(int $id, ?string &$msg = null): bool
     {
+        $this->db->selectAs('count(*) count')
+            ->from('issued_book')
+            ->innerJoin('status')
+            ->on('status.code = issued_book.status')
+            ->where('status.value', '=', Constants::STATUS_ISSUED)
+            ->where('bookId', '=', $id)
+            ->execute();
+        if ($this->db->fetch()->count != 0) {
+            $msg = "The of the book is issued to the user. Please "
+                . "mark those as returned and again make the delete request "
+                . "to delete it";
+            return false;
+        }
         $deletionToken = uniqid();
         $field = [ 'deletionToken' => $deletionToken];
-        $this->db->update('book', $field)->where('id', '=', $id);
-        return $this->db->execute();
+        $this->db->set("autocommit", 0);
+        $this->db->begin();
+        $flag1 = $flag2 = false;
+        $flag1 = $this->db->update('book', $field)->where('id', '=', $id)->execute();
+        $flag2 = $this->db->update('issued_book', $field)
+            ->where('id', '=', $id)
+            ->where('returnAt', '=', Constants::DEFAULT_DATE_VAL)
+            ->execute();
+        if ($flag1 && $flag2) {
+            return $this->db->commit();
+        }
+        $this->db->rollback();
+        return false;
     }
 
     /**

@@ -34,29 +34,87 @@ class ManageUserController extends BaseController
      *
      * @return void
      */
-    public function getAllUsers()
+    public function manageAllUsers()
     {
         $user = $this->input->session('type');
         $currentUser = $this->input->session('id');
-        $data['users'] = $this->model->getAllUsers($currentUser);
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("adminManageUsers", $data);
+        $this->loadTemplate("adminManageUsers");
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
     }
+
+    /**
+     * Loads Regs users
+     *
+     * @return void
+     */
+    public function loadRegUser()
+    {
+        $user = $this->input->session('id');
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $tcount = $tfcount = '';
+        $data['aaData'] = $this->model->getRegUsers(
+            $user,
+            $start,
+            $limit,
+            $sortby+1,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
+    }
+
+
+    /**
+     * Loads all users
+     *
+     * @return void
+     */
+    public function loadAllUser()
+    {
+        $user = $this->input->session('id');
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $tcount = $tfcount = '';
+        $data['aaData'] = $this->model->getAllUsers(
+            $user,
+            $start,
+            $limit,
+            $sortby+1,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
+    }
+
 
     /**
      * Displays all the registered users
      *
      * @return void
      */
-    public function getRegUsers()
+    public function manageRegUsers()
     {
         $user = $this->input->session('type');
         $currentUser = $this->input->session('id');
-        $data['users'] = $this->model->getRegUsers();
         $this->loadLayout("librarianHeader.html");
-        $this->loadTemplate("librarianManageUsers", $data);
+        $this->loadTemplate("librarianManageUsers");
         $this->loadLayout("librarianFooter.html");
     }
 
@@ -81,7 +139,8 @@ class ManageUserController extends BaseController
      */
     public function delete(string $role, int $id)
     {
-        $result['result'] = $this->model->delete($role, $id);
+        $result['result'] = $this->model->delete($role, $id, $msg);
+        $result['msg'] = $msg;
         echo json_encode($result);
     }
 

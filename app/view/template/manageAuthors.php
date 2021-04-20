@@ -8,23 +8,8 @@
                 </div>
             </div>
             <div class="div-card-body">
-                <div class='table-panel'>
-                    <div class="form-input-div">
-                        <label> Record count </label>
-                        <select class="table-form-control">
-                            <option>5</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>50</option>
-                        </select>
-                    </div>
-                    <div class="form-input-div">
-                        <label> Search </label>
-                        <input type="text" class="table-form-control">
-                    </div>
-                </div>
                 <div style="overflow-x:auto;">
-                    <table class="tab_design">
+                    <table id="author-list" class="tab_design">
                         <thead>
                             <tr>
                                 <th>Sl. No</th>
@@ -35,56 +20,10 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php $i=0; if (isset($authors)): ?>
+                        <tbody class="table_body">
 
-                            <?php foreach ($authors as $author):?>
-                            <tr id="<?php echo $author->id;?>">
-                                <td><?php echo ++$i;?>
-                                </td>
-                                <td><?php echo $author->name;?>
-                                </td>
-                                <td><?php echo $author->createdAt;?>
-                                </td>
-                                <td><?php echo $author->updatedAt;?>
-                                </td>
-                                <td>
-                                    <div class="checkbox"><input type="checkbox"
-                                            onchange="changeStatus(event,'/authors/changeStatus/<?php echo $author->id;?>');"
-                                            <?php if ($author->status == 1) {
-    echo "checked";
-}?>>
-                                    </div>
-                                </td>
-                                <td>
-                                    <button type="button"
-                                        onclick="editItem('/authors/edit/<?php echo $author->id;?>');"
-                                        class="button-control icon-btn positive" title="edit"><i
-                                            class="fa fa-edit"></i></button>
-                                    <button type="button"
-                                        onclick="deleteItem('/authors/delete/<?php echo $author->id;?>');"
-                                        class="button-control icon-btn negative" title="delete"><i
-                                            class="fa fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <?php endforeach;?>
-                            <?php endif;?>
                         </tbody>
                     </table>
-                </div>
-                <div class="table-panel">
-                    <div>
-                        Showing 1 to 2 of 2 entries
-                    </div>
-                    <div>
-                        <ul class="pagination">
-                            <li class="disable"><a>Previous</a></li>
-                            <li class="active"><a>1</a></li>
-                            <li><a>2</a></li>
-                            <li><a>3</a></li>
-                            <li><a>Next</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -128,4 +67,46 @@
 
 <script>
     document.getElementById('authors').className += " active";
+    column = [{
+        "render": function (data, type, row, meta) {
+        return meta.row + meta.settings._iDisplayStart + 1;
+        }
+        },
+        {
+            "data": "name"
+        },
+        {
+            "data": "createdAt"
+        },
+        {
+            "data": "updatedAt"
+        },
+        {
+            "data": null,
+            "render": function(item) {
+                code = '<div class="checkbox"><input type="checkbox" ';
+                code += 'onchange="changeStatus(event,'
+                code += "'/authors/changeStatus/" + item.id + "');" + '" ';
+                code += item.status == 1 ? "checked" : '';
+                code += '></div>';
+                return code;
+            }
+        },
+        {
+            "data": null,
+            "render": function(item) {
+                code = '<button type="button" onclick="editItem(';
+                code += "'/authors/edit/" + item.id + "');" + '"';
+                code +=
+                    'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button> <button type="button"';
+                code += ' onclick="deleteItem(' + "'/authors/delete/" + item.id + "');" + '"';
+                code +=
+                    'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
+                return code;
+            }
+        }
+    ]
+    $(document).ready(function() {
+        loadTableData("author-list", "/author/loadData", column);
+    });
 </script>
