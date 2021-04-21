@@ -1,4 +1,3 @@
-
 <article class="main">
     <section>
         <div class="container div-card">
@@ -13,14 +12,14 @@
                     <table class="tab_design" id='user-list'>
                         <thead>
                             <tr>
-                                <th>Sl. No</th>
+                                <th data-orderable="false">Sl. No</th>
                                 <th>Full Name</th>
                                 <th>User Name</th>
                                 <th>Email</th>
                                 <th>Mobile No</th>
                                 <th>User Type</th>
                                 <th>Registered At</th>
-                                <th>Action</th>
+                                <th data-orderable="false">Action</th>
                             </tr>
                         </thead>
                         <tbody>

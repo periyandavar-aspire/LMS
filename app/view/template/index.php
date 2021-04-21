@@ -56,7 +56,7 @@
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
                     <a
-                        href="/home/book/view/<?php echo $book->id; ?>">
+                        href="/book/view/<?php echo $book->id; ?>">
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                             book="<?php echo $book->name; ?>"
@@ -71,11 +71,13 @@
                         </div>
                         <p><?php echo $book->description;?>
                         </p>
-                        <p>only <?php echo $book->available;?> books
+                        <p>
+                            <?php echo ($book->available == 0) ? "no copy" 
+                                : ("only " . $book->available
+                                . (($book->available == 1) ? " copy" : " copies"));
+                            ?>
                             available</p>
                         <div class="btn-container">
-                            <!-- <a class="btn-link" href="/home/book/lend/<?php //echo $book->id;?>">LEND
-                            NOW</a> -->
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,7 @@
                     <table id='user-list' class="tab_design">
                         <thead>
                             <tr>
-                                <th>Sl. No</th>
+                                <th data-orderable="false">Sl. No</th>
                                 <th>Full Name</th>
                                 <th>User Name</th>
                                 <th>Email</th>

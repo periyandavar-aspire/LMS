@@ -12,7 +12,7 @@
                     <div class="text-container">
                         <h1>A PLACE TO <span class="morph"> </span></h1>
                         <p class="heading-para">Find the Books of your Taste.. <br>Among the thounsand's collection.</p>
-                        <a class="btn-link" href="home/registration">JOIN NOW</a>
+                        <a class="btn-link" href="/register">JOIN NOW</a>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                                     <div class="details">"" <br><br> by </div>
                                 </div> -->
                     <!-- </div></div> -->
-                    <a href="/home/book/view/<?php echo $book->id; ?>">
+                    <a href="/book/view/<?php echo $book->id; ?>">
 
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
@@ -58,8 +58,11 @@
                         </div>
                         <p><?php echo $book->description;?>
                         </p>
-                        <p>only <?php echo $book->available;?>
-                            <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
+                        <p>
+                            <?php echo ($book->available == 0) ? "no copy" 
+                                : ("only " . $book->available
+                                . (($book->available == 1) ? " copy" : " copies"));
+                            ?>
                             available</p>
                         <div class="btn-container">
                             <!-- <a class="btn-link" href="/home/book/lend/<?php //echo $book->id;?>">LEND

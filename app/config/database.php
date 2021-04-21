@@ -25,7 +25,6 @@ $dbConfig = [
     'user' => 'root',
     'password' => '',
     'database' => 'lms',
-    'usepdo' => false,
-    'driver' => 'mysql',
+    'driver' => 'mysqli',
     'prefix' => ''
 ];

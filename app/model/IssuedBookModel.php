@@ -46,7 +46,7 @@ class IssuedBookModel extends BaseModel
             ->where('user.deletionToken', '=', 'N/A')
             ->limit(1)
             ->execute();
-        
+
         $user = $this->db->fetch();
         // print_r($user);
         return $user;
@@ -195,10 +195,25 @@ class IssuedBookModel extends BaseModel
     /**
      * Returns the issued book details
      *
+     * @param integer     $start     offset
+     * @param integer     $limit     limit value
+     * @param string      $sortby    sorting column
+     * @param string      $sortDir   sorting direction
+     * @param string      $searchKey search key
+     * @param string|null $tcount    stores total records count
+     * @param string|null $tfcount   stores filtered records  count
+     * 
      * @return array
      */
-    public function getIssuedBooks(): array
-    {
+    public function getIssuedBooks(
+        int $start = 0,
+        int $limit = 10,
+        string $sortby = "returnAT",
+        string $sortDir = 'DESC',
+        string $searchKey = '',
+        ?string &$tcount = null,
+        ?string &$tfcount = null
+    ): array {
         $issuedBooks = [];
         $this->db->select(
             'book.isbnNumber',
@@ -222,11 +237,51 @@ class IssuedBookModel extends BaseModel
             ->on('book.id = ib.bookId')
             ->innerJoin('user')
             ->on('user.id = ib.userId')
-            ->where('ib.issuedAt', '!=', '0000-00-00')
-            ->orderby('returnAt');
-        $this->db->limit(10, 0)->execute();
+            ->where('ib.issuedAt', '!=', '0000-00-00');
+        if ($searchKey != '') {
+            $this->db->where(
+                " user.username LIKE '%$searchKey%' OR "
+                ." name LIKE '%$searchKey%' OR "
+                ." book.isbnNumber LIKE '%$searchKey%' "
+            );
+        }
+        $this->db->orderBy($sortby, $sortDir)
+            ->limit($limit, $start)
+            ->execute();
         while ($row = $this->db->fetch()) {
             $issuedBooks[] = $row;
+        }
+        $this->db->selectAs(
+            "COUNT(*) count",
+        )->from('issued_book ib')
+            ->innerJoin('status')
+            ->on('status.code = ib.status')
+            ->innerJoin('book')
+            ->on('book.id = ib.bookId')
+            ->innerJoin('user')
+            ->on('user.id = ib.userId')
+            ->where('ib.issuedAt', '!=', '0000-00-00')
+            ->execute();
+        $tcount = $this->db->fetch()->count;
+        if ($searchKey != '') {
+            $this->db->selectAs(
+                "COUNT(*) count",
+            )->from('issued_book ib')
+                ->innerJoin('status')
+                ->on('status.code = ib.status')
+                ->innerJoin('book')
+                ->on('book.id = ib.bookId')
+                ->innerJoin('user')
+                ->on('user.id = ib.userId')
+                ->where('ib.issuedAt', '!=', '0000-00-00');
+            $this->db->where(
+                " user.username LIKE '%$searchKey%' OR "
+                 ." name LIKE '%$searchKey%' OR "
+                 ." book.isbnNumber LIKE '%$searchKey%' "
+            )->execute();    
+            $tfcount = $this->db->fetch()->count;
+        } else {
+            $tfcount = $tcount;
         }
         return $issuedBooks;
     }
@@ -234,10 +289,25 @@ class IssuedBookModel extends BaseModel
     /**
      * Returns the book requests
      *
+     * @param integer     $start     offset
+     * @param integer     $limit     limit value
+     * @param string      $sortby    sorting column
+     * @param string      $sortDir   sorting direction
+     * @param string      $searchKey search key
+     * @param string|null $tcount    stores total records count
+     * @param string|null $tfcount   stores filtered records  count
+     * 
      * @return array
      */
-    public function getRequestBooks(): array
-    {
+    public function getRequestBooks(
+        int $start = 0,
+        int $limit = 10,
+        string $sortby = "requestedAt",
+        string $sortDir = 'DESC',
+        string $searchKey = '',
+        ?string &$tcount = null,
+        ?string &$tfcount = null
+    ): array {
         $issuedBooks = [];
         $this->db->select(
             'book.isbnNumber',
@@ -258,9 +328,50 @@ class IssuedBookModel extends BaseModel
             ->innerJoin('user')
             ->on('user.id = ib.userId');
         $this->db->where('status.value', 'LIKE', 'Request%');
-        $this->db->limit(10, 0)->execute();
+        if ($searchKey != '') {
+            $this->db->where(
+                " user.username LIKE '%$searchKey%' OR "
+                ." name LIKE '%$searchKey%' OR "
+                ." book.isbnNumber LIKE '%$searchKey%' "
+            );
+        }
+        $this->db->orderBy($sortby, $sortDir)
+            ->limit($limit, $start)
+            ->execute();
         while ($row = $this->db->fetch()) {
             $issuedBooks[] = $row;
+        }
+        $this->db->selectAs(
+            "COUNT(*) count",
+        )->from('issued_book ib')
+            ->innerJoin('status')
+            ->on('status.code = ib.status')
+            ->innerJoin('book')
+            ->on('book.id = ib.bookId')
+            ->innerJoin('user')
+            ->on('user.id = ib.userId')
+            ->where('status.value', 'LIKE', 'Request%')
+            ->execute();
+        $tcount = $this->db->fetch()->count;
+        if ($searchKey != '') {
+            $this->db->selectAs(
+                "COUNT(*) count",
+            )->from('issued_book ib')
+                ->innerJoin('status')
+                ->on('status.code = ib.status')
+                ->innerJoin('book')
+                ->on('book.id = ib.bookId')
+                ->innerJoin('user')
+                ->on('user.id = ib.userId')
+                ->where('status.value', 'LIKE', 'Request%');
+            $this->db->where(
+                " user.username LIKE '%$searchKey%' OR "
+                 ." name LIKE '%$searchKey%' OR "
+                 ." book.isbnNumber LIKE '%$searchKey%' "
+            )->execute();    
+            $tfcount = $this->db->fetch()->count;
+        } else {
+            $tfcount = $tcount;
         }
         return $issuedBooks;
     }

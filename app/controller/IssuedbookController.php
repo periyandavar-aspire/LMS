@@ -51,15 +51,9 @@ class IssuedBookController extends BaseController
     public function issue()
     {
         $user = $this->input->session('type');
-        $issuedBooks = $this->model->getIssuedBooks();
-        $fineSettings = $this->model->getFineConfigs();
-        $data['issuedBooks'] = $this->service->calculateFine(
-            $issuedBooks,
-            $fineSettings
-        );
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadTemplate('manageissuedbooks', $data);
+        $this->loadTemplate('manageissuedbooks');
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -84,10 +78,9 @@ class IssuedBookController extends BaseController
     public function manageUserRequest()
     {
         $user = $this->input->session('type');
-        $data['issuedBooks'] = $this->model->getRequestBooks();
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadTemplate('manageUserRequest', $data);
+        $this->loadTemplate('manageUserRequest');
         $this->loadLayout($user . "Footer.html");
         if ($this->input->session('msg') != null) {
             $this->addScript("toast('" . $this->input->session('msg') . "')");
@@ -159,7 +152,7 @@ class IssuedBookController extends BaseController
         $flag = $this->model->updateRequest(
             $id,
             $updateTo,
-            $this->input->post(comments)
+            $this->input->post('comments')
         );
         $script = $flag == true ? 'Success..!' : 'Failed..!';
         Utility::setSessionData('msg', $script);
@@ -246,5 +239,72 @@ class IssuedBookController extends BaseController
         }
         $result['msg'] = $msg;
         echo json_encode($result);
+    }
+
+    /**
+     * Loads Issued books
+     *
+     * @return void
+     */
+    public function loadIssuedBook()
+    {
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $tcount = $tfcount = '';
+        if ($sortby == 0) {
+            $sortby = "ReturnedAt";
+            $sortDir = "DESC";
+        }
+        $issuedBooks = $this->model->getIssuedBooks(
+            $start,
+            $limit,
+            $sortby,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $fineSettings = $this->model->getFineConfigs();
+        $data['aaData'] = $this->service->calculateFine(
+            $issuedBooks,
+            $fineSettings
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
+    }
+
+    /**
+     * Loads Request books
+     *
+     * @return void
+     */
+    public function loadRequestBook()
+    {
+        $start = $this->input->get("iDisplayStart");
+        $limit = $this->input->get("iDisplayLength");
+        $sortby = $this->input->get("iSortCol_0");
+        $sortDir = $this->input->get("sSortDir_0");
+        $searchKey = $this->input->get("sSearch");
+        $tcount = $tfcount = '';
+        if ($sortby == 0) {
+            $sortby = "RequestedAt";
+            $sortDir = "DESC";
+        }
+        $data['aaData'] = $this->model->getRequestBooks(
+            $start,
+            $limit,
+            $sortby,
+            $sortDir,
+            $searchKey,
+            $tcount,
+            $tfcount
+        );
+        $data["iTotalRecords"] = $tcount;
+        $data["iTotalDisplayRecords"] = $tfcount;
+        echo json_encode($data);
     }
 }

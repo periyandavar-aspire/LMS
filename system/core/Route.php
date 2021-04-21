@@ -203,7 +203,7 @@ class Route
             if (!headers_sent()) {
                 header('HTTP/1.1 404 Not Found');
             }
-            die('404 - The file  not found');
+            die('404 - The file not found');
         }
         if (!$methodMatch) {
             if (self::$_methodNotAllowed) {

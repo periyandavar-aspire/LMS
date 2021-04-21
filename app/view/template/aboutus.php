@@ -12,7 +12,7 @@
                                 echo $aboutUs;
                             } ?> 
                         </p>
-                        <a class="btn-link" href="home/registration">JOIN NOW</a>
+                        <a class="btn-link" href="/register">JOIN NOW</a>
                         
                     </div>
                 </div> 

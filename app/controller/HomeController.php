@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') OR exit('Not a valid Request');
 /**
  * HomeController Class Handles all the request to the home page
  *
@@ -40,11 +41,11 @@ class HomeController extends BaseController
         $homeData['vision'] = $this->model->getVision();
         $homeData['mission'] = $this->model->getMission();
         $homeData['books'] = $this->model->getAvailableBooks();
-        // $this->loadTemplate("index", $homeData);
         $this->setView(new HomeView());
-        $this->view->loadIndexPage($homeData);
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
+        $this->loadTemplate("index", $homeData);
+        // $this->view->loadIndexPage($homeData);
         $this->loadTemplate("footer", $data);
         $this->includeScript('bookElement.js');
     }
@@ -159,8 +160,8 @@ class HomeController extends BaseController
         } else {
             $pass = $this->model->getUserPass($username);
             if ($pass == md5($this->input->post('password'))) {
-                Utility::setsessionData('login', Constants::VALID_LOGIN);
-                Utility::setSessionData("type", Constants::REG_USER);
+                Utility::setsessionData('login', VALID_LOGIN);
+                Utility::setSessionData("type", REG_USER);
                 Utility::setSessionData("id", $username);
                 $this->redirect("user/home");
             } else {

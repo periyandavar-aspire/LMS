@@ -161,6 +161,7 @@ class UserController extends BaseController
         ?string $search = null
     ) {
         $user = $this->input->session('id');
+        $limit = $limit == 0 ? 5 : $limit;
         $data["books"] = $this->model->getRequestedBooks(
             $user,
             $tCount,
@@ -181,7 +182,6 @@ class UserController extends BaseController
         $this->loadTemplate("booked", $data);
         $this->loadLayout("userFooter.html");
     }
-
 
     /**
      * Removes the user book request

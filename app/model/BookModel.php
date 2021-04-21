@@ -427,7 +427,7 @@ class BookModel extends BaseModel
             ->where('status.value', '!=', 'Returned')
             ->where('status.value', '!=', 'Deleted Request')
             ->execute();
-        if ($row = $this->db->fetch()) {
+        while ($row = $this->db->fetch()) {
             $result[] = $row;
         }
         return $result;

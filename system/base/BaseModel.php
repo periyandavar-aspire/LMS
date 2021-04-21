@@ -36,23 +36,20 @@ class BaseModel
     public function __construct()
     {
         global $dbConfig;
-        if ($dbConfig['usepdo']) {
-            $this->db = PdoDbHandler::getInstance(
-                $dbConfig['host'],
-                $dbConfig['user'],
-                $dbConfig['password'],
-                $dbConfig['database'],
-                $dbConfig['driver']
-            );
-        } else {
-            $handler = $dbConfig['driver'] . "DbHandler";
-            $this->db = $handler::getInstance(
-                $dbConfig['host'],
-                $dbConfig['user'],
-                $dbConfig['password'],
-                $dbConfig['database'],
-                $dbConfig['driver']
-            );
-        }
+        $handler = $dbConfig['driver'] . 'Driver';
+        $this->db = $handler::getInstance(
+            $dbConfig['host'],
+            $dbConfig['user'],
+            $dbConfig['password'],
+            $dbConfig['database'],
+            $dbConfig['driver']
+        );
+    }
+    /**
+     * Close the db connection
+     */
+    public function __destruct()
+    {
+        $this->db->close();
     }
 }

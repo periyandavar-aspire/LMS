@@ -1,28 +1,28 @@
 <?php
 /**
- * MysqlDbHandler File Doc Comment
+ * MysqliDriver File Doc Comment
  * php version 7.3.5
  *
- * @category DbHandler
- * @package  DbHandler
+ * @category Database
+ * @package  Database
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
 /**
- * MysqlDbHandler Class performs database operations with mysqli connection
+ * MysqliDriver Class performs database operations with mysqli connection
  *
- * @category   DbHandler
- * @package    DbHandler
- * @subpackage MysqlDbHandler
+ * @category   Database
+ * @package    Database
+ * @subpackage MysqliDriver
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
  */
-class MysqlDbHandler extends BaseDbHandler
+class MysqliDriver extends Database
 {
     /**
-     * Instantiate a new MysqlDbHandler instance
+     * Instantiate a new MysqliDriver instance
      *
      * @param string $host Host
      * @param string $user Username
@@ -35,7 +35,7 @@ class MysqlDbHandler extends BaseDbHandler
     }
 
     /**
-     * Returns the same instance of the MysqlDbHandler to performs Singleton
+     * Returns the same instance of the MysqliDriver to performs Singleton
      *
      * @param string $host   Host
      * @param string $user   UserName
@@ -43,7 +43,7 @@ class MysqlDbHandler extends BaseDbHandler
      * @param string $db     DatabaseName
      * @param string $driver DriverName
      *
-     * @return MysqlDbHandler
+     * @return MysqliDriver
      */
     public static function getInstance(
         string $host,
@@ -51,7 +51,7 @@ class MysqlDbHandler extends BaseDbHandler
         string $pass,
         string $db,
         string $driver
-    ): MysqlDbHandler {
+    ): MysqliDriver {
         if (!self::$instance) {
             self::$instance = new static($host, $user, $pass, $db);
         }

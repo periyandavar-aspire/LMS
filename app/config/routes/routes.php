@@ -1,13 +1,14 @@
 <?php
 /**
- * RouteConfig File all the configurations of the routes are defined here
+ * Routes File all the configurations of the routes are defined here
  * php version 7.3.5
  *
- * @category RouteConfig
- * @package  RouteConfig
- * @author   Periyandavar <periyandavar@gmail.com>
- * @license  http://license.com license
- * @link     http://url.com
+ * @category   Route
+ * @package    Routes
+ * @subpackage Routes
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
  */
 
 Route::add('/', 'home/getIndexPage');
@@ -22,16 +23,14 @@ Route::add('/home/captcha');
 
 Route::add('/home/home');
 
-// Route::add('/home/book/view/([1-9]{1}[0-9]*)', 'book/get');
-
 Route::add(
     '/user/home',
     null,
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -46,8 +45,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -62,8 +61,8 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -78,8 +77,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -94,8 +93,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -110,8 +109,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -132,8 +131,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -148,8 +147,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -164,8 +163,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        // if ($input->session('login') == Constants::VALID_LOGIN) {
-            return true;
+        // if ($input->session('login') == VALID_LOGIN) {
+        return true;
         // } else {
         //     Utility::redirectURL('/login');
         // }
@@ -178,8 +177,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::REG_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == REG_USER
         ) {
             return true;
         } else {
@@ -197,8 +196,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::LIBR_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == LIBR_USER
         ) {
             return true;
         } else {
@@ -213,8 +212,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::LIBR_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == LIBR_USER
         ) {
             return true;
         } else {
@@ -229,8 +228,8 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::LIBR_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == LIBR_USER
         ) {
             return true;
         } else {
@@ -246,8 +245,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::LIBR_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == LIBR_USER
         ) {
             return true;
         } else {
@@ -262,8 +261,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && $input->session('type') == Constants::LIBR_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == LIBR_USER
         ) {
             return true;
         } else {
@@ -283,8 +282,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -299,8 +298,8 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -315,8 +314,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -331,8 +330,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -348,9 +347,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -365,9 +364,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -382,8 +381,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -398,8 +397,8 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -414,8 +413,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -430,8 +429,8 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -447,8 +446,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -463,8 +462,8 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -479,8 +478,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -495,9 +494,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -512,9 +511,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -530,9 +529,9 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             $action = $input->post('action');
             $action == null
@@ -550,9 +549,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -567,9 +566,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -584,9 +583,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -601,9 +600,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -618,9 +617,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -636,9 +635,9 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             $action = $input->post('action');
             $action == null
@@ -656,9 +655,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -673,9 +672,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -690,9 +689,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -707,9 +706,43 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/issueBook/loadData',
+    'Issuedbook/loadIssuedBook',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/requestBook/loadData',
+    'Issuedbook/loadRequestBook',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -724,9 +757,9 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -741,9 +774,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -758,9 +791,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -775,9 +808,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -792,9 +825,9 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -809,9 +842,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            || $input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -826,9 +859,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -843,9 +876,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -860,9 +893,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -877,8 +910,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -893,8 +927,9 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -909,9 +944,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -926,7 +961,7 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN) {
+        if ($input->session('login') == VALID_LOGIN) {
             return true;
         } else {
             Utility::redirectURL('admin/login');
@@ -940,7 +975,7 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN) {
+        if ($input->session('login') == VALID_LOGIN) {
             return true;
         } else {
             Utility::redirectURL('admin/login');
@@ -954,9 +989,9 @@ Route::add(
     'post',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -971,9 +1006,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -988,9 +1023,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -1008,9 +1043,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -1025,9 +1060,9 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::LIBR_USER
-            ||$input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -1045,8 +1080,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN 
-            && $input->session('type') == Constants::ADMIN_USER
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
         ) {
             return true;
         } else {
@@ -1061,8 +1096,8 @@ Route::add(
     'get',
     function () {
         $input = new InputData();
-        if ($input->session('login') == Constants::VALID_LOGIN
-            && ($input->session('type') == Constants::ADMIN_USER)
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {

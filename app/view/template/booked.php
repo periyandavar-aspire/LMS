@@ -11,7 +11,7 @@
                 <div class='table-panel'>
                     <div class="form-input-div">
                         <label> Record count </label>
-                        <select id="recordCount" onchange="changePagination('/user/lentbooks');"
+                        <select id="recordCount" onchange="changePagination('/user/requestedBooks');"
                             class="table-form-control">
                             <option>5</option>
                             <option>10</option>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="form-input-div">
                         <label> Search </label>
-                        <input type="text" id="recordSearch" onchange="changePagination('/user/lentbooks');"
+                        <input type="text" id="recordSearch" onchange="changePagination('/user/requestedBooks');"
                             value="<?php echo $pagination['search']; ?>"
                             class="table-form-control">
                     </div>
@@ -85,11 +85,11 @@
                                 if ($pagination['tpages'] > 1) {
                                     $previous = ($pagination['start'] == 1)
                                     ? '<li class="disable"><a class="disable">Previous</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.((($pagination['cpage']-1)) * $pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">Previous</a></li>';
+                                    : '<li><a href="/user/requestedBooks/'.((($pagination['cpage']-1)) * $pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">Previous</a></li>';
                                     echo $previous;
                                     $first = ($pagination['start'] == 1)
                                     ? '<li class="active"><a>1</a></li>'
-                                    : '<li><a href="/user/lentbooks/0/'.$pagination['limit'].'/'.$pagination['search'].'">1</a></li>';
+                                    : '<li><a href="/user/requestedBooks/0/'.$pagination['limit'].'/'.$pagination['search'].'">1</a></li>';
                                     echo $first;
                                     if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
                                         $i = $pagination['cpage'];
@@ -106,7 +106,7 @@
                                         $li = "<li";
                                         $li = ($i == $pagination['cpage']+1)
                                         ? $li . " class='active'><a>$i</a></li>"
-                                        : $li . "><a href='/user/lentbooks/".($pagination['limit']*($i-1))."/".$pagination['limit'].'/'.$pagination['search']."'>$i</a></li>";
+                                        : $li . "><a href='/user/requestedBooks/".($pagination['limit']*($i-1))."/".$pagination['limit'].'/'.$pagination['search']."'>$i</a></li>";
                                         // $li .= "";
                                         echo $li;
                                     }
@@ -115,11 +115,11 @@
                                     }
                                     $last = ($pagination['end'] == $pagination['tcount'])
                                     ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.(($pagination['tpages']-1)*$pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
+                                    : '<li><a href="/user/requestedBooks/'.(($pagination['tpages']-1)*$pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
                                     echo $last;
                                     $next = ($pagination['end'] == $pagination['tcount'])
                                     ? '<li class="disable"><a class="disable">Next</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.((($pagination['cpage']+1)* $pagination['limit'])).'/'.$pagination['limit'].'/'.$pagination['search'].'">Next</a></li>';
+                                    : '<li><a href="/user/requestedBooks/'.((($pagination['cpage']+1)* $pagination['limit'])).'/'.$pagination['limit'].'/'.$pagination['search'].'">Next</a></li>';
                                     echo $next;
                                 }
                             ?>
@@ -138,4 +138,6 @@
 
 <script>
     document.getElementById('booked').className += " active";
+    document.getElementById('recordCount').value =
+        "<?php echo $pagination['limit'] ?>";
 </script>

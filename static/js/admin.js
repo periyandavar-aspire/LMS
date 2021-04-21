@@ -52,10 +52,11 @@ function loadTableData(id, url, columns) {
         "bProcessing": true,
         "bServerSide": true,
         "rowId": "id",
-        columnDefs: [
-            { width: '40%', targets: 1 }
-        ],
         "sAjaxSource": url,
-        "columns": columns
+        "columns": columns,
+        "columnDefs": [
+            // { "orderable": false, "targets": [0, columns.length] },
+            // { "orderable": true, "targets": [1, 2, 3] }
+        ]
     });
 }

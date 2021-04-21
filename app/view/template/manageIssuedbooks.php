@@ -1,8 +1,3 @@
-<?php
-    if (!isset($issuedBooks)) {
-        return;
-    }
-?>
 <article class="main">
     <section>
         <div class="container div-card">
@@ -74,26 +69,12 @@
                 </div>
             </div>
             <div class="div-card-body">
-                <div class='table-panel'>
-                    <div class="form-input-div">
-                        <label> Record count </label>
-                        <select class="table-form-control">
-                            <option>5</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>50</option>
-                        </select>
-                    </div>
-                    <div class="form-input-div">
-                        <label> Search </label>
-                        <input type="text" class="table-form-control">
-                    </div>
-                </div>
+                
                 <div style="overflow-x:auto;">
-                    <table class="tab_design">
+                    <table class="tab_design" id='book-list'>
                         <thead>
                             <tr>
-                                <th>Sl. No</th>
+                                <th data-orderable="false">Sl. No</th>
                                 <th>ISBN Number</th>
                                 <th>Book Name</th>
                                 <th>User Name</th>
@@ -101,58 +82,14 @@
                                 <th>Returned Date</th>
                                 <th>Status</th>
                                 <th>Fine Amount</th>
-                                <th>Mark as Returned</th>
+                                <th data-orderable="false">Mark as Returned</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($issuedBooks)): ?>
-
-                            <?php foreach ($issuedBooks as $issued):?>
-                            <tr id="<?php echo $issued->id ?>">
-                                <td><?php echo ++$i;?>
-                                </td>
-                                <td><?php echo $issued->isbnNumber;?>
-                                </td>
-                                <td><?php echo $issued->bookName?>
-                                </td>
-                                <td><?php echo $issued->userName;?>
-                                </td>
-                                <td><?php echo $issued->issuedAt;?>
-                                </td>
-                                <td><?php echo $issued->returnedAt;?>
-                                </td>
-                                <td><?php echo $issued->status;?>
-                                </td>
-                                <td>&#8377;<?php echo $issued->fine;?>
-                                </td>
-                                <td>
-                                    <?php if ($issued->status == "Issued"): ?>
-                                    <button type="button"
-                                        onclick="MarkasReturn(<?php echo $issued->id;?>);"
-                                        class="button-control icon-btn positive" title="edit"><i class="fa fa-check"
-                                            aria-hidden="true"></i></button>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                            <?php endforeach;?>
-                            <?php endif;?>
                         </tbody>
                     </table>
                 </div>
-                <div class="table-panel">
-                    <div>
-                        Showing 1 to 2 of 2 entries
-                    </div>
-                    <div>
-                        <ul class="pagination">
-                            <li class="disable"><a>Previous</a></li>
-                            <li class="active"><a>1</a></li>
-                            <li><a>2</a></li>
-                            <li><a>3</a></li>
-                            <li><a>Next</a></li>
-                        </ul>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </section>
@@ -161,4 +98,47 @@
     document.getElementById('issued').className += " active";
     autocomplete(document.getElementById("username"), null, "/user/get/", loadUserDetails);
     autocomplete(document.getElementById("isbnNumber"), null, "/book/get/", loadBookDetails);
+    column = [{
+            "render": function(data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            "data": "isbnNumber"
+        },
+        {
+            "data": "bookName"
+        },
+        {
+            "data": "userName"
+        },
+        {
+            "data": "issuedAt"
+        },
+        {
+            "data": "returnedAt"
+        },
+        {
+            "data": "status"
+        },
+        {
+            "data": "fine"
+        },
+        {
+            "data":null,
+            "render": function(item) {
+                if (item.status == 'Issued') {
+                    code = '<button type="button" onclick="MarkasReturn('+item.id+');"';
+                    code += 'class="button-control icon-btn positive" title="Mark as Returned"><i class="fa fa-check"';
+                    code += 'aria-hidden="true"></i></button>';
+                    return code;
+                }
+                else 
+                    return item.status;
+            }
+        },
+    ]
+    $(document).ready(function() {
+        loadTableData("book-list", "/issueBook/loadData", column);
+    });
 </script>

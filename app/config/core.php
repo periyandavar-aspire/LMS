@@ -51,10 +51,6 @@ $config['static'] = "";
  */
 $config['upload'] = "upload";
 /**
- * Default page index page
- */
-$config['default_page'] = "/home";
-/**
  * Set the name of the controller handles errors
  */
 $config['error_ctrl'] = "ErrorController";
@@ -65,7 +61,7 @@ $config['environment'] = null;
 /**
  * Sets log file
  */
-$config['logs'] = "log";
+$config['logs'] = "app/log";
 /**
  * Server email from this all mails were sent
  */
@@ -74,3 +70,5 @@ $config['serverEmail'] = 'admin@lms.com';
  * Sets a mail to report errors
  */
 $config['mailTo'] = 'someonesomeone@example.com';
+
+// print_r($config);

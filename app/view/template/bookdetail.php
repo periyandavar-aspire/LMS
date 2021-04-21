@@ -50,7 +50,7 @@
                         <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?>
                             </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
                             available</p>
-                        <?php if ($user == Constants::REG_USER): ?>
+                        <?php if ($user == REG_USER): ?>
                         <div class="form-buttons">
                             <button
                                 onclick="requestBook(<?php echo $book->isbnNumber . ',' . $book->available; ?>)"
@@ -66,9 +66,10 @@
                             <?php
                                 if (empty($issuedUsers->issued)) {
                                     echo "-";
-                                }
-                                foreach ($issuedUsers->issued as $issuedUsers) {
-                                    echo "<li>  $issuedUsers </li>";
+                                } else {
+                                    foreach ($issuedUsers->issued as $user) {
+                                        echo "<li>  $user </li>";
+                                    }
                                 }
                             ?>
                         </ul>
@@ -77,9 +78,10 @@
                             <?php
                                 if (empty($issuedUsers->requested)) {
                                     echo "-";
-                                }
-                                foreach ($issuedUsers->requested as $requestedUsers) {
-                                    echo "<li>  $requestedUsers </li>";
+                                } else {
+                                    foreach ($issuedUsers->requested as $user) {
+                                        echo "<li>  $user </li>";
+                                    }
                                 }
                             ?>
                         </ul>

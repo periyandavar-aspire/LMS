@@ -57,7 +57,7 @@ class ManageUserModel extends BaseModel
         )->selectAs(
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
-        $this->db->where('email', '!=', $email)->orderBy('id');
+        $this->db->where('email', '!=', $email);
         if ($searchKey != '') {
             $this->db->where(
                 "(fullname LIKE %$searchKey%"
@@ -125,12 +125,12 @@ class ManageUserModel extends BaseModel
         )->selectAs(
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
-        $result = $this->db->where('role', '=', 'user')->orderby('id');
+        $result = $this->db->where('role', '=', 'user');
         if ($searchKey != '') {
             $this->db->where(
-                "(fullname LIKE %$searchKey%"
-                ." OR username LIKE %$searchKey OR "
-                ."email LIKE %$searchKey%)"
+                "(fullname LIKE '%$searchKey%'"
+                ." OR username LIKE '%$searchKey%'OR "
+                ."email LIKE '%$searchKey%')"
             );
         }
         $this->db->orderBy($sortby, $sortDir)
@@ -141,17 +141,20 @@ class ManageUserModel extends BaseModel
         }
         $this->db->selectAs(
             "COUNT(*) count",
-        )->from('user')->execute();
+        )->from('all_user')
+            ->where('role', '=', 'user')
+            ->execute();
         $tcount = $this->db->fetch()->count-1;
         if ($searchKey != '') {
             $this->db->selectAs(
                 "COUNT(*) count",
-            )->from('user');
+            )->from('all_user');
             $this->db->where(
-                "(fullname LIKE %$searchKey%"
-                ." OR username LIKE %$searchKey OR "
-                ."email LIKE %$searchKey%)"
-            )->execute();    
+                "(fullname LIKE '%$searchKey%'"
+                ." OR username LIKE '%$searchKey%' OR "
+                ."email LIKE '%$searchKey%')"
+            )->where('role', '=', 'user')
+                ->execute();    
             $tfcount = $this->db->fetch()->count-1;
         } else {
             $tfcount = $tcount;
@@ -201,13 +204,13 @@ class ManageUserModel extends BaseModel
     {
         $deletionToken = uniqid();
         $field = [ 'deletionToken' => $deletionToken];
-        if ($role == Constants::REG_USER) {
+        if ($role == REG_USER) {
             $this->db->selectAs('count(*) count')
                 ->from('issued_book')
                 ->innerJoin('status')
                 ->on('status.code = issued_book.status')
                 ->where('userId', '=', $id)
-                ->where('status.value', '=', Constants::STATUS_ISSUED)
+                ->where('status.value', '=', STATUS_ISSUED)
                 ->execute();
             if ($this->db->fetch()->count != 0) {
                 $msg = "The user need to return some books, In order to delete "

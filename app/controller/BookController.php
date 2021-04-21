@@ -205,9 +205,9 @@ class BookController extends BaseController
         }
         $data['books'] = $this->model->getBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("newBook", $data);
+        $this->loadTemplate("manageBooks", $data);
         $this->loadLayout($user . "Footer.html");
-        $this->includeScript("populate.js");
+        // $this->includeScript("populate.js");
         $this->addScript($script);
     }
 
@@ -307,7 +307,7 @@ class BookController extends BaseController
                         unlink(
                             $config['upload']
                             . '/'
-                            . Constants::COVER_PIC_PATH
+                            . COVER_PIC_PATH
                             . $oldPic
                         );
                     }

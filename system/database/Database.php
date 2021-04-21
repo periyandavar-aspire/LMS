@@ -1,28 +1,27 @@
 <?php
 /**
- * BaseDbHandler File Doc Comment
+ * Database File Doc Comment
  * php version 7.3.5
  *
- * @category DbHandler
- * @package  DbHandler
+ * @category Database
+ * @package  Database
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
 defined('VALID_REQ') OR exit('Not a valid Request');
 /**
- * Super class for all DbHandler. All Dbhandlers should extend this dbhandler
- * Dbhandler class consists of basic level functions for various purposes and
+ * Super class for all Database. All drivers should extend this Database
+ * Database class consists of basic level functions for various purposes and
  * query building functionality
  *
- * @category   DbHandler
- * @package    Dbhandler
- * @subpackage BaseDbHandler
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Database
+ * @package  Database
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-abstract class BaseDbhandler
+abstract class Database
 {
     /**
      * Database connection object
@@ -82,7 +81,7 @@ abstract class BaseDbhandler
      * @param string $db     database
      * @param string $driver Driver
      *
-     * @return BaseDbHandler
+     * @return Database
      */
     abstract public static function getInstance(
         string $host,
@@ -271,9 +270,9 @@ abstract class BaseDbhandler
      * @param string      $table Table Name
      * @param string|null $where Where condition
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function delete(string $table, ?string $where = null): BaseDbHandler
+    public function delete(string $table, ?string $where = null): Database
     {
         $this->_resetQuery();
         $this->_sql = "DELETE FROM `$table`";
@@ -286,9 +285,9 @@ abstract class BaseDbhandler
     /**
      * Set the values in update query
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function setTo(): BaseDbHandler
+    public function setTo(): Database
     {
         $args = func_get_args();
         $change = implode(",", $args);
@@ -308,14 +307,14 @@ abstract class BaseDbhandler
      * @param string|null $where  Where condition
      * @param string|null $join   Join condition
      *
-     * @return BaseDbHandler
+     * @return Database
      */
     public function update(
         string $table,
         array $fields = [],
         ?string $where = null,
         ?string $join = null
-    ): BaseDbHandler {
+    ): Database {
         $this->_resetQuery();
         $set = '';
         $index = 1;
@@ -349,13 +348,13 @@ abstract class BaseDbhandler
      * @param array  $fields     Fields
      * @param array  $funcfields Fields with function values
      *
-     * @return BaseDbHandler
+     * @return Database
      */
     public function insert(
         string $table,
         array $fields = [],
         array $funcfields = []
-    ): BaseDbHandler {
+    ): Database {
         $this->_resetQuery();
         $keys = '';
         if (count($fields) > 0) {
@@ -394,9 +393,9 @@ abstract class BaseDbhandler
      * we can call this in following way
      * select('field1', 'field2', 'field3');
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function select(): BaseDbHandler
+    public function select(): Database
     {
         $this->_resetQuery();
         $columns = func_get_args();
@@ -430,9 +429,9 @@ abstract class BaseDbhandler
      * call this function by
      * selectAs(['field1' => 'as1', 'field2' => 'as2'])
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function selectAs(): BaseDbHandler
+    public function selectAs(): Database
     {
         $selectData = func_get_args();
         $selectData = implode(",", $selectData);
@@ -445,9 +444,9 @@ abstract class BaseDbhandler
     /**
      * This function used to selectAll fields
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function selectAll(): BaseDbHandler
+    public function selectAll(): Database
     {
         $this->_resetQuery();
         $this->_columns = "*";
@@ -460,9 +459,9 @@ abstract class BaseDbhandler
      *
      * @param string $tableName Table Name
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function from(string $tableName): BaseDbHandler
+    public function from(string $tableName): Database
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -479,9 +478,9 @@ abstract class BaseDbhandler
      *
      * @param string $where Where condition string
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function appendWhere(string $where): BaseDbHandler
+    public function appendWhere(string $where): Database
     {
         $this->_where = $this->_where==null ? '' : $this->_where;
         $this->_where .= $where;
@@ -513,9 +512,9 @@ abstract class BaseDbhandler
      * $where = ['id', '!=', 1]
      * where($where)
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function where(): BaseDbHandler
+    public function where(): Database
     {
         if ($this->_where == null) {
             $this->_where .= " WHERE ";
@@ -582,9 +581,9 @@ abstract class BaseDbhandler
      * $orWhere = ['id', '!=', 1]
      * orWhere($orWhere)
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function orWhere(): BaseDbhandler
+    public function orWhere(): Database
     {
         if ($this->_where == null) {
             $this->_where .= " WHERE ";
@@ -641,9 +640,9 @@ abstract class BaseDbhandler
      * @param int      $limit  limit
      * @param int|null $offset Offset value
      *
-     * @return BaseDbhandler
+     * @return Database
      */
-    public function limit(int $limit, ?int $offset=null): BaseDbHandler
+    public function limit(int $limit, ?int $offset=null): Database
     {
         if ($offset ==null) {
             $this->_limit = " LIMIT $limit";
@@ -660,9 +659,9 @@ abstract class BaseDbhandler
      * @param string $fieldName Field name
      * @param string $order     order direction
      *
-     * @return baseDbHandler
+     * @return Database
      */
-    public function orderBy(string $fieldName, string $order = 'ASC'): baseDbHandler
+    public function orderBy(string $fieldName, string $order = 'ASC'): Database
     {
         $fieldName = trim($fieldName);
 
@@ -727,9 +726,9 @@ abstract class BaseDbhandler
      *
      * @param array $values values
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function appendBindValues(array $values): BaseDbHandler
+    public function appendBindValues(array $values): Database
     {
         foreach ($values as $value) {
             $this->bindValues[] = $value;
@@ -742,9 +741,9 @@ abstract class BaseDbhandler
      *
      * @param string $tableName Table Name
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function innerJoin(string $tableName): BaseDbHandler
+    public function innerJoin(string $tableName): Database
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -761,9 +760,9 @@ abstract class BaseDbhandler
      *
      * @param string $tableName Table Name
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function leftJoin(string $tableName): BaseDbHandler
+    public function leftJoin(string $tableName): Database
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -780,9 +779,9 @@ abstract class BaseDbhandler
      *
      * @param string $tableName TableName
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function rightJoin(string $tableName): BaseDbHandler
+    public function rightJoin(string $tableName): Database
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -799,9 +798,9 @@ abstract class BaseDbhandler
      *
      * @param string $tableName Table Name
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function crossJoin(string $tableName): BaseDbHandler
+    public function crossJoin(string $tableName): Database
     {
         if (strpos($tableName, " ")) {
             $tableName = explode(" ", $tableName);
@@ -818,9 +817,9 @@ abstract class BaseDbhandler
      *
      * @param string $condition On condition
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function on(string $condition): BaseDbHandler
+    public function on(string $condition): Database
     {
         $this->_join .= ' ON ' . $condition;
         return $this;
@@ -831,9 +830,9 @@ abstract class BaseDbhandler
      *
      * @param string $field Field Name
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function using(string $field): BaseDbHandler
+    public function using(string $field): Database
     {
         $this->_join .= ' USING(' . $field . ')';
         return $this;
@@ -842,9 +841,9 @@ abstract class BaseDbhandler
     /**
      * This function is used to perform group by
      *
-     * @return BaseDbHandler
+     * @return Database
      */
-    public function groupBy(): BaseDbHandler
+    public function groupBy(): Database
     {
         $fields = func_get_args();
         $fields = implode(", ", $fields);

@@ -34,7 +34,7 @@ class BookService extends BaseService
         $issuedUsers = [];
         $requestedUsers = [];
         foreach ($users as $user) {
-            if ($user->status == 'Issued') {
+            if ($user->status == STATUS_ISSUED) {
                 $issuedUsers[] = $user->username;
             } else {
                 $requestedUsers[] = $user->username;

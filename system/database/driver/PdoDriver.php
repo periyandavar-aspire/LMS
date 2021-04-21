@@ -1,29 +1,29 @@
 <?php
 /**
- * PdoDbHandler File Doc Comment
+ * PdoDriver File Doc Comment
  * php version 7.3.5
  *
- * @category DbHandler
- * @package  DbHandler
+ * @category Database
+ * @package  Database
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
 /**
- * PdoDbHandler Class Handles the data base operations with PDO connection
+ * PdoDriver Class Handles the data base operations with PDO connection
  *
- * @category   DbHandler
- * @package    DbHandler
- * @subpackage PdoDbHandler
+ * @category   Database
+ * @package    Database
+ * @subpackage PdoDriver
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
  */
 
-class PdoDbHandler extends BaseDbHandler
+class PdoDriver extends Database
 {
     /**
-     * Instantiate a new PdoDbHandler instance
+     * Instantiate a new PdoDriver instance
      *
      * @param string $host   Host Name
      * @param string $user   User Name
@@ -45,7 +45,7 @@ class PdoDbHandler extends BaseDbHandler
     }
 
     /**
-     * Return same PdoDbHandler instance to perform singletone
+     * Return same PdoDriver instance to perform singletone
      *
      * @param string $host   Host Name
      * @param string $user   User Name
@@ -53,7 +53,7 @@ class PdoDbHandler extends BaseDbHandler
      * @param string $db     Database Name
      * @param string $driver Driver Name
      *
-     * @return PdoDbHandler
+     * @return PdoDriver
      */
     public static function getInstance(
         string $host,

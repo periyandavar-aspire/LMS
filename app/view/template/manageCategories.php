@@ -12,12 +12,12 @@
                     <table id="category-list" class="tab_design">
                         <thead>
                             <tr>
-                                <th>Sl. No</th>
+                                <th data-orderable="false">Sl. No</th>
                                 <th>Category</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th data-orderable="false">Action</th>
                             </tr>
                         </thead>
                         <tbody class="table_body">

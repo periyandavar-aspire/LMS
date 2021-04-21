@@ -15,20 +15,21 @@ define("VALID_REQ", true);
 
 session_start();
 
-require_once 'core/utilities/Utility.php';
+require_once 'system/core/Loader.php';
 
-require_once 'core/autoload.php';
+foreach (glob("app/config/*.php") as $filename) {
+    include $filename;
+}
 
-require_once 'config/config.php';
-require_once 'config/routeConfig.php';
-require_once 'config/dbConfig.php';
+Loader::intialize();
 
 
+global $config;
 
 define('ENVIRONMENT', $config['environment'] ?? Constants::ENV_DEVELOPMENT);
 
-set_error_handler("errHandler");
 set_exception_handler('exceptionHandler');
+set_error_handler("errHandler");
 
 if (defined('ENVIRONMENT')) {
     switch (ENVIRONMENT) {
@@ -59,6 +60,7 @@ if (defined('ENVIRONMENT')) {
 function errHandler($errNo, $errMsg, $errFile, $errLine)
 {
     global $config;
+    ob_end_clean();
     $message = "Error caught! [$errNo] $errMsg at "
         . "File [$errFile] line number [$errLine] on "
         . date("m/d/Y h:i:s A", time());
@@ -86,6 +88,7 @@ function errHandler($errNo, $errMsg, $errFile, $errLine)
 function exceptionHandler($exception)
 {
     global $config;
+    ob_end_clean();
     $message = "Uncaught exception: " . $exception->getMessage() . " at "
         . "File [" . $exception->getFile() . "] line number ["
         . $exception->getLine() . "] on "
