@@ -31,6 +31,10 @@ $config['model'] = "app/model/";
  */
 $config['controller'] ="app/controller/";
 /**
+ * Path to Libraries Directory
+ */
+$config['library'] = "app/libraries/";
+/**
  * Path to Layout Directory
  */
 $config['layout'] = "static/layout/";

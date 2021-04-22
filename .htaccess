@@ -1,9 +1,21 @@
+#Rewrite all request to index.php
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)$ index.php/$1 [L]
+
+#Deny directory access
 Options -Indexes
-<Files ~ "^.*\.(LOG|log|bak|bk|LCK)">
+
+#Deny log files access
+<Files ~ "^.*\.(LOG|log)">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</Files>
+
+#Deny env file access
+<Files ~ "^.*\.(env)">
     Order allow,deny
     Deny from all
     Satisfy All

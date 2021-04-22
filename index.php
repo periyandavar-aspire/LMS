@@ -10,12 +10,17 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-
 define("VALID_REQ", true);
 
 session_start();
 
 require_once 'system/core/Loader.php';
+
+require_once 'system/core/EnvParser.php';
+
+require_once 'system/Database/database.php';
+
+(new EnvParser('.env'))->load();
 
 foreach (glob("app/config/*.php") as $filename) {
     include $filename;
@@ -23,13 +28,9 @@ foreach (glob("app/config/*.php") as $filename) {
 
 Loader::intialize();
 
-
 global $config;
 
 define('ENVIRONMENT', $config['environment'] ?? Constants::ENV_DEVELOPMENT);
-
-set_exception_handler('exceptionHandler');
-set_error_handler("errHandler");
 
 if (defined('ENVIRONMENT')) {
     switch (ENVIRONMENT) {
@@ -47,65 +48,63 @@ if (defined('ENVIRONMENT')) {
     }
 }
 
-/**
- * Error handler
- *
- * @param $errNo   Error level
- * @param $errMsg  Error Message
- * @param $errFile Error File
- * @param $errLine Error Line
- *
- * @return void
- */
-function errHandler($errNo, $errMsg, $errFile, $errLine)
-{
-    global $config;
-    ob_end_clean();
-    $message = "Error caught! [$errNo] $errMsg at "
-        . "File [$errFile] line number [$errLine] on "
-        . date("m/d/Y h:i:s A", time());
-    if (ENVIRONMENT == Constants::ENV_PRODUCTION) {
+if (!function_exists("errHandler")) {
+    /**
+     * Error handler
+     *
+     * @param $errNo   Error level
+     * @param $errMsg  Error Message
+     * @param $errFile Error File
+     * @param $errLine Error Line
+     *
+     * @return void
+     */
+    function errHandler($errNo, $errMsg, $errFile, $errLine)
+    {
+        ob_get_contents() and ob_end_clean();
+        $errNo == E_USER_WARNING || $errNo == E_USER_NOTICE
+            ? Log::getInstance()->warning(
+                $errMsg,
+                [
+                    'File' => $errFile,
+                    'Line' => $errLine
+                ]
+            )
+            : Log::getInstance()->warning(
+                $errMsg,
+                [
+                    'File' => $errFile,
+                    'Line' => $errLine
+                ]
+            );
         Route::error();
-        // error_log(
-        //     $message . "\n",
-        //     1,
-        //     $config['mailTo'],
-        //     $config['serverEmail']
-        // );
-    } else {
-        error_log($message . "\n", 3, $config['logs'] . "/errors.log");
-        Route::error($message);
     }
 }
 
-/**
- * Error handler
- *
- * @param $exception Exception object
- *
- * @return void
- */
-function exceptionHandler($exception)
-{
-    global $config;
-    ob_end_clean();
-    $message = "Uncaught exception: " . $exception->getMessage() . " at "
-        . "File [" . $exception->getFile() . "] line number ["
-        . $exception->getLine() . "] on "
-        . date("m/d/Y h:i:s A", time());
-    if (ENVIRONMENT == Constants::ENV_PRODUCTION) {
+if (!function_exists("exceptionHandler")) {
+    /**
+     * Error handler
+     *
+     * @param $exception Exception object
+     *
+     * @return void
+     */
+    function exceptionHandler($exception)
+    {
+        ob_get_contents() and ob_end_clean();
+        Log::getInstance()->error(
+            $exception->getMessage(),
+            [
+            'File' => $exception->getFile(),
+            'Line' => $exception->getLine()
+            ]
+        );
         Route::error();
-        // error_log(
-        //     $message . "\n",
-        //     1,
-        //     $config['mailTo'],
-        //     $config['serverEmail']
-        // );
-    } else {
-        error_log($message . "\n", 3, $config['logs'] . "/exceptions.log");
-        Route::error($message);
     }
 }
+
+// set_exception_handler('exceptionHandler');
+// set_error_handler("errHandler");
 
 ob_start();
 Route::run();

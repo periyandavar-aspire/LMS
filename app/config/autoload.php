@@ -10,6 +10,15 @@
  * @link     http://url.com
  */
 
-$autoload = [
-    "system/Database/Database.php"
+$autoload['auto-class'] = [
+    "Captcha.php"
+];
+
+$autoload['auto-file'] = [
+];
+
+$autoload['file'] = [
+];
+
+$autoload['class'] = [
 ];

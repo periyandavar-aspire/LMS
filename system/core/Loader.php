@@ -32,12 +32,15 @@ class Loader
      */
     private static $_instance = null;
 
+    private static $_autoLoadClasses = [];
+
     /**
      * Instantiate the new Loader instance
      */
     public function __construct()
     {
         $this->_defaultRegister();
+        $this->loadAll('system/core');
         $this->_autoloader();
         $this->loadAll('app/config/routes');
     }
@@ -55,15 +58,45 @@ class Loader
     }
 
     /**
-     * Loads the all files from autoloaded files list
+     * Loads the all files from autoload files list
      *
      * @return void
      */
     private function _autoloader()
     {
         global $autoload;
-        foreach ($autoload as $file) {
-            include_once $file;
+        foreach ($autoload['auto-file'] as $file) {
+            $file = str_ireplace(".php", "", $file);
+            $file = $file . '.php';
+            if (file_exists($file)) {
+                include_once $file;
+            }
+        }
+        foreach ($autoload['auto-class'] as $class) {
+            $class = ucfirst(str_ireplace(".php", "", $class));
+            $file = "app/libraries/" . $class .".php";
+            if (file_exists($file)) {
+                include_once $file;
+            }
+            static::$_autoLoadClasses[] = new $class();
+        }
+    }
+
+    /**
+     * Loads the all classes from autoload class list
+     * and creates the instance for them
+     *
+     * @param BaseController $ctrl Controller object
+     *
+     * @return void
+     */
+    public static function autoLoadClass(BaseController $ctrl)
+    {
+        global $autoload;
+        if (!isset($_instance)) {
+            foreach (static::$_autoLoadClasses as $obj) {
+                $ctrl->{lcfirst(get_class($obj))} = $obj;
+            }
         }
     }
 
@@ -90,7 +123,7 @@ class Loader
     public function loadAll(string $dir)
     {
         foreach (glob("$dir/*.php") as $filename) {
-            include $filename;
+            include_once $filename;
         }
     }
 
@@ -103,16 +136,7 @@ class Loader
     {
         spl_autoload_register(
             function ($className) {
-                $file = 'system/base/' . $className . ".php";
-                if (file_exists($file)) {
-                    include_once $file;
-                }
-            }
-        );
-
-        spl_autoload_register(
-            function ($className) {
-                $file = 'system/core/' . $className . ".php";
+                $file = 'system/libraries/' . $className . ".php";
                 if (file_exists($file)) {
                     include_once $file;
                 }

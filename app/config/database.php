@@ -20,11 +20,14 @@
  * driver - database driver name (ex: mysql)
  * prefix - database tables prefix
  */
-$dbConfig = [
-    'host' => 'localhost',
-    'user' => 'root',
-    'password' => '',
-    'database' => 'lms',
-    'driver' => 'mysqli',
-    'prefix' => ''
-];
+$dbConfig['host'] = getenv('DB_HOST');
+
+$dbConfig['user'] = getenv('DB_USERNAME');
+
+$dbConfig['password'] = getenv('DB_PASSWORD');
+
+$dbConfig ['database'] = getenv('DB_DATABASE');
+    
+$dbConfig['driver'] = 'mysqli';
+
+// 'prefix' => ''

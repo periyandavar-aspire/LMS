@@ -32,6 +32,8 @@ class BaseController
      */
     protected $model;
 
+    private $_obj=[];
+
     /**
      * Input allows us to access the get, post, session, files method
      *
@@ -54,6 +56,13 @@ class BaseController
     protected $service;
 
     /**
+     * Instance of BaseController
+     *
+     * @var BaseController
+     */
+    private $_instance;
+
+    /**
      * Instantiate the BaseController instance
      *
      * @param Model   $model   model class object to intialize $this->model
@@ -65,6 +74,7 @@ class BaseController
         $this->input = new InputData();
         $this->service = $service;
         $this->view = null;
+        Loader::autoLoadClass($this);
     }
 
     /**
@@ -228,6 +238,17 @@ class BaseController
         }
     }
 
+
+    /**
+     * Returns instance
+     *
+     * @return BaseController
+     */
+    public static function getInstance(): BaseController
+    {
+        return self::$_instance;
+    }
+
     /**
      * This function will call when the undefined function is called
      *
@@ -262,5 +283,32 @@ class BaseController
     public function __clone()
     {
         $this->model = clone $this->model;
+    }
+    /**
+     * Add new object to $_obj array
+     *
+     * @param string $name  name
+     * @param mixed  $value object
+     * 
+     * @return void
+     */ 
+    public function __set(string $name, $value)
+    {
+        $this->_obj[$name] = $value;
+    }
+
+    /**
+     * Get the object
+     *
+     * @param string $name object name
+     * 
+     * @return object|null
+     */
+    public function __get($name)
+    {
+        if (array_key_exists($name, $this->_obj)) {
+            return $this->_obj[$name];
+        }
+        return null;
     }
 }
