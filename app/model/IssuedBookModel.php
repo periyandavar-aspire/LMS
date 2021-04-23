@@ -202,7 +202,7 @@ class IssuedBookModel extends BaseModel
      * @param string      $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getIssuedBooks(
@@ -278,7 +278,7 @@ class IssuedBookModel extends BaseModel
                 " user.username LIKE '%$searchKey%' OR "
                  ." name LIKE '%$searchKey%' OR "
                  ." book.isbnNumber LIKE '%$searchKey%' "
-            )->execute();    
+            )->execute();
             $tfcount = $this->db->fetch()->count;
         } else {
             $tfcount = $tcount;
@@ -296,7 +296,7 @@ class IssuedBookModel extends BaseModel
      * @param string      $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getRequestBooks(
@@ -368,7 +368,7 @@ class IssuedBookModel extends BaseModel
                 " user.username LIKE '%$searchKey%' OR "
                  ." name LIKE '%$searchKey%' OR "
                  ." book.isbnNumber LIKE '%$searchKey%' "
-            )->execute();    
+            )->execute();
             $tfcount = $this->db->fetch()->count;
         } else {
             $tfcount = $tcount;
@@ -385,17 +385,59 @@ class IssuedBookModel extends BaseModel
      */
     public function getRequestDetails(int $id): ?object
     {
-        $this->db->select('userName', 'isbnNumber', 'comments')
+        $this->db->select(
+            'userId',
+            'userName',
+            'fullName',
+            'mobile',
+            'email',
+            'bookId',
+            'name',
+            'location',
+            'publication',
+            'price',
+            'stack',
+            'coverPic',
+            'available',
+            'isbnNumber',
+            'comments'
+        )
             ->from('issued_book ib')
             ->innerJoin('user')
             ->on('user.id = ib.userId')
             ->innerJoin('book')
             ->on('book.id = ib.bookId')
+            ->innerJoin('status')
+            ->on('status.code = ib.status')
             ->where('ib.id', '=', $id)
+            ->where('status.value', 'LIKE', "Request%")
+            ->where('user.deletionToken', '=', 'N/A')
+            ->where('book.deletionToken', '=', 'N/A')
             ->limit(1);
         $this->db->execute();
         $result = $this->db->fetch();
         return $result;
+    }
+
+    /**
+     * Returns lent books count
+     * 
+     * @param int $userId User Id
+     * 
+     * @return int
+     */
+    public function lentBooksCount(int $userId): int
+    {
+        $this->db->selectAs(
+            "SUM(IF(`status`.`value` = 'Issued', 1, 0)) lent"
+        );
+        $this->db->from('issued_book')
+            ->innerJoin('status')
+            ->on('status.code = status')
+            ->where('userId', '=', $userId)
+            ->execute();
+        return $this->db->fetch()->lent;
+           
     }
 
     /**
@@ -439,21 +481,49 @@ class IssuedBookModel extends BaseModel
      */
     public function updateRequest(int $id, int $status, string $comments): bool
     {
-        $status = ($status == 1) ? 'Request Accepted' : 'Request Rejected';
-        $this->db->select('code')
-            ->from('status')
-            ->where('value', '=', $status)
-            ->execute();
-        $status = $this->db->fetch()->code;
-        $values = [
-            'status' => $status,
-            'comments' => $comments
-        ];
-        // $query = $this->db->getQuery();
-        // $values = $this->db->getbindValues();
-        // $this->db->update('issued_book')->setTo("status = ($query)")
-        //  ->appendBindValues($values)->where('id', '=', $id);
-        $this->db->update('issued_book', $values)->where('id', '=', $id);
-        return $this->db->execute();
+        if ($status != 2) {
+            $status = ($status == 1) ? 'Request Accepted' : 'Request Rejected';
+            $this->db->select('code')
+                ->from('status')
+                ->where('value', '=', $status)
+                ->execute();
+            $status = $this->db->fetch()->code;
+            $values = [
+                'status' => $status,
+                'comments' => $comments
+            ];
+            $this->db->update('issued_book', $values)->where('id', '=', $id);
+            return $this->db->execute();
+        } else {
+            $this->db->select('code')
+                ->from('status')
+                ->where('value', '=', 'Issued')
+                ->execute();
+            $status = $this->db->fetch()->code;
+            $this->db->select('bookId')
+                ->from('issued_book')
+                ->where('id', '=', $id)
+                ->execute();
+            $bookId = $this->db->fetch()->bookId;
+            $values = [
+                'status' => $status,
+                'comments' => $comments
+            ];
+            $this->db->set("autocommit", 0);
+            $this->db->begin();
+            $flag1 = $this->db->update('issued_book', $values)
+                ->setTo('issuedAt = NOW()')
+                ->where('id', '=', $id)
+                ->execute();
+            $this->db->update('book')
+                ->setTo('available = available - 1')
+                ->where('id', '=', $bookId);
+            $flag2 = $this->db->where('deletionToken', '=', 'N/A')->execute();
+            if ($flag1 && $flag2) {
+                return $this->db->commit();
+            }
+            $this->db->rollback();
+            return false;
+        }
     }
 }

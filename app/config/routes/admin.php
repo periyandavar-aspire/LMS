@@ -27,6 +27,54 @@ Route::add(
 );
 
 Route::add(
+    '/analytics',
+    'report/getAnalytics',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/report/(book|category|author|user)/?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
+    'report/getReports',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/report/topList/(book|category|author|user)/([\d]{4}-[\d]{2}-[\d]{2})/([\d]{4}-[\d]{2}-[\d]{2})',
+    null,
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
     '/admin/profile/update',
     'admin/updateProfile',
     'post',

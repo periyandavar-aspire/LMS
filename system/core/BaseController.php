@@ -63,6 +63,13 @@ class BaseController
     private $_instance;
 
     /**
+     * Loader class object
+     * 
+     * @var Loader
+     */
+    protected $load;
+
+    /**
      * Instantiate the BaseController instance
      *
      * @param Model   $model   model class object to intialize $this->model
@@ -74,7 +81,7 @@ class BaseController
         $this->input = new InputData();
         $this->service = $service;
         $this->view = null;
-        Loader::autoLoadClass($this);
+        $this->load = Loader::autoLoadClass($this);
     }
 
     /**

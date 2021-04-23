@@ -35,6 +35,11 @@ class Loader
     private static $_autoLoadClasses = [];
 
     /**
+     * Controller object
+     */
+    private static $_ctrl;
+
+    /**
      * Instantiate the new Loader instance
      */
     public function __construct()
@@ -65,21 +70,19 @@ class Loader
     private function _autoloader()
     {
         global $autoload;
-        foreach ($autoload['auto-file'] as $file) {
-            $file = str_ireplace(".php", "", $file);
-            $file = $file . '.php';
+        foreach ($autoload['file'] as $file) {
             if (file_exists($file)) {
                 include_once $file;
             }
         }
-        foreach ($autoload['auto-class'] as $class) {
-            $class = ucfirst(str_ireplace(".php", "", $class));
-            $file = "app/libraries/" . $class .".php";
-            if (file_exists($file)) {
-                include_once $file;
-            }
-            static::$_autoLoadClasses[] = new $class();
-        }
+        // foreach ($autoload['library'] as $class) {
+        //     $class = ucfirst(str_ireplace(".php", "", $class));
+        //     $file = "app/library/" . $class .".php";
+        //     if (file_exists($file)) {
+        //         include_once $file;
+        //     }
+        //     static::$_autoLoadClasses[] = new $class();
+        // }
     }
 
     /**
@@ -88,14 +91,112 @@ class Loader
      *
      * @param BaseController $ctrl Controller object
      *
-     * @return void
+     * @return null|Loader
      */
-    public static function autoLoadClass(BaseController $ctrl)
+    public static function autoLoadClass(BaseController $ctrl): ?Loader
     {
         global $autoload;
-        if (!isset($_instance)) {
-            foreach (static::$_autoLoadClasses as $obj) {
-                $ctrl->{lcfirst(get_class($obj))} = $obj;
+        if (isset(static::$_instance)) {
+            static::$_ctrl = $ctrl;
+            $models = $autoload['model'];
+            is_array($models) or $models = array($models);
+            static::$_instance->model(...$models);
+            $services = $autoload['service'];
+            is_array($services) or $services = array($services);
+            static::$_instance->service(...$services);
+            $libraries = $autoload['library'];
+            is_array($libraries) or $libraries = array($libraries);
+            static::$_instance->library(...$libraries);
+            $helpers = $autoload['helper'];
+            is_array($helpers) or $helpers = array($helper);
+            static::$_instance->helper(...$helpers);
+            return static::$_instance;
+        }
+        return null;
+    }
+
+    /**
+     * Loads models
+     *
+     * @param string ...$models Model list
+     *
+     * @return void
+     */
+    public function model(...$models)
+    {
+        global $config;
+        foreach ($models as $model) {
+            $file = $config['model'] . '/' . $model . '.php';
+            if (file_exists($file)) {
+                include_once $file;
+                static::$_ctrl->{lcfirst($model)} = new $model();
+            } else {
+                throw new Exception("Model class '$model' not found");
+            }
+        }
+    }
+
+    /**
+     * Loads Services
+     *
+     * @param string ...$services Service list
+     *
+     * @return void
+     */
+    public function service(...$services)
+    {
+        global $config;
+        foreach ($services as $service) {
+            $file = $config['service'] . '/' . $service . '.php';
+            if (file_exists($file)) {
+                include_once $file;
+                static::$_ctrl->{lcfirst($service)} = new $service();
+            } else {
+                throw new Exception("Service class '$service' not found");
+            }
+        }
+    }
+
+    /**
+     * Loads Libraries
+     *
+     * @param string ...$libraries Library list
+     *
+     * @return void
+     */
+    public function library(...$libraries)
+    {
+        global $config;
+        foreach ($libraries as $library) {
+            if (file_exists($config['library'] . $library . '.php')) {
+                include_once $config['library'] . $library . '.php';
+                static::$_ctrl->{lcfirst($library)} = new $library();
+            } else {
+                throw new Exception("Library class '$library' not found");
+            }
+        }
+    }
+
+
+    /**
+     * Loads helpers
+     *
+     * @param string ...$helpers Helper list
+     *
+     * @return void
+     */
+    public function helper(...$helpers)
+    {
+        global $config;
+        foreach ($helpers as $helper) {
+            if (file_exists($config['helper'] . '/' . $helper . '.php')) {
+                include_once $config['helper'] . '/' . $helper . '.php';
+                static::$_ctrl->{lcfirst($helper)} = new $helper();
+            } elseif (file_exists('system/helper/' . $helper . '.php')) {
+                include_once 'system/helper/' . $helper . '.php';
+                static::$_ctrl->{lcfirst($helper)} = new $helper();
+            } else {
+                throw new Exception("Helper class '$helper' not found");
             }
         }
     }
@@ -136,7 +237,7 @@ class Loader
     {
         spl_autoload_register(
             function ($className) {
-                $file = 'system/libraries/' . $className . ".php";
+                $file = 'system/library/' . $className . ".php";
                 if (file_exists($file)) {
                     include_once $file;
                 }

@@ -129,10 +129,18 @@ class IssuedBookController extends BaseController
     {
         $user = $this->input->session('type');
         $result = $this->model->getRequestDetails($id);
-        $data['user'] = $this->model->getUserDetails($result->userName);
-        $data['book'] = $this->model->getBookDetails($result->isbnNumber);
-        $data['comments'] = $result->comments;
-        $data['id'] = $id;
+        if ($result == null) {
+            Utility::setSessionData('msg', 'Invalid Action');
+            $this->redirect('userRequest');
+        }
+        $result->lent = $this->model->lentBooksCount($result->userId);
+        $max = $this->model->getMaxBooksToLend($result->userId);
+        if ($max <= $result->lent) {
+            $result->msg = "The user almost lent maximum number of books";
+        } elseif ($result->available == 0) {
+            $result->msg = "Book is currently not available";
+        }
+        $data['data'] = $result;
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
         $this->loadTemplate('userRequest', $data);

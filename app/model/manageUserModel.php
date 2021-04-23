@@ -144,7 +144,7 @@ class ManageUserModel extends BaseModel
         )->from('all_user')
             ->where('role', '=', 'user')
             ->execute();
-        $tcount = $this->db->fetch()->count-1;
+        $tcount = $this->db->fetch()->count;
         if ($searchKey != '') {
             $this->db->selectAs(
                 "COUNT(*) count",
@@ -155,7 +155,7 @@ class ManageUserModel extends BaseModel
                 ."email LIKE '%$searchKey%')"
             )->where('role', '=', 'user')
                 ->execute();    
-            $tfcount = $this->db->fetch()->count-1;
+            $tfcount = $this->db->fetch()->count;
         } else {
             $tfcount = $tcount;
         }

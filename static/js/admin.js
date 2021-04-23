@@ -54,9 +54,14 @@ function loadTableData(id, url, columns) {
         "rowId": "id",
         "sAjaxSource": url,
         "columns": columns,
-        "columnDefs": [
-            // { "orderable": false, "targets": [0, columns.length] },
-            // { "orderable": true, "targets": [1, 2, 3] }
-        ]
     });
+}
+
+function changeReport(url) {
+    let list = document.getElementById('list').value;
+    let sDate = document.getElementById('sDate').value;
+    sDate = sDate == '' ? '0000-00-00' : sDate;
+    let eDate = document.getElementById('eDate').value;
+    url = url + "/" + list + '/' + sDate + '/' + eDate;
+    window.location.replace(url);
 }

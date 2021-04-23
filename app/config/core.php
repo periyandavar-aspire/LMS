@@ -33,7 +33,11 @@ $config['controller'] ="app/controller/";
 /**
  * Path to Libraries Directory
  */
-$config['library'] = "app/libraries/";
+$config['library'] = "app/library/";
+/**
+ * Path to helpers Directory
+ */
+$config['helper'] = "app/helper/";
 /**
  * Path to Layout Directory
  */

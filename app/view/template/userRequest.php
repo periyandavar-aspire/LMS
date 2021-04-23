@@ -14,7 +14,7 @@
                         <div class="form-input-div">
                             <label>User name</label>
                             <input disabled class="form-control disabled" type="text" id="username" name="username"
-                                value="<?php echo $user->userName; ?>"
+                                value="<?php echo $data->userName; ?>"
                                 placeholder="User Name" required="">
                         </div>
                     </div>
@@ -24,10 +24,10 @@
                             <label>User Details</label>
                             <div class="form-control div-like-textarea disabled" id="userdetails">
                                 <?php
-                                echo $user->fullName . "<br>";
-                                echo $user->mobile . "<br>";
-                                echo $user->email . "<br>";
-                                echo 'lent books '.$user->lent ;
+                                echo $data->fullName . "<br>";
+                                echo $data->mobile . "<br>";
+                                echo $data->email . "<br>";
+                                echo 'lent books '.$data->lent ;
                             ?>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                         <div class="form-input-div">
                             <label>ISBN Number</label>
                             <input disabled class="form-control disabled" type="text" id="isbnNumber"
-                                value="<?php echo $book->isbnNumber; ?>"
+                                value="<?php echo $data->isbnNumber; ?>"
                                 name="isbnNumber" placeholder="Book Name" required="">
                         </div>
                     </div>
@@ -48,16 +48,16 @@
                             <div class="form-control div-like-textarea disabled" id="bookdetails">
                                 <div class="img-wrapper">
                                     <?php
-                            echo "<img src='/upload/book/$book->coverPic'>";
+                            echo "<img src='/upload/book/$data->coverPic'>";
                         ?>
                                 </div>
                                 <div class="text-wrapper">
                                     <?php
-                                echo $book->name . '<br>';
-                                echo "location: $book->location <br>";
-                                echo "$book->publication<br>";
-                                $available = $book->available == 0 ? 'no' : $book->available;
-                                $available .= $book->available == 1 ? ' copy' : ' copies';
+                                echo $data->name . '<br>';
+                                echo "location: $data->location <br>";
+                                echo "$data->publication<br>";
+                                $available = $data->available == 0 ? 'no' : $data->available;
+                                $available .= $data->available == 1 ? ' copy' : ' copies';
                                 echo "$available available";
                             ?>
                                 </div>
@@ -69,12 +69,20 @@
                         <div class="form-input-div">
                             <label>Comments (if any)</label>
                             <textarea class="form-control" id="comments" name="comments"
-                                placeholder="comments"><?php echo $comments; ?></textarea>
+                                placeholder="comments"><?php echo $data->comments; ?></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="form-buttons">
+                    <?php if (isset($data->msg)): ?>
+                    <div class='msg'>
+                        <?php echo $data->msg; ?><br><br>
+                    </div>
+                    <?php else:?>
+                    <button type="submit" name='status' value='2' class="btn-link positive">Issue</button>
+                    <?php endif; ?>
                     <button type="submit" name='status' value='1' class="btn-link">Approve</button>
+ 
                     <button type="submit" name='status' value='0' class="btn-link negative">Reject</button>
                 </div>
         </div>
