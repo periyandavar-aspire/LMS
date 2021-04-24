@@ -1,0 +1,34 @@
+<body onload="barChart2();">
+    <div id="body">
+        chart
+        <section>
+            <canvas id="bchart" height="400" width="600">
+    Your browser does not support HTML5 Canvas </canvas>
+        </section>
+    </div>
+</body>
+<script src="/static/js/chart.js"></script>
+<script>
+    var data = [
+        ["PHP", 22.92],
+        ["Atlantis", 16.67],
+        ["Night", 14.58],
+        ["gravity", 12.5],
+        ["king", 10.42],
+        ["histories", 6.25],
+        ["cs", 4.17]
+    ];
+
+    function barChart2() {
+        barChart({
+            id: "bchart",
+            data: data,
+            xAxis: "Book Name",
+            yAxis: "Impressions",
+            maxVal: 100,
+            color: "#005A9C",
+            yDots: 10
+        });
+
+    }
+</script>

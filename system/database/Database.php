@@ -230,7 +230,7 @@ abstract class Database
         } else {
             $this->query  = $this->_sql . $this->_where;
         }
-        // echo $this->query;
+        // echo $this->query, "<br>";
         // print_r($this->bindValues);
         try {
             $result = $this->executeQuery();

@@ -34,11 +34,11 @@ class ReportController extends BaseController
      *
      * @return void
      */
-    public function getAnalytics()
+    public function getReports()
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate('analytics');
+        $this->loadTemplate('reports');
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -47,14 +47,29 @@ class ReportController extends BaseController
      *
      * @return void
      */
-    public function getReports(string $list = 'book', ?string $sDate = null, ?string $eDate = null)
+    public function getAnalytics(string $list = 'book', ?string $sDate = null, ?string $eDate = null)
     {
         $user = $this->input->session('type');
         $data['sDate'] = $sDate ?? "0000-00-00";
         $data['eDate'] = $eDate ?? Date('Y-m-d');
         $data['list'] = $list;
+        $funcName = "getTop" . $list . "List";
+        $tcount = $tfcount = null;
+        $data['data'] = $this->model->$funcName(
+            $data['sDate'],
+            $data['eDate'],
+            0,
+            10,
+            'rank',
+            'DESC',
+            '',
+            $tcount,
+            $tfcount
+        );
+        $this->load->helper('chartHelper');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate('reports', $data);
+        $this->includeScript('chart.js');
+        $this->loadTemplate('analytics', $data);
         $this->loadLayout($user . "Footer.html");
     }
 

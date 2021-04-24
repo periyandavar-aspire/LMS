@@ -436,52 +436,53 @@ class BookModel extends BaseModel
     /**
      * Search th book and returns the search result with given search keys
      *
-     * @param string $Searchkey Search key
+     * @param string $searchKey Search key
      * @param int    $offset    Offset
      * @param int    $limit     Row count
      *
      * @return array
      */
     public function searchBook(
-        string $Searchkey,
+        string $searchKey,
         int $offset = 0,
         int $limit = 12
     ): array {
         $books = [];
-        $this->db->select(
-            'b.id id',
-            'b.name',
-            'publication',
-            'isbnNumber',
-            'location',
-            'price',
-            'stack',
-            'description',
-            'available',
-            'coverPic'
-        );
-        $this->db->selectAs(
-            'GROUP_CONCAT(DISTINCT `a`.`name` SEPARATOR ",") `author`',
-            'GROUP_CONCAT(DISTINCT `c`.`name` SEPARATOR ",") `category`'
-        )->from('book b');
-        $this->db->leftJoin('book_author ba')->on('b.id = ba.id');
-        $this->db->innerJoin('author a')
-            ->on('(`ba`.`authorId` = `a`.`id`) AND(`a`.`status` = 1)');
-        $this->db->leftJoin('book_category bc')->on('`b`.`id` = `bc`.`bookId`');
-        $this->db->innerJoin('category c')
-            ->on('(`bc`.`catId` = `c`.`id`) AND(`c`.`status` = 1)');
-        $this->db->where('b.status', '=', 1);
-        $this->db->where('b.deletionToken', '=', 'N/A');
-        $this->db->where(
-            "(MATCH(b.name, description, publication, isbnNumber) "
-            . "AGAINST ('$Searchkey')"
-        );
-        $this->db->orWhere("a.name", "LIKE", "%$Searchkey%");
-        $this->db->orWhere("c.name", "LIKE", "%$Searchkey%");
-        $this->db->appendWhere(')');
-        $this->db->groupBy('b.id');
-        $this->db->limit($limit, $offset);
-        $this->db->execute();
+        // $this->db->select(
+        //     'b.id id',
+        //     'b.name',
+        //     'publication',
+        //     'isbnNumber',
+        //     'location',
+        //     'price',
+        //     'stack',
+        //     'description',
+        //     'available',
+        //     'coverPic'
+        // );
+        // $this->db->selectAs(
+        //     'GROUP_CONCAT(DISTINCT `a`.`name` SEPARATOR ",") `author`',
+        //     'GROUP_CONCAT(DISTINCT `c`.`name` SEPARATOR ",") `category`'
+        // )->from('book b');
+        // $this->db->leftJoin('book_author ba')->on('b.id = ba.bookid');
+        // $this->db->innerJoin('author a')
+        //     ->on('(`ba`.`authorId` = `a`.`id`) AND(`a`.`status` = 1)');
+        // $this->db->leftJoin('book_category bc')->on('`b`.`id` = `bc`.`bookId`');
+        // $this->db->innerJoin('category c')
+        //     ->on('(`bc`.`catId` = `c`.`id`) AND(`c`.`status` = 1)');
+        // $this->db->where('b.status', '=', 1);
+        // $this->db->where('b.deletionToken', '=', 'N/A');
+        // $this->db->where(
+        //     "(MATCH(b.name, description, publication, isbnNumber) "
+        //     . "AGAINST ('$Searchkey')"
+        // );
+        // $this->db->orWhere("a.name", "LIKE", "%$Searchkey%");
+        // $this->db->orWhere("c.name", "LIKE", "%$Searchkey%");
+        // $this->db->appendWhere(')');
+        // $this->db->groupBy('b.id');
+        // $this->db->limit($limit, $offset);
+        // $this->db->execute();
+        $this->db->runQuery("CALL searchBook('$searchKey', $offset, $limit)");
         while ($row = $this->db->fetch()) {
             $books[] = $row;
         }

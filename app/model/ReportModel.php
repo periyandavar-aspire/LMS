@@ -49,8 +49,10 @@ class ReportModel extends BaseModel
     ): array {
 
         $records = [];
+        $tcount = $tfcount = 0;
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
+            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
             ->execute();
         $tot = $this->db->fetch()->count;
         $this->db->select(
@@ -78,7 +80,7 @@ class ReportModel extends BaseModel
             ->limit($limit, $start)
             ->execute();
         while ($row = $this->db->fetch()) {
-            $row->impression = round(($row->rank / $tot) * 100, 2) . "%";
+            $row->impression = round(($row->rank / $tot) * 100, 2);
             $records[] = $row;
         }
         $this->db->selectAs(
@@ -89,7 +91,9 @@ class ReportModel extends BaseModel
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
             ->groupBy('b.id')
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        while ($row = $this->db->fetch()) {
+            $tcount++;
+        }
         if ($searchKey != '') {
             $this->db->selectAs(
                 "COUNT(*) count",
@@ -104,7 +108,9 @@ class ReportModel extends BaseModel
                 ."categories LIKE '%$searchKey%')"
             )->groupBy('b.id')
                 ->execute();
-            $tfcount = $this->db->fetch()->count;
+            while ($row = $this->db->fetch()) {
+                $tfcount++;
+            }
         } else {
             $tfcount = $tcount;
         }
@@ -141,19 +147,21 @@ class ReportModel extends BaseModel
         $records = [];
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
+            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
             ->execute();
         $tot = $this->db->fetch()->count;
         $this->db->select(
-            'b.authors name',
-            'b.id',
-            'isbnNumber',
-            'authors',
-            'categories',
+            'a.name',
+            'a.id'
         )->selectAs(
             'count(ib.bookId) rank'
-        )->from('book_detail b')
-            ->leftJoin('issued_book ib')
+        )->from('issued_book ib')
+            ->innerJoin('book b')
             ->on('b.id = ib.bookId')
+            ->innerJoin('book_author ba')
+            ->on('ba.bookId = b.id')
+            ->rightJoin('author a')
+            ->on('a.id = ba.authorId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
         if ($searchKey != '') {
             $this->db->where(
@@ -163,29 +171,37 @@ class ReportModel extends BaseModel
                 ."categories LIKE '%$searchKey%')"
             );
         }
-        $this->db->groupBy('b.id');
+        $this->db->groupBy('a.id');
         $this->db->orderBy($sortby, $sortDir)
             ->limit($limit, $start)
             ->execute();
         while ($row = $this->db->fetch()) {
-            $row->impression = round(($row->rank / $tot) * 100, 2) . "%";
+            $row->impression = round(($row->rank / $tot) * 100, 2);
             $records[] = $row;
         }
         $this->db->selectAs(
             "COUNT(*) count",
-        )->from('book_detail b')
-            ->leftJoin('issued_book ib')
+        )->from('issued_book ib')
+            ->innerJoin('book b')
             ->on('b.id = ib.bookId')
+            ->innerJoin('book_author ba')
+            ->on('ba.bookId = b.id')
+            ->rightJoin('author a')
+            ->on('a.id = ba.authorId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->groupBy('b.id')
+            ->groupBy('a.id')
             ->execute();
         $tcount = $this->db->fetch()->count;
         if ($searchKey != '') {
             $this->db->selectAs(
                 "COUNT(*) count",
-            )->from('book_detail b')
-                ->leftJoin('issued_book ib')
+            )->from('issued_book ib')
+                ->innerJoin('book b')
                 ->on('b.id = ib.bookId')
+                ->innerJoin('book_author ba')
+                ->on('ba.bookId = b.id')
+                ->rightJoin('author a')
+                ->on('a.id = ba.authorId')
                 ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
             $this->db->where(
                 "(b.name LIKE '%$searchKey%'"
@@ -231,19 +247,21 @@ class ReportModel extends BaseModel
         $records = [];
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
+            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
             ->execute();
         $tot = $this->db->fetch()->count;
         $this->db->select(
-            'b.authors name',
-            'b.id',
-            'isbnNumber',
-            'authors',
-            'categories',
+            'c.name',
+            'c.id',
         )->selectAs(
-            'count(ib.bookId) rank'
-        )->from('book_detail b')
-            ->leftJoin('issued_book ib')
+            'count(ib.id) rank'
+        )->from('issued_book ib')
+            ->innerJoin('book b')
             ->on('b.id = ib.bookId')
+            ->innerJoin('book_category bc')
+            ->on('bc.bookId = b.id')
+            ->rightJoin('category c')
+            ->on('c.id = bc.catId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
         if ($searchKey != '') {
             $this->db->where(
@@ -253,36 +271,44 @@ class ReportModel extends BaseModel
                 ."categories LIKE '%$searchKey%')"
             );
         }
-        $this->db->groupBy('b.id');
+        $this->db->groupBy('c.id');
         $this->db->orderBy($sortby, $sortDir)
             ->limit($limit, $start)
             ->execute();
         while ($row = $this->db->fetch()) {
-            $row->impression = round(($row->rank / $tot) * 100, 2) . "%";
+            $row->impression = round(($row->rank / $tot) * 100, 2);
             $records[] = $row;
         }
         $this->db->selectAs(
             "COUNT(*) count",
-        )->from('book_detail b')
-            ->leftJoin('issued_book ib')
+        )->from('issued_book ib')
+            ->innerJoin('book b')
             ->on('b.id = ib.bookId')
+            ->innerJoin('book_category bc')
+            ->on('bc.bookId = b.id')
+            ->rightJoin('category c')
+            ->on('c.id = bc.catId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->groupBy('b.id')
+            ->groupBy('c.id')
             ->execute();
         $tcount = $this->db->fetch()->count;
         if ($searchKey != '') {
             $this->db->selectAs(
                 "COUNT(*) count",
-            )->from('book_detail b')
-                ->leftJoin('issued_book ib')
+            )->from('issued_book ib')
+                ->innerJoin('book b')
                 ->on('b.id = ib.bookId')
+                ->innerJoin('book_category bc')
+                ->on('bc.bookId = b.id')
+                ->rightJoin('category c')
+                ->on('c.id = bc.catId')
                 ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
             $this->db->where(
                 "(b.name LIKE '%$searchKey%'"
                 ." OR authors LIKE '%$searchKey%'OR "
                 ."isbnNumber LIKE '%$searchKey%'OR "
                 ."categories LIKE '%$searchKey%')"
-            )->groupBy('b.id')
+            )->groupBy('c.id')
                 ->execute();
             $tfcount = $this->db->fetch()->count;
         } else {
@@ -321,6 +347,7 @@ class ReportModel extends BaseModel
         $records = [];
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
+            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
             ->execute();
         $tot = $this->db->fetch()->count;
         $this->db->select(
@@ -344,7 +371,7 @@ class ReportModel extends BaseModel
             ->limit($limit, $start)
             ->execute();
         while ($row = $this->db->fetch()) {
-            $row->impression = round(($row->rank / $tot) * 100, 2) . "%";
+            $row->impression = round(($row->rank / $tot) * 100, 2);
             $records[] = $row;
         }
         $this->db->selectAs(

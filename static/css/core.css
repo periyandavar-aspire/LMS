@@ -386,6 +386,11 @@ section {
     padding-bottom: 60px;
 }
 
+.icons {
+    width: 40px;
+    cursor: pointer;
+}
+
 section .container {
     max-width: 1140px;
     width: 100%;

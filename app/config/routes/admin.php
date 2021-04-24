@@ -27,23 +27,7 @@ Route::add(
 );
 
 Route::add(
-    '/analytics',
-    'report/getAnalytics',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == ADMIN_USER
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/report/(book|category|author|user)/?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
+    '/report',
     'report/getReports',
     'get',
     function () {
@@ -59,8 +43,24 @@ Route::add(
 );
 
 Route::add(
-    '/report/topList/(book|category|author|user)/([\d]{4}-[\d]{2}-[\d]{2})/([\d]{4}-[\d]{2}-[\d]{2})',
-    null,
+    '/analytics/(book|category|author|user)/?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
+    'report/getAnalytics',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == ADMIN_USER
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/analytics/topList/(book|category|author|user)/([\d]{4}-[\d]{2}-[\d]{2})/([\d]{4}-[\d]{2}-[\d]{2})',
+    'report/topList',
     'get',
     function () {
         $input = new InputData();

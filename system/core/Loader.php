@@ -191,10 +191,8 @@ class Loader
         foreach ($helpers as $helper) {
             if (file_exists($config['helper'] . '/' . $helper . '.php')) {
                 include_once $config['helper'] . '/' . $helper . '.php';
-                static::$_ctrl->{lcfirst($helper)} = new $helper();
             } elseif (file_exists('system/helper/' . $helper . '.php')) {
                 include_once 'system/helper/' . $helper . '.php';
-                static::$_ctrl->{lcfirst($helper)} = new $helper();
             } else {
                 throw new Exception("Helper class '$helper' not found");
             }

@@ -25,5 +25,5 @@ $autoload['service'] = [
 ];
 
 $autoload['helper'] = [
-
+    'dataHelper'
 ];
