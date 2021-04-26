@@ -38,7 +38,7 @@ Route::add('/librarian/login', 'admin/login');
 
 Route::add(
     '/librarian/home',
-    'admin/home',
+    'admin/getHomePage',
     'get',
     function () {
         $input = new InputData();
@@ -126,7 +126,7 @@ Route::add('/admin/login', 'admin/dologin', 'post');
 Route::add(
     '/book/search',
     'book/findBook',
-    'post',
+    'get',
     function () {
         $input = new InputData();
         if ($input->session('login') == VALID_LOGIN) {

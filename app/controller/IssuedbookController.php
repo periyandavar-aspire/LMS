@@ -39,7 +39,7 @@ class IssuedBookController extends BaseController
     // {
     //     $user = $this->input->session('type');
     //     $this->loadLayout($user . "Header.html");
-    //     $this->loadTemplate('manageIssuedbooks');
+    //     $this->loadView('manageIssuedbooks');
     //     $this->loadLayout($user . "Footer.html");
     // }
 
@@ -53,7 +53,7 @@ class IssuedBookController extends BaseController
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadTemplate('manageissuedbooks');
+        $this->loadView('manageissuedbooks');
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -80,7 +80,7 @@ class IssuedBookController extends BaseController
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadTemplate('manageUserRequest');
+        $this->loadView('manageUserRequest');
         $this->loadLayout($user . "Footer.html");
         if ($this->input->session('msg') != null) {
             $this->addScript("toast('" . $this->input->session('msg') . "')");
@@ -143,7 +143,7 @@ class IssuedBookController extends BaseController
         $data['data'] = $result;
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadTemplate('userRequest', $data);
+        $this->loadView('userRequest', $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -214,7 +214,7 @@ class IssuedBookController extends BaseController
         );
         $this->loadLayout($user . "Header.html");
         $this->includeScript("issuedbook.js");
-        $this->loadTemplate("manageissuedbooks", $data);
+        $this->loadView("manageissuedbooks", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($script);
     }
@@ -314,5 +314,18 @@ class IssuedBookController extends BaseController
         $data["iTotalRecords"] = $tcount;
         $data["iTotalDisplayRecords"] = $tfcount;
         echo json_encode($data);
+    }
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function samo()
+    {
+        // $this->load->library("exporter");
+        $csv = new Export('pdf');
+        $data = $this->model->getRequestBooks();
+        $csv->generate($data, "samp", true);
+        $csv->send();
     }
 }

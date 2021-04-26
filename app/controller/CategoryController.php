@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Not a valid Request');
+
 /**
  * CategoryController Class Handles the request related to the categories
  *
@@ -39,7 +41,7 @@ class CategoryController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageCategories");
+        $this->loadView("manageCategories");
         $this->loadLayout($user."Footer.html");
     }
 
@@ -120,9 +122,13 @@ class CategoryController extends BaseController
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
         $fields = new Fields(['name']);
+        $rules = [
+            'name' => ['alphaSpaceValidation', 'required']
+        ];
+        $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger);";
+            $script = "toast('Invalid $field..!', 'danger');";
         } elseif (!$this->model->update(
             $fields->getValues(),
             $this->input->post('id')
@@ -134,7 +140,7 @@ class CategoryController extends BaseController
         }
         $data['categories'] = $this->model->getAll();
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageCategories", $data);
+        $this->loadView("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
@@ -150,6 +156,10 @@ class CategoryController extends BaseController
         $user = $this->input->session('type');
         $fields = new Fields(['name']);
         $fields->setRequiredFields('name');
+        $rules = [
+            'name' => 'alphaSpaceValidation',
+        ];
+        $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger');";
@@ -160,7 +170,7 @@ class CategoryController extends BaseController
         }
         $data['categories'] = $this->model->getAll();
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageCategories", $data);
+        $this->loadView("manageCategories", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }

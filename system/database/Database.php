@@ -213,7 +213,7 @@ abstract class Database
      *
      * @return bool
      */
-    public function execute(): bool
+    final public function execute(): bool
     {
         $result = true;
         if ($this->_sql == '') {

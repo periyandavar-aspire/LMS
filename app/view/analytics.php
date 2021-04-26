@@ -26,8 +26,8 @@
                     </select>
                 </div>
                 <div class="form-buttons">
-                        <a target='_blank' href="/<?php echo $list; ?>/<?php echo $sDate; ?>/<?php echo $eDate ?>/excel"><img class='icons' src="/static/img/symbols/excel.png"></a>
-                        <a target='_blank' href="/<?php echo $list; ?>/<?php echo $sDate; ?>/<?php echo $eDate ?>/pdf"><img class='icons' src="/static/img/symbols/pdf.png"></a>
+                        <a target='_blank' href="/book/export/csv?list=<?php echo $list; ?>&sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>"><img class='icons' src="/static/img/symbols/excel.png"></a>
+                        <a target='_blank' href="/book/export/pdf?list=<?php echo $list; ?>&sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>"><img class='icons' src="/static/img/symbols/pdf.png"></a>
                 </div>
             </div>
             <div class="row">

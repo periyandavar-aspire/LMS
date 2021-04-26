@@ -33,7 +33,7 @@ function changePagination(url) {
     let search = document.getElementById('recordSearch').value;
     let offset = 0;
     limit = isNaN(limit) ? 5 : limit;
-    url = url + "/" + offset + "/" + limit + "/" + search;
+    url = url + "?index=" + offset + "&limit=" + limit + "&search=" + search;
     window.location.replace(url);
     // console.log(url);
 }

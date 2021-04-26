@@ -12,7 +12,7 @@
  */
 Route::add(
     '/admin/profile',
-    null,
+    'admin/getProfile',
     'get',
     function () {
         $input = new InputData();
@@ -28,7 +28,7 @@ Route::add(
 
 Route::add(
     '/report',
-    'report/getReports',
+    'report/get',
     'get',
     function () {
         $input = new InputData();
@@ -44,7 +44,7 @@ Route::add(
 
 Route::add(
     '/analytics/(book|category|author|user)/?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
-    'report/getAnalytics',
+    'report/analytics',
     'get',
     function () {
         $input = new InputData();
@@ -75,7 +75,7 @@ Route::add(
 );
 
 Route::add(
-    '/admin/profile/update',
+    '/admin/profile',
     'admin/updateProfile',
     'post',
     function () {
@@ -92,23 +92,7 @@ Route::add(
 
 Route::add(
     '/admin/home',
-    null,
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == ADMIN_USER
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/admin',
-    'admin/home',
+    '/admin/getHomePage',
     'get',
     function () {
         $input = new InputData();
@@ -123,25 +107,25 @@ Route::add(
 );
 
 
-Route::add(
-    '/get/userDetails/([a-zA-Z0-9_]+)',
-    'Issuedbook/getUserDetails',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
+// Route::add(
+//     '/user/([a-zA-Z0-9_]+)',
+//     'Issuedbook/getUserDetails',
+//     'get',
+//     function () {
+//         $input = new InputData();
+//         if ($input->session('login') == VALID_LOGIN
+//             && ($input->session('type') == LIBR_USER
+//             ||$input->session('type') == ADMIN_USER)
+//         ) {
+//             return true;
+//         } else {
+//             Utility::redirectURL('admin/login');
+//         }
+//     }
+// );
 
 Route::add(
-    '/get/bookDetails/([1-9]{1}[0-9]*)',
+    '/book/([1-9]{1}[0-9]*)',
     'Issuedbook/getBookDetails',
     'get',
     function () {
@@ -158,7 +142,7 @@ Route::add(
 );
 
 Route::add(
-    '/admin/manageUsers',
+    '/admin/users',
     'manageUser/manageAllUsers',
     'get',
     function () {
@@ -174,7 +158,7 @@ Route::add(
 );
 
 Route::add(
-    '/admin/manageUsers',
+    '/admin/users',
     'manageUser/addUser',
     'post',
     function () {
@@ -191,7 +175,7 @@ Route::add(
 
 Route::add(
     '/admin/settings',
-    null,
+    'admin/getSettings',
     'get',
     function () {
         $input = new InputData();
@@ -207,7 +191,7 @@ Route::add(
 
 Route::add(
     '/admin/settings',
-    '/admin/updateSettings',
+    'admin/updateSettings',
     'post',
     function () {
         $input = new InputData();
@@ -224,7 +208,7 @@ Route::add(
 
 Route::add(
     '/admin/cms',
-    null,
+    'admin/getCms',
     'get',
     function () {
         $input = new InputData();
@@ -270,6 +254,41 @@ Route::add(
     }
 );
 
+
+Route::add(
+    '/book/export/csv',
+    'report/exportToCsv',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Route::add(
+    '/book/export/pdf',
+    'report/exportToPdf',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
 Route::add(
     '/categories',
     'category/manage',
@@ -303,6 +322,7 @@ Route::add(
         }
     }
 );
+
 
 
 Route::add(

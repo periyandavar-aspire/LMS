@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Not a valid Request');
 /**
  * BookController Class Handles the requests related to the Books
  *
@@ -38,7 +39,7 @@ class BookController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("manageBooks");
+        $this->loadView("manageBooks");
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -51,7 +52,7 @@ class BookController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("newBook");
+        $this->loadView("newBook");
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -67,7 +68,7 @@ class BookController extends BaseController
         $data['book'] = $this->model->get($id);
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("newBook", $data);
+        $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -82,7 +83,7 @@ class BookController extends BaseController
     // {
     //     $data['book'] = $this->model->getBookDetails($id);
     //     $this->loadLayout('header.html');
-    //     $this->loadTemplate("book", $data);
+    //     $this->loadView("book", $data);
     //     $this->loadLayout('footer.html');
     // }
 
@@ -94,29 +95,27 @@ class BookController extends BaseController
     public function findBook()
     {
         $user = $this->input->session('type');
-        $keyword = $this->input->post('search') ?? '';
+        $keyword = $this->input->get('search') ?? '';
         $data['books'] = $this->model->searchBook($keyword);
         $data['searchKey'] = $keyword;
         $this->loadLayout($user.'header.html');
-        $this->loadTemplate("searchBook", $data);
+        $this->loadView("searchBook", $data);
         $this->loadLayout($user.'footer.html');
         $this->includeScript('bookElement.js');
     }
 
-    
+
     /**
      * Displays the books requested by the user
      *
-     * @param int         $offset Offset
-     * @param int         $limit  Limit
-     * @param string|null $search Search Key
-     * 
+     * @param int $offset Offset
+     * @param int $limit  Limit
+     *
      * @return void
      */
     public function loadBooks(
         int $offset = 0,
-        int $limit = 5,
-        ?string $search = null
+        int $limit = 5
     ) {
         $data["books"] = $this->model->getAvailableBooks(
             $offset,
@@ -132,7 +131,7 @@ class BookController extends BaseController
      * @param string $search Search Key
      * @param int    $offset Offset
      * @param int    $limit  Limit
-     * 
+     *
      * @return void
      */
     public function findMoreBooks(
@@ -193,6 +192,12 @@ class BookController extends BaseController
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
                     $script = "toast('New book added successfully..!', 'success');";
+                    $data['books'] = $this->model->getBooks();
+                    $this->loadLayout($user . "Header.html");
+                    $this->loadView("manageBooks", $data);
+                    $this->loadLayout($user . "Footer.html");
+                    $this->addScript($script);
+                    return;
                 } else {
                     $script = "toast('Unable to add new book..!', 'danger');";
                 }
@@ -203,9 +208,8 @@ class BookController extends BaseController
         } else {
             $script = "toast('Invalid $field..!', 'danger');";
         }
-        $data['books'] = $this->model->getBooks();
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("manageBooks", $data);
+        $this->loadView("newBook");
         $this->loadLayout($user . "Footer.html");
         // $this->includeScript("populate.js");
         $this->addScript($script);
@@ -324,7 +328,7 @@ class BookController extends BaseController
         $data['books'] = $this->model->getBooks();
         $data['book'] = $this->model->get($id);
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate("newBook", $data);
+        $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($script);
     }
@@ -368,7 +372,7 @@ class BookController extends BaseController
         }
         $template = ($user == null) ? 'book' : 'bookdetail';
         $this->loadLayout($user . 'header.html');
-        $this->loadTemplate($template, $data);
+        $this->loadView($template, $data);
         $this->loadLayout($user . 'footer.html');
     }
 
@@ -381,7 +385,7 @@ class BookController extends BaseController
     {
         $this->loadLayout("userHeader.html");
         $data['books'] = $this->model->getAvailableBooks();
-        $this->loadTemplate("availablebooks", $data);
+        $this->loadView("availablebooks", $data);
         $this->loadLayout("userFooter.html");
         $this->includeScript('bookElement.js');
     }

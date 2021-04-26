@@ -46,7 +46,6 @@ class Loader
     {
         $this->_defaultRegister();
         $this->loadAll('system/core');
-        $this->_autoloader();
         $this->loadAll('app/config/routes');
     }
 
@@ -60,29 +59,6 @@ class Loader
     public function regiterAutoload(callable $callback)
     {
         spl_autoload_register($callback);
-    }
-
-    /**
-     * Loads the all files from autoload files list
-     *
-     * @return void
-     */
-    private function _autoloader()
-    {
-        global $autoload;
-        foreach ($autoload['file'] as $file) {
-            if (file_exists($file)) {
-                include_once $file;
-            }
-        }
-        // foreach ($autoload['library'] as $class) {
-        //     $class = ucfirst(str_ireplace(".php", "", $class));
-        //     $file = "app/library/" . $class .".php";
-        //     if (file_exists($file)) {
-        //         include_once $file;
-        //     }
-        //     static::$_autoLoadClasses[] = new $class();
-        // }
     }
 
     /**
@@ -170,6 +146,9 @@ class Loader
         foreach ($libraries as $library) {
             if (file_exists($config['library'] . $library . '.php')) {
                 include_once $config['library'] . $library . '.php';
+                static::$_ctrl->{lcfirst($library)} = new $library();
+            } elseif (file_exists("system/library/" . $library . '.php')) {
+                include_once "system/library/" . $library . '.php';
                 static::$_ctrl->{lcfirst($library)} = new $library();
             } else {
                 throw new Exception("Library class '$library' not found");
@@ -266,12 +245,6 @@ class Loader
                 } elseif (Utility::endsWith(strtolower($className), 'driver')) {
                     $DriverPath = 'system/database/driver/';
                     $file = $DriverPath . $className . ".php";
-                    if (file_exists($file)) {
-                        include_once $file;
-                    }
-                } elseif (Utility::endsWith(strtolower($className), 'view')) {
-                    $ViewPath = $config['view'];
-                    $file = $ViewPath . $className . ".php";
                     if (file_exists($file)) {
                         include_once $file;
                     }

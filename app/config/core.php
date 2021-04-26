@@ -3,7 +3,7 @@
  * Config File all the configurations of the applications are defined here
  * php version 7.3.5
  *
- * @category Config
+ * @category Core
  * @package  Config
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
@@ -18,10 +18,6 @@ $config['base_url'] = "http://lms.com";
  * Path to Views Directory
  */
 $config['view'] = "app/view/";
-/**
- * Path to Templates Directory
- */
-$config['template'] = "app/view/template/";
 /**
  * Path to Models Directory
  */
@@ -71,6 +67,18 @@ $config['environment'] = null;
  */
 $config['logs'] = "app/log";
 /**
+ * Session driver available options file|database
+ */
+$config['session_driver'] = 'file';
+/**
+ * Session expiration time
+ */
+$config['session_expiration'] = 7200;
+/**
+ * Session save path
+ */
+$config['session_save_path'] = 'C:\xampp\htdocs\LMS\sess';
+/**
  * Server email from this all mails were sent
  */
 $config['serverEmail'] = 'admin@lms.com';
@@ -78,5 +86,3 @@ $config['serverEmail'] = 'admin@lms.com';
  * Sets a mail to report errors
  */
 $config['mailTo'] = 'someonesomeone@example.com';
-
-// print_r($config);

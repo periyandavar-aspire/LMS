@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Not a valid Request');
+
 /**
  * AuthorController Class Handles the requests related to the authors
  *
@@ -38,7 +40,7 @@ class AuthorController extends BaseController
     {
         $user = $this->input->session('type');
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageAuthors");
+        $this->loadView("manageAuthors");
         $this->loadLayout($user."Footer.html");
     }
 
@@ -80,6 +82,10 @@ class AuthorController extends BaseController
         $fields = new Fields(['name']);
         $user = $this->input->session('type');
         $fields->setRequiredFields('name');
+        $rules = [
+            'name' => 'alphaSpaceValidation',            
+        ];
+        $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger');";
@@ -90,7 +96,7 @@ class AuthorController extends BaseController
         }
         $data['authors'] = $this->model->getAll();
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageAuthors", $data);
+        $this->loadView("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }
@@ -133,9 +139,13 @@ class AuthorController extends BaseController
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
         $fields = new Fields(['name']);
+        $rules = [
+            'name' => ['alphaSpaceValidation', 'required'],           
+        ];
+        $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger);";
+            $script = "toast('Invalid $field..!', 'danger');";
         } elseif (!$this->model->update(
             $fields->getValues(),
             $this->input->post('id')
@@ -147,7 +157,7 @@ class AuthorController extends BaseController
         }
         $data['authors'] = $this->model->getAll();
         $this->loadLayout($user."Header.html");
-        $this->loadTemplate("manageAuthors", $data);
+        $this->loadView("manageAuthors", $data);
         $this->loadLayout($user."Footer.html");
         $this->addScript($script);
     }

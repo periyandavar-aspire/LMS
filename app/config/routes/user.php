@@ -76,7 +76,7 @@ Route::add(
 );
 
 Route::add(
-    '/user/lentBooks/?([0-9]+)?/?([0-9]+)?/?([\d\D]+)?',
+    '/user/lentBooks',
     'user/getLentBooks',
     'get',
     function () {
@@ -92,7 +92,7 @@ Route::add(
 );
 
 Route::add(
-    '/user/requestedBooks/?([0-9]+)?/?([0-9]+)?/?([\d\D]+)?',
+    '/user/requestedBooks',
     'user/getRequestedBooks',
     'get',
     function () {

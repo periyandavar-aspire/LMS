@@ -391,6 +391,19 @@ section {
     cursor: pointer;
 }
 
+.print-btn {
+    display: inline-block;
+    padding: 7px 12px;
+    border: 2px solid dodgerblue;
+    border-radius: 8.5px;
+    background-color: dodgerblue;
+    color: #fff;
+    font: 700 12px sans-serif;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
 section .container {
     max-width: 1140px;
     width: 100%;
@@ -398,6 +411,23 @@ section .container {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+}
+
+@media print {
+    html,
+    body {
+        height: auto;
+    }
+    #page-wrapper {
+        margin: 0 0 0 0;
+        border-left: #FFF;
+        padding: 0 10px;
+        min-height: auto;
+    }
+    .navbar-static-side {
+        margin: 0 0 0 0;
+        margin-top: 10px;
+    }
 }
 
 .cols {

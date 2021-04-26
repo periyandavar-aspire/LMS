@@ -33,7 +33,7 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Book</h1>
                 <hr><br>
-                <form action="/admin/manageUsers" onsubmit="createUserFormValidator(event);" method="post">
+                <form action="/admin/users" onsubmit="createUserFormValidator(event);" method="post">
                     <div class="form-input-div">
                         <label>Full Name</label>
                         <input class="form-control" type="text" id="fullname" name="fullName" autocomplete="off"

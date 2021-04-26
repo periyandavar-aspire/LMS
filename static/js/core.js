@@ -158,7 +158,7 @@ function loaded() {
     document.getElementsByClassName('right-cover')[0].style.right = "100% ";
     document.getElementById('loader').className += " loaded";
 }
-let offset = 0;
+let offset = 12;
 let limit = 12;
 
 function loadMoreBooks(event, url) {

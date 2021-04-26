@@ -34,21 +34,102 @@ class ReportController extends BaseController
      *
      * @return void
      */
-    public function getReports()
+    public function get()
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate('reports');
+        $this->loadView('reports');
         $this->loadLayout($user . "Footer.html");
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function exportToCsv()
+    {
+        $user = $this->input->session('type');
+        $sDate = $this->input->get('sDate') ?? "0000-00-00";
+        $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
+        $list = $this->input->get('list');
+        $funcName = "getTop" . $list . "List";
+        $tcount = $tfcount = null;
+        $data = $this->model->$funcName(
+            $sDate,
+            $eDate,
+            0,
+            10,
+            'rank',
+            'DESC',
+            '',
+            $tcount,
+            $tfcount
+        );
+        $csv = new Export('csv');
+        $csv->generate($data, ["id", 'rank']);
+        $csv->send();
+        // unset($->new_property);
+
+        // $this->load->helper('chartHelper');
+        // $this->loadLayout($user . "Header.html");
+        // $this->includeScript('chart.js');
+        // $this->loadView('analytics', $data);
+        // $this->loadLayout($user . "Footer.html");
+        // print_r($data);   
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function exportToPdf()
+    {
+        $user = $this->input->session('type');
+        $sDate = $this->input->get('sDate') ?? "0000-00-00";
+        $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
+        $list = $this->input->get('list');
+        $funcName = "getTop" . $list . "List";
+        $tcount = $tfcount = null;
+        $data = $this->model->$funcName(
+            $sDate,
+            $eDate,
+            0,
+            10,
+            'rank',
+            'DESC',
+            '',
+            $tcount,
+            $tfcount
+        );
+        $csv = new Export('pdf');
+        $csv->generate($data, ["id", 'rank']);
+        $csv->send();
+        // unset($->new_property);
+
+        // $this->load->helper('chartHelper');
+        // $this->loadLayout($user . "Header.html");
+        // $this->includeScript('chart.js');
+        // $this->loadView('analytics', $data);
+        // $this->loadLayout($user . "Footer.html");
+        // print_r($data);   
     }
 
     /**
      * Displays reports page
      *
+     * @param string $list  List Name
+     * @param string $sDate Start Date
+     * @param string $eDate End Date
+     *
      * @return void
      */
-    public function getAnalytics(string $list = 'book', ?string $sDate = null, ?string $eDate = null)
-    {
+    public function analytics(
+        string $list = 'book',
+        ?string $sDate = null,
+        ?string $eDate = null
+    ) {
         $user = $this->input->session('type');
         $data['sDate'] = $sDate ?? "0000-00-00";
         $data['eDate'] = $eDate ?? Date('Y-m-d');
@@ -69,13 +150,40 @@ class ReportController extends BaseController
         $this->load->helper('chartHelper');
         $this->loadLayout($user . "Header.html");
         $this->includeScript('chart.js');
-        $this->loadTemplate('analytics', $data);
+        $this->loadView('analytics', $data);
         $this->loadLayout($user . "Footer.html");
+
+        // $user = $this->input->session('type');
+        // $data['sDate'] = $this->input->get('sDate') ?? "0000-00-00";
+        // $data['eDate'] = $this->input->get('eDate') ?? Date('Y-m-d');
+        // $data['list'] = $this->input->get('list');
+        // $funcName = "getTop" . $data['list'] . "List";
+        // $tcount = $tfcount = null;
+        // $data['data'] = $this->model->$funcName(
+        //     $data['sDate'],
+        //     $data['eDate'],
+        //     0,
+        //     10,
+        //     'rank',
+        //     'DESC',
+        //     '',
+        //     $tcount,
+        //     $tfcount
+        // );
+        // $this->load->helper('chartHelper');
+        // $this->loadLayout($user . "Header.html");
+        // $this->includeScript('chart.js');
+        // $this->loadView('analytics', $data);
+        // $this->loadLayout($user . "Footer.html"); 
     }
 
     /**
      * Displays Top books list
-     * 
+     *
+     * @param string $list  List Name
+     * @param string $sDate Start Date
+     * @param string $eDate End Date
+     *
      * @return void
      */
     public function topList($list, $sDate, $eDate)

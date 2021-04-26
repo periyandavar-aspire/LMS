@@ -46,9 +46,7 @@ class IssuedBookModel extends BaseModel
             ->where('user.deletionToken', '=', 'N/A')
             ->limit(1)
             ->execute();
-
         $user = $this->db->fetch();
-        // print_r($user);
         return $user;
     }
 
@@ -199,7 +197,7 @@ class IssuedBookModel extends BaseModel
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
      * @param string      $sortDir   sorting direction
-     * @param string      $searchKey search key
+     * @param string|null $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
      *
@@ -208,9 +206,9 @@ class IssuedBookModel extends BaseModel
     public function getIssuedBooks(
         int $start = 0,
         int $limit = 10,
-        string $sortby = "returnAT",
+        string $sortby = "returnAt",
         string $sortDir = 'DESC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -225,9 +223,7 @@ class IssuedBookModel extends BaseModel
             'fine'
         )->selectAs(
             "date_format(issuedAt, '%d-%m-%Y %h:%i:%s') issuedAt",
-            "IF(returnAt != '0000-00-00', "
-                ."date_format(returnAt, '%d-%m-%Y %h:%i:%s') "
-                .",'Not Yet Returned') returnedAt"
+            "formatReturn(returnAt) returnedAt"
         );
         $this->db->selectAs('DATEDIFF(NOW(), issuedAt) days');
         $this->db->from('issued_book ib')
@@ -238,7 +234,7 @@ class IssuedBookModel extends BaseModel
             ->innerJoin('user')
             ->on('user.id = ib.userId')
             ->where('ib.issuedAt', '!=', '0000-00-00');
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 " user.username LIKE '%$searchKey%' OR "
                 ." name LIKE '%$searchKey%' OR "
@@ -263,7 +259,7 @@ class IssuedBookModel extends BaseModel
             ->where('ib.issuedAt', '!=', '0000-00-00')
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('issued_book ib')
@@ -304,7 +300,7 @@ class IssuedBookModel extends BaseModel
         int $limit = 10,
         string $sortby = "requestedAt",
         string $sortDir = 'DESC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -328,7 +324,7 @@ class IssuedBookModel extends BaseModel
             ->innerJoin('user')
             ->on('user.id = ib.userId');
         $this->db->where('status.value', 'LIKE', 'Request%');
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 " user.username LIKE '%$searchKey%' OR "
                 ." name LIKE '%$searchKey%' OR "
@@ -353,7 +349,7 @@ class IssuedBookModel extends BaseModel
             ->where('status.value', 'LIKE', 'Request%')
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('issued_book ib')

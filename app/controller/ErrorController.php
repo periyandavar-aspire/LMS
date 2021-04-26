@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Not a valid Request');
+
 /**
  * ErrorController Class Handles the errors
  *
@@ -36,7 +38,7 @@ class ErrorController extends BaseController implements ErrorHandler
         $data['msg'] .= "This may be missing or temporarily unavailable.";
         $data['msg'] .= "You can click the button below to go back to the homepage.";
         $this->loadLayout("header.html");
-        $this->loadTemplate("pageNotFound", $data);
+        $this->loadView("pageNotFound", $data);
         $this->loadLayout("footer.html");
     }
 
@@ -53,7 +55,7 @@ class ErrorController extends BaseController implements ErrorHandler
         $data['msg'] = "Your request is invalid or that service is removed.";
         $data['msg'] = "Please try again later...";
         $this->loadLayout("header.html");
-        $this->loadTemplate("pageNotFound", $data);
+        $this->loadView("pageNotFound", $data);
         $this->loadLayout("footer.html");
     }
 
@@ -73,7 +75,7 @@ class ErrorController extends BaseController implements ErrorHandler
         $data['msg'] .= "Please check later and retry again...";
         $data['data'] = $error;
         $this->loadLayout("header.html");
-        $this->loadTemplate("serverError", $data);
+        $this->loadView("serverError", $data);
         $this->loadLayout("footer.html");
     }
 }

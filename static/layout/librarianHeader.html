@@ -18,9 +18,11 @@
     <link rel="stylesheet" type="text/css" href="/static/css/preloader.css">
     <link rel="stylesheet" type="text/css" href="/static/css/datatable/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome-4.7.0/css/font-awesome.min.css">
-    <script src="/static/js/autoload.js"></script>
+    <script src="/static/js/autocomplete.js"></script>
     <script src="/static/js/jquery/jquery-1.12.4.min.js"></script>
     <script src="/static/js/datatable/datatables.min.js"></script>
+    <script src="/static/js/datatable/dataTables.buttons.min.js"></script>
+    <script src="/static/js/datatable/buttons.print.min.js"></script>
 </head>
 
 <body id="body">
@@ -41,7 +43,7 @@
     <header>
         <a class="navbar-logo" href="home"><img src="/static/img/favicon.png">&nbsp;LMS</a>
         <div class="searchBar" id="searchBar">
-            <form action='/book/search' method="post">
+            <form action='/book/search' method="GET">
                 <input type="text" name="search" placeholder="Search Books...">
                 <button>
                         <i class="fa fa-search" aria-hidden="true"></i>

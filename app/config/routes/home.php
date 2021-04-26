@@ -12,13 +12,12 @@
  */
 Route::add('/', 'home/getIndexPage');
 Route::add('/home', 'home/getIndexPage');
-Route::add('/home/books');
-Route::add('/home/aboutus');
+Route::add('/home/books', 'home/getBooks');
+Route::add('/home/aboutus', 'home/getAboutus');
 Route::add('/login', '/home/login');
-Route::add('/register', '/home/registration');
+Route::add('/signup', '/home/registration');
 Route::add('/login', '/home/dologin', 'post');
-Route::add('/user/signup', '/home/createAccount', 'post');
-Route::add('/home/captcha');
+Route::add('/signup', '/home/createAccount', 'post');
+Route::add('/home/captcha', 'home/createCaptcha');
 
 
-Route::add('/home/home');

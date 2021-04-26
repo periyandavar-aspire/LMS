@@ -24,52 +24,51 @@
                     id="location" name="location" autocomplete="off" placeholder="Book Location" required="">
                 </div>
 
-                <div class="form-input-div">
+                <!-- <div class="form-input-div">
                     <label>Author</label>
                     <input class="form-control autocomplete" type="text" id="search-author" autocomplete="off"
                         placeholder="Search Author">
-                </div>
+                </div> -->
                 <div class="form-input-div">
                     <label>Selected Authors</label>
-                    <div class="form-control list-group " id="authorslist" name="userDetails">
+                    <div class="form-control list-group" contenteditable="true" id="authorslist" name="userDetails">
                         <?php
                             if (isset($book)) {
                                 $dataCodes = explode(",", $book->authorCodes);
                                 $dataValues = explode(",", $book->authors);
                                 for ($i=0; $i < count($dataCodes); $i++) {
-                                    echo '<span class="list-group-item" id="list-group-item-' . $dataCodes[$i] . '" data-value="' . $dataCodes[$i] . '">' . $dataValues[$i] . ' <span class="badge" onclick="removeItem(event, \'\');" data-id="' . $dataCodes[$i] . '">X</span></span>';
+                                    echo '<span contenteditable="false" class="list-group-item" id="list-group-item-' . $dataCodes[$i] . '" data-value="' . $dataCodes[$i] . '">' . $dataValues[$i] . ' <span class="badge removeItems" id="removeItem-'.$dataCodes[$i].'" data-id="' . $dataCodes[$i] . '">X</span></span>&nbsp;';
                                 }
                             }
                         ?>
-                        <input type="hidden" <?php if (isset($book->authorCodes)) {
+                    </div>
+                </div>
+                <input type="hidden" <?php if (isset($book->authorCodes)) {
                             echo "value='".$book->authorCodes.",'";
                         }?>
                         name="author" required id="selected-author">
-                    </div>
-                </div>
-
-                <div class="form-input-div">
+                <!-- <div class="form-input-div">
                     <label>Category</label>
                     <input class="form-control autocomplete" type="text" id="search-category" autocomplete="off"
                         placeholder="Search Category">
-                </div>
+                </div> -->
                 <div class="form-input-div">
                     <label>Selected Categories</label>
-                    <div class="form-control list-group " id="catlist" name="userDetails">
+                    <div contenteditable="true" class="form-control list-group " id="catlist" name="userDetails">
                         <?php
                             if (isset($book)) {
                                 $dataCodes = explode(",", $book->categoryCodes);
                                 $dataValues = explode(",", $book->categories);
                                 for ($i=0; $i < count($dataCodes); $i++) {
-                                    echo '<span class="list-group-item" id="list-group-item-' . $dataCodes[$i] . '" data-value="' . $dataCodes[$i] . '">' . $dataValues[$i] . ' <span class="badge" onclick="removeItem(event, \'\');" data-id="' . $dataCodes[$i] . '">X</span></span>';
+                                    echo '<span contenteditable="false" class="list-group-item" id="list-group-item-' . $dataCodes[$i] . '" data-value="' . $dataCodes[$i] . '">' . $dataValues[$i] . ' <span class="badge removeItems" id="removeItem-'.$dataCodes[$i].'" data-id="' . $dataCodes[$i] . '">X</span></span>&nbsp;';
                                 }
                             }
                         ?>
-                        <input type="hidden" <?php if (isset($book->categoryCodes)) {
+                    </div>
+                    <input type="hidden" <?php if (isset($book->categoryCodes)) {
                             echo "value='".$book->categoryCodes.",'";
                         }?>
                         name="category" required id="selected-category">
-                    </div>
                 </div>
 
                 <div class="form-input-div">
@@ -128,6 +127,6 @@
 </article>
 <script>
     document.getElementById('books').className += " active";
-    autocomplete(document.getElementById("search-author"), document.getElementById("authorslist"), "/book/authors/");
-    autocomplete(document.getElementById("search-category"), document.getElementById("catlist"), "/book/categories/");
+    autocomplete(document.getElementById("authorslist"), document.getElementById("authorslist"), "/book/authors/", null, "selected-author",true );
+    autocomplete(document.getElementById("catlist"), document.getElementById("catlist"), "/book/categories/", null, "selected-category", true);
 </script>

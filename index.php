@@ -12,13 +12,14 @@
  */
 define("VALID_REQ", true);
 
-session_start();
 
 require_once 'system/core/Loader.php';
 
 require_once 'system/core/EnvParser.php';
 
 require_once 'system/Database/database.php';
+
+
 
 (new EnvParser('.env'))->load();
 
@@ -27,7 +28,8 @@ foreach (glob("app/config/*.php") as $filename) {
 }
 
 Loader::intialize();
-
+Session::getInstance();
+session_start();
 global $config;
 
 define('ENVIRONMENT', $config['environment'] ?? Constants::ENV_DEVELOPMENT);
@@ -102,9 +104,6 @@ if (!function_exists("exceptionHandler")) {
         Route::error();
     }
 }
-
-// set_exception_handler('exceptionHandler');
-// set_error_handler("errHandler");
 
 ob_start();
 Route::run();

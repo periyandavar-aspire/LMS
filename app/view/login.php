@@ -35,14 +35,14 @@
                                 </div>
                                 <div class="form-buttons">
                                     <button type="submit" name="login" class="btn-link">Login</button>
-                                    <!-- <a href="registration" class="button-control negative">Register</a> -->
+                                    <!-- <a href="registration" class="button-control negative">signup</a> -->
                                 </div>
                                 <div class="msg">
                                     <?php if (isset($msg)) {
     echo $msg;
 } ?>
                                 </div>
-                                <br><span> Don't have an account..? <a class="link" href="/register"> Register here
+                                <br><span> Don't have an account..? <a class="link" href="/signup"> Register here
                                     </a></span>
 
                             </form>

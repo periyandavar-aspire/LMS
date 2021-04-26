@@ -39,7 +39,7 @@ class ManageUserController extends BaseController
         $user = $this->input->session('type');
         $currentUser = $this->input->session('id');
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("adminManageUsers");
+        $this->loadView("adminManageUsers");
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
     }
@@ -114,7 +114,7 @@ class ManageUserController extends BaseController
         $user = $this->input->session('type');
         $currentUser = $this->input->session('id');
         $this->loadLayout("librarianHeader.html");
-        $this->loadTemplate("librarianManageUsers");
+        $this->loadView("librarianManageUsers");
         $this->loadLayout("librarianFooter.html");
     }
 
@@ -155,7 +155,7 @@ class ManageUserController extends BaseController
         $fields = new Fields(['fullName', 'email', 'role', 'password']);
         $roleCodes = implode(" ", $this->model->getRoleCodes());
         $rules = [
-            'email' => ['mailValidation', 'required'],
+            'email' => ['emailValidation', 'required'],
             'fullname' => ['alphaSpaceValidation', 'required'],
             'password' => ["lengthValidation 6", 'required'],
             'role' => ["valuesInValidation $roleCodes", 'required']
@@ -173,7 +173,7 @@ class ManageUserController extends BaseController
         $currentUser = $this->input->session('id');
         $data['users'] = $this->model->getAllUsers($currentUser);
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("adminmanageUsers", $data);
+        $this->loadView("adminmanageUsers", $data);
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
         $this->addScript($script);

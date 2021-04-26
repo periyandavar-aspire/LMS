@@ -19,7 +19,7 @@ defined('VALID_REQ') or exit('Not a valid Request');
  * @license  http://license.com license
  * @link     http://url.com
  */
-class Utility
+final class Utility
 {
     /**
      * Returns the baseURL

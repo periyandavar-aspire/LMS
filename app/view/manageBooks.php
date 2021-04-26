@@ -17,7 +17,7 @@
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Status</th>
-                                <th data-orderable="false">Action</th>
+                                <th class="notexport" data-orderable="false">Action</th>
                             </tr>
                         </thead>
                         <tbody class="table_body">

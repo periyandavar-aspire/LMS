@@ -42,13 +42,6 @@ class BaseController
     protected $input;
 
     /**
-     * View object
-     * 
-     * @var BaseView
-     */
-    protected $view;
-
-    /**
      * Service class object that will offers the services(bussiness logics)
      *
      * @var Service $service
@@ -80,22 +73,10 @@ class BaseController
         $this->model = $model;
         $this->input = new InputData();
         $this->service = $service;
-        $this->view = null;
         $this->load = Loader::autoLoadClass($this);
     }
 
-    /**
-     * Sets the view object
-     *
-     * @param BaseView $view View Object
-     * 
-     * @return void
-     */
-    public function setView(BaseView $view)
-    {
-        $this->view = $view;
-    }
-
+   
     /**
      * This function will load the required View(php) file without error on failure
      * only files with .php extension are allowed and those files should
@@ -106,10 +87,10 @@ class BaseController
      *
      * @return void
      */
-    protected function loadTemplate(string $file, ?array $data = null)
+    final protected function loadView(string $file, ?array $data = null)
     {
         global $config;
-        $path = $config['template'] . '' . $file . ".php";
+        $path = $config['view'] . '' . $file . ".php";
         if (file_exists($path)) {
             if ($data != null) {
                 foreach ($data as $key => $value) {
@@ -131,7 +112,7 @@ class BaseController
      *
      * @return void
      */
-    protected function redirect(string $url, bool $permanent = false)
+    final protected function redirect(string $url, bool $permanent = false)
     {
         Utility::redirectURL($url, $permanent);
     }
@@ -144,7 +125,7 @@ class BaseController
      *
      * @return void
      */
-    public function dispatch(string $url, bool $caseSensitive = false)
+    final public function dispatch(string $url, bool $caseSensitive = false)
     {
         Route::dispatch($url, 'get', $caseSensitive);
         exit();
@@ -157,7 +138,7 @@ class BaseController
      *
      * @return void
      */
-    protected function loadLayout(string $file)
+    final protected function loadLayout(string $file)
     {
         global $config;
         $path = $config['layout'] . '/' . $file;
@@ -178,7 +159,7 @@ class BaseController
      *
      * @return void
      */
-    public function includeScript(string $script, ?string $path= null)
+    final public function includeScript(string $script, ?string $path= null)
     {
         global $config;
         $path = $path ?? ($config['static'] . '/static' . '/js');
@@ -196,7 +177,7 @@ class BaseController
      *
      * @return void
      */
-    public function includeSheet($sheet, ?string $path= null)
+    final public function includeSheet($sheet, ?string $path= null)
     {
         global $config;
         $path = $path ?? ($config['static'] . '/static/css');
@@ -212,7 +193,7 @@ class BaseController
      *
      * @return void
      */
-    public function addScript(string $script)
+    final public function addScript(string $script)
     {
         echo "<script>" . $script . "</script>";
     }
@@ -224,7 +205,7 @@ class BaseController
      *
      * @return void
      */
-    public function addStyle(string $style)
+    final public function addStyle(string $style)
     {
         echo "<style>" . $style . "</style>";
     }
@@ -236,7 +217,7 @@ class BaseController
      *
      * @return void
      */
-    public static function executeMethod(string $method)
+    final public static function executeMethod(string $method)
     {
         if (method_exists(new static(), $method)) {
             static::$method();
@@ -246,15 +227,15 @@ class BaseController
     }
 
 
-    /**
-     * Returns instance
-     *
-     * @return BaseController
-     */
-    public static function getInstance(): BaseController
-    {
-        return self::$_instance;
-    }
+    // /**
+    //  * Returns instance
+    //  *
+    //  * @return BaseController
+    //  */
+    // final public static function getInstance(): BaseController
+    // {
+    //     return self::$_instance;
+    // }
 
     /**
      * This function will call when the undefined function is called
@@ -299,7 +280,7 @@ class BaseController
      * 
      * @return void
      */ 
-    public function __set(string $name, $value)
+    final public function __set(string $name, $value)
     {
         $this->_obj[$name] = $value;
     }
@@ -311,7 +292,7 @@ class BaseController
      * 
      * @return object|null
      */
-    public function __get($name)
+    final public function __get($name)
     {
         if (array_key_exists($name, $this->_obj)) {
             return $this->_obj[$name];

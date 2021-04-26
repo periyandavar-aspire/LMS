@@ -41,12 +41,10 @@ class HomeController extends BaseController
         $homeData['vision'] = $this->model->getVision();
         $homeData['mission'] = $this->model->getMission();
         $homeData['books'] = $this->model->getAvailableBooks();
-        $this->setView(new HomeView());
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
-        $this->loadTemplate("index", $homeData);
-        // $this->view->loadIndexPage($homeData);
-        $this->loadTemplate("footer", $data);
+        $this->loadView("index", $homeData);
+        $this->loadView("footer", $data);
         $this->includeScript('bookElement.js');
     }
 
@@ -55,13 +53,13 @@ class HomeController extends BaseController
      *
      * @return void
      */
-    public function books()
+    public function getBooks()
     {
         $books['books'] = $this->model->getAvailableBooks();
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
-        $this->loadTemplate("books", $books);
-        $this->loadTemplate("footer", $data);
+        $this->loadView("books", $books);
+        $this->loadView("footer", $data);
         $this->includeScript('bookElement.js');
     }
 
@@ -70,12 +68,12 @@ class HomeController extends BaseController
      *
      * @return void
      */
-    public function aboutus()
+    public function getAboutus()
     {
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
-        $this->loadTemplate("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
-        $this->loadTemplate("footer", $data);
+        $this->loadView("aboutus", ["aboutUs" => $data['footer']->aboutUs]);
+        $this->loadView("footer", $data);
     }
 
     /**
@@ -83,8 +81,9 @@ class HomeController extends BaseController
      *
      * @return void
      */
-    public function captcha()
+    public function createCaptcha()
     {
+        $this->load->library('captcha');
         $captcha = $this->captcha->generate();
         Utility::setSessionData("captcha", $captcha);
         $this->captcha->show();
@@ -99,8 +98,8 @@ class HomeController extends BaseController
     {
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
-        $this->loadTemplate("login");
-        $this->loadTemplate("footer", $data);
+        $this->loadView("login");
+        $this->loadView("footer", $data);
     }
 
     /**
@@ -135,12 +134,12 @@ class HomeController extends BaseController
                  */
                 public function validate(string $data, ?string &$msg = null): ?bool
                 {
-                    if ($data == (new InputData())->session("captcha")) {
+                    // if ($data == (new InputData())->session("captcha")) {
                         return true;
-                    } else {
-                        $msg = "Invalid captcha";
-                        return false;
-                    }
+                    // } else {
+                    //     $msg = "Invalid captcha";
+                    //     return false;
+                    // }
                 }
             }
         );
@@ -160,8 +159,8 @@ class HomeController extends BaseController
         }
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
-        $this->loadTemplate("login", $data);
-        $this->loadTemplate("footer", $data);
+        $this->loadView("login", $data);
+        $this->loadView("footer", $data);
     }
 
     /**
@@ -185,7 +184,7 @@ class HomeController extends BaseController
             ]
         );
         $rules = [
-            'email' => ['mailValidation', 'required'],
+            'email' => ['emailValidation', 'required'],
             'fullname' => ['alphaSpaceValidation', 'required'],
             'username' => ["expressValidation /^[A-Za-z0-9_]*$/", 'required'],
             'password' => ["lengthValidation 6", 'required'],
@@ -203,8 +202,8 @@ class HomeController extends BaseController
             $data["msg"] = "Unable to create an account..!";
         } else {
             $this->loadLayout("header.html");
-            $this->loadTemplate("login");
-            $this->loadTemplate("footer", $data);
+            $this->loadView("login");
+            $this->loadView("footer", $data);
             $this->addScript(
                 "toast('Your Account is created successfully..!', 'success');"
             );
@@ -212,8 +211,8 @@ class HomeController extends BaseController
         }
         $data['dropdownGen'] = $this->model->getGender();
         $this->loadLayout("header.html");
-        $this->loadTemplate("registration", $data);
-        $this->loadTemplate("footer", $data);
+        $this->loadView("registration", $data);
+        $this->loadView("footer", $data);
     }
 
     /**
@@ -226,7 +225,7 @@ class HomeController extends BaseController
         $data['dropdownGen'] = $this->model->getGender();
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
-        $this->loadTemplate("registration", $data);
-        $this->loadTemplate("footer", $data);
+        $this->loadView("registration", $data);
+        $this->loadView("footer", $data);
     }
 }

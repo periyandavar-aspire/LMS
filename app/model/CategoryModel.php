@@ -52,7 +52,7 @@ class CategoryModel extends BaseModel
         int $limit = 10,
         string $sortby = "1",
         string $sortDir = 'ASC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -64,7 +64,7 @@ class CategoryModel extends BaseModel
             )
             ->from('category');
         $this->db->where('deletionToken', '=', "N/A");
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where('name', "LIKE", "%$searchKey%");
         }
         $this->db->orderBy($sortby, $sortDir)
@@ -79,7 +79,7 @@ class CategoryModel extends BaseModel
         $this->db->where('deletionToken', '=', "N/A")
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('category');

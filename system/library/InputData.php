@@ -18,7 +18,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-class InputData
+final class InputData
 {
     /**
      * Post data values
@@ -69,14 +69,14 @@ class InputData
      */
     public function get(?string $key = null, ?string $default = null)
     {
-        $data = $this->_checkKey($this->_getData, $key, $default);
+        $data = $this->_checkKey($this->_getData, $key);
         if (is_array($data)) {
             foreach ($data as $key => $value) {
                 $data[$key] = htmlspecialchars(trim($value));
             }
             return $data;
         }
-        return htmlspecialchars(trim($data));
+        return $data != null ? htmlspecialchars(trim($data)) : $default;
     }
 
     /**
@@ -89,14 +89,14 @@ class InputData
      */
     public function post(?string $key = null, ?string $default = null)
     {
-        $data = $this->_checkKey($this->_postData, $key, $default);
+        $data = $this->_checkKey($this->_postData, $key);
         if (is_array($data)) {
             foreach ($data as $key => $value) {
                 $data[$key] = htmlspecialchars(trim($value));
             }
             return $data;
         }
-        return htmlspecialchars(trim($data));
+        return $data != null ? htmlspecialchars(trim($data)) : $default;
     }
 
     /**
@@ -109,7 +109,7 @@ class InputData
      */
     public function session(?string $key, ?string $default = null): string
     {
-        return base64_decode($this->_checkKey($this->_sessionData, $key, $default));
+        return base64_decode($this->_checkKey($this->_sessionData, $key));
     }
 
     /**
@@ -122,7 +122,7 @@ class InputData
      */
     public function files(?string $key = null, ?string $default = null)
     {
-        return $this->_checkKey($this->_fileData, $key, $default);
+        return $this->_checkKey($this->_fileData, $key);
     }
 
     /**
@@ -137,14 +137,13 @@ class InputData
      */
     private function _checkKey(
         array $data,
-        ?string $key = null,
-        ?string $default = null
+        ?string $key = null
     ) {
         if ($key) {
             if (isset($data[$key])) {
                 return $data[$key];
             } else {
-                return $default;
+                return null;
             }
         }
         return $data;

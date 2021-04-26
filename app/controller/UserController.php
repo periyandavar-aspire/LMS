@@ -37,7 +37,7 @@ class UserController extends BaseController
     public function home()
     {
         $this->loadLayout("userHeader.html");
-        $this->loadTemplate("userHome");
+        $this->loadView("userHome");
         $this->loadLayout("userFooter.html");
     }
 
@@ -52,7 +52,7 @@ class UserController extends BaseController
         $data['dropdownGen'] = $this->model->getGender();
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout("userHeader.html");
-        $this->loadTemplate("userProfile", $data);
+        $this->loadView("userProfile", $data);
         $this->loadLayout("userFooter.html");
     }
 
@@ -94,7 +94,7 @@ class UserController extends BaseController
         $data['result'] = $this->model->getProfile($id);
         $data['dropdownGen'] = $this->model->getGender();
         $this->loadLayout("userHeader.html");
-        $this->loadTemplate("userProfile", $data);
+        $this->loadView("userProfile", $data);
         $this->loadLayout("userFooter.html");
         $this->addScript($msg);
     }
@@ -113,17 +113,14 @@ class UserController extends BaseController
     /**
      * Displays the lent books of the user
      *
-     * @param int         $offset Offset
-     * @param int         $limit  Limit
-     * @param string|null $search Search Key
-     *
      * @return void
      */
-    public function getLentBooks(
-        int $offset = 0,
-        int $limit = 5,
-        ?string $search = null
-    ) {
+    public function getLentBooks() 
+    {
+        var_export($this->input->get('index'));
+        $offset = $this->input->get("index") ?? 0;
+        $limit = $this->input->get("limit") ?? 5;
+        $search = $this->input->get("search");
         $user = $this->input->session('id');
         $data["books"] = $this->model->getLentBooks(
             $user,
@@ -142,24 +139,20 @@ class UserController extends BaseController
             "search" => $search,
         ];
         $this->loadLayout("userHeader.html");
-        $this->loadTemplate("lentBooks", $data);
+        $this->loadView("lentBooks", $data);
         $this->loadLayout("userFooter.html");
     }
 
     /**
      * Displays the books requested by the user
-     *
-     * @param int         $offset Offset
-     * @param int         $limit  Limit
-     * @param string|null $search Search Key
      * 
      * @return void
      */
-    public function getRequestedBooks(
-        int $offset = 0,
-        int $limit = 5,
-        ?string $search = null
-    ) {
+    public function getRequestedBooks() 
+    {
+        $offset = $this->input->get("index") ?? 0;
+        $limit = $this->input->get("limit") ?? 5;
+        $search = $this->input->get("search");
         $user = $this->input->session('id');
         $limit = $limit == 0 ? 5 : $limit;
         $data["books"] = $this->model->getRequestedBooks(
@@ -179,7 +172,7 @@ class UserController extends BaseController
             "search" => $search,
         ];
         $this->loadLayout("userHeader.html");
-        $this->loadTemplate("booked", $data);
+        $this->loadView("booked", $data);
         $this->loadLayout("userFooter.html");
     }
 

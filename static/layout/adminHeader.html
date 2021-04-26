@@ -19,9 +19,11 @@
     <link rel="stylesheet" type="text/css" href="/static/css/preloader.css">
     <link rel="stylesheet" type="text/css" href="/static/css/datatable/datatables.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome-4.7.0/css/font-awesome.min.css">
-    <script src="/static/js/autoload.js"></script>
+    <script src="/static/js/autocomplete.js"></script>
     <script src="/static/js/jquery/jquery-1.12.4.min.js"></script>
     <script src="/static/js/datatable/datatables.min.js"></script>
+    <script src="/static/js/datatable/dataTables.buttons.min.js"></script>
+    <script src="/static/js/datatable/buttons.print.min.js"></script>
 </head>
 
 <body id="body">
@@ -42,7 +44,7 @@
     <header>
         <a class="navbar-logo" href="home"><img src="/static/img/favicon.png">&nbsp;LMS</a>
         <div class="searchBar" id="searchBar">
-            <form action='/book/search' method="post">
+            <form action='/book/search' method="GET">
                 <input type="text" name="search" placeholder="Search Books...">
                 <button>
                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -70,7 +72,7 @@
                 <li><a href="/books" id="books"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Books</a></li>
                 <li><a href="/issueBook" id="issued"><i class="fa fa-table" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Issue Books</a></li>
                 <li><a href="/userRequest" id="request"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;User Request</a></li>
-                <li><a href="/admin/manageUsers" id="manageUsers"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users</a></li>
+                <li><a href="/admin/users" id="manageUsers"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Users</a></li>
                 <li><a href="/analytics/book" id="analytics"><i class="fa fa-list" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Analytics</a></li>
                 <li><a href="/admin/settings" id="settings"><i class="fa fa-cog" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Settings</a></li>
                 <li><a href="/admin/cms" id="cms"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Manage contents</a></li>

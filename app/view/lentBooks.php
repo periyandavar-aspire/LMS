@@ -75,46 +75,7 @@
                     <div>
                         <ul class="pagination">
                             <?php
-                                if ($pagination['tpages'] > 1) {
-                                    $previous = ($pagination['start'] == 1)
-                                    ? '<li class="disable"><a class="disable">Previous</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.((($pagination['cpage']-1)) * $pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">Previous</a></li>';
-                                    echo $previous;
-                                    $first = ($pagination['start'] == 1)
-                                    ? '<li class="active"><a>1</a></li>'
-                                    : '<li><a href="/user/lentbooks/0/'.$pagination['limit'].'/'.$pagination['search'].'">1</a></li>';
-                                    echo $first;
-                                    if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
-                                        $i = $pagination['cpage'];
-                                        $iEnd = $pagination['cpage'] + 3;
-                                        $iEnd = $pagination['tpages'] < $iEnd ? $pagination['tpages'] : $iEnd;
-                                    } else {
-                                        $i = 2;
-                                        $iEnd = $pagination['tpages'] < 6 ? $pagination['tpages'] : 6;
-                                    }
-                                    if ($i != 2) {
-                                        echo "<li class='disable'>...</li>";
-                                    }
-                                    for (; $i < $iEnd; $i++) {
-                                        $li = "<li";
-                                        $li = ($i == $pagination['cpage']+1)
-                                        ? $li . " class='active'><a>$i</a></li>"
-                                        : $li . "><a href='/user/lentbooks/".($pagination['limit']*($i-1))."/".$pagination['limit'].'/'.$pagination['search']."'>$i</a></li>";
-                                        // $li .= "";
-                                        echo $li;
-                                    }
-                                    if ($i != $pagination['tpages']) {
-                                        echo "<li class='disable'>...</li>";
-                                    }
-                                    $last = ($pagination['end'] == $pagination['tcount'])
-                                    ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.(($pagination['tpages']-1)*$pagination['limit']).'/'.$pagination['limit'].'/'.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
-                                    echo $last;
-                                    $next = ($pagination['end'] == $pagination['tcount'])
-                                    ? '<li class="disable"><a class="disable">Next</a></li>'
-                                    : '<li><a href="/user/lentbooks/'.((($pagination['cpage']+1)* $pagination['limit'])).'/'.$pagination['limit'].'/'.$pagination['search'].'">Next</a></li>';
-                                    echo $next;
-                                }
+                                echo generatePagination($pagination, "/user/lentbooks");
                             ?>
 
                             <!-- <li class="active"><a>1</a></li>

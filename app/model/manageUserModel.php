@@ -41,7 +41,7 @@ class ManageUserModel extends BaseModel
         int $limit = 10,
         string $sortby = "1",
         string $sortDir = 'ASC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -58,7 +58,7 @@ class ManageUserModel extends BaseModel
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
         $this->db->where('email', '!=', $email);
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 "(fullname LIKE %$searchKey%"
                 ." OR username LIKE %$searchKey OR "
@@ -75,7 +75,7 @@ class ManageUserModel extends BaseModel
             "COUNT(*) count",
         )->from('all_user')->execute();
         $tcount = $this->db->fetch()->count-1;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('all_user');
@@ -111,7 +111,7 @@ class ManageUserModel extends BaseModel
         int $limit = 10,
         string $sortby = "1",
         string $sortDir = 'ASC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -126,7 +126,7 @@ class ManageUserModel extends BaseModel
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
         $result = $this->db->where('role', '=', 'user');
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 "(fullname LIKE '%$searchKey%'"
                 ." OR username LIKE '%$searchKey%'OR "
@@ -145,7 +145,7 @@ class ManageUserModel extends BaseModel
             ->where('role', '=', 'user')
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('all_user');

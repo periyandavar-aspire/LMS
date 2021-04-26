@@ -32,7 +32,7 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Category</h1>
                 <hr><br>
-                <form action="/categories" id="add" method="post">
+                <form onsubmit="categoryValidator(event, this);" action="/categories" id="add" method="post">
                     <div class="form-input-div">
                         <label>Category Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name"
@@ -49,7 +49,7 @@
                 <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
                 <h1>Edit Category</h1>
                 <hr><br>
-                <form action="/categories" id="edit" onsubmit="updateItem(event);" method="post">
+                <form onsubmit="categoryValidator(event, this);" action="/categories" id="edit" onsubmit="updateItem(event);" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
                         <label>Category Name</label>

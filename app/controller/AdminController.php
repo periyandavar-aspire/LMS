@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Not a valid Request');
+
 /**
  * AdminController Class Handles the admin functionalities
  *
@@ -36,7 +38,7 @@ class AdminController extends BaseController
      */
     public function login()
     {
-        $this->loadTemplate("admin");
+        $this->loadView("admin");
     }
 
     /**
@@ -50,7 +52,7 @@ class AdminController extends BaseController
         $captcha = $this->input->post("verfcode");
         if ($captcha != $this->input->session("captcha")) {
             $data["msg"] = "Invalid captcha..!";
-            $this->loadTemplate("admin", $data);
+            $this->loadView("admin", $data);
             return;
         }
         $result = $this->model->getAdminUser($user);
@@ -63,7 +65,7 @@ class AdminController extends BaseController
             }
         }
         $data["msg"] = "Login failed..!";
-        $this->loadTemplate("admin", $data);
+        $this->loadView("admin", $data);
     }
 
 
@@ -72,11 +74,11 @@ class AdminController extends BaseController
      *
      * @return void
      */
-    public function home()
+    public function getHomePage()
     {
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate($user. 'home');
+        $this->loadView($user. 'home');
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -85,13 +87,13 @@ class AdminController extends BaseController
      *
      * @return void
      */
-    public function profile()
+    public function getProfile()
     {
         $user = $this->input->session('type');
         $id = $this->input->session('id');
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate($user . 'Profile', $data);
+        $this->loadView($user . 'Profile', $data);
         $this->loadLayout($user . "Footer.html");
     }
 
@@ -143,7 +145,7 @@ class AdminController extends BaseController
         }
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout($user . "Header.html");
-        $this->loadTemplate($user . "Profile", $data);
+        $this->loadView($user . "Profile", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($msg);
     }
@@ -153,11 +155,11 @@ class AdminController extends BaseController
      *
      * @return void
      */
-    public function settings()
+    public function getSettings()
     {
         $data['data'] = $this->model->getConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("settings", $data);
+        $this->loadView("settings", $data);
         $this->loadLayout("adminFooter.html");
     }
 
@@ -188,7 +190,7 @@ class AdminController extends BaseController
         }
         $data['data'] = $this->model->getConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("settings", $data);
+        $this->loadView("settings", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }
@@ -198,11 +200,11 @@ class AdminController extends BaseController
      *
      * @return void
      */
-    public function cms()
+    public function getCms()
     {
         $data['data'] = $this->model->getCmsConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("cms", $data);
+        $this->loadView("cms", $data);
         $this->loadLayout("adminFooter.html");
     }
 
@@ -244,7 +246,7 @@ class AdminController extends BaseController
         }
         $data['data'] = $this->model->getCmsConfigs();
         $this->loadLayout("adminHeader.html");
-        $this->loadTemplate("cms", $data);
+        $this->loadView("cms", $data);
         $this->loadLayout("adminFooter.html");
         $this->addScript($script);
     }

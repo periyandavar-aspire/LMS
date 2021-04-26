@@ -18,7 +18,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-class Constants
+final class Constants
 {
     public const METHOD_GET = "get";
 

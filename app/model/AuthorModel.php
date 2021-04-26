@@ -28,7 +28,7 @@ class AuthorModel extends BaseModel
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
      * @param string      $sortDir   sorting direction
-     * @param string      $searchKey search key
+     * @param string|null $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
      * 
@@ -39,7 +39,7 @@ class AuthorModel extends BaseModel
         int $limit = 10,
         string $sortby = "1",
         string $sortDir = 'ASC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -51,7 +51,7 @@ class AuthorModel extends BaseModel
             )
             ->from('author');
         $this->db->where('deletionToken', '=', "N/A");
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where('name', "LIKE", "%$searchKey%");
         }
         $this->db->orderBy($sortby, $sortDir)
@@ -66,7 +66,7 @@ class AuthorModel extends BaseModel
         $this->db->where('deletionToken', '=', "N/A")
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('author');

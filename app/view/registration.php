@@ -11,7 +11,7 @@
                         <section class="form-card">
                             <h1>User Registeration</h1>
                             <hr>
-                            <form action="/user/signup" onsubmit="registrationFormValidator(event);" method="POST">
+                            <form action="" onsubmit="registrationFormValidator(event);" method="POST">
                                 <div class="form-input-div">
                                     <label>Enter Full Name <span class="required-star">*</span></label>
                                     <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="fullname"

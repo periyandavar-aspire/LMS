@@ -39,8 +39,17 @@ function changeStatus(event, statusChangeUrl) {
             }
         });
 }
+var buttonCommon = {
+    exportOptions: {
+        format: {
+            body: function(data, row, column, node) {
+                return data;
+            }
+        }
+    }
+}
 
-function loadTableData(id, url, columns) {
+function loadTableData(id, url, columns, title) {
     studentTable = jQuery('#' + id).dataTable({
         "bJQueryUI": true,
         "sPaginationType": "full_numbers",
@@ -54,6 +63,30 @@ function loadTableData(id, url, columns) {
         "rowId": "id",
         "sAjaxSource": url,
         "columns": columns,
+        dom: 'lBfrtip',
+        buttons: [$.extend(true, {}, buttonCommon, {
+            extend: 'print',
+            text: 'Print',
+            title: ' Details',
+            className: 'print-btn',
+            exportOptions: {
+                columns: ':not(.notexport)'
+            },
+            customize: function(win) {
+                $(win.document.body)
+                    .css('font-size', '10pt')
+                    .css('margin', '12px')
+                    .prepend(
+                        '<img src="http://lms.com/static/img/favicon.png" style="height:50px; top:10; left:10;" /> LMS'
+                    );
+
+                $(win.document.body).find('table')
+                    .addClass('compact')
+                    .css('font-size', 'inherit')
+                    .css('margin', '9px')
+            }
+
+        })]
     });
 }
 

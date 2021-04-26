@@ -43,7 +43,7 @@ class ReportModel extends BaseModel
         int $limit = 10,
         string $sortby = "rank",
         string $sortDir = 'DESC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -67,7 +67,7 @@ class ReportModel extends BaseModel
             ->leftJoin('issued_book ib')
             ->on('b.id = ib.bookId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 "(b.name LIKE '%$searchKey%'"
                 ." OR authors LIKE '%$searchKey%'OR "
@@ -94,7 +94,7 @@ class ReportModel extends BaseModel
         while ($row = $this->db->fetch()) {
             $tcount++;
         }
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('book_detail b')
@@ -139,7 +139,7 @@ class ReportModel extends BaseModel
         int $limit = 10,
         string $sortby = "rank",
         string $sortDir = 'DESC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -163,7 +163,7 @@ class ReportModel extends BaseModel
             ->rightJoin('author a')
             ->on('a.id = ba.authorId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 "(b.name LIKE '%$searchKey%'"
                 ." OR authors LIKE '%$searchKey%'OR "
@@ -192,7 +192,7 @@ class ReportModel extends BaseModel
             ->groupBy('a.id')
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('issued_book ib')
@@ -239,7 +239,7 @@ class ReportModel extends BaseModel
         int $limit = 10,
         string $sortby = "rank",
         string $sortDir = 'DESC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -263,7 +263,7 @@ class ReportModel extends BaseModel
             ->rightJoin('category c')
             ->on('c.id = bc.catId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 "(b.name LIKE '%$searchKey%'"
                 ." OR authors LIKE '%$searchKey%'OR "
@@ -292,7 +292,7 @@ class ReportModel extends BaseModel
             ->groupBy('c.id')
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('issued_book ib')
@@ -339,7 +339,7 @@ class ReportModel extends BaseModel
         int $limit = 10,
         string $sortby = "rank",
         string $sortDir = 'DESC',
-        string $searchKey = '',
+        ?string $searchKey = null,
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
@@ -360,7 +360,7 @@ class ReportModel extends BaseModel
             ->leftJoin('issued_book ib')
             ->on('u.id = ib.userId')
             ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->where(
                 "(u.username LIKE '%$searchKey%'"
                 ." OR u.fullname LIKE '%$searchKey%')"
@@ -383,7 +383,7 @@ class ReportModel extends BaseModel
             ->groupBy('u.id')
             ->execute();
         $tcount = $this->db->fetch()->count;
-        if ($searchKey != '') {
+        if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('user u')
