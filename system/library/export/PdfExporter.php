@@ -9,6 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
+require_once 'fpdf/pdf.php';
 /**
  * Fields Class used to store the input fields
  * User defined Error controller should implement this interface
@@ -50,60 +53,41 @@ class PdfExporter
         $this->_pdf->AddPage();
         $data = json_decode(json_encode($data), true);
         $this->_pdf->SetFont('Arial', 'B', 7);
-        $cell_width = 30;
-        $cell_height= 10;
-        $current_y = $this->_pdf->GetY();
-        $start_x = $current_x = $this->_pdf->GetX();
-        $this->_pdf->SetXY($current_x, $current_y);
-        $this->_pdf->multicell(10, $cell_height, "Sl. No", 1);
-        $current_x += 10;
+        $cellWidth = 30;
+        $cellHeight= 10;
+        $currentY = $this->_pdf->GetY();
+        $startX = $currentX = $this->_pdf->GetX();
+        $this->_pdf->SetXY($currentX, $currentY);
+        $this->_pdf->Multicell(10, $cellHeight, "Sl. No", 1);
+        $currentX += 10;
         $headings = array_keys($data[0]);
-        // foreach ($ignoreList as $ignore) {
-        //     unset($headings[array_search($ignore, $headings)]);
-        // }
         foreach ($headings as $heading) {
             if (in_array($heading, $ignoreList)) {
                 continue;
             }
-            $this->_pdf->SetXY($current_x, $current_y);
-            $this->_pdf->multicell($cell_width, $cell_height, $heading, 1);
-            $current_x += $cell_width;
+            $this->_pdf->SetXY($currentX, $currentY);
+            $this->_pdf->multicell($cellWidth, $cellHeight, $heading, 1);
+            $currentX += $cellWidth;
         }
-        $current_x = $start_x;
-        $current_y += $cell_height;
+        $currentX = $startX;
+        $currentY += $cellHeight;
         $i = 1;
         foreach ($data as $row) {
             $this->_pdf->Ln();
-            $this->_pdf->SetXY($current_x, $current_y);
-            $this->_pdf->multicell(10, $cell_height, $i++, 1);
+            $this->_pdf->SetXY($currentX, $currentY);
+            $this->_pdf->multicell(10, $cellHeight, $i++, 1);
             $current_x += 10;
             foreach ($row as $column) {
                 if (in_array(array_search($column, $row), $ignoreList)) {
                     continue;
                 }
-                $str = $this->formatStr($column);
-                $this->_pdf->SetXY($current_x, $current_y);
-                $this->_pdf->multicell($cell_width, $cell_height, $column, 1);
+                $this->_pdf->SetXY($currentX, $currentY);
+                $this->_pdf->multicell($cellWidth, $cellHeight, $column, 1);
                 $current_x += $cell_width;
             }
-            $current_x = $start_x;
-            $current_y += $cell_height;
+            $currentX = $startX;
+            $currentY += $cellHeight;
         }
-    }
-
-    /**
-     * Formates the String
-     *
-     * @param string|null $str String
-     *
-     * @return void
-     */
-    public function formatStr(?string $str)
-    {
-        for ($i = 0; $i < strlen($str) % 17; $i++) {
-            $str = substr_replace($str, "\n", 17+$i, 0);
-        }
-        return $str;
     }
 
     /**

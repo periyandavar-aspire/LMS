@@ -10,16 +10,16 @@
  * @license    http://license.com license
  * @link       http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 
-
-Route::add(
+Router::add(
     '/books/load/?([0-9]+)?/?([0-9]+)?/?([\d\D]+)?',
     'book/loadBooks',
     'get'
 );
 
 
-Route::add(
+Router::add(
     '/book/view/([1-9]{1}[0-9]*)',
     'book/view',
     'get',
@@ -33,10 +33,10 @@ Route::add(
     }
 );
 
-Route::add('/librarian', 'admin/login');
-Route::add('/librarian/login', 'admin/login');
+Router::add('/librarian', 'admin/login');
+Router::add('/librarian/login', 'admin/login');
 
-Route::add(
+Router::add(
     '/librarian/home',
     'admin/getHomePage',
     'get',
@@ -52,7 +52,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/librarian/profile',
     'admin/profile',
     'get',
@@ -68,7 +68,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/librarian/profile',
     'admin/updateProfile',
     'post',
@@ -85,8 +85,8 @@ Route::add(
 );
 
 
-Route::add(
-    '/librarian/manageUsers',
+Router::add(
+    '/librarian/user-management',
     'manageUser/manageRegUsers',
     'get',
     function () {
@@ -101,7 +101,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/librarian/logout',
     'admin/logout',
     'get',
@@ -118,12 +118,12 @@ Route::add(
 );
 
 
-Route::add('/admin/login', 'admin/login');
-Route::add('/admin', 'admin/login');
-Route::add('/admin/login', 'admin/dologin', 'post');
+Router::add('/admin/login', 'admin/login');
+Router::add('/admin', 'admin/login');
+Router::add('/admin/login', 'admin/dologin', 'post');
 
 
-Route::add(
+Router::add(
     '/book/search',
     'book/findBook',
     'get',
@@ -137,7 +137,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/book/search/?([^/]+)?/?([0-9]+)?/?([0-9]+)?',
     'book/findMoreBooks',
     'get',

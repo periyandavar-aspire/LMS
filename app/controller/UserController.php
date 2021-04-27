@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * UserController Class Handles the requests by user
  *

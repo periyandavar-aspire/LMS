@@ -1,8 +1,10 @@
-<!-- footer starts -->
 <?php
+defined('VALID_REQ') or exit('Invalid request');
 if (!isset($footer)) {
     return;
-} ?>
+} 
+?>
+<!-- footer starts -->
 <footer id="footer">
     <div class="container">
         <div class="row">

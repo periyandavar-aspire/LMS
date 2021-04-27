@@ -1,3 +1,6 @@
+<?php
+defined('VALID_REQ') or exit('Invalid request');
+?>
 <!-- header starts -->
 <header class="err-500-container">
     <div class="header-content">

@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * AuthorModel Class Handles the AuthorController class data base operations
  *

@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * ManageUserController Class allows ys to manage the users
  *

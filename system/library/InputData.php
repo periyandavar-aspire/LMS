@@ -1,19 +1,21 @@
 <?php
 /**
- * InputData File Doc Comment
+ * InputData
  * php version 7.3.5
  *
  * @category InputData
- * @package  InputData
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * InputData Class used to access the GET, POST and SESSION values
  *
  * @category InputData
- * @package  InputData
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -105,11 +107,11 @@ final class InputData
      * @param string|null $key     key name
      * @param string|null $default default value
      *
-     * @return void
+     * @return string|null
      */
-    public function session(?string $key, ?string $default = null): string
+    public function session(?string $key, ?string $default = null): ?string
     {
-        return base64_decode($this->_checkKey($this->_sessionData, $key));
+        return ($this->_checkKey($this->_sessionData, $key));
     }
 
     /**
@@ -129,9 +131,8 @@ final class InputData
      * This function is used to check the given key is exists in the array or not
      * and returns the value if the key is exists else false
      *
-     * @param array       $data    Data
-     * @param string|null $key     Key name
-     * @param string|null $default Default value
+     * @param array       $data Data
+     * @param string|null $key  Key name
      *
      * @return mixed
      */

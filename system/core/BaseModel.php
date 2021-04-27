@@ -1,6 +1,6 @@
 <?php
 /**
- * BaseModel File Doc Comment
+ * BaseModel
  * php version 7.3.5
  *
  * @category Model
@@ -9,14 +9,14 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') OR exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Super class for all Model. All Model class should extend this Model.
  * BaseModel class consists of basic level functions for various purposes
  *
  * @category   Model
- * @package    Model
- * @subpackage BaseModel
+ * @package    Core
+ * @subpackage Model
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
@@ -26,7 +26,7 @@ class BaseModel
     /**
      * Database connection variable
      *
-     * @var BaseDbHandler $db
+     * @var Database $db
      */
     protected $db;
 
@@ -35,16 +35,10 @@ class BaseModel
      */
     public function __construct()
     {
-        global $dbConfig;
-        $handler = $dbConfig['driver'] . 'Driver';
-        $this->db = $handler::getInstance(
-            $dbConfig['host'],
-            $dbConfig['user'],
-            $dbConfig['password'],
-            $dbConfig['database'],
-            $dbConfig['driver']
-        );
+        $this->db = DatabaseFactory::create();
+        Log::getInstance()->info("The model is initalized successfully");
     }
+
     /**
      * Close the db connection
      */

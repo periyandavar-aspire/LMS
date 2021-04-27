@@ -1,20 +1,22 @@
 <?php
 /**
- * FormDataValidation File Doc Comment
+ * FormDataValidation
  * php version 7.3.5
  *
  * @category FormDataValidation
- * @package  FormDataValidation
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * Fields Class used to store the input fields
  * User defined Error controller should implement this interface
  *
  * @category FormDataValidation
- * @package  FormDataValidation
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -106,12 +108,8 @@ class FormDataValidation
     ): bool {
         $flag = is_numeric($data);
         if ($flag) {
-            if (isset($start)) {
-                $flag = (int)$data > $start;
-            }
-            if (isset($end)) {
-                $flag = (int)$flag && ($data < $end);
-            }
+            isset($start) and $flag = (int)$data > $start;
+            isset($end) and $flag = ($flag && (int)($data < $end));
         }
         return $flag;
     }

@@ -1,20 +1,20 @@
 <?php
 /**
- * Utility File Doc Comment
+ * Utility
  * php version 7.3.5
  *
  * @category Utility
- * @package  Utility
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Utility Class offers various static functions
  *
  * @category Utility
- * @package  Utility
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -33,7 +33,7 @@ final class Utility
     }
 
     /**
-     * Set the session value with base64 encode
+     * Set & unset the session data
      *
      * @param string      $key   Key Name
      * @param string|null $value Value
@@ -45,25 +45,8 @@ final class Utility
         if ($value == null) {
             unset($_SESSION[$key]);
         } else {
-            $value = base64_encode($value);
             $_SESSION[$key] = $value;
         }
-    }
-
-    /**
-     * Checks whether the given key is exists in the Session array or not
-     *
-     * @param string $key Key Name
-     *
-     * @return boolean
-     */
-    public static function validateSession(string $key): bool
-    {
-        $value = (new InputData())->session($key);
-        if ($value == null) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -71,14 +54,13 @@ final class Utility
      *
      * @param string $url       URL
      * @param bool   $permanent Whether the URL is permanent or temporary
-     * 
+     *
      * @return void
      */
     public static function redirectURL(string $url, $permanent = true)
     {
-        if (!headers_sent()) {
+        !headers_sent() and
             header('Location: ../' . $url, true, ($permanent === true) ? 301 : 302);
-        }
         exit();
     }
 
@@ -111,28 +93,5 @@ final class Utility
     {
         $len = strlen($startStr);
         return (substr($str, 0, $len) === $startStr);
-    }
-
-    /**
-     * Performs Dispatch
-     *
-     * @param string $url URL
-     *
-     * @return void
-     */
-    public static function dispatch(string $url)
-    {
-        global $config;
-        $url = ltrim($url, "/");
-        $url = explode("/", $url);
-        $controller = $url[0] . "Controller";
-        $method = $url[1];
-        if (file_exists($config['controller']) . "/" . $controller . ".php") {
-            if (method_exists($controller, $method)) {
-                (new $controller())->$method();
-                exit();
-            }
-        }
-        Route::error();
     }
 }

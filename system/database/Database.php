@@ -1,6 +1,6 @@
 <?php
 /**
- * Database File Doc Comment
+ * Database
  * php version 7.3.5
  *
  * @category Database
@@ -9,7 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') OR exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Super class for all Database. All drivers should extend this Database
  * Database class consists of basic level functions for various purposes and
@@ -376,7 +376,7 @@ abstract class Database
         $index = 1;
         foreach ($funcfields as $column => $value) {
             $values .= "($value)";
-            $keys = $keys != '' 
+            $keys = $keys != ''
                 ? $keys . '`, `' . $column
                 : $column;
             if ($index < count($funcfields)) {

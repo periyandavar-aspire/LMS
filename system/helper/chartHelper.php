@@ -4,27 +4,30 @@
  * php version 7.3.5
  *
  * @category   Helper
- * @package    SYS
+ * @package    Helper
  * @subpackage Libraries
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 if (!function_exists('createChart')) {
     /**
      * Helper function to create charts
-     * 
+     *
      * @param string $id        Chart id
      * @param int    $height    Chart Height
      * @param int    $width     Chart width
-     * @param string $className Chart class 
+     * @param string $className Chart class
      *
      * @return string
      */
     function createChart(string $id, int $height = 600, int $width = 400, string $className = ''): string
     {
-        $chart = "<canvas id='$id' class='$className' height='$height' width='$width'>"
-                 ."Your browser does not support HTML5 Canvas </canvas>";
+        $chart = "<canvas id='$id' class='$className' height='$height'"
+                    . " width='$width'> Your browser does not support HTML5 Canvas "
+                    . "</canvas>";
         return $chart;
     }
 }
@@ -36,7 +39,7 @@ if (!function_exists('generateChart')) {
      * @param string $id         Id
      * @param array  $data       Data
      * @param array  $properties Properties arry
-     * 
+     *
      * @return void
      */
     function generateChart(string $id, array $data, array $properties = [])

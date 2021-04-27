@@ -9,7 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 
 define("LIKE_REQUEST_STATUS", 'Request%');
 

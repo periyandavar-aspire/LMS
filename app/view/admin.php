@@ -1,3 +1,6 @@
+<?php
+defined('VALID_REQ') or exit('Invalid request');
+?>
 <!DOCTYPE html>
 <html lang="en">
 

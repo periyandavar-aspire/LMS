@@ -1,7 +1,8 @@
 <?php
-    if (!isset($result)) {
-        return;
-    }
+defined('VALID_REQ') or exit('Invalid request');
+if (!isset($result)) {
+    return;
+}
 ?>
 <article class="main">
     <section>

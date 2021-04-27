@@ -1,3 +1,6 @@
+<?php
+defined('VALID_REQ') or exit('Invalid request');
+?>
 <article class="main">
     <section>
         <div class="container div-card">

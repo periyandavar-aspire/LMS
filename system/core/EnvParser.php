@@ -1,27 +1,23 @@
 <?php
 /**
- * Loader File
+ * EnvParser
  * php version 7.3.5
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category EnvParser
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-
-defined('VALID_REQ') or exit('Not a valid Request');
-
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * Loader Class autoloads the files
+ * EnvParser parse the env files and loads values from it
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category EnvParser
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
 class EnvParser
 {
@@ -32,14 +28,20 @@ class EnvParser
 
     /**
      * Instantitate the new EnvParser Instance
-     * 
+     *
      * @param $file ENV File Name
+     * 
+     * @throws FrameworkException
      */
     public function __construct($file)
     {
-        $this->_env = $file;
+        if (file_exists($file)) {
+            $this->_env = $file;
+        } else {
+            throw new FrameWorkException("Unable to locate ENV file");
+        }
     }
-    
+
     /**
      * Loads env file values from .env file and add to $_ENV
      *

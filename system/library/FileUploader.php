@@ -1,20 +1,21 @@
 <?php
 /**
- * FileUploader File Doc Comment
+ * FileUploader
  * php version 7.3.5
  *
  * @category FileUploader
- * @package  FileUploader
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * FileUploader Trait used to validate and handle file upload operations
  * User defined Error controller should implement this interface
  *
  * @category FileUploader
- * @package  FileUploader
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com

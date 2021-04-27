@@ -1,21 +1,21 @@
 <?php
 /**
- * BaseService File Doc Comment
+ * BaseService
  * php version 7.3.5
  *
  * @category Service
- * @package  Service
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * BaseService Class Base class for all services
+ * BaseService class, Base class for all services
  *
  * @category   Service
- * @package    Service
- * @subpackage BaseService
+ * @package    Core
+ * @subpackage Service
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com

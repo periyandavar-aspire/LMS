@@ -1,3 +1,6 @@
+<?php
+defined('VALID_REQ') or exit('Invalid request');
+?>
 <!-- header starts -->
 <header>
     <div class="header-content">
@@ -9,7 +12,7 @@
                         <p class="heading-para">We store the energy that fuels the imagination. we open up windows to
                             the world and inspire you to explore and achieve, and contribute to improving your quality
                             of life.</p>
-                        <a class="btn-link" href="/signup">JOIN NOW</a>
+                        <a class="btn-link" href="<?php echo Router::getURL('registrationPage', 'get', []);?>">JOIN NOW</a>
                     </div>
                 </div>
             </div>

@@ -1,20 +1,21 @@
 <?php
 /**
- * Exporter File Doc Comment
+ * Exporter
  * php version 7.3.5
  *
  * @category Exporter
- * @package  Exporter
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Exporter Class used to store the input Exporter
  * User defined Error controller should implement this interface
  *
  * @category Exporter
- * @package  Exporter
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -30,20 +31,18 @@ class Export
      */
     public function __construct(string $type)
     {
-        switch ($type) {
-            case 'csv':
-                $this->_exporter = new CsvExporter();
-                break;
-            case 'pdf':
-                $this->_exporter = new PdfExporter();
-                break;
-            default:
-                throw new Exception("Invalid Export type caught");
+        $file = 'system/library/export/' . $type .'Exporter.php';
+        $class = $type . 'Exporter';
+        if (file_exists($file)) {
+            include_once "$file";
+            $this->_exporter = new $class();
+        } else {
+            Log::getInstance()->Debug("Invalid export type '$file'");
         }
     }
 
     /**
-     * Generates Excel
+     * Generates the export file
      *
      * @param array      $data   Data
      * @param null|array $ignore Ignore values
@@ -56,7 +55,7 @@ class Export
     }
 
     /**
-     * Send csv file to the client
+     * Sends the export file
      *
      * @return void
      */
@@ -66,7 +65,7 @@ class Export
     }
 
     /**
-     * Stores the excel file on the server
+     * Store the export file
      *
      * @param string $destination Destination with filename
      *

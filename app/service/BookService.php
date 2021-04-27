@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * BookService Class Handles the BookService class Logical operations
  *

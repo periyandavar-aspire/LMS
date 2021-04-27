@@ -1,27 +1,23 @@
 <?php
 /**
- * Loader File
+ * Log
  * php version 7.3.5
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Log
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-
-defined('VALID_REQ') or exit('Not a valid Request');
-
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * Loader Class autoloads the files
+ * Log Class autoloads the files
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Log
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
 class Log
 {
@@ -40,12 +36,12 @@ class Log
     private $_error = null;
 
     private $_levels = [
-        0 => 0, 
-        'FATAL' => 1, 
-        'ERROR' => 2, 
-        'WARNING' => 3, 
-        'DEBUG' => 4, 
-        'INFO' => 5, 
+        0 => 0,
+        'FATAL' => 1,
+        'ERROR' => 2,
+        'WARNING' => 3,
+        'DEBUG' => 4,
+        'INFO' => 5,
         'ALL' => 6
     ];
 
@@ -72,15 +68,15 @@ class Log
             ? $level
             : "ALL";
         $this->_dir = $config['logs'];
-        $this->initialize();
+        $this->_initialize();
     }
 
     /**
-     * Ini
+     * Initialize logs
      *
      * @return void
      */
-    public function initialize()
+    private function _initialize()
     {
         $dir = opendir($this->_dir);
         while (($log = readdir($dir)) !== false) {
@@ -90,20 +86,17 @@ class Log
             ) {
                 continue;
             }
-            if (filectime($this->_dir . '/' . $log) <= time() - 14 * 24 * 60 * 60) {
-                unlink($this->_dir . '/' . $log);
-            }
+            filectime($this->_dir . '/' . $log) <= time() - 14 * 24 * 60 * 60
+                and unlink($this->_dir . '/' . $log);
         }
         closedir($dir);
         $prefix = Date('Y-m-d');
         $this->_error = $this->_error ?? $prefix . '-error.log';
         $this->_activity = $this->_activity ?? $prefix . '-activity.log';
-        if (!file_exists($this->_dir .'/'. $this->_error)) {
-            fclose(fopen($this->_dir .'/'. $this->_error, 'w'));
-        }
-        if (!file_exists($this->_dir .'/'. $this->_activity)) {
-            fclose(fopen($this->_dir .'/'. $this->_activity, 'w'));
-        }
+        !file_exists($this->_dir .'/'. $this->_error)
+            and fclose(fopen($this->_dir .'/'. $this->_error, 'w'));
+        !file_exists($this->_dir .'/'. $this->_activity)
+            and fclose(fopen($this->_dir .'/'. $this->_activity, 'w'));
     }
 
     /**
@@ -227,7 +220,7 @@ class Log
      *
      * @return bool
      */
-    protected function custom($file, $msg, $data = null): bool
+    public function custom($file, $msg, $data = null): bool
     {
         $msg .= "[" . date("m/d/Y h:i:s") . "]";
         return $this->_add($this->_dir . '/' . $file, $msg, $data);
@@ -251,18 +244,19 @@ class Log
     /**
      * Writes to log file
      *
-     * @param string $file Filename
-     * @param string $msg  Message
-     * @param array  $data Data
+     * @param string     $file Filename
+     * @param string     $msg  Message
+     * @param null|array $data Data
      *
      * @return bool
      */
-    private function _add(string $file, string $msg, array $data)
+    private function _add(string $file, string $msg, ?array $data = null)
     {
         $fp = fopen($file, "a") or null;
         if ($fp != null) {
             fwrite($fp, $msg);
-            fwrite($fp, " Data : " . print_r($data, true) . "\n");
+            isset($data) and fwrite($fp, ", Data : " . print_r($data, true));
+            fwrite($fp, "\n");
             fclose($fp);
             return true;
         } else {

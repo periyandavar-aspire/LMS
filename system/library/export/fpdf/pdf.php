@@ -1,22 +1,21 @@
 <?php
 /**
- * Fields File Doc Comment
+ * Pdf
  * php version 7.3.5
  *
- * @category Fields
- * @package  Fields
+ * @category Export
+ * @package  Export
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
-
-require_once 'fpdf/fpdf.php';
+require_once 'fpdf.php';
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * Fields Class used to store the input fields
- * User defined Error controller should implement this interface
+ * Pdf Class extends fpf set header and footer
  *
- * @category Fields
- * @package  Fields
+ * @category Export
+ * @package  Export
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com

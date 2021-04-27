@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * PdoDriver Class Handles the data base operations with PDO connection
  *
@@ -38,10 +39,16 @@ class PdoDriver extends Database
         string $db,
         string $driver
     ) {
-        $this->con = new PDO("$driver:host=$host;dbname=$db;", $user, $pass);
-        $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $this->con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+        try {
+            $this->con = new PDO("$driver:host=$host;dbname=$db;", $user, $pass);
+            $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->con->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+        } catch (PDOException $e) {
+            Log::getInstance()->fatal(
+                "Unable to establish db connection, ". $exception->getMessage(),
+            );
+            die();
+        }
     }
 
     /**
@@ -62,9 +69,8 @@ class PdoDriver extends Database
         string $db,
         string $driver
     ) {
-        if (!self::$instance) {
-            self::$instance = new static($host, $user, $pass, $db, $driver);
-        }
+        self::$instance = self::$instance 
+            ?? new static($host, $user, $pass, $db, $driver);
         return self::$instance;
     }
 
@@ -75,40 +81,41 @@ class PdoDriver extends Database
      */
     public function executeQuery(): bool
     {
-        $stmt = $this->con->prepare($this->query);
-        $index = 1;
-        foreach ((array)$this->bindValues as $bindValue) {
-            switch (gettype($bindValue)) {
-            case 'integer':
-                $paramType = PDO::PARAM_INT;
-                break;
-            default:
-                $paramType = PDO::PARAM_STR;
-                break;
+        $flag = false;
+        try {
+            $stmt = $this->con->prepare($this->query);
+            $index = 1;
+            foreach ((array)$this->bindValues as $bindValue) {
+                $paramType = gettype($bindValue) == 'integer'
+                    ? PDO::PARAM_INT
+                    : PDO::PARAM_STR;
+                $stmt->bindValue($index, $bindValue, $paramType);
+                $index++;
             }
-            $stmt->bindValue($index, $bindValue, $paramType);
-            $index++;
+            $flag = $stmt->execute();
+            if ($flag == true) {
+                $this->result = $stmt;
+            }
+        } catch (PDOException $e) {
+            Log::getInstance()->error(
+                $exception->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
         }
-        $flag = $stmt->execute();
-        if ($flag == true) {
-            $this->result = $stmt;
-        }
-
         return $flag;
     }
 
     /**
      * Fetch the records
      *
-     * @return object|bool|null
+     * @return object|null
      */
-    public function fetch() //:object|bool|null
+    public function fetch()
     {
-        if ($this->result != null) {
-            return $this->result->fetch(PDO::FETCH_OBJ);
-        } else {
-            return null;
-        }
+        return $this->result != null ? $this->result->fetch(PDO::FETCH_OBJ) : null;
     }
 
     /**
@@ -121,23 +128,34 @@ class PdoDriver extends Database
      */
     public function runQuery(string $sql, array $bindValues=[]): bool
     {
-        $stmt = $this->con->prepare($sql);
-        $index = 1;
-        foreach ($bindValues as $bindValue) {
-            switch (gettype($bindValue)) {
-            case 'integer':
-                $paramType = PDO::PARAM_INT;
-                break;
-            default:
-                $paramType = PDO::PARAM_STR;
-                break;
+        $flag = false;
+        try {
+            $stmt = $this->con->prepare($sql);
+            $index = 1;
+            foreach ($bindValues as $bindValue) {
+                switch (gettype($bindValue)) {
+                case 'integer':
+                    $paramType = PDO::PARAM_INT;
+                    break;
+                default:
+                    $paramType = PDO::PARAM_STR;
+                    break;
+                }
+                $stmt->bindValue($index, $value, $paramType);
+                $index++;
             }
-            $stmt->bindValue($index, $value, $paramType);
-            $index++;
-        }
-        $flag = $stmt->execute();
-        if ($flag == true) {
-            $this->result = $stmt;
+            $flag = $stmt->execute();
+            if ($flag == true) {
+                $this->result = $stmt;
+            }
+        } catch (PDOException $e) {
+            Log::getInstance()->error(
+                $exception->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
         }
         return $flag;
     }

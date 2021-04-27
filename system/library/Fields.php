@@ -1,20 +1,21 @@
 <?php
 /**
- * Fields File Doc Comment
+ * Fields
  * php version 7.3.5
  *
  * @category Fields
- * @package  Fields
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Fields Class used to store the input fields
  * User defined Error controller should implement this interface
  *
  * @category Fields
- * @package  Fields
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -25,15 +26,14 @@ class Fields implements Iterator
     /**
      * List of fields stored in array
      *
-     * @var    array $fields
-     * @access private
+     * @var array
      */
     private $_fields;
 
     /**
      * Instantiate new Fields instance
      *
-     * @param array $fields null value or array of strings
+     * @param array|null $fields Fields
      */
     public function __construct(?array $fields = null)
     {
@@ -255,7 +255,7 @@ class Fields implements Iterator
      *
      * @return void
      */
-    public function next(): void
+    public function next()
     {
         next($this->_fields);
     }

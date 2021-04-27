@@ -10,14 +10,16 @@
  * @license    http://license.com license
  * @link       http://url.com
  */
-Route::add('/', 'home/getIndexPage');
-Route::add('/home', 'home/getIndexPage');
-Route::add('/home/books', 'home/getBooks');
-Route::add('/home/aboutus', 'home/getAboutus');
-Route::add('/login', '/home/login');
-Route::add('/signup', '/home/registration');
-Route::add('/login', '/home/dologin', 'post');
-Route::add('/signup', '/home/createAccount', 'post');
-Route::add('/home/captcha', 'home/createCaptcha');
+defined('VALID_REQ') or exit('Invalid request');
+
+Router::add('/', 'home/getIndexPage');
+Router::add('/home', 'home/getIndexPage');
+Router::add('/home/books', 'home/getBooks');
+Router::add('/home/aboutus', 'home/getAboutus');
+Router::add('/login', '/home/login', 'get', null, 'loginPage');
+Router::add('/signup', '/home/registration', 'get', null, 'registrationPage');
+Router::add('/login', '/home/dologin', 'post');
+Router::add('/signup', '/home/createAccount', 'post');
+Router::add('/home/captcha', 'home/createCaptcha');
 
 

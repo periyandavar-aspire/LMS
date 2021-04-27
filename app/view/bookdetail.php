@@ -1,8 +1,9 @@
 <?php
-    if (!isset($book)) {
-        return;
-    }
-    ?>
+defined('VALID_REQ') or exit('Invalid request');
+if (!isset($book)) {
+    return;
+}
+?>
 <article class="main">
     <section>
         <div class="container div-card view-book">

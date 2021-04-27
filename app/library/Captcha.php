@@ -9,7 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') OR exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * HomeView Class Base class for all View Classes
  *

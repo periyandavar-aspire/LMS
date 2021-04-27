@@ -1,7 +1,8 @@
 <?php
-    if (!isset($data)) {
-        return;
-    }
+defined('VALID_REQ') or exit('Invalid request');
+if (!isset($data)) {
+    return;
+}
 ?>
 <article class="main">
     <section>

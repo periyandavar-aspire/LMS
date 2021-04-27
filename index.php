@@ -1,37 +1,70 @@
 <?php
 /**
- * Constants File Doc Comment
+ * Entry point of the application
  * All the requests are handled by this file
  * php version 7.3.5
  *
- * @category IndexFile
- * @package  IndexFile
+ * @category Index
+ * @package  Index
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
 define("VALID_REQ", true);
 
+require_once 'system/core/FrameworkException.php';
 
 require_once 'system/core/Loader.php';
 
 require_once 'system/core/EnvParser.php';
 
-require_once 'system/Database/database.php';
-
-
-
-(new EnvParser('.env'))->load();
-
-foreach (glob("app/config/*.php") as $filename) {
-    include $filename;
+/**
+ * Location of config directory
+ */
+$configDir = 'app/config';
+/**
+ * Lods env files
+ */
+try {
+    (new EnvParser('.env'))->load();
+    /**
+     * Loads all configs
+     */
+    if (file_exists('app/config')) {
+        foreach (glob("$configDir/*.php") as $filename) {
+            include $filename;
+        }
+    } else {
+        throw new FrameworkException("Unable to load config files");
+    }
+} catch (FrameWorkException $e) {
+    error_log($message . "\n", 3, "system/exceptions.log");
+    header('HTTP/1.1 500 Internal Server Error');
+    die("Server Error");
 }
 
-Loader::intialize();
-Session::getInstance();
+try {
+    Loader::intialize(); // Initialize the Loader
+} catch (FrameworkException $e) {
+    Log::getInstance()->fatal(
+        $exception->getMessage() . " in " . $exception->getFile() ." at line "
+            . $exception->getLine()
+    );
+}
+
+Session::getInstance(); // Initialize the Session
 session_start();
+
 global $config;
 
+/**
+ * Sets timezone
+ */
+isset($config['timezone']) and date_default_timezone_set($config['timezone']);
+
+/**
+ * Defines ENVIRONMENT
+ */
 define('ENVIRONMENT', $config['environment'] ?? Constants::ENV_DEVELOPMENT);
 
 if (defined('ENVIRONMENT')) {
@@ -39,14 +72,14 @@ if (defined('ENVIRONMENT')) {
     case Constants::ENV_DEVELOPMENT:
         error_reporting(E_ALL);
         break;
-
     case Constants::ENV_TESTING:
     case Constants::ENV_PRODUCTION:
         error_reporting(0);
         break;
-
     default:
-        exit('The application environment is not set correctly.');
+        Log::getInstance()->fatal("Invalid enviroment found");
+        header('HTTP/1.1 500 Internal Server Error');
+        die("Server Error");
     }
 }
 
@@ -64,22 +97,10 @@ if (!function_exists("errHandler")) {
     function errHandler($errNo, $errMsg, $errFile, $errLine)
     {
         ob_get_contents() and ob_end_clean();
-        $errNo == E_USER_WARNING || $errNo == E_USER_NOTICE
-            ? Log::getInstance()->warning(
-                $errMsg,
-                [
-                    'File' => $errFile,
-                    'Line' => $errLine
-                ]
-            )
-            : Log::getInstance()->warning(
-                $errMsg,
-                [
-                    'File' => $errFile,
-                    'Line' => $errLine
-                ]
-            );
-        Route::error();
+        Log::getInstance()->error(
+            $errMsg . ' in ' . $errFile . 'at line ' . $errLine
+        );
+        Router::error();
     }
 }
 
@@ -95,18 +116,18 @@ if (!function_exists("exceptionHandler")) {
     {
         ob_get_contents() and ob_end_clean();
         Log::getInstance()->error(
-            $exception->getMessage(),
-            [
-            'File' => $exception->getFile(),
-            'Line' => $exception->getLine()
-            ]
+            $exception->getMessage() . " in " . $exception->getFile() ." at line "
+                . $exception->getLine()
         );
-        Route::error();
+        Router::error();
     }
 }
 
+set_exception_handler('exceptionHandler');
+set_error_handler("errHandler");
+
 ob_start();
-Route::run();
+Router::run();
 $output = ob_get_contents();
 ob_end_clean();
 echo $output;

@@ -1,8 +1,9 @@
 <?php
-    if (!isset($books)) {
-        return;
-    }
-    ?>
+defined('VALID_REQ') or exit('Invalid request');
+if (!isset($books)) {
+    return;
+}
+?>
 <article class="main">
     <!-- section 1 -->
     <section>

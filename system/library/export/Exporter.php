@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * Exporter Class used to store the input Exporter
  * User defined Error controller should implement this interface

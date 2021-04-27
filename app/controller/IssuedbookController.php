@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
  * IssuedBookController Class Handles Issued books
  *
@@ -314,18 +316,5 @@ class IssuedBookController extends BaseController
         $data["iTotalRecords"] = $tcount;
         $data["iTotalDisplayRecords"] = $tfcount;
         echo json_encode($data);
-    }
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function samo()
-    {
-        // $this->load->library("exporter");
-        $csv = new Export('pdf');
-        $data = $this->model->getRequestBooks();
-        $csv->generate($data, "samp", true);
-        $csv->send();
     }
 }

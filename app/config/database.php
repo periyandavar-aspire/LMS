@@ -9,7 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Config keys and meanings
  * host - db host
@@ -25,5 +25,9 @@ $dbConfig['user'] = getenv('DB_USERNAME');
 $dbConfig['password'] = getenv('DB_PASSWORD');
 
 $dbConfig ['database'] = getenv('DB_DATABASE');
-    
-$dbConfig['driver'] = 'mysqli';
+/**
+ * For pdo  "pdo/driverName" ex: pdo/mysql
+ * For mysqli 'mysqli'
+ */
+$dbConfig['driver'] = 'pdo/mysql';
+// $dbConfig['driver'] = 'mysqli';

@@ -1,25 +1,24 @@
 <?php
 /**
- * BaseController File Doc Comment
+ * BaseController
  * php version 7.3.5
  *
  * @category Controller
- * @package  Controller
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') OR exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Super class for all controller. All controllers should extend this controller
  * BaseController class consists of basic level functions for various purposes
  *
- * @category   Controller
- * @package    Controller
- * @subpackage BaseController
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Controller
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
 class BaseController
 {
@@ -32,10 +31,15 @@ class BaseController
      */
     protected $model;
 
+    /**
+     * Autoload class objects
+     *
+     * @var array
+     */
     private $_obj=[];
 
     /**
-     * Input allows us to access the get, post, session, files method
+     * Input allows us to access the get, post, session, files values
      *
      * @var InputData $input
      */
@@ -49,18 +53,18 @@ class BaseController
     protected $service;
 
     /**
-     * Instance of BaseController
-     *
-     * @var BaseController
-     */
-    private $_instance;
-
-    /**
      * Loader class object
-     * 
+     *
      * @var Loader
      */
     protected $load;
+
+    /**
+     * Log class instance
+     *
+     * @var Log
+     */
+    protected $log;
 
     /**
      * Instantiate the BaseController instance
@@ -71,12 +75,14 @@ class BaseController
     public function __construct($model = null, $service = null)
     {
         $this->model = $model;
-        $this->input = new InputData();
         $this->service = $service;
+        $this->input = new InputData();
         $this->load = Loader::autoLoadClass($this);
+        $this->log = Log::getInstance();
+        $this->log->info("The controller is initalized successfully");
     }
 
-   
+
     /**
      * This function will load the required View(php) file without error on failure
      * only files with .php extension are allowed and those files should
@@ -99,7 +105,7 @@ class BaseController
             }
             include_once $path;
         } else {
-            echo "$path not found";
+            $this->log->debug("Unable to load the $file view");
         }
     }
 
@@ -118,20 +124,6 @@ class BaseController
     }
 
     /**
-     * This function will dispatch the request
-     *
-     * @param string $url           dispatch page url
-     * @param bool   $caseSensitive whether the url is case sensitive or not
-     *
-     * @return void
-     */
-    final public function dispatch(string $url, bool $caseSensitive = false)
-    {
-        Route::dispatch($url, 'get', $caseSensitive);
-        exit();
-    }
-
-    /**
      * This function loads html layout files
      *
      * @param string $file html filename with extension
@@ -142,11 +134,9 @@ class BaseController
     {
         global $config;
         $path = $config['layout'] . '/' . $file;
-        if (file_exists($path)) {
-            readfile($path);
-        } else {
-            echo "$path layout is missing";
-        }
+        file_exists($path)
+            ? readfile($path)
+            : $this->log->warning("Unable to load the $file layout");
     }
 
     /**
@@ -162,8 +152,8 @@ class BaseController
     final public function includeScript(string $script, ?string $path= null)
     {
         global $config;
-        $path = $path ?? ($config['static'] . '/static' . '/js');
-        $script = $path."/".$script;
+        $script = ($path ?? ($config['static'] . '/static' . '/js'))
+             . "/" . $script;
         echo "<script src='$script'></script>";
     }
 
@@ -180,8 +170,8 @@ class BaseController
     final public function includeSheet($sheet, ?string $path= null)
     {
         global $config;
-        $path = $path ?? ($config['static'] . '/static/css');
-        $sheet = $path."/".$sheet;
+        $sheet = ($path ?? ($config['static'] . '/static/css'))
+            . "/" . $sheet;
         echo "<link rel='stylesheet' type='text/css' href='$sheet'>";
     }
 
@@ -211,33 +201,6 @@ class BaseController
     }
 
     /**
-     * Executes method will call the method in controller class
-     *
-     * @param string $method Method name
-     *
-     * @return void
-     */
-    final public static function executeMethod(string $method)
-    {
-        if (method_exists(new static(), $method)) {
-            static::$method();
-        } else {
-            echo "method not exists $method";
-        }
-    }
-
-
-    // /**
-    //  * Returns instance
-    //  *
-    //  * @return BaseController
-    //  */
-    // final public static function getInstance(): BaseController
-    // {
-    //     return self::$_instance;
-    // }
-
-    /**
      * This function will call when the undefined function is called
      *
      * @param string $name function name
@@ -247,7 +210,7 @@ class BaseController
      */
     public function __call(string $name, array $args)
     {
-        echo "Error the page $name is not found..!";
+        $this->log->error("Undefined method call in " . get_called_class());
     }
 
     /**
@@ -260,26 +223,28 @@ class BaseController
      */
     public static function __callStatic($name, $args)
     {
-        echo "echo the page is not found";
+        $this->log->error("Undefined static method call in " . get_called_class());
     }
 
-    /**
-     * Making clone as deep copy instead of shallow
-     *
-     * @return void
-     */
-    public function __clone()
-    {
-        $this->model = clone $this->model;
-    }
+    // /**
+    //  * Making clone as deep copy instead of shallow
+    //  *
+    //  * @return void
+    //  */
+    // public function __clone()
+    // {
+    //     $this->model = clone $this->model;
+    //     $this->service = clone $this->service;
+    // }
+
     /**
      * Add new object to $_obj array
      *
      * @param string $name  name
      * @param mixed  $value object
-     * 
+     *
      * @return void
-     */ 
+     */
     final public function __set(string $name, $value)
     {
         $this->_obj[$name] = $value;
@@ -289,8 +254,8 @@ class BaseController
      * Get the object
      *
      * @param string $name object name
-     * 
-     * @return object|null
+     *
+     * @return mixed
      */
     final public function __get($name)
     {
@@ -298,5 +263,17 @@ class BaseController
             return $this->_obj[$name];
         }
         return null;
+    }
+
+    /**
+     * Check the object is present or not
+     *
+     * @param string $name object name
+     * 
+     * @return boolean
+     */
+    final public function __isset(string $name): bool
+    {
+        return array_key_exists($name, $this->_obj);
     }
 }

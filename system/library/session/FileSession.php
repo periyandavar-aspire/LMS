@@ -1,26 +1,23 @@
 <?php
 /**
- * Loader File
+ * FileSession Handler
  * php version 7.3.5
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category SessionHandler
+ * @package  Library
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-
-defined('VALID_REQ') or exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * Loader Class autoloads the files
+ * Custom Session handler
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category SessionHandler
+ * @package  Library
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
 class FileSession implements SessionHandlerInterface
 {
@@ -29,15 +26,15 @@ class FileSession implements SessionHandlerInterface
     /**
      * Session open
      *
+     * @param $savePath    Session path
+     * @param $sessionName Session name
+     *
      * @return bool
      */
     public function open($savePath, $sessionName)
     {
         $this->_savePath = $savePath;
-        if (!is_dir($this->_savePath)) {
-            mkdir($this->_savePath, 0777);
-        }
-
+        !is_dir($this->_savePath) and mkdir($this->_savePath, 0777);
         return true;
     }
 
@@ -54,42 +51,41 @@ class FileSession implements SessionHandlerInterface
     /**
      * Reads data from session
      *
-     * @param string $sess_id Session Id
+     * @param string $sessId Session Id
      *
      * @return null|string
      */
-    public function read($sess_id)
+    public function read($sessId)
     {
-        return (string)@file_get_contents("$this->_savePath/sess_$id");
+        return (string)@file_get_contents("$this->_savePath/$sessId");
     }
 
     /**
      * Writes data to the session db
      *
-     * @param string $sess_id Session id
-     * @param string $data    Session data
+     * @param string $sessId Session id
+     * @param string $data   Session data
      *
      * @return bool
      */
-    public function write($sess_id, $data)
+    public function write($sessId, $data)
     {
-        return file_put_contents("$this->_savePath/$sess_id", $data) === false ? false : true;
+        return file_put_contents("$this->_savePath/$sessId", $data) === false
+            ? false
+            : true;
     }
 
     /**
      * Destroy sessions
      *
-     * @param string $sess_id Session Id
+     * @param string $sessId Session Id
      *
      * @return bool
      */
-    public function destroy($sess_id)
+    public function destroy($sessId)
     {
-        $file = "$this->_savePath/sess_$id";
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
+        $file = "$this->_savePath/$sessId";
+        file_exists($file) and unlink($file);
         return true;
     }
 
@@ -107,7 +103,6 @@ class FileSession implements SessionHandlerInterface
                 unlink($file);
             }
         }
-
         return true;
     }
 }

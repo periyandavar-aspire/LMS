@@ -1,3 +1,6 @@
+<?php
+defined('VALID_REQ') or exit('Invalid request');
+?>
 <!-- top container starts -->
 <div class="top-container">
     <div class="header-content">

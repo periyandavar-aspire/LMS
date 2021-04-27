@@ -10,7 +10,9 @@
  * @license    http://license.com license
  * @link       http://url.com
  */
-Route::add(
+defined('VALID_REQ') or exit('Invalid request');
+
+Router::add(
     '/admin/profile',
     'admin/getProfile',
     'get',
@@ -26,7 +28,23 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
+    '/librarian/profile',
+    'admin/getProfile',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && $input->session('type') == LIBR_USER
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Router::add(
     '/report',
     'report/get',
     'get',
@@ -42,8 +60,9 @@ Route::add(
     }
 );
 
-Route::add(
-    '/analytics/(book|category|author|user)/?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
+Router::add(
+    '/analytics/(book|category|author|user)/'
+        . '?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
     'report/analytics',
     'get',
     function () {
@@ -58,8 +77,9 @@ Route::add(
     }
 );
 
-Route::add(
-    '/analytics/topList/(book|category|author|user)/([\d]{4}-[\d]{2}-[\d]{2})/([\d]{4}-[\d]{2}-[\d]{2})',
+Router::add(
+    '/analytics/topList/(book|category|author|user)/'
+        . '([\d]{4}-[\d]{2}-[\d]{2})/([\d]{4}-[\d]{2}-[\d]{2})',
     'report/topList',
     'get',
     function () {
@@ -74,7 +94,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/profile',
     'admin/updateProfile',
     'post',
@@ -90,7 +110,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/home',
     '/admin/getHomePage',
     'get',
@@ -107,7 +127,7 @@ Route::add(
 );
 
 
-// Route::add(
+// Router::add(
 //     '/user/([a-zA-Z0-9_]+)',
 //     'Issuedbook/getUserDetails',
 //     'get',
@@ -124,7 +144,7 @@ Route::add(
 //     }
 // );
 
-Route::add(
+Router::add(
     '/book/([1-9]{1}[0-9]*)',
     'Issuedbook/getBookDetails',
     'get',
@@ -141,8 +161,8 @@ Route::add(
     }
 );
 
-Route::add(
-    '/admin/users',
+Router::add(
+    '/admin/user-management',
     'manageUser/manageAllUsers',
     'get',
     function () {
@@ -157,7 +177,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/users',
     'manageUser/addUser',
     'post',
@@ -173,7 +193,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/settings',
     'admin/getSettings',
     'get',
@@ -189,7 +209,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/settings',
     'admin/updateSettings',
     'post',
@@ -206,7 +226,7 @@ Route::add(
 );
 
 
-Route::add(
+Router::add(
     '/admin/cms',
     'admin/getCms',
     'get',
@@ -222,7 +242,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/cms',
     '/admin/updateCms',
     'post',
@@ -238,7 +258,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/admin/logout',
     null,
     'get',
@@ -255,7 +275,7 @@ Route::add(
 );
 
 
-Route::add(
+Router::add(
     '/book/export/csv',
     'report/exportToCsv',
     'get',
@@ -272,7 +292,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/book/export/pdf',
     'report/exportToPdf',
     'get',
@@ -289,8 +309,8 @@ Route::add(
     }
 );
 
-Route::add(
-    '/categories',
+Router::add(
+    '/category-management',
     'category/manage',
     'get',
     function () {
@@ -306,98 +326,8 @@ Route::add(
     }
 );
 
-Route::add(
-    '/category/loadData',
-    'category/load',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-
-
-Route::add(
-    '/categories',
-    null,
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            $action = $input->post('action');
-            $action == null
-            ? Utility::redirectURL('categories')
-            : Utility::dispatch("/category/$action");
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/categories/delete/([1-9]{1}[0-9]*)',
-    'Category/delete',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/categories/edit/([1-9]{1}[0-9]*)',
-    'Category/get',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/categories/changeStatus/([1-9]{1}[0-9]*)/([0,1]{1})',
-    'Category/changeStatus',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/authors',
+Router::add(
+    '/author-management',
     'author/manage',
     'get',
     function () {
@@ -413,97 +343,8 @@ Route::add(
     }
 );
 
-Route::add(
-    '/author/loadData',
-    'author/load',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-
-Route::add(
-    '/authors',
-    null,
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            $action = $input->post('action');
-            $action == null
-            ? Utility::redirectURL('authors')
-            : Utility::dispatch("/author/$action");
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/authors/edit/([1-9]{1}[0-9]*)',
-    'author/get',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/authors/delete/([1-9]{1}[0-9]*)',
-    'author/delete',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/authors/changeStatus/([1-9]{1}[0-9]*)/([0,1]{1})',
-    'author/changeStatus',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/issueBook',
+Router::add(
+    '/issuebook-management',
     'Issuedbook/issue',
     'get',
     function () {
@@ -519,76 +360,8 @@ Route::add(
     }
 );
 
-Route::add(
-    '/issueBook/loadData',
-    'Issuedbook/loadIssuedBook',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            || $input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/requestBook/loadData',
-    'Issuedbook/loadRequestBook',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            || $input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/issueBook',
-    'Issuedbook/add',
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            || $input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/issuedBook/returned/([1-9]{1}[0-9]*)',
-    'Issuedbook/markAsReturn',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            || $input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/userRequest',
+Router::add(
+    '/request-management',
     'Issuedbook/manageUserRequest',
     'get',
     function () {
@@ -604,42 +377,8 @@ Route::add(
     }
 );
 
-Route::add(
-    '/userRequest/([1-9]{1}[0-9]*)',
-    'Issuedbook/manageRequest',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            || $input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('/login');
-        }
-    }
-);
-
-Route::add(
-    '/userRequest/([1-9]{1}[0-9]*)',
-    'Issuedbook/updateRequest',
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            || $input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('/login');
-        }
-    }
-);
-
-Route::add(
-    '/books',
+Router::add(
+    '/book-management',
     'book/manageBooks',
     'get',
     function () {
@@ -655,226 +394,11 @@ Route::add(
     }
 );
 
-Route::add(
-    '/book/loadData',
-    'book/load',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
 
-Route::add(
-    '/allUser/loadData',
-    'manageuser/loadAllUser',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/allregUser/loadData',
-    'manageuser/loadRegUser',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/books/add',
-    'book/newBook',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/books/add',
-    'book/add',
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/books/edit/([1-9]{1}[0-9]*)',
-    'book/getToEdit',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-Route::add(
-    '/books/edit/([1-9]{1}[0-9]*)',
-    'book/update',
-    'post',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/books/delete/([1-9]{1}[0-9]*)',
-    'book/delete',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/books/changeStatus/([1-9]{1}[0-9]*)/([0,1]{1})',
-    'book/changeStatus',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add('/book/authors/([A-Za-z ]+)/([0-9 ,]*)', 'author/search');
-Route::add('/book/categories/([A-Za-z ]+)/([0-9 ,]*)', 'category/search');
-
-Route::add(
-    '/user/get/([a-zA-Z0-9_]+)',
-    'user/search',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Route::add(
-    '/book/get/([0-9]+)',
-    'book/search',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == LIBR_USER
-            ||$input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
+Router::add('/book/authors/([A-Za-z ]+)/([0-9 ,]*)', 'author/search');
+Router::add('/book/categories/([A-Za-z ]+)/([0-9 ,]*)', 'category/search');
 
 
-Route::add('/book/categories', 'category/getCategories');
-Route::add('/book/authors', 'author/getAuthors');
-Route::add(
-    '/user/allRoles',
-    'manageUser/getUserRoles',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == ADMIN_USER
-        ) {
-            return true;
-        } else {
-            echo "Invalid Request";
-        }
-    }
-);
+Router::add('/book/categories', 'category/getCategories');
+Router::add('/book/authors', 'author/getAuthors');
 
-Route::add(
-    '/user/delete/(user|librarian|admin)/([1-9]{1}[0-9]*)',
-    'manageuser/delete',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && ($input->session('type') == ADMIN_USER)
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);

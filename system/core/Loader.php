@@ -1,27 +1,23 @@
 <?php
 /**
- * Loader File
+ * Loader
  * php version 7.3.5
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Loader
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-
-defined('VALID_REQ') or exit('Not a valid Request');
-
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Loader Class autoloads the files
  *
- * @category   Loader
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Loader
+ * @package  Core
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
 class Loader
 {
@@ -32,33 +28,22 @@ class Loader
      */
     private static $_instance = null;
 
-    private static $_autoLoadClasses = [];
-
     /**
      * Controller object
+     *
+     * @var Loader
      */
     private static $_ctrl;
 
     /**
-     * Instantiate the new Loader instance
+     * Instantiate the the Loader instance
      */
     public function __construct()
     {
         $this->_defaultRegister();
         $this->loadAll('system/core');
+        $this->loadAll('system/database');
         $this->loadAll('app/config/routes');
-    }
-
-    /**
-     * Register new spl_autoload_register callback fucntion
-     *
-     * @param callable $callback Callback function
-     *
-     * @return void
-     */
-    public function regiterAutoload(callable $callback)
-    {
-        spl_autoload_register($callback);
     }
 
     /**
@@ -67,28 +52,23 @@ class Loader
      *
      * @param BaseController $ctrl Controller object
      *
-     * @return null|Loader
+     * @return Loader
+     * @throws FrameworkException
      */
-    public static function autoLoadClass(BaseController $ctrl): ?Loader
+    public static function autoLoadClass(BaseController $ctrl): Loader
     {
         global $autoload;
+        $loads = ['model', 'service', 'library', 'helper'];
         if (isset(static::$_instance)) {
             static::$_ctrl = $ctrl;
-            $models = $autoload['model'];
-            is_array($models) or $models = array($models);
-            static::$_instance->model(...$models);
-            $services = $autoload['service'];
-            is_array($services) or $services = array($services);
-            static::$_instance->service(...$services);
-            $libraries = $autoload['library'];
-            is_array($libraries) or $libraries = array($libraries);
-            static::$_instance->library(...$libraries);
-            $helpers = $autoload['helper'];
-            is_array($helpers) or $helpers = array($helper);
-            static::$_instance->helper(...$helpers);
+            foreach ($loads as $load) {
+                $files = $autoload[$load];
+                is_array($files) or $files = array($files);
+                static::$_instance->$load(...$files);
+            }
             return static::$_instance;
         }
-        return null;
+        throw new FrameworkException("Loader class is not Initialized");
     }
 
     /**
@@ -97,6 +77,7 @@ class Loader
      * @param string ...$models Model list
      *
      * @return void
+     * @throws FrameworkException
      */
     public function model(...$models)
     {
@@ -107,7 +88,9 @@ class Loader
                 include_once $file;
                 static::$_ctrl->{lcfirst($model)} = new $model();
             } else {
-                throw new Exception("Model class '$model' not found");
+                throw new FrameworkException(
+                    "Unable to locate the model class '$model'"
+                );
             }
         }
     }
@@ -118,6 +101,7 @@ class Loader
      * @param string ...$services Service list
      *
      * @return void
+     * @throws FrameworkException
      */
     public function service(...$services)
     {
@@ -128,7 +112,9 @@ class Loader
                 include_once $file;
                 static::$_ctrl->{lcfirst($service)} = new $service();
             } else {
-                throw new Exception("Service class '$service' not found");
+                throw new FrameworkException(
+                    "Unable to loacate the '$service' class"
+                );
             }
         }
     }
@@ -139,6 +125,7 @@ class Loader
      * @param string ...$libraries Library list
      *
      * @return void
+     * @throws FrameworkException
      */
     public function library(...$libraries)
     {
@@ -151,7 +138,7 @@ class Loader
                 include_once "system/library/" . $library . '.php';
                 static::$_ctrl->{lcfirst($library)} = new $library();
             } else {
-                throw new Exception("Library class '$library' not found");
+                throw new FrameworkException("Library class '$library' not found");
             }
         }
     }
@@ -163,6 +150,7 @@ class Loader
      * @param string ...$helpers Helper list
      *
      * @return void
+     * @throws FrameworkException
      */
     public function helper(...$helpers)
     {
@@ -173,7 +161,7 @@ class Loader
             } elseif (file_exists('system/helper/' . $helper . '.php')) {
                 include_once 'system/helper/' . $helper . '.php';
             } else {
-                throw new Exception("Helper class '$helper' not found");
+                throw new FrameworkException("Helper class '$helper' not found");
             }
         }
     }
@@ -214,37 +202,29 @@ class Loader
     {
         spl_autoload_register(
             function ($className) {
-                $file = 'system/library/' . $className . ".php";
-                if (file_exists($file)) {
-                    include_once $file;
-                }
-            }
-        );
-
-        spl_autoload_register(
-            function ($className) {
                 global $config;
                 if (Utility::endsWith(strtolower($className), 'controller')) {
-                    $ctrlPath = $config['controller'];
-                    $file = $ctrlPath . $className . ".php";
+                    $file = $config['controller'] . $className . ".php";
                     if (file_exists($file)) {
                         include_once $file;
                     }
                 } elseif (Utility::endsWith(strtolower($className), 'model')) {
-                    $ModelPath = $config['model'];
-                    $file = $ModelPath . $className . ".php";
+                    $file = $config['model'] . $className . ".php";
                     if (file_exists($file)) {
                         include_once $file;
                     }
                 } elseif (Utility::endsWith(strtolower($className), 'service')) {
-                    $ModelPath = $config['service'];
-                    $file = $ModelPath . $className . ".php";
+                    $file = $config['service'] . $className . ".php";
                     if (file_exists($file)) {
                         include_once $file;
                     }
                 } elseif (Utility::endsWith(strtolower($className), 'driver')) {
-                    $DriverPath = 'system/database/driver/';
-                    $file = $DriverPath . $className . ".php";
+                    $file = 'system/database/driver/' . $className . ".php";
+                    if (file_exists($file)) {
+                        include_once $file;
+                    }
+                } else {
+                    $file = 'system/library/' . $className . ".php";
                     if (file_exists($file)) {
                         include_once $file;
                     }

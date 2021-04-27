@@ -1,20 +1,20 @@
 <?php
 /**
- * Fields File Doc Comment
+ * CsvExporter
  * php version 7.3.5
  *
- * @category Fields
- * @package  Fields
+ * @category Export
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * Fields Class used to store the input fields
- * User defined Error controller should implement this interface
+ * Export the data into csv
  *
- * @category Fields
- * @package  Fields
+ * @category Export
+ * @package  Library
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -39,7 +39,7 @@ class CsvExporter
     }
 
     /**
-     * Generates Excel
+     * Generates Csv
      *
      * @param array      $data       Data
      * @param null|array $ignoreList Ignore values
@@ -66,7 +66,7 @@ class CsvExporter
     }
 
     /**
-     * Stores the excel file on the server
+     * Stores the csv file on the server
      *
      * @param string $destination Destination with filename
      *

@@ -9,7 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') OR exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * HomeController Class Handles all the request to the home page
  *

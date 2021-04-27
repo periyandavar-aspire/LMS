@@ -1,20 +1,22 @@
 <?php
 /**
- * MysqliDriver File Doc Comment
+ * MysqliDriver
  * php version 7.3.5
  *
- * @category Database
- * @package  Database
- * @author   Periyandavar <periyandavar@gmail.com>
- * @license  http://license.com license
- * @link     http://url.com
+ * @category   Database
+ * @package    Database
+ * @subpackage DatabaseDriver
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * MysqliDriver Class performs database operations with mysqli connection
  *
  * @category   Database
  * @package    Database
- * @subpackage MysqliDriver
+ * @subpackage DatabaseDriver
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
@@ -22,7 +24,7 @@
 class MysqliDriver extends Database
 {
     /**
-     * Instantiate a new MysqliDriver instance
+     * Instantiate a MysqliDriver instance
      *
      * @param string $host Host
      * @param string $user Username
@@ -31,7 +33,14 @@ class MysqliDriver extends Database
      */
     public function __construct(string $host, string $user, string $pass, string $db)
     {
-        $this->con = new mysqli($host, $user, $pass, $db);
+        try {
+            $this->con = new mysqli($host, $user, $pass, $db);
+        } catch (Mysqli_sql_exception $e) {
+            Log::getInstance()->fatal(
+                "Unable to establish db connection, ". $exception->getMessage(),
+            );
+            die();
+        }
     }
 
     /**
@@ -52,9 +61,7 @@ class MysqliDriver extends Database
         string $db,
         string $driver
     ): MysqliDriver {
-        if (!self::$instance) {
-            self::$instance = new static($host, $user, $pass, $db);
-        }
+        self::$instance = self::$instance ?? new static($host, $user, $pass, $db);
         return self::$instance;
     }
 
@@ -65,32 +72,39 @@ class MysqliDriver extends Database
      */
     public function executeQuery(): bool
     {
-        $stmt = $this->con->prepare($this->query);
-        $paramType = "";
-        if (is_array($this->bindValues)) {
-            foreach ($this->bindValues as $bindValue) {
-                switch (gettype($bindValue)) {
-                case 'integer':
-                    $paramType .= "i";
-                    break;
-                case 'double':
-                    $paramType .= "d";
-                    break;
-                default:
-                    $paramType .= "s";
-                    break;
+        $flag = false;
+        try {
+            $stmt = $this->con->prepare($this->query);
+            $paramType = "";
+            if (is_array($this->bindValues)) {
+                foreach ($this->bindValues as $bindValue) {
+                    switch (gettype($bindValue)) {
+                    case 'integer':
+                        $paramType .= "i";
+                        break;
+                    case 'double':
+                        $paramType .= "d";
+                        break;
+                    default:
+                        $paramType .= "s";
+                        break;
+                    }
                 }
+                $stmt->bind_param($paramType, ...$this->bindValues);
             }
-            $stmt->bind_param($paramType, ...$this->bindValues);
-        }
-        $flag = $stmt->execute();
-        if ($flag == true) {
-            $result = $stmt->get_result();
-            if ($result == false) {
-                $this->result = null;
-            } else {
-                $this->result = $result;
+            $flag = $stmt->execute();
+            if ($flag) {
+                $result = $stmt->get_result();
+                $this->result = ($result == false) ? null : $this->result = $result;
             }
+        } catch (Mysqli_sql_exception $e) {
+            Log::getInstance()->error(
+                $exception->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
         }
         return $flag;
     }
@@ -98,16 +112,11 @@ class MysqliDriver extends Database
     /**
      * Fetch the records
      *
-     * @return object|bool|null
+     * @return object|bool
      */
-    public function fetch() //:object|bool|null
+    public function fetch()
     {
-        if ($this->result != null) {
-            $obj = $this->result->fetch_object();
-            return $obj;
-        } else {
-            return null;
-        }
+        return $this->result != null ? $this->result->fetch_object() : null;
     }
 
     /**
@@ -120,32 +129,39 @@ class MysqliDriver extends Database
      */
     public function runQuery(string $sql, array $bindValues=[]): bool
     {
-        $stmt = $this->con->prepare($sql);
-        $paramType = "";
-        foreach ($bindValues as $bindValue) {
-            switch (gettype($bindValue)) {
-            case 'integer':
-                $paramType .= "i";
-                break;
-            case 'double':
-                $paramType .= "d";
-                break;
-            default:
-                $paramType .= "s";
-                break;
+        $flag = false;
+        try {
+            $stmt = $this->con->prepare($sql);
+            $paramType = "";
+            foreach ($bindValues as $bindValue) {
+                switch (gettype($bindValue)) {
+                case 'integer':
+                    $paramType .= "i";
+                    break;
+                case 'double':
+                    $paramType .= "d";
+                    break;
+                default:
+                    $paramType .= "s";
+                    break;
+                }
             }
-        }
-        if (count($bindValues) != 0) {
-            $stmt->bind_param($paramType, ...$bindValues);
-        }
-        $flag = $stmt->execute();
-        if ($flag == true) {
-            $result = $stmt->get_result();
-            if ($result == false) {
-                $this->result = null;
-            } else {
-                $this->result = $result;
+            if (count($bindValues) != 0) {
+                $stmt->bind_param($paramType, ...$bindValues);
             }
+            $flag = $stmt->execute();
+            if ($flag == true) {
+                $result = $stmt->get_result();
+                $this->result = ($result == false) ? null : $this->result = $result;
+            }
+        } catch (Mysqli_sql_exception $e) {
+            Log::getInstance()->error(
+                $exception->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
         }
         return $flag;
     }
@@ -175,7 +191,7 @@ class MysqliDriver extends Database
         return $this->con->insert_id;
     }
 
-    
+
     /**
      * Begin the transaction
      *

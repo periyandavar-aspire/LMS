@@ -1,9 +1,11 @@
-<!-- header starts -->
+
 <?php
-    if (!isset($books)) {
-        return;
-    }
-    ?>
+defined('VALID_REQ') or exit('Invalid request');
+if (!isset($books)) {
+    return;
+}
+?>
+<!-- header starts -->
 <header class="books-header">
     <div class="header-content">
         <div class="container">

@@ -1,3 +1,6 @@
+<?php
+defined('VALID_REQ') or exit('Invalid request');
+?>
 <div class="row-container">
     <div class="row">
         <div class="cols">

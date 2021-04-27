@@ -1,24 +1,25 @@
 <?php
 /**
- * Route File Doc Comment
+ * Router
  * php version 7.3.5
  *
- * @category Route
- * @package  Route
+ * @category Router
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 /**
- * Route Class handles routing
+ * Router Class handles routing
  *
- * @category Route
- * @package  Route
+ * @category Router
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
-class Route
+class Router
 {
     /**
      * GET method Routes
@@ -33,6 +34,20 @@ class Route
      * @var array
      */
     private static $_postMethodRoutes = [];
+
+    /**
+     * PUT method routes
+     *
+     * @var array
+     */
+    private static $_putMethodRoutes = [];
+
+    /**
+     * DELETE method routes
+     *
+     * @var array
+     */
+    private static $_deleteMethodRoutes = [];
 
     /**
      * Other method routes
@@ -54,6 +69,7 @@ class Route
      * @param string|null   $expression execution value (controller/method)
      * @param string        $method     method Name
      * @param callable|null $filter     filter function
+     * @param string|null   $name       Route alias name
      *
      * @return void
      */
@@ -61,25 +77,128 @@ class Route
         string $route,
         ?string $expression = null,
         string $method = Constants::METHOD_GET,
-        ?callable $filter = null
+        ?callable $filter = null,
+        ?string $name = null
     ) {
         $method = strtolower($method);
-        if ($method == Constants::METHOD_GET) {
-            array_push(
-                self::$_getMethodRoutes,
-                [ 'route' => $route, 'expression' => $expression,'rule' => $filter]
-            );
-        } elseif ($method == Constants::METHOD_POST) {
-            array_push(
-                self::$_postMethodRoutes,
-                [ 'route' => $route, 'expression' => $expression,'rule' => $filter]
-            );
-        } else {
-            array_push(
-                self::$_otherRoutes,
-                [ 'route' => $route, 'expression' => $expression,'rule' => $filter]
-            );
+        switch ($method) {
+        case Constants::METHOD_GET:
+            $name != null
+                ? self::$_getMethodRoutes[$name] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ]
+                : self::$_getMethodRoutes[] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ];
+            break;
+
+        case Constants::METHOD_POST:
+            $name != null
+                ? self::$_postMethodRoutes[$name] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ]
+                : self::$_postMethodRoutes[] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ];
+            break;
+        case Constants::METHOD_PUT:
+            $name != null
+                ? self::$_putMethodRoutes[$name] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ]
+                : self::$_putMethodRoutes[] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ];
+            break;
+        case Constants::METHOD_DELETE:
+            $name != null
+                ? self::$_deleteMethodRoutes[$name] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ]
+                : self::$_deleteMethodRoutes[] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ];
+            break;
+        default:
+            $name != null
+                ? self::$_otherRoutes[$name] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ]
+                : self::$_otherRoutes[] = [
+                    'route' => $route,
+                    'expression' => $expression,
+                    'rule' => $filter
+                    ];
+            break;
         }
+    }
+
+    /**
+     * Returns the URL
+     *
+     * @param string     $name   URL alias name
+     * @param string     $method URL method
+     * @param array|null $data   URL data
+     *
+     * @return string|null
+     */
+    public static function getURL(
+        string $name,
+        string $method = 'get',
+        array $data = null
+    ): ?string {
+        $route = null;
+        switch ($method) {
+        case Constants::METHOD_GET:
+            $route = isset(self::$_getMethodRoutes[$name])
+                ? self::$_getMethodRoutes[$name]['route']
+                : null;
+            break;
+        case Constants::METHOD_POST:
+            $route = isset(self::$_postMethodRoutes[$name])
+                ? self::$_postMethodRoutes[$name]['route']
+                : null;
+            break;
+        case Constants::METHOD_PUT:
+            $route = isset(self::$_putMethodRoutes[$name])
+                ? self::$_putMethodRoutes[$name]['route']
+                : null;
+            break;
+        case Constants::METHOD_DELETE:
+            $route = isset(self::$_deleteMethodRoutes[$name])
+                ? self::$_deleteMethodRoutes[$name]['route']
+                : null;
+            break;
+        default:
+            $route = isset(self::$_otherRoutes[$name])
+                ? self::$_otherRoutes[$name]['route']
+                : null;
+            break;
+        }
+        if ($route != null) {
+            foreach ($data as $value) {
+                $route .= "/" . $value;
+            }
+        }
+        return $route;
     }
 
     /**
@@ -131,12 +250,22 @@ class Route
         $path = $parsedUrl['path'] ?? '/';
         $path = urldecode($path);
         $reqMethod = strtolower($_SERVER['REQUEST_METHOD']);
-        if ($reqMethod == Constants::METHOD_GET) {
+        switch ($reqMethod) {
+        case Constants::METHOD_GET:
             self::handleRequest($path, self::$_getMethodRoutes, $caseSensitive);
-        } elseif ($reqMethod == Constants::METHOD_POST) {
+            break;
+        case Constants::METHOD_POST:
             self::handleRequest($path, self::$_postMethodRoutes, $caseSensitive);
-        } else {
-            self::handleRequest($path, self::$_otherRoutes, $caseSensitive);
+            break;
+        case Constants::METHOD_PUT:
+            self::handleRequest($path, self::$_putMethodRoutes, $caseSensitive);
+            break;
+        case Constants::METHOD_DELETE:
+            self::handleRequest($path, self::$_deleteMethodRoutes, $caseSensitive);
+            break;
+        default:
+            self::handleRequest($path, self::$_otherMethodRoutes, $caseSensitive);
+            break;
         }
     }
 
@@ -160,9 +289,8 @@ class Route
         foreach ($routes as $route) {
             $routeUrl = '#^' . $route['route'] . '$#';
 
-            if (!$caseSensitive) {
+            !$caseSensitive and
                 $routeUrl = $routeUrl . 'i';
-            }
             if (preg_match($routeUrl, $path, $matches)) {
                 $pathMatch = true;
                 $rule = $route['rule'];
@@ -200,9 +328,7 @@ class Route
                     }
                 }
             }
-            if (!headers_sent()) {
-                header('HTTP/1.1 404 Not Found');
-            }
+            !headers_sent() and header('HTTP/1.1 404 Not Found');
             die('404 - The file not found');
         }
         if (!$methodMatch) {
@@ -219,34 +345,8 @@ class Route
                     }
                 }
             }
-            if (!headers_sent()) {
-                header('HTTP/1.1 400 Bad Request');
-            }
+            !headers_sent() and header('HTTP/1.1 400 Bad Request');
             die('404 - The method not allowed');
-        }
-    }
-
-    /**
-     * Dispatch the Request
-     *
-     * @param string  $path          Requested URL path
-     * @param string  $method        Method Name
-     * @param boolean $caseSensitive Does the URL is case sensitive or not
-     *
-     * @return void
-     */
-    public static function dispatch(
-        string $path,
-        string $method,
-        bool $caseSensitive
-    ) {
-        $method = strtolower($method);
-        if ($method == Constants::METHOD_GET) {
-            self::handleRequest($path, self::$_getMethodRoutes, $caseSensitive);
-        } elseif ($method == Constants::METHOD_POST) {
-            self::handleRequest($path, self::$_postMethodRoutes, $caseSensitive);
-        } else {
-            self::handleRequest($path, self::$_otherRoutes, $caseSensitive);
         }
     }
 
@@ -254,7 +354,7 @@ class Route
      * Calls when an error occured
      *
      * @param string|null $data Error data
-     * 
+     *
      * @return void
      */
     public static function error(?string $data = null)
@@ -279,9 +379,7 @@ class Route
                 }
             }
         }
-        if (!headers_sent()) {
-            header('HTTP/1.1 500 Internal Server Error');
-        }
+        !headers_sent() and header('HTTP/1.1 500 Internal Server Error');
         die('500 - Server Error');
         exit();
     }

@@ -9,7 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Not a valid Request');
+defined('VALID_REQ') or exit('Invalid request');
 /**
  * Base URL of the site
  */
@@ -39,10 +39,6 @@ $config['helper'] = "app/helper/";
  */
 $config['layout'] = "static/layout/";
 /**
- * Path to custom db handlers
- */
-$config['db_handler'] = "app/dbHandler/";
-/**
  * Path to services
  */
 $config['service'] = "app/service/";
@@ -69,15 +65,25 @@ $config['logs'] = "app/log";
 /**
  * Session driver available options file|database
  */
-$config['session_driver'] = 'file';
+$config['session_driver'] = 'database';
+// $config['session_driver'] = 'file';
 /**
  * Session expiration time
  */
 $config['session_expiration'] = 7200;
 /**
+ * Cookie expiration time
+ */
+$config['cookie_expiration'] = 86400;
+/**
  * Session save path
  */
-$config['session_save_path'] = 'C:\xampp\htdocs\LMS\sess';
+$config['session_save_path'] = 'sess'; 
+// $config['session_save_path'] = 'C:\xampp\LMS\sess';
+/**
+ * Sets default timezone
+ */
+$config['timezone'] = 'Asia/Kolkata';
 /**
  * Server email from this all mails were sent
  */

@@ -10,8 +10,9 @@
  * @license    http://license.com license
  * @link       http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
 
-Route::add(
+Router::add(
     '/user/home',
     null,
     'get',
@@ -27,7 +28,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/user/profile',
     null,
     'get',
@@ -43,7 +44,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/user/profile/update',
     'user/updateProfile',
     'post',
@@ -59,7 +60,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/user/availbleBooks',
     'Book/getAvailableBooks',
     'get',
@@ -75,7 +76,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/user/lentBooks',
     'user/getLentBooks',
     'get',
@@ -91,7 +92,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/user/requestedBooks',
     'user/getRequestedBooks',
     'get',
@@ -106,7 +107,7 @@ Route::add(
         }
     }
 );
-Route::add(
+Router::add(
     '/userRequest/delete/([1-9]{1}[0-9]*)',
     'user/removeRequest',
     'get',
@@ -122,7 +123,7 @@ Route::add(
     }
 );
 
-Route::add(
+Router::add(
     '/user/logout',
     null,
     'get',
@@ -137,7 +138,7 @@ Route::add(
         }
     }
 );
-Route::add(
+Router::add(
     '/book/request/([1-9]{1}[0-9]*)',
     'Issuedbook/request',
     'get',
@@ -152,4 +153,3 @@ Route::add(
         }
     }
 );
-

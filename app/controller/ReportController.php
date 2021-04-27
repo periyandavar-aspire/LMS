@@ -1,6 +1,6 @@
 <?php
 /**
- * BookController File Doc Comment
+ * ReportController File Doc Comment
  * php version 7.3.5
  *
  * @category Controller
@@ -9,12 +9,14 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+defined('VALID_REQ') or exit('Invalid request');
+
 /**
- * BookController Class Handles the requests related to the Books
+ * ReportController Class Handles the requests related to the Books
  *
  * @category   Controller
  * @package    Controller
- * @subpackage BookController
+ * @subpackage ReportController
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
