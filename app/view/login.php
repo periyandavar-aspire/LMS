@@ -34,7 +34,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                     <input type="text" name="captcha" maxlength="5" autocomplete="off"
                                         placeholder="Verification Code..." required=""
                                         style="width: 150px; height: 25px;">&nbsp;<img id="logImg"
-                                        src="<?php echo Utility::baseURL() . "/home/captcha"; ?>">
+                                        src="<?php echo Utility::baseURL() . "/captcha"; ?>">
                                 </div>
                                 <div class="form-buttons">
                                     <button type="submit" name="login" class="btn-link">Login</button>

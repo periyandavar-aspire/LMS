@@ -41,6 +41,10 @@ class BookController extends BaseController
         $this->loadLayout($user . "Header.html");
         $this->loadView("manageBooks");
         $this->loadLayout($user . "Footer.html");
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -88,15 +92,31 @@ class BookController extends BaseController
     // }
 
     /**
-     * Handles the search form and return the search result
+     * Displays the book details of the given Id in JSON
+     *
+     * @param int $id book Id
      *
      * @return void
      */
-    public function findBook()
+    public function get(int $id)
+    {
+        $result = $this->model->get($id);
+        echo json_encode($result);
+    }
+
+    /**
+     * Handles the search form and return the search result
+     * 
+     * @param int $offset offset
+     * @param int $limit  Limit value
+     *
+     * @return void
+     */
+    public function search(int $offset = 0, int $limit = 12)
     {
         $user = $this->input->session('type');
         $keyword = $this->input->get('search') ?? '';
-        $data['books'] = $this->model->searchBook($keyword);
+        $data['books'] = $this->model->searchBook($keyword, $offset, $limit);
         $data['searchKey'] = $keyword;
         $this->loadLayout($user.'header.html');
         $this->loadView("searchBook", $data);
@@ -113,10 +133,11 @@ class BookController extends BaseController
      *
      * @return void
      */
-    public function loadBooks(
-        int $offset = 0,
-        int $limit = 5
-    ) {
+    public function loadBooks()
+    {
+        $offset = $this->input->get('offset') ?? 0;
+        $limit = $this->input->get('limit') ?? 12;
+        $search = $this->input->get("search");
         $data["books"] = $this->model->getAvailableBooks(
             $offset,
             $limit,
@@ -125,27 +146,27 @@ class BookController extends BaseController
         echo json_encode($data);
     }
 
-    /**
-     * Displays the books requested by the user
-     *
-     * @param string $search Search Key
-     * @param int    $offset Offset
-     * @param int    $limit  Limit
-     *
-     * @return void
-     */
-    public function findMoreBooks(
-        string $search,
-        int $offset = 0,
-        int $limit = 12
-    ) {
-        $data["books"] = $this->model->searchBook(
-            $search,
-            $offset,
-            $limit
-        );
-        echo json_encode($data);
-    }
+    // /**
+    //  * Displays the books requested by the user
+    //  *
+    //  * @param string $search Search Key
+    //  * @param int    $offset Offset
+    //  * @param int    $limit  Limit
+    //  *
+    //  * @return void
+    //  */
+    // public function findMoreBooks(
+    //     string $search,
+    //     int $offset = 0,
+    //     int $limit = 12
+    // ) {
+    //     $data["books"] = $this->model->searchBook(
+    //         $search,
+    //         $offset,
+    //         $limit
+    //     );
+    //     echo json_encode($data);
+    // }
 
 
     /**
@@ -192,11 +213,13 @@ class BookController extends BaseController
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
                     $script = "toast('New book added successfully..!', 'success');";
-                    $data['books'] = $this->model->getBooks();
-                    $this->loadLayout($user . "Header.html");
-                    $this->loadView("manageBooks", $data);
-                    $this->loadLayout($user . "Footer.html");
-                    $this->addScript($script);
+                    Utility::setSessionData('msg', $script);
+                    $this->redirect('book-management');
+                    // $data['books'] = $this->model->getBooks();
+                    // $this->loadLayout($user . "Header.html");
+                    // $this->loadView("manageBooks", $data);
+                    // $this->loadLayout($user . "Footer.html");
+                    // $this->addScript($script);
                     return;
                 } else {
                     $script = "toast('Unable to add new book..!', 'danger');";
@@ -211,21 +234,21 @@ class BookController extends BaseController
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook");
         $this->loadLayout($user . "Footer.html");
-        // $this->includeScript("populate.js");
+        $this->includeScript("populate.js");
         $this->addScript($script);
     }
 
     /**
-     * Loads Authors
+     * Loads Books
      *
      * @return void
      */
     public function load()
     {
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $data['aaData'] = $this->model->getBooks(
             $start,
@@ -244,15 +267,14 @@ class BookController extends BaseController
     /**
      * Update the status of the book for the book Id $id to status $status
      *
-     * @param int $id     BookID
-     * @param int $status StatusId
+     * @param int $id BookID
      *
      * @return void
      */
-    public function changeStatus(int $id, int $status)
+    public function changeStatus(int $id)
     {
-        $values = ['status' => $status];
-        $result['result'] = $this->model->updateBook($values, $id);
+        $data = $this->input->data();
+        $result['result'] = $this->model->updateBook($data, $id);
         echo json_encode($result);
     }
 
@@ -315,6 +337,8 @@ class BookController extends BaseController
                             . $oldPic
                         );
                     }
+                    Utility::setSessionData('msg', $script);
+                    $this->redirect('book-management');
                 } else {
                     $script = "toast('Unable to update the book..!', 'danger');";
                 }
@@ -405,15 +429,15 @@ class BookController extends BaseController
     }
 
     /**
-     * Search for a book with given $searchKey
+     * Search for a book with given isbnNumber
      *
-     * @param string $searchKey Search keys as string
+     * @param string $isbnNumber Search keys as string
      *
      * @return void
      */
-    public function search(string $searchKey)
+    public function searchByIsbn(string $isbnNumber)
     {
-        $result['result'] = $this->model->getBooksLike($searchKey);
+        $result['result'] = $this->model->getByIsbn($isbnNumber);
         echo json_encode($result);
     }
 }

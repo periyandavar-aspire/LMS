@@ -383,4 +383,27 @@ class Router
         die('500 - Server Error');
         exit();
     }
+
+    /**
+     * Performs Dispatch
+     *
+     * @param string $url URL
+     *
+     * @return void
+     */
+    public static function dispatch(string $url)
+    {
+        global $config;
+        $url = ltrim($url, "/");
+        $url = explode("/", $url);
+        $controller = $url[0] . "Controller";
+        $method = $url[1];
+        if (file_exists($config['controller']) . "/" . $controller . ".php") {
+            if (method_exists($controller, $method)) {
+                (new $controller())->$method();
+                exit();
+            }
+        }
+        Route::error();
+    }
 }

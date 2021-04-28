@@ -22,35 +22,7 @@ defined('VALID_REQ') or exit('Invalid request');
  */
 class IssuedBookModel extends BaseModel
 {
-    /**
-     * Returns the user details
-     *
-     * @param string $username User Name
-     *
-     * @return null|object
-     */
-    public function getUserDetails(string $username): ?object
-    {
-        $this->db->select('user.id id', 'userName', 'fullName', 'mobile', 'email')
-            ->selectAs(
-                "SUM(IF(`status`.`value` LIKE 'Request%', 1, 0)) request",
-                "SUM(IF(`status`.`value` = 'Issued', 1, 0)) lent"
-            );
-        $this->db->from('user')
-            ->innerJoin('issued_book ib')
-            ->on('ib.userid = user.id')
-            ->innerJoin('status')
-            ->on('status.code = ib.status')
-            ->where('returnAt', '=', '0000-00-00')
-            ->where('username', '=', $username)
-            ->where('user.status', '=', 1)
-            ->where('user.deletionToken', '=', 'N/A')
-            ->limit(1)
-            ->execute();
-        $user = $this->db->fetch();
-        return $user;
-    }
-
+    
     /**
      * Returns the Maximum Lend Books
      *
@@ -89,13 +61,42 @@ class IssuedBookModel extends BaseModel
     }
 
     /**
+     * Returns the user details
+     *
+     * @param string $userId User Name
+     *
+     * @return null|object
+     */
+    public function getUserDetails(string $userId): ?object
+    {
+        $this->db->select('user.id id', 'userName', 'fullName', 'mobile', 'email')
+            ->selectAs(
+                "SUM(IF(`status`.`value` LIKE 'Request%', 1, 0)) request",
+                "SUM(IF(`status`.`value` = 'Issued', 1, 0)) lent"
+            );
+        $this->db->from('user')
+            ->innerJoin('issued_book ib')
+            ->on('ib.userid = user.id')
+            ->innerJoin('status')
+            ->on('status.code = ib.status')
+            ->where('returnAt', '=', '0000-00-00')
+            ->where('user.id', '=', $userId)
+            ->where('user.status', '=', 1)
+            ->where('user.deletionToken', '=', 'N/A')
+            ->limit(1)
+            ->execute();
+        $user = $this->db->fetch();
+        return $user;
+    }
+
+    /**
      * Returns the book details
      *
-     * @param string $isbnNumber ISBN Number
+     * @param int $id ISBN Number
      *
-     * @return object
+     * @return object|null
      */
-    public function getBookDetails(string $isbnNumber): object
+    public function getBookDetails(int $id): ?object
     {
         $this->db->select(
             'id',
@@ -107,15 +108,19 @@ class IssuedBookModel extends BaseModel
             'coverPic',
             'available',
             'isbnNumber'
-        )->from('book')->where('isbnNumber', '=', $isbnNumber);
-        $this->db->where('deletionToken', '=', 'N/A')
+        )->from('book')->where('id', '=', $id);
+        $flag = $this->db->where('deletionToken', '=', 'N/A')
             ->where('status', '=', 1)
             ->limit(1)
             ->execute();
-        $book = $this->db->fetch();
-        return $book;
+        if ($book = $this->db->fetch()) {
+            return $book;
+        } else {
+            return null;
+        }
     }
 
+    
     /**
      * Adds the details of the Issued book
      *
@@ -131,22 +136,6 @@ class IssuedBookModel extends BaseModel
             ->limit(1)
             ->execute();
         $book['status'] = $this->db->fetch()->code;
-        $this->db->select('id')
-            ->from('user')
-            ->where('username', '=', $book['username'])
-            ->where('user.deletionToken', '=', 'N/A')
-            ->limit(1)
-            ->execute();
-        unset($book['username']);
-        $book['userId'] = $this->db->fetch()->id;
-        $this->db->select('id')
-            ->from('book')
-            ->where('isbnNumber', '=', $book['isbnNumber'])
-            ->where('book.deletionToken', '=', 'N/A')
-            ->limit(1)
-            ->execute();
-        unset($book['isbnNumber']);
-        $book['bookId'] = $this->db->fetch()->id;
         $this->db->set("autocommit", 0);
         $this->db->begin();
         $flag1 = $this->db->insert('issued_book', $book, ['issuedAt' => 'NOW()'])
@@ -165,28 +154,16 @@ class IssuedBookModel extends BaseModel
     /**
      * Add the details of the requested book
      *
-     * @param string $userName   User Name
-     * @param string $isbnNumber ISBN Number
+     * @param string $userId User Id
+     * @param string $bookId ISBN Number
      *
      * @return boolean
      */
-    public function requestBook(string $userName, string $isbnNumber): bool
+    public function requestBook(string $userId, string $bookId): bool
     {
-        $userId = $this->db->select('id')
-            ->from('user')
-            ->where('username', '=', $userName)
-            ->where('deletionToken', '=', 'N/A')
-            ->limit(1)
-            ->getQuery();
-        $bookId = $this->db->select('id')
-            ->from('book')
-            ->where('isbnNumber', '=', $isbnNumber)
-            ->where('deletionToken', '=', 'N/A')
-            ->limit(1)
-            ->getQuery();
+
         $fields = ['userId' => $userId, 'bookId' => $bookId];
-        $flag = $this->db->insert('issued_book', [], $fields)
-            ->appendBindValues([$userName, 'N/A', $isbnNumber, 'N/A'])
+        $flag = $this->db->insert('issued_book', $fields)
             ->execute();
         return $flag;
     }
@@ -239,6 +216,7 @@ class IssuedBookModel extends BaseModel
             $this->db->where(
                 " user.username LIKE '%$searchKey%' OR "
                 ." name LIKE '%$searchKey%' OR "
+                ." status.value LIKE '%$searchKey%' OR "
                 ." book.isbnNumber LIKE '%$searchKey%' "
             );
         }
@@ -273,8 +251,9 @@ class IssuedBookModel extends BaseModel
                 ->where('ib.issuedAt', '!=', '0000-00-00');
             $this->db->where(
                 " user.username LIKE '%$searchKey%' OR "
-                 ." name LIKE '%$searchKey%' OR "
-                 ." book.isbnNumber LIKE '%$searchKey%' "
+                ." name LIKE '%$searchKey%' OR "
+                ." status.value LIKE '%$searchKey%' OR "
+                ." book.isbnNumber LIKE '%$searchKey%' "
             )->execute();
             $tfcount = $this->db->fetch()->count;
         } else {
@@ -328,6 +307,8 @@ class IssuedBookModel extends BaseModel
         if ($searchKey != null) {
             $this->db->where(
                 " user.username LIKE '%$searchKey%' OR "
+                ." comments LIKE '%$searchKey%' OR "
+                ." status.value LIKE '%$searchKey%' OR "
                 ." name LIKE '%$searchKey%' OR "
                 ." book.isbnNumber LIKE '%$searchKey%' "
             );
@@ -363,8 +344,10 @@ class IssuedBookModel extends BaseModel
                 ->where('status.value', 'LIKE', 'Request%');
             $this->db->where(
                 " user.username LIKE '%$searchKey%' OR "
-                 ." name LIKE '%$searchKey%' OR "
-                 ." book.isbnNumber LIKE '%$searchKey%' "
+                ." comments LIKE '%$searchKey%' OR "
+                ." status.value LIKE '%$searchKey%' OR "
+                ." name LIKE '%$searchKey%' OR "
+                ." book.isbnNumber LIKE '%$searchKey%' "
             )->execute();
             $tfcount = $this->db->fetch()->count;
         } else {
@@ -412,15 +395,17 @@ class IssuedBookModel extends BaseModel
             ->where('book.deletionToken', '=', 'N/A')
             ->limit(1);
         $this->db->execute();
-        $result = $this->db->fetch();
-        return $result;
+        if ($result = $this->db->fetch()) {
+            return $result;
+        }
+        return null;
     }
 
     /**
      * Returns lent books count
-     * 
+     *
      * @param int $userId User Id
-     * 
+     *
      * @return int
      */
     public function lentBooksCount(int $userId): int
@@ -434,7 +419,6 @@ class IssuedBookModel extends BaseModel
             ->where('userId', '=', $userId)
             ->execute();
         return $this->db->fetch()->lent;
-           
     }
 
     /**

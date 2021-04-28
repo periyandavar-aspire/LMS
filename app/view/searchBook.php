@@ -15,7 +15,7 @@ if (!isset($books)) {
                 <?php else:?>
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
-                    <a href="/book/view/<?php echo $book->id;?>">
+                    <a href="/book/<?php echo $book->id;?>">
                     <book-element
                         cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                         book="<?php echo $book->name; ?>"
@@ -37,7 +37,7 @@ if (!isset($books)) {
                         </p>
                         <div class="btn-container">
                             <a class="btn-link"
-                                href="/book/view/<?php echo $book->id;?>">View
+                                href="/book/<?php echo $book->id;?>">View
                                 Book</a>
                         </div>
                     </div>
@@ -46,7 +46,7 @@ if (!isset($books)) {
             </div>
             <!-- show more button -->
             <div class="btn-container" id="loadMore">
-                <a class="btn-link" onclick='loadMoreBooks(event, "/book/search/<?php echo $searchKey;?>");'>SHOW MORE</a>
+                <a class="btn-link" onclick='loadMoreBooks(event, "/books/load");'>SHOW MORE</a>
             </div>
             <?php endif;?>
             <?php endif;?>

@@ -115,7 +115,7 @@ class BookModel extends BaseModel
      * @param string|null $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getBooks(
@@ -164,7 +164,7 @@ class BookModel extends BaseModel
             )->from('book');
             $this->db->where('deletionToken', '=', "N/A");
             $this->db->where('name', "LIKE", "%$searchKey%")
-                ->execute();    
+                ->execute();
             $tfcount = $this->db->fetch()->count;
         } else {
             $tfcount = $tcount;
@@ -248,7 +248,7 @@ class BookModel extends BaseModel
             ->from('issued_book')
             ->innerJoin('status')
             ->on('status.code = issued_book.status')
-            ->where('status.value', '=', Constants::STATUS_ISSUED)
+            ->where('status.value', '=', STATUS_ISSUED)
             ->where('bookId', '=', $id)
             ->execute();
         if ($this->db->fetch()->count != 0) {
@@ -265,7 +265,7 @@ class BookModel extends BaseModel
         $flag1 = $this->db->update('book', $field)->where('id', '=', $id)->execute();
         $flag2 = $this->db->update('issued_book', $field)
             ->where('id', '=', $id)
-            ->where('returnAt', '=', Constants::DEFAULT_DATE_VAL)
+            ->where('returnAt', '=', DEFAULT_DATE_VAL)
             ->execute();
         if ($flag1 && $flag2) {
             return $this->db->commit();
@@ -279,9 +279,9 @@ class BookModel extends BaseModel
      *
      * @param int $id Book Id
      *
-     * @return object
+     * @return object|null
      */
-    public function get(int $id): object
+    public function get(int $id): ?object
     {
         $this->db->select(
             'id',
@@ -300,7 +300,11 @@ class BookModel extends BaseModel
             'categoryCodes'
         )->from('book_detail');
         $this->db->where('id', '=', $id)->execute();
-        return $this->db->fetch();
+        if ($row = $this->db->fetch()) {
+            return $row;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -385,20 +389,20 @@ class BookModel extends BaseModel
     /**
      * Returns the books like given search key
      *
-     * @param string $Searchkey Search keys
+     * @param string $isbnNumber Search keys
      *
      * @return array
      */
-    public function getBooksLike(string $Searchkey): array
+    public function getByIsbn(string $isbnNumber): array
     {
         $result = [];
         $this->db->select("id code", "isbnNumber value")
             ->from('book')
-            ->where('isbnNumber', 'LIKE', "%" . $Searchkey . "%");
+            ->where('isbnNumber', 'LIKE', "%" . $isbnNumber . "%");
         $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
-        $orderClause = "case when isbnNumber like '$Searchkey%' THEN 0 ";
-        $orderClause .= "WHEN isbnNumber like '% %$Searchkey% %' THEN 1 ";
-        $orderClause .= "WHEN isbnNumber like '%$Searchkey' THEN 2 else 3 end,";
+        $orderClause = "case when isbnNumber like '$isbnNumber%' THEN 0 ";
+        $orderClause .= "WHEN isbnNumber like '% %$isbnNumber% %' THEN 1 ";
+        $orderClause .= "WHEN isbnNumber like '%$isbnNumber' THEN 2 else 3 end,";
         $orderClause .= "isbnNumber";
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
@@ -406,6 +410,7 @@ class BookModel extends BaseModel
         }
         return $result;
     }
+
 
     /**
      * Returns the books issued and requested users list

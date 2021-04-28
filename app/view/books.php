@@ -44,7 +44,7 @@ if (!isset($books)) {
                                     <div class="details">"" <br><br> by </div>
                                 </div> -->
                     <!-- </div></div> -->
-                    <a href="/book/view/<?php echo $book->id; ?>">
+                    <a href="/book/<?php echo $book->id; ?>">
 
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
@@ -67,8 +67,11 @@ if (!isset($books)) {
                             ?>
                             available</p>
                         <div class="btn-container">
-                            <!-- <a class="btn-link" href="/home/book/lend/<?php //echo $book->id;?>">LEND
-                            NOW</a> -->
+                        <div class="btn-container">
+                                    <a class="btn-link"
+                                        href="/book/<?php echo $book->id?>">View
+                                        Book</a>
+                                </div>
                         </div>
                     </div>
                 </div>

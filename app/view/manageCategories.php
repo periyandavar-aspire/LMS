@@ -15,8 +15,8 @@ defined('VALID_REQ') or exit('Invalid request');
                     <table id="category-list" class="tab_design">
                         <thead>
                             <tr>
-                                <th data-orderable="false">Sl. No</th>
-                                <th>Category</th>
+                                <th data-orderable="false">#</th>
+                                <th>Name</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Status</th>
@@ -35,7 +35,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Category</h1>
                 <hr><br>
-                <form onsubmit="categoryValidator(event, this);" action="/categories" id="add" method="post">
+                <form onsubmit="categoryValidator(event, this);" action="/category-management/categories" id="add" method="post">
                     <div class="form-input-div">
                         <label>Category Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name"
@@ -52,7 +52,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
                 <h1>Edit Category</h1>
                 <hr><br>
-                <form onsubmit="categoryValidator(event, this);" action="/categories" id="edit" onsubmit="updateItem(event);" method="post">
+                <form onsubmit="categoryValidator(event, this);" action="/category-management/categories" id="edit" onsubmit="updateItem(event);" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
                         <label>Category Name</label>
@@ -89,7 +89,7 @@ defined('VALID_REQ') or exit('Invalid request');
             "render": function(item) {
                 code = '<div class="checkbox"><input type="checkbox" ';
                 code += 'onchange="changeStatus(event,'
-                code += "'/categories/changeStatus/" + item.id + "');" + '" ';
+                code += "'/category-management/categories/" + item.id + "');" + '" ';
                 code += item.status == 1 ? "checked" : '';
                 code += '></div>';
                 return code;
@@ -99,10 +99,10 @@ defined('VALID_REQ') or exit('Invalid request');
             "data": null,
             "render": function(item) {
                 code = '<button type="button" onclick="editItem(';
-                code += "'/categories/edit/" + item.id + "');" + '"';
+                code += "'/category-management/categories/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button> <button type="button"';
-                code += ' onclick="deleteItem(' + "'/categories/delete/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/category-management/categories/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;
@@ -110,6 +110,6 @@ defined('VALID_REQ') or exit('Invalid request');
         }
     ]
     $(document).ready(function() {
-        loadTableData("category-list", "/category/loadData", column);
+        loadTableData("category-list", "/category-management/categories", column);
     });
 </script>

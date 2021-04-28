@@ -15,8 +15,8 @@ defined('VALID_REQ') or exit('Invalid request');
                     <table id="author-list" class="tab_design">
                         <thead>
                             <tr>
-                                <th data-orderable="false">Sl. No</th>
-                                <th>Author</th>
+                                <th data-orderable="false">#</th>
+                                <th>Name</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Status</th>
@@ -35,7 +35,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Author</h1>
                 <hr><br>
-                <form action="/authors" id="add" method="post">
+                <form action="/author-management/authors" id="add" method="post">
                     <div class="form-input-div">
                         <label>Author Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name"
@@ -50,9 +50,9 @@ defined('VALID_REQ') or exit('Invalid request');
         <div class="modal-shadow" id="editRecord">
             <div class="modal">
                 <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
-                <h1>Add New Author</h1>
+                <h1>Edit Author</h1>
                 <hr><br>
-                <form action="/authors" id="edit" method="post">
+                <form action="/author-management/authors" id="edit" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
                         <label>Author Name</label>
@@ -89,7 +89,7 @@ defined('VALID_REQ') or exit('Invalid request');
             "render": function(item) {
                 code = '<div class="checkbox"><input type="checkbox" ';
                 code += 'onchange="changeStatus(event,'
-                code += "'/authors/changeStatus/" + item.id + "');" + '" ';
+                code += "'/author-management/authors/" + item.id + "');" + '" ';
                 code += item.status == 1 ? "checked" : '';
                 code += '></div>';
                 return code;
@@ -99,10 +99,10 @@ defined('VALID_REQ') or exit('Invalid request');
             "data": null,
             "render": function(item) {
                 code = '<button type="button" onclick="editItem(';
-                code += "'/authors/edit/" + item.id + "');" + '"';
+                code += "'/author-management/authors/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button> <button type="button"';
-                code += ' onclick="deleteItem(' + "'/authors/delete/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/author-management/authors/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;
@@ -110,6 +110,6 @@ defined('VALID_REQ') or exit('Invalid request');
         }
     ]
     $(document).ready(function() {
-        loadTableData("author-list", "/author/loadData", column);
+        loadTableData("author-list", "/author-management/authors", column);
     });
 </script>

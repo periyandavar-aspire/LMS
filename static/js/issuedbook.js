@@ -1,13 +1,19 @@
-function loadUserDetails(username) {
-    fetch("/user/" + username, { headers: { response: "application/json" } })
+function loadUserDetails(userId) {
+    fetch("/user/id/" + userId, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
-        .then(data => updateUserDetails(document.getElementById('userdetails'), data));
+        .then(data => {
+            updateUserDetails(document.getElementById('userdetails'), data)
+            document.getElementById('userId').value = userId;
+        });
 }
 
-function loadBookDetails(isbn) {
-    fetch("/book/" + isbn, { headers: { response: "application/json" } })
+function loadBookDetails(bookId) {
+    fetch("/book/id/" + bookId, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
-        .then(data => updateBookDetails(document.getElementById('bookdetails'), data));
+        .then(data => {
+            updateBookDetails(document.getElementById('bookdetails'), data)
+            document.getElementById('bookId').value = bookId;
+        });
 }
 
 function updateUserDetails(elem, data) {
@@ -54,7 +60,16 @@ function updateBookDetails(elem, data) {
 }
 
 function MarkasReturn(id) {
-    fetch('/issuedBook/returned/' + id, { headers: { response: "application/json" } })
+    data = {
+        "action": "markReturned"
+    }
+    fetch('/issued-book-management/issued-books/' + id, {
+            method: 'PUT',
+            headers: {
+                response: "application/json",
+            },
+            body: JSON.stringify(data)
+        })
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {

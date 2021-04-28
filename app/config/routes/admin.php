@@ -12,8 +12,12 @@
  */
 defined('VALID_REQ') or exit('Invalid request');
 
+Router::add('/admin/login', 'admin/login');
+Router::add('/admin', 'admin/login');
+Router::add('/admin/login', 'admin/dologin', 'post');
+
 Router::add(
-    '/admin/profile',
+    '/admin-profile',
     'admin/getProfile',
     'get',
     function () {
@@ -29,40 +33,7 @@ Router::add(
 );
 
 Router::add(
-    '/librarian/profile',
-    'admin/getProfile',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == LIBR_USER
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Router::add(
-    '/report',
-    'report/get',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == ADMIN_USER
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Router::add(
-    '/analytics/(book|category|author|user)/'
-        . '?([\d]{4}-[\d]{2}-[\d]{2})?/?([\d]{4}-[\d]{2}-[\d]{2})?',
+    '/analytics/(book|category|author|user)',
     'report/analytics',
     'get',
     function () {
@@ -78,8 +49,7 @@ Router::add(
 );
 
 Router::add(
-    '/analytics/topList/(book|category|author|user)/'
-        . '([\d]{4}-[\d]{2}-[\d]{2})/([\d]{4}-[\d]{2}-[\d]{2})',
+    '/analytics/topList/(book|category|author|user)',
     'report/topList',
     'get',
     function () {
@@ -95,7 +65,7 @@ Router::add(
 );
 
 Router::add(
-    '/admin/profile',
+    '/admin-profile',
     'admin/updateProfile',
     'post',
     function () {
@@ -127,26 +97,26 @@ Router::add(
 );
 
 
-// Router::add(
-//     '/user/([a-zA-Z0-9_]+)',
-//     'Issuedbook/getUserDetails',
-//     'get',
-//     function () {
-//         $input = new InputData();
-//         if ($input->session('login') == VALID_LOGIN
-//             && ($input->session('type') == LIBR_USER
-//             ||$input->session('type') == ADMIN_USER)
-//         ) {
-//             return true;
-//         } else {
-//             Utility::redirectURL('admin/login');
-//         }
-//     }
-// );
+Router::add(
+    '/user/id/([a-zA-Z0-9_]+)',
+    'issuedbook/getUserDetails',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
 
 Router::add(
-    '/book/([1-9]{1}[0-9]*)',
-    'Issuedbook/getBookDetails',
+    '/book/id/([1-9]{1}[0-9]*)',
+    'book/get',
     'get',
     function () {
         $input = new InputData();
@@ -178,7 +148,7 @@ Router::add(
 );
 
 Router::add(
-    '/admin/users',
+    '/admin/user-management',
     'manageUser/addUser',
     'post',
     function () {
@@ -276,7 +246,7 @@ Router::add(
 
 
 Router::add(
-    '/book/export/csv',
+    '/report/(book|category|author|user)/csv',
     'report/exportToCsv',
     'get',
     function () {
@@ -293,7 +263,7 @@ Router::add(
 );
 
 Router::add(
-    '/book/export/pdf',
+    '/report/(book|category|author|user)/pdf',
     'report/exportToPdf',
     'get',
     function () {
@@ -344,7 +314,7 @@ Router::add(
 );
 
 Router::add(
-    '/issuebook-management',
+    '/issued-book-management',
     'Issuedbook/issue',
     'get',
     function () {
@@ -395,10 +365,5 @@ Router::add(
 );
 
 
-Router::add('/book/authors/([A-Za-z ]+)/([0-9 ,]*)', 'author/search');
-Router::add('/book/categories/([A-Za-z ]+)/([0-9 ,]*)', 'category/search');
-
-
-Router::add('/book/categories', 'category/getCategories');
-Router::add('/book/authors', 'author/getAuthors');
-
+Router::add('/authors/([A-Za-z ]+)/([0-9 ,]*)', 'author/search');
+Router::add('/categories/([A-Za-z ]+)/([0-9 ,]*)', 'category/search');

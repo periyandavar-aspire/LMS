@@ -92,18 +92,17 @@ class HomeModel extends BaseModel
      *
      * @param string $username User Name
      *
-     * @return string|null
+     * @return object|null
      */
-    public function getUserPass(string $username): ?string
+    public function getUser(string $username): ?object
     {
-        $this->db->select('password');
+        $this->db->select('password', 'id');
         $this->db->from('user');
         $this->db->where('username', '=', $username);
         $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
         $this->db->execute();
-        $result = $this->db->fetch();
-        if ($result != null) {
-            return $result->password;
+        if ($result = $this->db->fetch()) {
+            return $result;
         } else {
             return null;
         }

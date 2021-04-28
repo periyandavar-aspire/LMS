@@ -33,7 +33,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         </p>
                         <p class="text-para italics-text"><?php echo $vision; ?>
                         </p>
-                        <div class="text-author">Admin</div>
+                        <div class="text-author">- Admin</div>
                     </div>
                 </div>
                 <div class="cols col-5">
@@ -59,7 +59,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
                     <a
-                        href="/book/view/<?php echo $book->id; ?>">
+                        href="/book/<?php echo $book->id; ?>">
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                             book="<?php echo $book->name; ?>"
@@ -88,7 +88,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <?php endif;?>
             </div>
             <div class="btn-container" id="loadMore">
-                <a class="btn-link" href="/home/books">SHOW ALL</a>
+                <a class="btn-link" href="/books">SHOW ALL</a>
             </div>
     </section>
 </article>

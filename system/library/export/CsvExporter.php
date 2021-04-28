@@ -55,6 +55,9 @@ class CsvExporter
         foreach ($ignoreList as $ignore) {
             unset($headings[array_search($ignore, $headings)]);
         }
+        foreach ($headings as $key => $value) {
+            $headings[$key] = ucfirst($value);
+        }
         fputcsv($fp, $headings);
         foreach ($data as $row) {
             foreach ($ignoreList as $ignore) {

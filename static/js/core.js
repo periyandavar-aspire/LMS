@@ -163,7 +163,7 @@ let limit = 12;
 
 function loadMoreBooks(event, url) {
     url = url != undefined ? url : '/books/load';
-    url += "/" + offset + "/" + limit;
+    url += "?offset=" + offset + "&limit=" + limit;
     fetch(url, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => {
@@ -172,7 +172,7 @@ function loadMoreBooks(event, url) {
             if (data.books.length > 0) {
                 for (const book of data.books) {
                     divElem = document.createElement('div');
-                    code = `<a href="/book/view/` + book.id + `">
+                    code = `<a href="/book/` + book.id + `">
                             <book-element
                                 cover="/upload/book/` + book.coverPic + `"
                                 book="` + book.name + `"
@@ -194,7 +194,7 @@ function loadMoreBooks(event, url) {
                     code += ` available</p>
                                 <div class="btn-container">
                                     <a class="btn-link"
-                                        href="/book/view/` + book.id + `">View
+                                        href="/book/` + book.id + `">View
                                         Book</a>
                                 </div>
                             </div>

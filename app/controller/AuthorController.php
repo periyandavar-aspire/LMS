@@ -42,6 +42,10 @@ class AuthorController extends BaseController
         $this->loadLayout($user."Header.html");
         $this->loadView("manageAuthors");
         $this->loadLayout($user."Footer.html");
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -51,10 +55,10 @@ class AuthorController extends BaseController
      */
     public function load()
     {
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $data['aaData'] = $this->model->getAll(
             $start,
@@ -94,11 +98,13 @@ class AuthorController extends BaseController
         } else {
             $script = "toast('New author is added successfully..!', 'success');";
         }
-        $data['authors'] = $this->model->getAll();
-        $this->loadLayout($user."Header.html");
-        $this->loadView("manageAuthors", $data);
-        $this->loadLayout($user."Footer.html");
-        $this->addScript($script);
+        Utility::setSessionData('msg', $script);
+        $this->redirect('author-management');
+        // $data['authors'] = $this->model->getAll();
+        // $this->loadLayout($user."Header.html");
+        // $this->loadView("manageAuthors", $data);
+        // $this->loadLayout($user."Footer.html");
+        // $this->addScript($script);
     }
 
     /**
@@ -117,15 +123,14 @@ class AuthorController extends BaseController
     /**
      * Change the status of the author & displays the success/failure message in JSON
      *
-     * @param int $id     AuthorID
-     * @param int $status StatusID
-     *
+     * @param int $id AuthorID
+     * 
      * @return void
      */
-    public function changeStatus(int $id, int $status)
+    public function changeStatus(int $id)
     {
-        $values = ['status' => $status];
-        $result['result'] = $this->model->update($values, $id);
+        $data = $this->input->data();
+        $result['result'] = $this->model->update($data, $id);
         echo json_encode($result);
     }
 
@@ -155,11 +160,13 @@ class AuthorController extends BaseController
         } else {
             $script = "toast('Author is updated successfully..!', 'success');";
         }
-        $data['authors'] = $this->model->getAll();
-        $this->loadLayout($user."Header.html");
-        $this->loadView("manageAuthors", $data);
-        $this->loadLayout($user."Footer.html");
-        $this->addScript($script);
+        Utility::setSessionData('msg', $script);
+        $this->redirect('author-management');
+        // $data['authors'] = $this->model->getAll();
+        // $this->loadLayout($user."Header.html");
+        // $this->loadView("manageAuthors", $data);
+        // $this->loadLayout($user."Footer.html");
+        // $this->addScript($script);
     }
 
     /**

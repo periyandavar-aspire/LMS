@@ -16,18 +16,19 @@ if (!function_exists('createChart')) {
     /**
      * Helper function to create charts
      *
-     * @param string $id        Chart id
-     * @param int    $height    Chart Height
-     * @param int    $width     Chart width
-     * @param string $className Chart class
+     * @param string   $id        Chart id
+     * @param int|null $height    Chart Height
+     * @param int|null $width     Chart width
+     * @param string   $className Chart class
      *
      * @return string
      */
-    function createChart(string $id, int $height = 600, int $width = 400, string $className = ''): string
+    function createChart(string $id, ?int $height = null, ?int $width = null, string $className = ''): string
     {
-        $chart = "<canvas id='$id' class='$className' height='$height'"
-                    . " width='$width'> Your browser does not support HTML5 Canvas "
-                    . "</canvas>";
+        $chart = "<canvas id='$id' class='$className' ";
+        $chart .= $height != null ? " height='$height' " : '';
+        $chart .= $width != null ? " width='$width' " : '';
+        $chart .= "> Your browser does not support HTML5 Canvas </canvas>";
         return $chart;
     }
 }
@@ -55,6 +56,9 @@ if (!function_exists('generateChart')) {
         }
         return <<<EOF
         <script>
+            // var canvas = document.getElementById('$id');
+            // var heightRatio = 1;
+            // canvas.height = canvas.width * heightRatio;
             obj = {
                 id: "$id",
                 data: [$dataValue],
@@ -65,6 +69,19 @@ if (!function_exists('generateChart')) {
                 yDots: "$yDots"
             }
             barChart(obj)
+            window.addEventListener('resize', () => {
+                
+                obj = {
+                    id: "$id",
+                    data: [$dataValue],
+                    xAxis: "$xAxis",
+                    yAxis: "$yAxis",
+                    maxVal: "$maxVal",
+                    color: "$color",
+                    yDots: "$yDots"
+                }
+                barChart(obj)
+            });
         </script>
         EOF;
     }

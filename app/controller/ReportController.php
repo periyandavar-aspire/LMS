@@ -47,14 +47,15 @@ class ReportController extends BaseController
     /**
      * Undocumented function
      *
+     * @param string $list List name
+     *
      * @return void
      */
-    public function exportToCsv()
+    public function exportToCsv(string $list = 'book')
     {
         $user = $this->input->session('type');
         $sDate = $this->input->get('sDate') ?? "0000-00-00";
         $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
-        $list = $this->input->get('list');
         $funcName = "getTop" . $list . "List";
         $tcount = $tfcount = null;
         $data = $this->model->$funcName(
@@ -84,14 +85,15 @@ class ReportController extends BaseController
     /**
      * Undocumented function
      *
+     * @param string $list List name
+     *
      * @return void
      */
-    public function exportToPdf()
+    public function exportToPdf(string $list = 'book')
     {
         $user = $this->input->session('type');
         $sDate = $this->input->get('sDate') ?? "0000-00-00";
         $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
-        $list = $this->input->get('list');
         $funcName = "getTop" . $list . "List";
         $tcount = $tfcount = null;
         $data = $this->model->$funcName(
@@ -120,21 +122,16 @@ class ReportController extends BaseController
 
     /**
      * Displays reports page
-     *
-     * @param string $list  List Name
-     * @param string $sDate Start Date
-     * @param string $eDate End Date
+     * 
+     * @param string $list List name
      *
      * @return void
      */
-    public function analytics(
-        string $list = 'book',
-        ?string $sDate = null,
-        ?string $eDate = null
-    ) {
+    public function analytics(string $list = 'book') 
+    {
         $user = $this->input->session('type');
-        $data['sDate'] = $sDate ?? "0000-00-00";
-        $data['eDate'] = $eDate ?? Date('Y-m-d');
+        $data['sDate'] = $this->input->get('sDate') ?? "0000-00-00";
+        $data['eDate'] = $this->input->get('eDate') ?? Date('Y-m-d');
         $data['list'] = $list;
         $funcName = "getTop" . $list . "List";
         $tcount = $tfcount = null;
@@ -182,18 +179,18 @@ class ReportController extends BaseController
     /**
      * Displays Top books list
      *
-     * @param string $list  List Name
-     * @param string $sDate Start Date
-     * @param string $eDate End Date
+     * @param string $list List Name
      *
      * @return void
      */
-    public function topList($list, $sDate, $eDate)
+    public function topList($list)
     {
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $sDate = $this->input->get('sDate') ?? "0000-00-00";
+        $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $tcount = $tfcount = '';
         if ($sortby == 0) {

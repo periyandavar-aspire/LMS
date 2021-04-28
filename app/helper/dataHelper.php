@@ -91,7 +91,7 @@ if (!function_exists('generatePagination')) {
                 . ((($pagination['cpage']+1)* $pagination['limit']))
                 . '&limit='.$pagination['limit'] . '&search='.$pagination['search']
                 . '">Next</a></li>';
-            return $code;
         }
+        return $code;
     }
 }

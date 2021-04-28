@@ -43,6 +43,10 @@ class CategoryController extends BaseController
         $this->loadLayout($user."Header.html");
         $this->loadView("manageCategories");
         $this->loadLayout($user."Footer.html");
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -52,10 +56,10 @@ class CategoryController extends BaseController
      */
     public function load()
     {
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $data['aaData'] = $this->model->getAll(
             $start,
@@ -100,15 +104,14 @@ class CategoryController extends BaseController
     /**
      * Change the status of the category
      *
-     * @param int $id     CategoryID
-     * @param int $status StatusId
+     * @param int $id CategoryID
      *
      * @return void
      */
-    public function changeStatus(int $id, int $status)
+    public function changeStatus(int $id)
     {
-        $values = ['status' => $status];
-        $result['result'] = $this->model->update($values, $id);
+        $data = $this->input->data();
+        $result['result'] = $this->model->update($data, $id);
         echo json_encode($result);
     }
 
@@ -138,11 +141,13 @@ class CategoryController extends BaseController
         } else {
             $script = "toast('Category is updated successfully..!', 'success');";
         }
-        $data['categories'] = $this->model->getAll();
-        $this->loadLayout($user."Header.html");
-        $this->loadView("manageCategories", $data);
-        $this->loadLayout($user."Footer.html");
-        $this->addScript($script);
+        Utility::setSessionData('msg', $script);
+        $this->redirect('category-management');
+        // $data['categories'] = $this->model->getAll();
+        // $this->loadLayout($user."Header.html");
+        // $this->loadView("manageCategories", $data);
+        // $this->loadLayout($user."Footer.html");
+        // $this->addScript($script);
     }
 
     /**
@@ -168,11 +173,14 @@ class CategoryController extends BaseController
         } else {
             $script = "toast('New category is added successfully..!', 'success');";
         }
-        $data['categories'] = $this->model->getAll();
-        $this->loadLayout($user."Header.html");
-        $this->loadView("manageCategories", $data);
-        $this->loadLayout($user."Footer.html");
-        $this->addScript($script);
+        Utility::setSessionData('msg', $script);
+        $this->redirect('category-management');
+        // $data['categories'] = $this->model->getAll();
+        // $this->loadLayout($user."Header.html");
+        // $this->loadView("manageCategories", $data);
+        // $this->loadLayout($user."Footer.html");
+        // $this->addScript($script);
+
     }
 
     /**

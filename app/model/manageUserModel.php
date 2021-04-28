@@ -96,7 +96,6 @@ class ManageUserModel extends BaseModel
     /**
      * Returns all the registered users
      *
-     * @param string      $email     This user email id will be ignored in the list
      * @param integer     $start     offset
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
@@ -108,7 +107,6 @@ class ManageUserModel extends BaseModel
      * @return array
      */
     public function getRegUsers(
-        string $email = '',
         int $start = 0,
         int $limit = 10,
         string $sortby = "1",
@@ -132,6 +130,7 @@ class ManageUserModel extends BaseModel
             $this->db->where(
                 "(fullname LIKE '%$searchKey%'"
                 ." OR username LIKE '%$searchKey%'OR "
+                ." mobile LIKE '%$searchKey%'OR "
                 ."email LIKE '%$searchKey%')"
             );
         }
@@ -154,6 +153,7 @@ class ManageUserModel extends BaseModel
             $this->db->where(
                 "(fullname LIKE '%$searchKey%'"
                 ." OR username LIKE '%$searchKey%' OR "
+                ." mobile LIKE '%$searchKey%'OR "
                 ."email LIKE '%$searchKey%')"
             )->where('role', '=', 'user')
                 ->execute();    
@@ -206,7 +206,7 @@ class ManageUserModel extends BaseModel
     {
         $deletionToken = uniqid();
         $field = [ 'deletionToken' => $deletionToken];
-        if ($role == REG_USER) {
+        if ($role == strtolower(REG_USER)) {
             $this->db->selectAs('count(*) count')
                 ->from('issued_book')
                 ->innerJoin('status')
@@ -240,6 +240,29 @@ class ManageUserModel extends BaseModel
         $this->db->execute();
         while ($row = $this->db->fetch()) {
             $result[] = $row->code;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the users matching given username
+     *
+     * @param string $userName userName
+     *
+     * @return array
+     */
+    public function getUsersLike(string $userName): array
+    {
+        $result = [];
+        $this->db->select("id code", "userName value")
+            ->from('user')->where('userName', 'LIKE', "%" . $userName . "%")
+            ->where('deletionToken', '=', "N/A")->where('status', '=', 1);
+        $orderClause = "case when userName like '$userName%' THEN 0 "
+            . "WHEN userName like '% %$userName% %' THEN 1 "
+            . "WHEN userName like '%$userName' THEN 2 else 3 end, userName";
+        $this->db->orderBy($orderClause)->execute();
+        while ($row = $this->db->fetch()) {
+            $result[] = $row;
         }
         return $result;
     }

@@ -29,72 +29,81 @@ defined('VALID_REQ') or exit('Invalid request');
                     </select>
                 </div>
                 <div class="form-buttons">
-                        <a target='_blank' href="/book/export/csv?list=<?php echo $list; ?>&sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>"><img class='icons' src="/static/img/symbols/excel.png"></a>
-                        <a target='_blank' href="/book/export/pdf?list=<?php echo $list; ?>&sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>"><img class='icons' src="/static/img/symbols/pdf.png"></a>
+                        <a target='_blank' href="/report/book/csv?list=<?php echo $list; ?>&sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>"><img class='icons' src="/static/img/symbols/excel.png"></a>
+                        <a target='_blank' href="/report/book/pdf?list=<?php echo $list; ?>&sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>"><img class='icons' src="/static/img/symbols/pdf.png"></a>
                 </div>
             </div>
             <div class="row">
-            <div class="cols" style='text-align-last:center;'>
-                <h3>Top 10 <?php echo $list;?>s</h3>
-                    <?php 
-                    $values = [];
-                    foreach ($data as $temp) {
-                        // print_r($temp);
-                        $values[] = [$temp->name, $temp->impression];
-                    }
-                    // $values = [
-                    //     // [$data->name, $data->impression],
-                    //     ["Atlantis", 16.67],
-                    //     ["Night", 14.58],
-                    //     ["gravity", 12.5],
-                    //     ["king", 10.42],
-                    //     ["histories", 6.25],
-                    //     ["cs", 4.17]
-                    // ];
-                    $properties = [
-                        "xAxis"=> "Book Name",
-                        "yAxis"=> "Impressions",
-                        "maxVal"=> 100,
-                        "color"=> "#005A9C",
-                        "yDots" => 10
-                    ];
-                    echo createChart("chart", 400, 850);
-                    // echo getChartJs(); 
-                    echo generateChart("chart", $values, $properties);
-                    ?>
+                <div class="cols" style='text-align-last:center;'>
+                    <h3>Top 10 <?php echo $list;?>s</h3>
                 </div>
-                <div class="cols">
-                    <div class="div-card-body">
-                        <div style="overflow-x:auto;">
-                            <table id="report-list" class="tab_design">
-                                <thead>
-                                    <tr>
-                                        <th data-orderable="false">Sl. No</th>
-                                        <?php 
-                                        if ($list== "book")     {
-                                            echo generateTh(['Book Name', 'ISBN Number', 'Categories', 'Authors']);
-                                        } elseif ($list== "user") {
-                                            echo generateTh(['User Name', 'Full Name']);
-                                        } elseif ($list== "category") {
-                                            echo generateTh(['Category']);
-                                        } elseif ($list== "author") {
-                                            echo generateTh(['Author']);
-                                        }
-                                        ?>
-                                        
-                                        <th data-orderable="false">Impression%</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table_body">
+            </div>
+                <!-- <div class="cols">
+                    <div class="div-card-body"> -->
+            <div style="overflow-x:auto;">
+                <?php 
+                $values = [];
+                foreach ($data as $temp) {
+                    // print_r($temp);
+                    $values[] = [$temp->name, $temp->impression];
+                }
+                // $values = [
+                //     // [$data->name, $data->impression],
+                //     ["Atlantis", 16.67],
+                //     ["Night", 14.58],
+                //     ["gravity", 12.5],
+                //     ["king", 10.42],
+                //     ["histories", 6.25],
+                //     ["cs", 4.17]
+                // ];
+                $properties = [
+                    "xAxis"=> "Book Name",
+                    "yAxis"=> "Impressions",
+                    "maxVal"=> 100,
+                    "color"=> "#005A9C",
+                    "yDots" => 10
+                ];
+                echo createChart("chart", 400, 850, 'responsiveChart');
+                // echo getChartJs(); 
+                echo generateChart("chart", $values, $properties);
+                ?>
+            </div>
+                    <!-- </div>
+                </div> -->
+            </div>
+            <div class="container div-card">
+            <div class="cols">
+                <div class="div-card-body">
+                    <div style="overflow-x:auto;">
+                        <table id="report-list" class="tab_design">
+                            <thead>
+                                <tr>
+                                    <th data-orderable="false">Sl. No</th>
+                                    <?php 
+                                    if ($list== "book")     {
+                                        echo generateTh(['Book Name', 'ISBN Number', 'Categories', 'Authors']);
+                                    } elseif ($list== "user") {
+                                        echo generateTh(['User Name', 'Full Name']);
+                                    } elseif ($list== "category") {
+                                        echo generateTh(['Category']);
+                                    } elseif ($list== "author") {
+                                        echo generateTh(['Author']);
+                                    }
+                                    ?>
+                                    
+                                    <th data-orderable="false">Impression%</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table_body">
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 </article>
 
 <script>
@@ -158,7 +167,7 @@ defined('VALID_REQ') or exit('Invalid request');
         ];
     }
     $(document).ready(function() {
-        url = "/<?php echo $list; ?>/<?php echo $sDate; ?>/<?php echo $eDate ?>";
+        url = "/<?php echo $list; ?>?sDate=<?php echo $sDate; ?>&eDate=<?php echo $eDate ?>";
         loadTableData("report-list", "/analytics/topList"+url, column);
     });
     document.getElementById('analytics').className += " active";

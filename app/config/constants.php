@@ -13,9 +13,13 @@ defined('VALID_REQ') or exit('Invalid request');
 
 define("LIKE_REQUEST_STATUS", 'Request%');
 
+define("STATUS_ALL_REQ", '%Request%');
+
 define("STATUS_REQUEST", "Requested");
 
 define("STATUS_ISSUED", "Issued");
+
+define("STATUS_REQ", "Request%");
 
 define("ADMIN_USER", "Admin");
 

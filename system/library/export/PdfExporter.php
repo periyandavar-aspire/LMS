@@ -66,7 +66,7 @@ class PdfExporter
                 continue;
             }
             $this->_pdf->SetXY($currentX, $currentY);
-            $this->_pdf->multicell($cellWidth, $cellHeight, $heading, 1);
+            $this->_pdf->multicell($cellWidth, $cellHeight, ucfirst($heading), 1);
             $currentX += $cellWidth;
         }
         $currentX = $startX;
@@ -76,14 +76,14 @@ class PdfExporter
             $this->_pdf->Ln();
             $this->_pdf->SetXY($currentX, $currentY);
             $this->_pdf->multicell(10, $cellHeight, $i++, 1);
-            $current_x += 10;
+            $currentX += 10;
             foreach ($row as $column) {
                 if (in_array(array_search($column, $row), $ignoreList)) {
                     continue;
                 }
                 $this->_pdf->SetXY($currentX, $currentY);
                 $this->_pdf->multicell($cellWidth, $cellHeight, $column, 1);
-                $current_x += $cell_width;
+                $currentX += $cellWidth;
             }
             $currentX = $startX;
             $currentY += $cellHeight;

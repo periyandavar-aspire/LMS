@@ -147,12 +147,12 @@ class HomeController extends BaseController
         if (!$fdv->validate($fields, $field)) {
             $data["msg"] = "Invalid $field..!";
         } else {
-            $pass = $this->model->getUserPass($username);
-            if ($pass == md5($this->input->post('password'))) {
+            $user = $this->model->getUser($username);
+            if (isset($user) && $user->password == md5($this->input->post('password'))) {
                 Utility::setsessionData('login', VALID_LOGIN);
                 Utility::setSessionData("type", REG_USER);
-                Utility::setSessionData("id", $username);
-                $this->redirect("user/home");
+                Utility::setSessionData("id", $user->id);
+                $this->redirect("home");
             } else {
                 $data["msg"] = "Login failed..!";
             }

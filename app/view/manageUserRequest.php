@@ -16,8 +16,8 @@ defined('VALID_REQ') or exit('Invalid request');
                     <table class="tab_design" id='book-list'>
                         <thead>
                             <tr>
-                                <th data-orderable="false">Sl. No</th>
-                                <th>ISBN Number</th>
+                                <th data-orderable="false">#</th>
+                                <th>ISBN</th>
                                 <th>Book Name</th>
                                 <th>User Name</th>
                                 <th>Requested Date</th>
@@ -64,7 +64,7 @@ defined('VALID_REQ') or exit('Invalid request');
         {
             "data":null,
             "render": function(item) {   
-                code = ' <a type="button" href="/userRequest/'+item.id+'"';
+                code = ' <a type="button" href="/request-management/requests/'+item.id+'"';
                 code += ' class="button-control icon-btn positive" title="edit"><i';
                 code += ' class="fa fa-edit"></i></a>';
                 return code;
@@ -72,6 +72,6 @@ defined('VALID_REQ') or exit('Invalid request');
         },
     ]
     $(document).ready(function() {
-        loadTableData("book-list", "/requestBook/loadData", column);
+        loadTableData("book-list", "/request-management/requests", column);
     });
 </script>

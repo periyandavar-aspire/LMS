@@ -12,26 +12,6 @@
  */
 defined('VALID_REQ') or exit('Invalid request');
 
-Router::add(
-    '/books/load/?([0-9]+)?/?([0-9]+)?/?([\d\D]+)?',
-    'book/loadBooks',
-    'get'
-);
-
-
-Router::add(
-    '/book/view/([1-9]{1}[0-9]*)',
-    'book/view',
-    'get',
-    function () {
-        $input = new InputData();
-        // if ($input->session('login') == VALID_LOGIN) {
-        return true;
-        // } else {
-        //     Utility::redirectURL('/login');
-        // }
-    }
-);
 
 Router::add('/librarian', 'admin/login');
 Router::add('/librarian/login', 'admin/login');
@@ -53,8 +33,8 @@ Router::add(
 );
 
 Router::add(
-    '/librarian/profile',
-    'admin/profile',
+    '/librarian-profile',
+    'admin/getProfile',
     'get',
     function () {
         $input = new InputData();
@@ -69,7 +49,7 @@ Router::add(
 );
 
 Router::add(
-    '/librarian/profile',
+    '/librarian-profile',
     'admin/updateProfile',
     'post',
     function () {
@@ -116,38 +96,3 @@ Router::add(
         }
     }
 );
-
-
-Router::add('/admin/login', 'admin/login');
-Router::add('/admin', 'admin/login');
-Router::add('/admin/login', 'admin/dologin', 'post');
-
-
-Router::add(
-    '/book/search',
-    'book/findBook',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-
-Router::add(
-    '/book/search/?([^/]+)?/?([0-9]+)?/?([0-9]+)?',
-    'book/findMoreBooks',
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN) {
-            return true;
-        } else {
-            Utility::redirectURL('admin/login');
-        }
-    }
-);
-

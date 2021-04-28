@@ -13,8 +13,23 @@
 defined('VALID_REQ') or exit('Invalid request');
 
 Router::add(
-    '/user/home',
-    null,
+    '/book-search',
+    'book/search',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+
+Router::add(
+    '/home',
+    'user/getHomePage',
     'get',
     function () {
         $input = new InputData();
@@ -23,14 +38,14 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 
 Router::add(
-    '/user/profile',
-    null,
+    '/user-profile',
+    'user/getProfile',
     'get',
     function () {
         $input = new InputData();
@@ -39,13 +54,13 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 
 Router::add(
-    '/user/profile/update',
+    '/user-profile',
     'user/updateProfile',
     'post',
     function () {
@@ -55,13 +70,13 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 
 Router::add(
-    '/user/availbleBooks',
+    '/available-books',
     'Book/getAvailableBooks',
     'get',
     function () {
@@ -71,13 +86,13 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 
 Router::add(
-    '/user/lentBooks',
+    '/lent-books',
     'user/getLentBooks',
     'get',
     function () {
@@ -87,13 +102,13 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 
 Router::add(
-    '/user/requestedBooks',
+    '/requested-books',
     'user/getRequestedBooks',
     'get',
     function () {
@@ -103,13 +118,13 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 Router::add(
-    '/userRequest/delete/([1-9]{1}[0-9]*)',
-    'user/removeRequest',
+    '/logout',
+    'user/logout',
     'get',
     function () {
         $input = new InputData();
@@ -118,28 +133,13 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );
 
 Router::add(
-    '/user/logout',
-    null,
-    'get',
-    function () {
-        $input = new InputData();
-        if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == REG_USER
-        ) {
-            return true;
-        } else {
-            Utility::redirectURL('/login');
-        }
-    }
-);
-Router::add(
-    '/book/request/([1-9]{1}[0-9]*)',
+    '/request/([1-9]{1}[0-9]*)',
     'Issuedbook/request',
     'get',
     function () {
@@ -149,7 +149,7 @@ Router::add(
         ) {
             return true;
         } else {
-            Utility::redirectURL('/login');
+            Utility::redirectURL('login');
         }
     }
 );

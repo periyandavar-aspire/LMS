@@ -46,7 +46,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                     </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
                                     available</p>
                                 <div class="form-buttons">
-                                    <a class="btn-link" href="/home">Request to Lend</a>
+                                    <a class="btn-link" href="/login">Request to Lend</a>
                                 </div>
                             </div>
                         </div>

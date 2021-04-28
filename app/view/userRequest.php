@@ -38,7 +38,7 @@ defined('VALID_REQ') or exit('Invalid request');
 
                     <div class="cols col-4">
                         <div class="form-input-div">
-                            <label>ISBN Number</label>
+                            <label>ISBN</label>
                             <input disabled class="form-control disabled" type="text" id="isbnNumber"
                                 value="<?php echo $data->isbnNumber; ?>"
                                 name="isbnNumber" placeholder="Book Name" required="">

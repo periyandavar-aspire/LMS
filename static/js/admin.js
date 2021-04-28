@@ -1,5 +1,10 @@
 function deleteItem(delUrl) {
-    AskConfirm("Are sure to delete..?", () => fetch(delUrl, { headers: { response: "application/json" } })
+    AskConfirm("Are sure to delete..?", () => fetch(delUrl, {
+            method: 'DELETE',
+            headers: {
+                response: "application/json"
+            }
+        })
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {
@@ -26,9 +31,21 @@ function editItem(editUrl, element = "editRecord") {
 }
 
 function changeStatus(event, statusChangeUrl) {
-    flag = event.target.checked ? 1 : 0;
-    statusChangeUrl += "/" + flag;
-    fetch(statusChangeUrl, { headers: { response: "application/json" } })
+    status = event.target.checked ? 1 : 0;
+    // const formData = new FormData();
+    // formData.append('status', status);
+    data = {
+            "status": status
+        }
+        // statusChangeUrl += "/" + flag;
+    console.log(statusChangeUrl);
+    fetch(statusChangeUrl, {
+            method: 'PUT',
+            headers: {
+                response: "application/json",
+            },
+            body: JSON.stringify(data)
+        })
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {
@@ -38,15 +55,6 @@ function changeStatus(event, statusChangeUrl) {
                 toast("Unable to upate the status..!", 'danger');
             }
         });
-}
-var buttonCommon = {
-    exportOptions: {
-        format: {
-            body: function(data, row, column, node) {
-                return data;
-            }
-        }
-    }
 }
 
 function loadTableData(id, url, columns, title) {
@@ -63,30 +71,7 @@ function loadTableData(id, url, columns, title) {
         "rowId": "id",
         "sAjaxSource": url,
         "columns": columns,
-        dom: 'lBfrtip',
-        buttons: [$.extend(true, {}, buttonCommon, {
-            extend: 'print',
-            text: 'Print',
-            title: ' Details',
-            className: 'print-btn',
-            exportOptions: {
-                columns: ':not(.notexport)'
-            },
-            customize: function(win) {
-                $(win.document.body)
-                    .css('font-size', '10pt')
-                    .css('margin', '12px')
-                    .prepend(
-                        '<img src="http://lms.com/static/img/favicon.png" style="height:50px; top:10; left:10;" /> LMS'
-                    );
-
-                $(win.document.body).find('table')
-                    .addClass('compact')
-                    .css('font-size', 'inherit')
-                    .css('margin', '9px')
-            }
-
-        })]
+        "ordering": false
     });
 }
 
@@ -95,6 +80,6 @@ function changeReport(url) {
     let sDate = document.getElementById('sDate').value;
     sDate = sDate == '' ? '0000-00-00' : sDate;
     let eDate = document.getElementById('eDate').value;
-    url = url + "/" + list + '/' + sDate + '/' + eDate;
+    url = url + "/" + list + '?sDate=' + sDate + '&eDate=' + eDate;
     window.location.replace(url);
 }

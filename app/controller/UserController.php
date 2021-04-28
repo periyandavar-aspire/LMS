@@ -36,7 +36,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function home()
+    public function getHomePage()
     {
         $this->loadLayout("userHeader.html");
         $this->loadView("userHome");
@@ -48,7 +48,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function profile()
+    public function getProfile()
     {
         $id = $this->input->session('id');
         $data['dropdownGen'] = $this->model->getGender();
@@ -119,7 +119,6 @@ class UserController extends BaseController
      */
     public function getLentBooks() 
     {
-        var_export($this->input->get('index'));
         $offset = $this->input->get("index") ?? 0;
         $limit = $this->input->get("limit") ?? 5;
         $search = $this->input->get("search");
@@ -189,19 +188,6 @@ class UserController extends BaseController
     {
         $user = $this->input->session('id');
         $result['result'] = $this->model->removeRequest($id, $user);
-        echo json_encode($result);
-    }
-
-    /**
-     * Search for the user with the given search key
-     *
-     * @param string $searchKey Search keys
-     *
-     * @return void
-     */
-    public function search(string $searchKey)
-    {
-        $result['result'] = $this->model->getUsersLike($searchKey);
         echo json_encode($result);
     }
 }

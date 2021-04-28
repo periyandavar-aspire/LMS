@@ -97,7 +97,7 @@ class MysqliDriver extends Database
                 $result = $stmt->get_result();
                 $this->result = ($result == false) ? null : $this->result = $result;
             }
-        } catch (Mysqli_sql_exception $e) {
+        } catch (Mysqli_sql_exception $exception) {
             Log::getInstance()->error(
                 $exception->getMessage(),
                 [
@@ -154,7 +154,7 @@ class MysqliDriver extends Database
                 $result = $stmt->get_result();
                 $this->result = ($result == false) ? null : $this->result = $result;
             }
-        } catch (Mysqli_sql_exception $e) {
+        } catch (Mysqli_sql_exception $exception) {
             Log::getInstance()->error(
                 $exception->getMessage(),
                 [

@@ -13,7 +13,7 @@ if (!isset($books)) {
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
                     <a
-                        href="/home/book/view/<?php echo $book->id; ?>">
+                        href="/book/<?php echo $book->id; ?>">
 
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
@@ -36,7 +36,7 @@ if (!isset($books)) {
                         </p>
                         <div class="btn-container">
                             <a class="btn-link"
-                                href="/book/view/<?php echo $book->id;?>">View
+                                href="/book/<?php echo $book->id;?>">View
                                 Book</a>
                         </div>
                     </div>

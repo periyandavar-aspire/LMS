@@ -14,7 +14,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <div class='table-panel'>
                     <div class="form-input-div">
                         <label> Record count </label>
-                        <select id="recordCount" onchange="changePagination('/user/lentbooks');"
+                        <select id="recordCount" onchange="changePagination('/lent-books');"
                             class="table-form-control">
                             <option>5</option>
                             <option>10</option>
@@ -24,7 +24,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     </div>
                     <div class="form-input-div">
                         <label> Search </label>
-                        <input type="text" id="recordSearch" onchange="changePagination('/user/lentbooks');"
+                        <input type="text" id="recordSearch" placeholder="Book Name/ISBN" onchange="changePagination('/lent-books');"
                             value="<?php echo $pagination['search']; ?>"
                             class="table-form-control">
                     </div>
@@ -78,7 +78,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     <div>
                         <ul class="pagination">
                             <?php
-                                echo generatePagination($pagination, "/user/lentbooks");
+                                echo generatePagination($pagination, "/lent-books");
                             ?>
 
                             <!-- <li class="active"><a>1</a></li>

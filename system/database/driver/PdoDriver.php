@@ -96,7 +96,7 @@ class PdoDriver extends Database
             if ($flag == true) {
                 $this->result = $stmt;
             }
-        } catch (PDOException $e) {
+        } catch (PDOException $exception) {
             Log::getInstance()->error(
                 $exception->getMessage(),
                 [
@@ -148,7 +148,7 @@ class PdoDriver extends Database
             if ($flag == true) {
                 $this->result = $stmt;
             }
-        } catch (PDOException $e) {
+        } catch (PDOException $exception) {
             Log::getInstance()->error(
                 $exception->getMessage(),
                 [

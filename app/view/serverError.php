@@ -16,7 +16,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                 print_r($data);
                             } ?>
                             </p>
-                            <a class="btn-link" href="/home">GO TO HOME</a>
+                            <a class="btn-link" href="/">GO TO HOME</a>
                         </div>
                     </div>
                 </div>

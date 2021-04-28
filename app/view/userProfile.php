@@ -14,7 +14,7 @@ if (!isset($result)) {
                 </div>
             </div>
 
-            <form action="/user/profile/update" onsubmit="editProfileValidator(event);" method="POST">
+            <form action="/user-profile" onsubmit="editProfileValidator(event);" method="POST">
                 <div class="form-input-div">
                     <label>Full Name <span class="required-star">*</span></label>
                     <input class="form-control" type="text"

@@ -98,7 +98,7 @@ if (!function_exists("errHandler")) {
     {
         ob_get_contents() and ob_end_clean();
         Log::getInstance()->error(
-            $errMsg . ' in ' . $errFile . 'at line ' . $errLine
+            $errMsg . ' in ' . $errFile . ' at line ' . $errLine
         );
         Router::error();
     }

@@ -149,4 +149,19 @@ final class InputData
         }
         return $data;
     }
+
+    /**
+     * Returns php://input contents as array
+     *
+     * @return array
+     */
+    public function data(): array
+    {
+        // parse_str(file_get_contents("php://input"), $data);
+        $data = (array) json_decode(file_get_contents('php://input'), true);
+        foreach ($data as $key => $value) {
+                $data[$key] = htmlspecialchars(trim($value));
+        }
+        return $data;
+    }
 }

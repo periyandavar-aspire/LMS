@@ -57,6 +57,6 @@ defined('VALID_REQ') or exit('Invalid request');
         }
     ]
     $(document).ready(function() {
-        loadTableData("user-list", "/allRegUser/loadData", column);
+        loadTableData("user-list", "/user-management/reg-users", column);
     });
 </script>

@@ -60,7 +60,7 @@ final class Utility
     public static function redirectURL(string $url, $permanent = true)
     {
         !headers_sent() and
-            header('Location: ../' . $url, true, ($permanent === true) ? 301 : 302);
+            header('Location: /' . $url, true, ($permanent === true) ? 301 : 302);
         exit();
     }
 
@@ -94,4 +94,5 @@ final class Utility
         $len = strlen($startStr);
         return (substr($str, 0, $len) === $startStr);
     }
+
 }

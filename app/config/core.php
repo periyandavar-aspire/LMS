@@ -65,8 +65,8 @@ $config['logs'] = "app/log";
 /**
  * Session driver available options file|database
  */
-$config['session_driver'] = 'database';
-// $config['session_driver'] = 'file';
+// $config['session_driver'] = 'database';
+$config['session_driver'] = 'file';
 /**
  * Session expiration time
  */
@@ -78,8 +78,8 @@ $config['cookie_expiration'] = 86400;
 /**
  * Session save path
  */
-$config['session_save_path'] = 'sess'; 
-// $config['session_save_path'] = 'C:\xampp\LMS\sess';
+// $config['session_save_path'] = 'sess'; 
+$config['session_save_path'] = 'C:\xampp\LMS\sess';
 /**
  * Sets default timezone
  */

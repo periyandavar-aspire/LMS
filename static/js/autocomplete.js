@@ -64,11 +64,11 @@ function autocomplete(inputElem, destination, url, callFun, hiddenTag, isDiv = f
                             }
                             divValue = destination.innerHTML;
                             if (callFun != null)
-                                callFun(dataValue, dataCode);
+                                callFun(dataCode, dataValue);
                         } else {
                             inputElem.value = dataValue;
                             if (callFun != null)
-                                callFun(dataValue, dataCode);
+                                callFun(dataCode, dataValue);
                         }
                         closeList();
                     });

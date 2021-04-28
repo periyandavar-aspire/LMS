@@ -14,7 +14,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <div class='table-panel'>
                     <div class="form-input-div">
                         <label> Record count </label>
-                        <select id="recordCount" onchange="changePagination('/user/requestedBooks');"
+                        <select id="recordCount" onchange="changePagination('/requested-books');"
                             class="table-form-control">
                             <option>5</option>
                             <option>10</option>
@@ -24,7 +24,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     </div>
                     <div class="form-input-div">
                         <label> Search </label>
-                        <input type="text" id="recordSearch" onchange="changePagination('/user/requestedBooks');"
+                        <input type="text" id="recordSearch" onchange="changePagination('/requested-books');"
                             value="<?php echo $pagination['search']; ?>"
                             class="table-form-control">
                     </div>
@@ -61,7 +61,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                 </td>
                                 <td>
                                     <button type="button"
-                                        onclick="deleteItem('/userRequest/delete/<?php echo $book->id; ?>');"
+                                        onclick="deleteItem('/user-request-management/user-request/<?php echo $book->id; ?>');"
                                         class="button-control icon-btn negative" title="delete"><i
                                             class="fa fa-trash"></i></button>
                                 </td>
@@ -88,11 +88,11 @@ defined('VALID_REQ') or exit('Invalid request');
                                 if ($pagination['tpages'] > 1) {
                                     $previous = ($pagination['start'] == 1)
                                     ? '<li class="disable"><a class="disable">Previous</a></li>'
-                                    : '<li><a href="/user/requestedBooks?index='.((($pagination['cpage']-1)) * $pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Previous</a></li>';
+                                    : '<li><a href="/requested-books?index='.((($pagination['cpage']-1)) * $pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Previous</a></li>';
                                     echo $previous;
                                     $first = ($pagination['start'] == 1)
                                     ? '<li class="active"><a>1</a></li>'
-                                    : '<li><a href="/user/requestedBooks?index=0&limit='.$pagination['limit'].'&search='.$pagination['search'].'">1</a></li>';
+                                    : '<li><a href="/requested-books?index=0&limit='.$pagination['limit'].'&search='.$pagination['search'].'">1</a></li>';
                                     echo $first;
                                     if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
                                         $i = $pagination['cpage'];
@@ -109,7 +109,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                         $li = "<li";
                                         $li = ($i == $pagination['cpage']+1)
                                         ? $li . " class='active'><a>$i</a></li>"
-                                        : $li . "><a href='/user/requestedBooks?index=".($pagination['limit']*($i-1))."&limit=".$pagination['limit'].'&search='.$pagination['search']."'>$i</a></li>";
+                                        : $li . "><a href='/requested-books?index=".($pagination['limit']*($i-1))."&limit=".$pagination['limit'].'&search='.$pagination['search']."'>$i</a></li>";
                                         // $li .= "";
                                         echo $li;
                                     }
@@ -118,11 +118,11 @@ defined('VALID_REQ') or exit('Invalid request');
                                     }
                                     $last = ($pagination['end'] == $pagination['tcount'])
                                     ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
-                                    : '<li><a href="/user/requestedBooks?index='.(($pagination['tpages']-1)*$pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
+                                    : '<li><a href="/requested-books?index='.(($pagination['tpages']-1)*$pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
                                     echo $last;
                                     $next = ($pagination['end'] == $pagination['tcount'])
                                     ? '<li class="disable"><a class="disable">Next</a></li>'
-                                    : '<li><a href="/user/requestedBooks?index='.((($pagination['cpage']+1)* $pagination['limit'])).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Next</a></li>';
+                                    : '<li><a href="/requested-books?index='.((($pagination['cpage']+1)* $pagination['limit'])).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Next</a></li>';
                                     echo $next;
                                 }
                             ?>

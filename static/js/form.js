@@ -30,11 +30,13 @@ const adminLoginFormValidator = function(event) {
 };
 
 const issueBookFormValidator = function(event) {
-    if (document.getElementById('username').value == '') {
+    let userId = document.getElementById('userId').value;
+    let bookId = document.getElementById('userId').value;
+    if (isNaN(userId) && parseInt(userId) < 0) {
         toast("Please enter the User Name..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
-    } else if (document.getElementById('isbnNumber').value == '') {
+    } else if (isNaN(bookId) && parseInt(bookId) < 0) {
         toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;

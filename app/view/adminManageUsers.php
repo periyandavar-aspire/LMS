@@ -15,11 +15,11 @@ defined('VALID_REQ') or exit('Invalid request');
                     <table class="tab_design" id='user-list'>
                         <thead>
                             <tr>
-                                <th data-orderable="false">Sl. No</th>
+                                <th data-orderable="false">#</th>
                                 <th>Full Name</th>
                                 <th>User Name</th>
                                 <th>Email</th>
-                                <th>Mobile No</th>
+                                <th>Mobile</th>
                                 <th>User Type</th>
                                 <th>Registered At</th>
                                 <th data-orderable="false">Action</th>
@@ -34,9 +34,9 @@ defined('VALID_REQ') or exit('Invalid request');
         <div class="modal-shadow" id="addRecord">
             <div class="modal">
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
-                <h1>Add New Book</h1>
+                <h1>Add New User</h1>
                 <hr><br>
-                <form action="/admin/users" onsubmit="createUserFormValidator(event);" method="post">
+                <form action="/admin/user-management" onsubmit="createUserFormValidator(event);" method="post">
                     <div class="form-input-div">
                         <label>Full Name</label>
                         <input class="form-control" type="text" id="fullname" name="fullName" autocomplete="off"
@@ -108,7 +108,7 @@ defined('VALID_REQ') or exit('Invalid request');
             "data": null,
             "render": function(item) {
                 code = '<button type="button"';
-                code += ' onclick="deleteItem(' + "'/user/delete/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/user-management/all-users/" + item.role.toLowerCase() +"/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;
@@ -116,6 +116,6 @@ defined('VALID_REQ') or exit('Invalid request');
         }
     ]
     $(document).ready(function() {
-        loadTableData("user-list", "/allUser/loadData", column);
+        loadTableData("user-list", "/user-management/all-users", column);
     });
 </script>

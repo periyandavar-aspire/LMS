@@ -54,10 +54,10 @@ if (!isset($book)) {
                         <?php if ($user == REG_USER): ?>
                         <div class="form-buttons">
                             <button
-                                onclick="requestBook(<?php echo $book->isbnNumber . ',' . $book->available; ?>)"
+                                onclick="requestBook(<?php echo $book->id . ',' . $book->available; ?>)"
                                 class="btn-link <?php echo ($book->available == 0) ? "disabled" : ""; ?>">Request
                                 to Lend</button>
-                            <a href="/user/availbleBooks" class="btn-link">View All</a>
+                            <a href="/available-books" class="btn-link">View All</a>
                         </div>
                         <?php else: ?>
                         <h3>Stack</h3>

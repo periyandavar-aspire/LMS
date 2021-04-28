@@ -57,6 +57,10 @@ class IssuedBookController extends BaseController
         $this->includeScript("issuedbook.js");
         $this->loadView('manageissuedbooks');
         $this->loadLayout($user . "Footer.html");
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -89,37 +93,22 @@ class IssuedBookController extends BaseController
             Utility::setSessionData('msg', null);
         }
     }
-
     /**
-     * Displays the user details of the given username in JSON
+     * Displays the user details of the given book by Id in JSON
      *
-     * @param string $username UserName
+     * @param string $userId UserId
      *
      * @return void
      */
-    public function getUserDetails(string $username)
+    public function getUserDetails(string $userId)
     {
-        $result = $this->model->getUserDetails($username);
+        $result = $this->model->getUserDetails($userId);
         $result->condition = $this->service->checkUserCondition(
             $result,
             $this->model->getMaxBooksToLend()
         );
         echo json_encode($result);
     }
-
-    /**
-     * Displays the book details of the given ISBN Number in JSON
-     *
-     * @param string $isbnNumber IsbnNumber
-     *
-     * @return void
-     */
-    public function getBookDetails(string $isbnNumber)
-    {
-        $result = $this->model->getBookDetails($isbnNumber);
-        echo json_encode($result);
-    }
-
     /**
      * Manage the user request
      *
@@ -133,7 +122,7 @@ class IssuedBookController extends BaseController
         $result = $this->model->getRequestDetails($id);
         if ($result == null) {
             Utility::setSessionData('msg', 'Invalid Action');
-            $this->redirect('userRequest');
+            $this->redirect('request-management');
         }
         $result->lent = $this->model->lentBooksCount($result->userId);
         $max = $this->model->getMaxBooksToLend($result->userId);
@@ -162,11 +151,11 @@ class IssuedBookController extends BaseController
         $flag = $this->model->updateRequest(
             $id,
             $updateTo,
-            $this->input->post('comments')
+            $this->input->post('comments', '')
         );
         $script = $flag == true ? 'Success..!' : 'Failed..!';
         Utility::setSessionData('msg', $script);
-        $this->redirect('userRequest');
+        $this->redirect('request-management');
     }
 
     /**
@@ -178,20 +167,21 @@ class IssuedBookController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
-        $fields = new Fields(['username', 'isbnNumber', 'comments']);
+        $fields = new Fields(['userId', 'bookId', 'comments']);
         $rules = [
-            'username' => 'alphaSpaceValidation',
+            'userId' => 'numericValidation',
+            'bookId' => 'numericValidation'
         ];
         $fields->addRule($rules);
-        $fields->setRequiredFields('username', 'isbnNumber');
+        $fields->setRequiredFields('userId', 'bookId');
         $fields->addValues($this->input->post());
         $flag = $fdv->validate($fields, $field);
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!')";
         } else {
             $values = $fields->getValues();
-            $userDetail = $this->model->getUserDetails($values['username']);
-            $bookDetail = $this->model->getBookDetails($values['isbnNumber']);
+            $userDetail = $this->model->getUserDetails($values['userId']);
+            $bookDetail = $this->model->getBookDetails($values['bookId']);
             $maxLendBook = $this->model->getMaxBooksToLend();
             if (!$this->service->checkLendCondition(
                 $userDetail,
@@ -214,11 +204,13 @@ class IssuedBookController extends BaseController
             $issuedBooks,
             $fineSettings
         );
-        $this->loadLayout($user . "Header.html");
-        $this->includeScript("issuedbook.js");
-        $this->loadView("manageissuedbooks", $data);
-        $this->loadLayout($user . "Footer.html");
-        $this->addScript($script);
+        Utility::setSessionData('msg', $script);
+        $this->redirect('issued-book-management');
+        // $this->loadLayout($user . "Header.html");
+        // $this->includeScript("issuedbook.js");
+        // $this->loadView("manageissuedbooks", $data);
+        // $this->loadLayout($user . "Footer.html");
+        // $this->addScript($script);
     }
 
     /**
@@ -258,10 +250,10 @@ class IssuedBookController extends BaseController
      */
     public function loadIssuedBook()
     {
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $tcount = $tfcount = '';
         if ($sortby == 0) {
@@ -294,10 +286,10 @@ class IssuedBookController extends BaseController
      */
     public function loadRequestBook()
     {
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $tcount = $tfcount = '';
         if ($sortby == 0) {

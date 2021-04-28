@@ -6,7 +6,7 @@ defined('VALID_REQ') or exit('Invalid request');
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Books &nbsp;<a class="btn-link" href="/books/add">Add</a></h1>
+                    <h1>Books &nbsp;<a class="btn-link" href="/book-management/new-book">Add</a></h1>
                     <hr>
                 </div>
             </div>
@@ -54,7 +54,7 @@ defined('VALID_REQ') or exit('Invalid request');
             "render": function(item) {
                 code = '<div class="checkbox"><input type="checkbox" ';
                 code += 'onchange="changeStatus(event,'
-                code += "'/books/changeStatus/" + item.id + "');" + '" ';
+                code += "'/book-management/books/" + item.id + "');" + '" ';
                 code += item.status == 1 ? "checked" : '';
                 code += '></div>';
                 return code;
@@ -64,10 +64,10 @@ defined('VALID_REQ') or exit('Invalid request');
             "data": null,
             "render": function(item) {
                 code = '<a href=';
-                code += "'/books/edit/" + item.id + "'";
+                code += "'/book-management/books/" + item.id + "'";
                 code +=
                     'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a> <button type="button"';
-                code += ' onclick="deleteItem(' + "'/books/delete/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/book-management/books/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;
@@ -75,6 +75,6 @@ defined('VALID_REQ') or exit('Invalid request');
         }
     ]
     $(document).ready(function() {
-        loadTableData("book-list", "/book/loadData", column);
+        loadTableData("book-list", "/book-management/books", column);
     });
 </script>

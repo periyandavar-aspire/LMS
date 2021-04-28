@@ -3,7 +3,7 @@ function requestBook(book, available) {
         toast("This book is not available", 'danger');
         return false;
     }
-    fetch("/book/request/" + book, { headers: { response: "application/json" } })
+    fetch("/request/" + book, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {
@@ -15,7 +15,12 @@ function requestBook(book, available) {
 }
 
 function deleteItem(delUrl) {
-    AskConfirm("Are sure to delete..?", () => fetch(delUrl, { headers: { response: "application/json" } })
+    AskConfirm("Are sure to delete..?", () => fetch(delUrl, {
+            method: 'DELETE',
+            headers: {
+                response: "application/json"
+            }
+        })
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {

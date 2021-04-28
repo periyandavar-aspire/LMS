@@ -38,12 +38,4 @@ class BaseModel
         $this->db = DatabaseFactory::create();
         Log::getInstance()->info("The model is initalized successfully");
     }
-
-    /**
-     * Close the db connection
-     */
-    public function __destruct()
-    {
-        $this->db->close();
-    }
 }

@@ -82,7 +82,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     id="publication" name="publication" autocomplete="off" placeholder="Book Publication" required="">
                 </div>
                 <div class="form-input-div">
-                    <label>ISBN Number</label>
+                    <label>ISBN</label>
                     <input class="form-control" type="text" <?php if (isset($book->isbnNumber)) {
                             echo "value='".$book->isbnNumber."'";
                         }?>
@@ -130,6 +130,6 @@ defined('VALID_REQ') or exit('Invalid request');
 </article>
 <script>
     document.getElementById('books').className += " active";
-    autocomplete(document.getElementById("authorslist"), document.getElementById("authorslist"), "/book/authors/", null, "selected-author",true );
-    autocomplete(document.getElementById("catlist"), document.getElementById("catlist"), "/book/categories/", null, "selected-category", true);
+    autocomplete(document.getElementById("authorslist"), document.getElementById("authorslist"), "/authors/", null, "selected-author",true );
+    autocomplete(document.getElementById("catlist"), document.getElementById("catlist"), "/categories/", null, "selected-category", true);
 </script>

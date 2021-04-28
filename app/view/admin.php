@@ -68,7 +68,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                     <i class="fa fa-superpowers" aria-hidden="true"></i>&nbsp;
                                     <input type="text" name="verfcode" maxlength="5" autocomplete="off"
                                         placeholder="Verification Code" required="" class="verfcode">&nbsp;<img
-                                        src="<?php echo "/home/captcha"; ?>">
+                                        src="<?php echo "/captcha"; ?>">
                                 </div>
                                 <div class="msg">
                                     <?php if (isset($msg)) {

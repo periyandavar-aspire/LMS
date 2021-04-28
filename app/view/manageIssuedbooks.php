@@ -10,7 +10,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     <hr>
                 </div>
             </div>
-            <form action="/issueBook" onsubmit="issueBookFormValidator(event);" enctype="multipart/form-data"
+            <form action="/issued-book-management/issued-books" onsubmit="issueBookFormValidator(event);" enctype="multipart/form-data"
                 method="post">
                 <div class="row">
                     <div class="cols col-4">
@@ -18,6 +18,7 @@ defined('VALID_REQ') or exit('Invalid request');
                             <label>User Name <span class="required-star">*</span></label>
                             <input class="form-control" autocomplete="off" type="text" id="username" name="username"
                                 placeholder="User Name" required="">
+                            <input type="hidden" id="userId" name="userId">
                         </div>
                     </div>
 
@@ -31,9 +32,10 @@ defined('VALID_REQ') or exit('Invalid request');
 
                     <div class="cols col-4">
                         <div class="form-input-div">
-                            <label>ISBN Number <span class="required-star">*</span></label>
+                            <label>ISBN <span class="required-star">*</span></label>
                             <input pattern="^[0-9]+$" class="form-control" autocomplete="off" type="text"
                                 id="isbnNumber" name="isbnNumber" placeholder="Book Name" required="">
+                            <input type="hidden" id="bookId" name="bookId">
                         </div>
                     </div>
 
@@ -77,14 +79,14 @@ defined('VALID_REQ') or exit('Invalid request');
                     <table class="tab_design" id='book-list'>
                         <thead>
                             <tr>
-                                <th data-orderable="false">Sl. No</th>
-                                <th>ISBN Number</th>
+                                <th data-orderable="false">#</th>
+                                <th>ISBN </th>
                                 <th>Book Name</th>
                                 <th>User Name</th>
                                 <th>Issued Date</th>
                                 <th>Returned Date</th>
                                 <th>Status</th>
-                                <th>Fine Amount</th>
+                                <th>Fine in &#8377;</th>
                                 <th data-orderable="false">Mark as Returned</th>
                             </tr>
                         </thead>
@@ -99,8 +101,8 @@ defined('VALID_REQ') or exit('Invalid request');
 </article>
 <script>
     document.getElementById('issued').className += " active";
-    autocomplete(document.getElementById("username"), null, "/user/get/", loadUserDetails);
-    autocomplete(document.getElementById("isbnNumber"), null, "/book/get/", loadBookDetails);
+    autocomplete(document.getElementById("username"), null, "/user/user-name/", loadUserDetails);
+    autocomplete(document.getElementById("isbnNumber"), null, "/book/isbn-number/", loadBookDetails);
     column = [{
             "render": function(data, type, row, meta) {
                 return meta.row + meta.settings._iDisplayStart + 1;
@@ -142,6 +144,6 @@ defined('VALID_REQ') or exit('Invalid request');
         },
     ]
     $(document).ready(function() {
-        loadTableData("book-list", "/issueBook/loadData", column);
+        loadTableData("book-list", "/issued-book-management/issued-books", column);
     });
 </script>

@@ -53,15 +53,13 @@ class ManageUserController extends BaseController
      */
     public function loadRegUser()
     {
-        $user = $this->input->session('id');
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $tcount = $tfcount = '';
         $data['aaData'] = $this->model->getRegUsers(
-            $user,
             $start,
             $limit,
             $sortby+1,
@@ -84,10 +82,10 @@ class ManageUserController extends BaseController
     public function loadAllUser()
     {
         $user = $this->input->session('id');
-        $start = $this->input->get("iDisplayStart");
-        $limit = $this->input->get("iDisplayLength");
-        $sortby = $this->input->get("iSortCol_0");
-        $sortDir = $this->input->get("sSortDir_0");
+        $start = $this->input->get("iDisplayStart", '0');
+        $limit = $this->input->get("iDisplayLength", '10');
+        $sortby = $this->input->get("iSortCol_0", '0');
+        $sortDir = $this->input->get("sSortDir_0", 'ASC');
         $searchKey = $this->input->get("sSearch");
         $tcount = $tfcount = '';
         $data['aaData'] = $this->model->getAllUsers(
@@ -179,5 +177,18 @@ class ManageUserController extends BaseController
         $this->loadLayout("adminFooter.html");
         $this->includeScript("populate.js");
         $this->addScript($script);
+    }
+
+    /**
+     * Search for the user with the given search key
+     *
+     * @param string $searchKey Search keys
+     *
+     * @return void
+     */
+    public function search(string $searchKey)
+    {
+        $result['result'] = $this->model->getUsersLike($searchKey);
+        echo json_encode($result);
     }
 }

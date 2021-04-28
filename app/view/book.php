@@ -52,7 +52,7 @@ if (!isset($book)) {
                                             </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
                                             available</p>
                                         <div class="form-buttons">
-                                            <a class="btn-link" href="/home/books">View All</a>
+                                            <a class="btn-link" href="/books">View All</a>
                                         </div>
                                     </div>
                                 </div>
