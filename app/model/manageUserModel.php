@@ -63,10 +63,11 @@ class ManageUserModel extends BaseModel
             $this->db->where(
                 "(fullname LIKE ?"
                 ." OR username LIKE ? OR "
+                ." mobile LIKE ? OR "
                 ."email LIKE ?)"
             );
             $this->db->appendBindValues(
-                ["%$searchKey%", "%$searchKey%", "%$searchKey%"]
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%", "%$searchKey%"]
             );
         }
 
@@ -79,21 +80,24 @@ class ManageUserModel extends BaseModel
         $this->db->selectAs(
             "COUNT(*) count",
         )->from('all_user')->execute();
-        $tcount = ($result = $this->db->fetch()) ? $result->count-1 : 0;
+        $this->db->where('email', '!=', $email);
+        $tcount = ($result = $this->db->fetch()) ? $result->count : 0;
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('all_user');
+            $this->db->where('email', '!=', $email);
             $this->db->where(
                 "(fullname LIKE ?"
                 ." OR username LIKE ? OR "
+                ." mobile LIKE ? OR "
                 ."email LIKE ?)"
             );
             $this->db->appendBindValues(
-                ["%$searchKey%", "%$searchKey%", "%$searchKey%"]
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%", "%$searchKey%"]
             );
             $this->db->execute();
-            $tfcount = ($result = $this->db->fetch()) ? $result->count-1 : 0;
+            $tfcount = ($result = $this->db->fetch()) ? $result->count : 0;
         } else {
             $tfcount = $tcount;
         }

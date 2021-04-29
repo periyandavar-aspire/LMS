@@ -75,7 +75,7 @@ class BookModel extends BaseModel
         $book['available'] = $book['stack'];
         $this->db->set("autocommit", 0);
         $this->db->begin();
-        $flag1 = $flag2 = $flag3 = false;
+        $flag = $flag1 = $flag2 = $flag3 = false;
         $flag1 = $this->db->insert('book', $book)->execute();
         $bookId = $this->db->insertId();
         if ($flag1) {
@@ -98,11 +98,11 @@ class BookModel extends BaseModel
                 }
             }
         }
-        if ($flag1 && $flag2 && $flag3) {
-            return $this->db->commit();
-        }
-        $this->db->rollback();
-        return false;
+        ($flag1 && $flag2 && $flag3)
+            ? ($flag = $this->db->commit()) 
+            : ($this->db->rollback());
+        $this->db->set("autocommit", 1);
+        return $flag;
     }
 
     /**
@@ -266,17 +266,17 @@ class BookModel extends BaseModel
         $field = [ 'deletionToken' => $deletionToken];
         $this->db->set("autocommit", 0);
         $this->db->begin();
-        $flag1 = $flag2 = false;
+        $flag = $flag1 = $flag2 = false;
         $flag1 = $this->db->update('book', $field)->where('id', '=', $id)->execute();
         $flag2 = $this->db->update('issued_book', $field)
             ->where('id', '=', $id)
             ->where('returnAt', '=', DEFAULT_DATE_VAL)
             ->execute();
-        if ($flag1 && $flag2) {
-            return $this->db->commit();
-        }
-        $this->db->rollback();
-        return false;
+         ($flag1 && $flag2)
+            ? ($flag =$this->db->commit()) 
+            : ($this->db->rollback());
+        $this->db->set("autocommit", 1);
+        return $flag;
     }
 
     /**
@@ -319,7 +319,7 @@ class BookModel extends BaseModel
      */
     public function update(array $book, int $bookId): bool
     {
-        $flag1 = $flag2 = $flag3 = false;
+        $flag = $flag1 = $flag2 = $flag3 = false;
         $categories = explode(",", $book['category']);
         $authors = explode(",", $book['author']);
         unset($book['category']);
@@ -353,10 +353,11 @@ class BookModel extends BaseModel
                 }
             }
         }
-        if ($flag1 && $flag2 && $flag3) {
-            return $this->db->commit();
-        }
-        return $this->db->rollback();
+        ($flag1 && $flag2 && $flag3)
+            ? ($flag = $this->db->commit()) 
+            : ($this->db->rollback());
+        $this->db->set("autocommit", 1);
+        return $flag;
     }
 
     /**

@@ -31,13 +31,13 @@ const adminLoginFormValidator = function(event) {
 
 const issueBookFormValidator = function(event) {
     let userId = document.getElementById('userId').value;
-    let bookId = document.getElementById('userId').value;
+    let bookId = document.getElementById('bookId').value;
     if (isNaN(userId) && parseInt(userId) < 0) {
         toast("Please enter the User Name..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
     } else if (isNaN(bookId) && parseInt(bookId) < 0) {
-        toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
+        toast("Please enter the ISBN..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
     } else if (document.getElementById('user-condition').value == '0') {
@@ -81,7 +81,11 @@ const bookFormValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (document.getElementById("isbn").value == '') {
-        toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
+        toast("Please enter the ISBN..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!isbnValidator(document.getElementById("isbn").value)) {
+        toast("Invalid ISBN..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
     } else if (document.getElementById("stack").value == '') {
@@ -133,7 +137,11 @@ const bookEditFormValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (document.getElementById("isbn").value == '') {
-        toast("Please enter the ISBN Number..!", 'danger', "Invalid Input");
+        toast("Please enter the ISBN..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!isbnValidator(document.getElementById("isbn").value)) {
+        toast("Invalid ISBN..!", 'danger', "Invalid Input");
         event.preventDefault();
         return false;
     } else if (document.getElementById("stack").value == '') {
@@ -310,6 +318,28 @@ function checkEmail(event, span_id) {
                 document.getElementById(span_id).innerHTML = "Email id is already registered";
             }
         });
+}
+
+const isbnValidator = function(isbn) {
+    let sum = 0,
+        digit;
+    let n = isbn.length;
+    if (n != 10) {
+        return false;
+    }
+    for (let i = 0; i < 9; i++) {
+        if (isNaN(isbn[i])) {
+            return false;
+        }
+        digit = parseInt(isbn[i]);
+        sum += (digit * (10 - i));
+    }
+    last = isbn[9];
+    if (last != 'X' && (isNaN(last))) {
+        return false;
+    }
+    sum += ((last == 'X') ? 10 : (parseInt(last)));
+    return (sum % 11 == 0);
 }
 
 function checkPassword(strPassword) {

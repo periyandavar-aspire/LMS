@@ -128,6 +128,7 @@ class IssuedBookModel extends BaseModel
      */
     public function addIssuedBook(array $book): bool
     {
+        $flag = $flag1 = $flag2 = false;
         $this->db->select('code')
             ->from('status')
             ->where('value', '=', STATUS_ISSUED)
@@ -146,11 +147,11 @@ class IssuedBookModel extends BaseModel
             ->where('id', '=', $book['bookId']);
         $flag2 = $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
             ->execute();
-        if ($flag1 && $flag2) {
-            return $this->db->commit();
-        }
-        $this->db->rollback();
-        return false;
+        (($flag1 && $flag2))
+            ? ($flag = $this->db->commit()) 
+            : ($this->db->rollback());
+        $this->db->set("autocommit", 1);
+        return $flag;
     }
 
     /**
@@ -254,10 +255,10 @@ class IssuedBookModel extends BaseModel
                 ->on('user.id = ib.userId')
                 ->where('ib.issuedAt', '!=', DEFAULT_DATE_VAL);
             $this->db->where(
-                " user.username LIKE ? OR "
+                " (user.username LIKE ? OR "
                 ." name LIKE ? OR "
                 ." status.value LIKE ? OR "
-                ." book.isbn LIKE ? "
+                ." book.isbn LIKE ?) "
             );
             $this->db->appendBindValues(
                 ["%$searchKey%", "%$searchKey%", "%$searchKey%", "%$searchKey%"]
@@ -310,15 +311,17 @@ class IssuedBookModel extends BaseModel
             ->innerJoin('book')
             ->on('book.id = ib.bookId')
             ->innerJoin('user')
-            ->on('user.id = ib.userId');
+            ->on('user.id = ib.userId')
+            ->where('user.deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->where('book.deletionToken', '=', DEFAULT_DELETION_TOKEN);
         $this->db->where('status.value', 'LIKE', STATUS_REQ);
         if ($searchKey != null) {
             $this->db->where(
-                " user.username LIKE ? OR "
+                " (user.username LIKE ? OR "
                 ." comments LIKE ? OR "
                 ." status.value LIKE ? OR "
                 ." name LIKE ? OR "
-                ." book.isbn LIKE ? "
+                ." book.isbn LIKE ? )"
             );
             $this->db->appendBindValues(
                 [
@@ -543,11 +546,11 @@ class IssuedBookModel extends BaseModel
                 ->where('id', '=', $bookId);
             $flag2 = $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
                 ->execute();
-            if ($flag1 && $flag2) {
-                return $this->db->commit();
-            }
-            $this->db->rollback();
-            return false;
+            (($flag1 && $flag2))
+                ? ($flag = $this->db->commit()) 
+                : ($this->db->rollback());
+            $this->db->set("autocommit", 1);
+            return $flag;
         }
     }
 }

@@ -35,7 +35,7 @@ defined('VALID_REQ') or exit('Invalid request');
             </div>
             <div class="row">
                 <div class="cols" style='text-align-last:center;'>
-                    <h3>Top 10 <?php echo $list;?>s</h3>
+                    <h3></h3>
                 </div>
             </div>
                 <!-- <div class="cols">

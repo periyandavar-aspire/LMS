@@ -14,7 +14,7 @@ function requestBook(book, available) {
         });
 }
 
-function deleteItem(delUrl, titile) {
+function deleteItem(delUrl, title) {
     AskConfirm("Are sure to delete..?", () => fetch(delUrl, {
             method: 'DELETE',
             headers: {
@@ -24,7 +24,7 @@ function deleteItem(delUrl, titile) {
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {
-                title = (title == undefined) ? "item" : titile;
+                title = (title == undefined) ? "item" : title;
                 parts = delUrl.split("/");
                 document.getElementById(parts[parts.length - 1]).remove();
                 toast("The " + title + " was deleted..!", 'success');

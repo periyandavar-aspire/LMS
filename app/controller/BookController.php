@@ -44,8 +44,6 @@ class BookController extends BaseController
         if ($this->input->session('msg') != null) {
             $this->addScript($this->input->session('msg'));
             Utility::setSessionData('msg', null);
-        } else {
-            echo "ASsas";
         }
     }
 
@@ -196,7 +194,7 @@ class BookController extends BaseController
         $rules = [
             'author' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
             'category' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
-            'isbn' => '',
+            'isbn' => 'isbnValidation',
             'price' => 'positiveNumberValidation',
             'stack' => 'positiveNumberValidation'
         ];
@@ -220,7 +218,7 @@ class BookController extends BaseController
                     );
                     $script = "toast('New book added successfully..!', 'success');";
                     Utility::setSessionData('msg', $script);
-                    // $this->redirect('book-management');
+                    $this->redirect('book-management');
                 } else {
                     $script = "toast('Unable to add new book..!', 'danger',"
                         ." 'Failed');";
@@ -313,7 +311,7 @@ class BookController extends BaseController
         $rules = [
             'author' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
             'category' => 'expressValidation /^[1-9]{1}[0-9,]*$/',
-            'isbn' => '',
+            'isbn' => 'isbnValidation',
             'price' => 'positiveNumberValidation',
             'stack' => 'positiveNumberValidation'
         ];
@@ -349,7 +347,7 @@ class BookController extends BaseController
                         . json_encode($book) . ", admin id: '$adminId'"
                     );
                     Utility::setSessionData('msg', $script);
-                    // $this->redirect('book-management');
+                    $this->redirect('book-management');
                 } else {
                     $script = "toast('Unable to update the book..!', 'danger', "
                         . "'Failed..!');";

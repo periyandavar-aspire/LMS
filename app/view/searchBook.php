@@ -31,10 +31,11 @@ if (!isset($books)) {
                         </div>
                         <p><?php echo $book->description;?>
                         </p>
-                        <p>only <?php echo $book->available;?>
-                            <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
-                            available
-                        </p>
+                        <p><?php echo ($book->available == 0) ? "no copy"
+                                : ("only " . $book->available
+                                . (($book->available == 1) ? " copy" : " copies"));
+                            ?>
+                            available</p>
                         <div class="btn-container">
                             <a class="btn-link"
                                 href="/book/<?php echo $book->id;?>">View

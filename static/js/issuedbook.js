@@ -58,25 +58,3 @@ function updateBookDetails(elem, data) {
         document.getElementById('book-condition').value = 1;
     }
 }
-
-function MarkasReturn(id) {
-    data = {
-        "action": "markReturned"
-    }
-    fetch('/issued-book-management/issued-books/' + id, {
-            method: 'PUT',
-            headers: {
-                response: "application/json",
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => { return response.json() })
-        .then(data => {
-            if (data.result == 1) {
-                document.getElementById(id).remove();
-                toast("Success..!", 'success');
-            } else {
-                toast("Failed..!", 'danger', 'Failed');
-            }
-        });
-}

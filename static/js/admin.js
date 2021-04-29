@@ -20,6 +20,30 @@ function deleteItem(delUrl, title) {
         }));
 }
 
+
+function MarkasReturn(id) {
+    data = {
+        "action": "markReturned"
+    }
+    fetch('/issued-book-management/issued-books/' + id, {
+            method: 'PUT',
+            headers: {
+                response: "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => { return response.json() })
+        .then(data => {
+            if (data.result == 1) {
+                // document.getElementById(id).remove();
+                toast("Success..!", 'success');
+                loadTable();
+            } else {
+                toast("Failed..!", 'danger', 'Failed');
+            }
+        });
+}
+
 function editItem(editUrl, element = "editRecord") {
     fetch(editUrl, { headers: { response: "application/json" } })
         .then(response => { return response.json() })

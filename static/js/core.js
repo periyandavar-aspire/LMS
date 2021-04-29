@@ -189,9 +189,9 @@ function loadMoreBooks(event, url, searchKey) {
                                 <p>` + book.description + `
                                 </p>
                                 <p>`;
-                    code += book.available == 0 ? "no" :
-                        ('only ' + book.available);
-                    code += book.available == 1 ? " copy" : " copies";
+                    code += book.available == 0 ? "no copy" : (('only ' + book.available) + (
+                        (book.available == 1) ? " copy" : " copies"
+                    ))
                     code += ` available</p>
                                 <div class="btn-container">
                                     <a class="btn-link"

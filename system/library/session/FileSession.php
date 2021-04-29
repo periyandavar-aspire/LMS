@@ -79,7 +79,7 @@ class FileSession implements SessionHandlerInterface
      */
     public function write($sessId, $data)
     {
-        $data = $this->_security->encrypt(var_export($data, true));
+        $data = $this->_security->encrypt($data);
         return file_put_contents("$this->_savePath/$sessId", $data) === false
             ? false
             : true;

@@ -48,9 +48,11 @@ if (!isset($book)) {
                                         <h3>Location</h3>
                                         <p class="text-para"> <?php echo $book->location;?>
                                         </p>
-                                        <p class="stack-msg">Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?>
-                                            </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?>
-                                            available</p>
+                                        <p class="stack-msg">Currently <i><?php echo ($book->available == 0) ? "no copy"
+                                : ("only " . $book->available
+                                . (($book->available == 1) ? " copy" : " copies"));
+                            ?>
+                            available</p>
                                         <div class="form-buttons">
                                             <a class="btn-link" href="/books">View All</a>
                                         </div>

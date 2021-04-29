@@ -557,7 +557,3 @@ Router::add(
     'book/view',
     'get'
 );
-
-
-
-
