@@ -1,4 +1,14 @@
 <?php
+/**
+ * User Profile
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 if (!isset($result)) {
     return;
@@ -77,8 +87,8 @@ if (!isset($result)) {
                 <div class="msg">
                     <i>last updation on <?php echo $result->updatedAt ?><i><br><br>
                             <?php if (isset($msg)) {
-    echo $msg;
-} ?>
+                                echo $msg;
+                            } ?>
                 </div>
                 <div class="form-buttons">
                     <button type="submit" class="btn-link">Update</button>

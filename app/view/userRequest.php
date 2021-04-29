@@ -1,4 +1,14 @@
 <?php
+/**
+ * User Request
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <article class="main">
@@ -31,7 +41,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                 echo $data->mobile . "<br>";
                                 echo $data->email . "<br>";
                                 echo 'lent books '.$data->lent ;
-                            ?>
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -51,18 +61,18 @@ defined('VALID_REQ') or exit('Invalid request');
                             <div class="form-control div-like-textarea disabled" id="bookdetails">
                                 <div class="img-wrapper">
                                     <?php
-                            echo "<img src='/upload/book/$data->coverPic'>";
-                        ?>
+                                        echo "<img src='/upload/book/$data->coverPic'>";
+                                    ?>
                                 </div>
                                 <div class="text-wrapper">
                                     <?php
-                                echo $data->name . '<br>';
-                                echo "location: $data->location <br>";
-                                echo "$data->publication<br>";
-                                $available = $data->available == 0 ? 'no' : $data->available;
-                                $available .= $data->available == 1 ? ' copy' : ' copies';
-                                echo "$available available";
-                            ?>
+                                        echo $data->name . '<br>';
+                                        echo "location: $data->location <br>";
+                                        echo "$data->publication<br>";
+                                        $available = $data->available == 0 ? 'no' : $data->available;
+                                        $available .= $data->available == 1 ? ' copy' : ' copies';
+                                        echo "$available available";
+                                    ?>
                                 </div>
                             </div>
                         </div>

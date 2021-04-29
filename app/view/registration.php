@@ -1,4 +1,14 @@
 <?php
+/**
+ * Registration
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <!-- top container starts -->
@@ -32,12 +42,12 @@ defined('VALID_REQ') or exit('Invalid request');
                                         placeholder="Full Name..." required="">
                                         <option value="" style="display: none;">Select Gender</option>
                                         <?php if ($dropdownGen != null):?>
-                                        <?php foreach ($dropdownGen as $gender):?>
-                                        <option
-                                            value="<?php echo $gender['code']?>">
-                                            <?php echo $gender['value']?>
-                                        </option>
-                                        <?php endforeach;?>
+                                            <?php foreach ($dropdownGen as $gender):?>
+                                                <option
+                                                    value="<?php echo $gender['code']?>">
+                                                    <?php echo $gender['value']?>
+                                                </option>
+                                            <?php endforeach;?>
                                         <?php endif;?>
                                         <!-- <option value="m">Male</option>
                                         <option value="f">Female</option> -->
@@ -84,8 +94,8 @@ defined('VALID_REQ') or exit('Invalid request');
                                 </div>
                                 <div class="msg" id="msg">
                                     <?php if (isset($msg)) {
-    echo $msg;
-} ?>
+                                        echo $msg;
+                                    } ?>
                                 </div>
                                 <br><span> Already have an account..? <a class="link" href="/login"> login here
                                     </a></span>

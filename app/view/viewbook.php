@@ -1,4 +1,14 @@
 <?php
+/**
+ * View Book
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <div class="row-container">
@@ -22,10 +32,10 @@ defined('VALID_REQ') or exit('Invalid request');
                                 <div class='text-author'>
                                     <ul class="styled-list">
                                         <?php
-                                                foreach (explode(",", $book->authors) as $author) {
-                                                    echo "<li>  $author </li>";
-                                                }
-                                            ?>
+                                        foreach (explode(",", $book->authors) as $author) {
+                                            echo "<li>  $author </li>";
+                                        }
+                                        ?>
                                     </ul>
                                 </div>
                                 <h3> About the Book </h3>
@@ -34,10 +44,10 @@ defined('VALID_REQ') or exit('Invalid request');
                                 <h3> Categories </h3>
                                 <ul class="styled-list">
                                     <?php
-                                                foreach (explode(",", $book->categories) as $category) {
-                                                    echo "<li>  $category </li>";
-                                                }
-                                            ?>
+                                    foreach (explode(",", $book->categories) as $category) {
+                                        echo "<li>  $category </li>";
+                                    }
+                                    ?>
                                 </ul>
                                 <h3>ISBN Number</h3>
                                 <p class="text-para"> <?php echo $book->isbn; ?>

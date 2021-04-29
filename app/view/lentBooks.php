@@ -1,4 +1,14 @@
 <?php
+/**
+ * Lent books
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <article class="main">
@@ -43,23 +53,22 @@ defined('VALID_REQ') or exit('Invalid request');
                         </thead>
                         <tbody>
                             <?php $i=0; if (isset($books)): ?>
-
-                            <?php foreach ($books as $book):?>
-                            <tr>
-                                <td><?php echo ++$i;?>
-                                </td>
-                                <td><?php echo $book->isbn;?>
-                                </td>
-                                <td><?php echo $book->bookName?>
-                                </td>
-                                <td><?php echo $book->issuedAt;?>
-                                </td>
-                                <td><?php echo $book->returnAt;?>
-                                </td>
-                                <td>&#8377;<?php echo $book->fine;?>
-                                </td>
-                            </tr>
-                            <?php endforeach;?>
+                                <?php foreach ($books as $book):?>
+                                <tr>
+                                    <td><?php echo ++$i;?>
+                                    </td>
+                                    <td><?php echo $book->isbn;?>
+                                    </td>
+                                    <td><?php echo $book->bookName?>
+                                    </td>
+                                    <td><?php echo $book->issuedAt;?>
+                                    </td>
+                                    <td><?php echo $book->returnAt;?>
+                                    </td>
+                                    <td>&#8377;<?php echo $book->fine;?>
+                                    </td>
+                                </tr>
+                                <?php endforeach;?>
                             <?php endif;?>
                         </tbody>
                     </table>

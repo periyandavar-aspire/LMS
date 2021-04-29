@@ -1,4 +1,14 @@
 <?php
+/**
+ * Analytics
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <article class="main">
@@ -80,7 +90,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                 <tr>
                                     <th data-orderable="false">Sl. No</th>
                                     <?php 
-                                    if ($list== "book")     {
+                                    if ($list== "book") {
                                         echo generateTh(['Book Name', 'ISBN Number', 'Categories', 'Authors']);
                                     } elseif ($list== "user") {
                                         echo generateTh(['User Name', 'Full Name']);

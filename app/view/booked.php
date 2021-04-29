@@ -1,4 +1,14 @@
 <?php
+/**
+ * Requested books
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <article class="main">
@@ -43,23 +53,23 @@ defined('VALID_REQ') or exit('Invalid request');
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=0; if (isset($books)): ?>
-
-                            <?php foreach ($books as $book):?>
-                            <tr id="<?php echo $book->id;?>">
-                                <td><?php echo ++$i;?>
-                                </td>
-                                <td><?php echo $book->isbn;?>
-                                </td>
-                                <td><?php echo $book->bookName?>
-                                </td>
-                                <td><?php echo $book->requestedAt;?>
-                                </td>
-                                <td><?php echo $book->comments;?>
-                                </td>
-                                <td><?php echo $book->status;?>
-                                </td>
-                                <td>
+                            <?php $i=0; 
+                            if (isset($books)): ?>
+                                <?php foreach ($books as $book):?>
+                                <tr id="<?php echo $book->id;?>">
+                                    <td><?php echo ++$i;?>
+                                    </td>
+                                    <td><?php echo $book->isbn;?>
+                                    </td>
+                                    <td><?php echo $book->bookName?>
+                                    </td>
+                                    <td><?php echo $book->requestedAt;?>
+                                    </td>
+                                    <td><?php echo $book->comments;?>
+                                    </td>
+                                    <td><?php echo $book->status;?>
+                                    </td>
+                                    <td>
                                     <button type="button"
                                         onclick="deleteItem('/user-request-management/user-request/<?php echo $book->id; ?>', 'request');"
                                         class="button-control icon-btn negative" title="delete"><i
@@ -85,46 +95,46 @@ defined('VALID_REQ') or exit('Invalid request');
                     <div>
                         <ul class="pagination">
                             <?php
-                                if ($pagination['tpages'] > 1) {
-                                    $previous = ($pagination['start'] == 1)
-                                    ? '<li class="disable"><a class="disable">Previous</a></li>'
-                                    : '<li><a href="/requested-books?index='.((($pagination['cpage']-1)) * $pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Previous</a></li>';
-                                    echo $previous;
-                                    $first = ($pagination['start'] == 1)
-                                    ? '<li class="active"><a>1</a></li>'
-                                    : '<li><a href="/requested-books?index=0&limit='.$pagination['limit'].'&search='.$pagination['search'].'">1</a></li>';
-                                    echo $first;
-                                    if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
-                                        $i = $pagination['cpage'];
-                                        $iEnd = $pagination['cpage'] + 3;
-                                        $iEnd = $pagination['tpages'] < $iEnd ? $pagination['tpages'] : $iEnd;
-                                    } else {
-                                        $i = 2;
-                                        $iEnd = $pagination['tpages'] < 6 ? $pagination['tpages'] : 6;
-                                    }
-                                    if ($i != 2) {
-                                        echo "<li class='disable'>...</li>";
-                                    }
-                                    for (; $i < $iEnd; $i++) {
-                                        $li = "<li";
-                                        $li = ($i == $pagination['cpage']+1)
-                                        ? $li . " class='active'><a>$i</a></li>"
-                                        : $li . "><a href='/requested-books?index=".($pagination['limit']*($i-1))."&limit=".$pagination['limit'].'&search='.$pagination['search']."'>$i</a></li>";
-                                        // $li .= "";
-                                        echo $li;
-                                    }
-                                    if ($i != $pagination['tpages']) {
-                                        echo "<li class='disable'>...</li>";
-                                    }
-                                    $last = ($pagination['end'] == $pagination['tcount'])
-                                    ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
-                                    : '<li><a href="/requested-books?index='.(($pagination['tpages']-1)*$pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
-                                    echo $last;
-                                    $next = ($pagination['end'] == $pagination['tcount'])
-                                    ? '<li class="disable"><a class="disable">Next</a></li>'
-                                    : '<li><a href="/requested-books?index='.((($pagination['cpage']+1)* $pagination['limit'])).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Next</a></li>';
-                                    echo $next;
+                            if ($pagination['tpages'] > 1) {
+                                $previous = ($pagination['start'] == 1)
+                                ? '<li class="disable"><a class="disable">Previous</a></li>'
+                                : '<li><a href="/requested-books?index='.((($pagination['cpage']-1)) * $pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Previous</a></li>';
+                                echo $previous;
+                                $first = ($pagination['start'] == 1)
+                                ? '<li class="active"><a>1</a></li>'
+                                : '<li><a href="/requested-books?index=0&limit='.$pagination['limit'].'&search='.$pagination['search'].'">1</a></li>';
+                                echo $first;
+                                if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
+                                    $i = $pagination['cpage'];
+                                    $iEnd = $pagination['cpage'] + 3;
+                                    $iEnd = $pagination['tpages'] < $iEnd ? $pagination['tpages'] : $iEnd;
+                                } else {
+                                    $i = 2;
+                                    $iEnd = $pagination['tpages'] < 6 ? $pagination['tpages'] : 6;
                                 }
+                                if ($i != 2) {
+                                    echo "<li class='disable'>...</li>";
+                                }
+                                for (; $i < $iEnd; $i++) {
+                                    $li = "<li";
+                                    $li = ($i == $pagination['cpage']+1)
+                                    ? $li . " class='active'><a>$i</a></li>"
+                                    : $li . "><a href='/requested-books?index=".($pagination['limit']*($i-1))."&limit=".$pagination['limit'].'&search='.$pagination['search']."'>$i</a></li>";
+                                    // $li .= "";
+                                    echo $li;
+                                }
+                                if ($i != $pagination['tpages']) {
+                                    echo "<li class='disable'>...</li>";
+                                }
+                                $last = ($pagination['end'] == $pagination['tcount'])
+                                ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
+                                : '<li><a href="/requested-books?index='.(($pagination['tpages']-1)*$pagination['limit']).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">'.$pagination['tpages'].'</a></li>';
+                                echo $last;
+                                $next = ($pagination['end'] == $pagination['tcount'])
+                                ? '<li class="disable"><a class="disable">Next</a></li>'
+                                : '<li><a href="/requested-books?index='.((($pagination['cpage']+1)* $pagination['limit'])).'&limit='.$pagination['limit'].'&search='.$pagination['search'].'">Next</a></li>';
+                                echo $next;
+                            }
                             ?>
 
                             <!-- <li class="active"><a>1</a></li>

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Login
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <!-- top container starts -->
@@ -42,8 +52,8 @@ defined('VALID_REQ') or exit('Invalid request');
                                 </div>
                                 <div class="msg">
                                     <?php if (isset($msg)) {
-    echo $msg;
-} ?>
+                                        echo $msg;
+                                    } ?>
                                 </div>
                                 <br><span> Don't have an account..? <a class="link" href="/signup"> Register here
                                     </a></span>
