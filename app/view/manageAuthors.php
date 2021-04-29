@@ -39,7 +39,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     <div class="form-input-div">
                         <label>Author Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name"
-                            autocomplete="off" placeholder="Author Name..." required="">
+                            autocomplete="off" placeholder="Author Name" required="">
                     </div>
                     <div class="form-buttons">
                         <button type="submit" name="action" value="add" class="btn-link">Add</button>
@@ -102,7 +102,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 code += "'/author-management/authors/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button> <button type="button"';
-                code += ' onclick="deleteItem(' + "'/author-management/authors/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/author-management/authors/" + item.id + "', 'author');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;

@@ -20,7 +20,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <div class="cols col-1 div-card dashboard-icons">
                     <a href="/requested-books">
                         <i class="fa fa-bookmark" aria-hidden="true"></i> <br>
-                        Booked for lend
+                        Requested for lend
                     </a>
                 </div>
                 <div class="cols col-1 div-card dashboard-icons">

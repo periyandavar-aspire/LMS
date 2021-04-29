@@ -36,6 +36,8 @@ class BaseModel
     public function __construct()
     {
         $this->db = DatabaseFactory::create();
-        Log::getInstance()->info("The model is initalized successfully");
+        Log::getInstance()->info(
+            "The " . static::class . " class is initalized successfully"
+        );
     }
 }

@@ -84,7 +84,12 @@ class CategoryController extends BaseController
      */
     public function delete(int $id)
     {
-        $result['result'] = $this->model->delete($id);
+        $adminId = $this->input->session('id');
+        if ($result['result'] = $this->model->delete($id)) {
+            $this->log->activity(
+                "Admin user deleted the category($id), admin id: '$adminId'"
+            );
+        }
         echo json_encode($result);
     }
 
@@ -110,8 +115,14 @@ class CategoryController extends BaseController
      */
     public function changeStatus(int $id)
     {
+        $adminId = $this->input->session('id');
         $data = $this->input->data();
-        $result['result'] = $this->model->update($data, $id);
+        if ($result['result'] = $this->model->update($data, $id)) {
+            $this->log->activity(
+                "Admin user updated the category($id) with new values "
+                . json_encode($data) . ", admin id: '$adminId'"
+            );
+        }
         echo json_encode($result);
     }
 
@@ -123,6 +134,7 @@ class CategoryController extends BaseController
     public function update()
     {
         $fdv = new FormDataValidation();
+        $adminId = $this->input->session('id');
         $user = $this->input->session('type');
         $fields = new Fields(['name']);
         $rules = [
@@ -131,15 +143,20 @@ class CategoryController extends BaseController
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->update(
             $fields->getValues(),
             $this->input->post('id')
         )
         ) {
-            $script = "toast('Unable to update..!', 'danger');";
+            $script = "toast('Unable to update..!', 'danger', 'Failed');";
         } else {
             $script = "toast('Category is updated successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user updated the category(" . $this->input->post('id')
+                . ") with new values " . json_encode($fields->getValues())
+                . ", admin id: '$adminId'"
+            );
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('category-management');
@@ -159,6 +176,7 @@ class CategoryController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
+        $adminId = $this->input->session('id');
         $fields = new Fields(['name']);
         $fields->setRequiredFields('name');
         $rules = [
@@ -167,11 +185,16 @@ class CategoryController extends BaseController
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->add($fields->getValues())) {
-            $script = "toast('Unable to add new category..!', 'danger');";
+            $script = "toast('Unable to add new category..!', 'danger',"
+                . " 'Failed');";
         } else {
             $script = "toast('New category is added successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user added new category with values "
+                . json_encode($fields->getValues()) . ", admin id: '$adminId'"
+            );
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('category-management');
@@ -180,7 +203,6 @@ class CategoryController extends BaseController
         // $this->loadView("manageCategories", $data);
         // $this->loadLayout($user."Footer.html");
         // $this->addScript($script);
-
     }
 
     /**

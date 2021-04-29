@@ -30,6 +30,4 @@ defined('VALID_REQ') or exit('Invalid request');
 
 <script>
     document.getElementById('reports').className += " active";
-    autocomplete(document.getElementById("username"), null, "/user/get/");
-    autocomplete(document.getElementById("isbnNumber"), null, "/book/get/");
 </script>

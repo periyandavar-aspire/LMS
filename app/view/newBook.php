@@ -6,7 +6,7 @@ defined('VALID_REQ') or exit('Invalid request');
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Add New Book &nbsp;<a class="btn-link" href="/books">View Available Books</a></h1>
+                    <h1>Add New Book &nbsp;<a class="btn-link" href="/book-management">View Available Books</a></h1>
                     <hr>
                 </div>
             </div>
@@ -33,7 +33,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         placeholder="Search Author">
                 </div> -->
                 <div class="form-input-div">
-                    <label>Selected Authors</label>
+                    <label>Authors</label>
                     <div class="form-control list-group" contenteditable="true" id="authorslist" name="userDetails">
                         <?php
                             if (isset($book)) {
@@ -56,7 +56,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         placeholder="Search Category">
                 </div> -->
                 <div class="form-input-div">
-                    <label>Selected Categories</label>
+                    <label>Categories</label>
                     <div contenteditable="true" class="form-control list-group " id="catlist" name="userDetails">
                         <?php
                             if (isset($book)) {
@@ -83,8 +83,8 @@ defined('VALID_REQ') or exit('Invalid request');
                 </div>
                 <div class="form-input-div">
                     <label>ISBN</label>
-                    <input class="form-control" type="text" <?php if (isset($book->isbnNumber)) {
-                            echo "value='".$book->isbnNumber."'";
+                    <input class="form-control" type="text" <?php if (isset($book->isbn)) {
+                            echo "value='".$book->isbn."'";
                         }?>
                     id="isbn" name="isbn" autocomplete="off" placeholder="ISBN Number" required="">
                 </div>

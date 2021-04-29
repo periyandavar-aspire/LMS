@@ -46,7 +46,8 @@ if (!isset($books)) {
             </div>
             <!-- show more button -->
             <div class="btn-container" id="loadMore">
-                <a class="btn-link" onclick='loadMoreBooks(event, "/books/load");'>SHOW MORE</a>
+                <a class="btn-link" onclick='loadMoreBooks(event, "/books/load", "<?php echo $searchKey;?>");'>
+                SHOW MORE</a>
             </div>
             <?php endif;?>
             <?php endif;?>
@@ -55,4 +56,5 @@ if (!isset($books)) {
 </article>
 <script>
     document.getElementById("books").className += " active";
+    document.getElementById("g-book-search").value = "<?php echo $searchKey;?>"
 </script>

@@ -16,7 +16,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <div class="form-input-div">
                     <label>ISBN Number <span class="required-star">*</span></label>
                     <input pattern="^[0-9]+$" class="form-control" autocomplete="off" type="text"
-                        id="isbnNumber" name="isbnNumber" placeholder="Book Name" required="">
+                        id="isbn" name="isbn" placeholder="Book Name" required="">
                 </div>
             </div>
             <div class="cols col-2">
@@ -31,5 +31,5 @@ defined('VALID_REQ') or exit('Invalid request');
 <script>
     document.getElementById('reports').className += " active";
     autocomplete(document.getElementById("username"), null, "/user/get/");
-    autocomplete(document.getElementById("isbnNumber"), null, "/book/get/");
+    autocomplete(document.getElementById("isbn"), null, "/book/get/");
 </script>

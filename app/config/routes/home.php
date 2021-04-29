@@ -20,3 +20,11 @@ Router::add('/signup', '/home/registration', 'get', null, 'registrationPage');
 Router::add('/login', '/home/dologin', 'post');
 Router::add('/signup', '/home/createAccount', 'post');
 Router::add('/captcha', 'home/createCaptcha');
+Router::add(
+    '/user-management/users/email/([\s\S]*)',
+    'user/isEmailAvailable'
+);
+Router::add(
+    '/user-management/users/user-name/([a-zA-Z0-9_]+)',
+    'user/isNameAvailable'
+);

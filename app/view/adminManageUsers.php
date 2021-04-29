@@ -108,7 +108,7 @@ defined('VALID_REQ') or exit('Invalid request');
             "data": null,
             "render": function(item) {
                 code = '<button type="button"';
-                code += ' onclick="deleteItem(' + "'/user-management/all-users/" + item.role.toLowerCase() +"/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/user-management/all-users/" + item.role.toLowerCase() +"/" + item.id + "', 'user');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;

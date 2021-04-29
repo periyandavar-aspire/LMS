@@ -79,7 +79,9 @@ class BaseController
         $this->input = new InputData();
         $this->load = Loader::autoLoadClass($this);
         $this->log = Log::getInstance();
-        $this->log->info("The controller is initalized successfully");
+        $this->log->info(
+            "The " . static::class . " class is initalized successfully"
+        );
     }
 
 
@@ -269,7 +271,7 @@ class BaseController
      * Check the object is present or not
      *
      * @param string $name object name
-     * 
+     *
      * @return boolean
      */
     final public function __isset(string $name): bool

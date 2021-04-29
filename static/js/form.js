@@ -188,7 +188,7 @@ const registrationFormValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (document.getElementById('vercode').value == '') {
-        toast("Please enter captcha..!", "danger", "Warning");
+        toast("Please enter captcha..!", "danger", "Input Required");
         event.preventDefault();
         return false;
     }
@@ -220,7 +220,7 @@ const editProfileValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (password.length < 6 && password != '') {
-        toast("Password is too short.. It should be six character long..!", 'danger');
+        toast("Password is too short.. It should be six character long..!", 'danger', 'Note');
         event.preventDefault();
         return false;
     } else if (!regexMail.test(document.getElementById("emailid").value)) {
@@ -232,7 +232,7 @@ const editProfileValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (checkPassword(password) <= 50 && password != '') {
-        toast("Please select a strong password..!", "danger", "Warning");
+        toast("Please select a strong password..!", "danger", "Note");
         event.preventDefault();
         return false;
     } else if (!regexPhone.test(document.getElementById("mobile").value)) {
@@ -256,11 +256,11 @@ const createUserFormValidator = function(event) {
         event.preventDefault();
         return false;
     } else if (password.length < 6) {
-        toast("Password is too short.. It should be six character long..!", 'danger');
+        toast("Password is too short.. It should be six character long..!", 'danger', 'Note');
         event.preventDefault();
         return false;
     } else if (document.getElementById('role').value == '') {
-        toast("Please select the user role..!", 'danger');
+        toast("Please select the user role..!", 'danger', 'Note');
         event.preventDefault();
         return false;
     } else if (!regexMail.test(document.getElementById("email").value)) {
@@ -283,6 +283,34 @@ const createUserFormValidator = function(event) {
     // }
 }
 
+function checkUserName(event, span_id) {
+    let username = event.target.value;
+    fetch("user-management/users/user-name/" + username, { headers: { response: "application/json" } })
+        .then(response => { return response.json() })
+        .then(data => {
+            if (data.result == false) {
+                document.getElementById(span_id).innerHTML = "";
+            } else {
+                document.getElementById(span_id).innerHTML = "User name is not available";
+            }
+        });
+}
+
+function checkEmail(event, span_id) {
+    let email = event.target.value;
+    if (!regexMail.test(email)) {
+        return;
+    }
+    fetch("user-management/users/email/" + email, { headers: { response: "application/json" } })
+        .then(response => { return response.json() })
+        .then(data => {
+            if (data.result == false) {
+                document.getElementById(span_id).innerHTML = "";
+            } else {
+                document.getElementById(span_id).innerHTML = "Email id is already registered";
+            }
+        });
+}
 
 function checkPassword(strPassword) {
     // Reset combination count

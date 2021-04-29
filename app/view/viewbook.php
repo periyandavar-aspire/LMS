@@ -40,7 +40,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                             ?>
                                 </ul>
                                 <h3>ISBN Number</h3>
-                                <p class="text-para"> <?php echo $book->isbnNumber; ?>
+                                <p class="text-para"> <?php echo $book->isbn; ?>
                                 </p>
                                 <p class="stack-msg">* Currently <i><?php echo ($book->available == 0) ? "no" : $book->available; ?>
                                     </i> <?php echo ($book->available == 1) ? "copy" : "copies"; ?>

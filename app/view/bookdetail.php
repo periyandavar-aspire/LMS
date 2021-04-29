@@ -43,7 +43,7 @@ if (!isset($book)) {
                             ?>
                         </ul>
                         <h3>ISBN Number</h3>
-                        <p class="text-para"> <?php echo $book->isbnNumber; ?>
+                        <p class="text-para"> <?php echo $book->isbn; ?>
                         </p>
                         <h3>Location</h3>
                         <p> <?php echo $book->location;?>
@@ -86,6 +86,9 @@ if (!isset($book)) {
                                 }
                             ?>
                         </ul>
+                        <div class="form-buttons">
+                            <a href="/book-management" class="btn-link">View All</a>
+                        </div>
                         <?php endif;?>
                     </div>
                 </div>

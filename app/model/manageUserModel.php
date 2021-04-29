@@ -31,10 +31,10 @@ class ManageUserModel extends BaseModel
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
      * @param string      $sortDir   sorting direction
-     * @param string      $searchKey search key
+     * @param string|null $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getAllUsers(
@@ -54,19 +54,22 @@ class ManageUserModel extends BaseModel
             'userName',
             'email',
             'role',
-            'mobile',
-            'status'
+            'mobile'
         )->selectAs(
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
         $this->db->where('email', '!=', $email);
         if ($searchKey != null) {
             $this->db->where(
-                "(fullname LIKE %$searchKey%"
-                ." OR username LIKE %$searchKey OR "
-                ."email LIKE %$searchKey%)"
+                "(fullname LIKE ?"
+                ." OR username LIKE ? OR "
+                ."email LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%"]
             );
         }
+
         $this->db->orderBy($sortby, $sortDir)
             ->limit($limit, $start)
             ->execute();
@@ -76,17 +79,21 @@ class ManageUserModel extends BaseModel
         $this->db->selectAs(
             "COUNT(*) count",
         )->from('all_user')->execute();
-        $tcount = $this->db->fetch()->count-1;
+        $tcount = ($result = $this->db->fetch()) ? $result->count-1 : 0;
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('all_user');
             $this->db->where(
-                "(fullname LIKE %$searchKey%"
-                ." OR username LIKE %$searchKey OR "
-                ."email LIKE %$searchKey%)"
-            )->execute();    
-            $tfcount = $this->db->fetch()->count-1;
+                "(fullname LIKE ?"
+                ." OR username LIKE ? OR "
+                ."email LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%"]
+            );
+            $this->db->execute();
+            $tfcount = ($result = $this->db->fetch()) ? $result->count-1 : 0;
         } else {
             $tfcount = $tcount;
         }
@@ -103,7 +110,7 @@ class ManageUserModel extends BaseModel
      * @param string      $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getRegUsers(
@@ -125,13 +132,16 @@ class ManageUserModel extends BaseModel
         )->selectAs(
             "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
         )->from('all_user');
-        $result = $this->db->where('role', '=', 'user');
+        $this->db->where('role', '=', 'user');
         if ($searchKey != null) {
             $this->db->where(
-                "(fullname LIKE '%$searchKey%'"
-                ." OR username LIKE '%$searchKey%'OR "
-                ." mobile LIKE '%$searchKey%'OR "
-                ."email LIKE '%$searchKey%')"
+                "(fullname LIKE ? "
+                ." OR username LIKE ? OR "
+                ." mobile LIKE ? OR "
+                ."email LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%", "%$searchKey%"]
             );
         }
         $this->db->orderBy($sortby, $sortDir)
@@ -145,19 +155,23 @@ class ManageUserModel extends BaseModel
         )->from('all_user')
             ->where('role', '=', 'user')
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        $tcount = ($result = $this->db->fetch()) ? $result->count : 0;
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('all_user');
             $this->db->where(
-                "(fullname LIKE '%$searchKey%'"
-                ." OR username LIKE '%$searchKey%' OR "
-                ." mobile LIKE '%$searchKey%'OR "
-                ."email LIKE '%$searchKey%')"
-            )->where('role', '=', 'user')
-                ->execute();    
-            $tfcount = $this->db->fetch()->count;
+                "(fullname LIKE ?"
+                ." OR username LIKE ? OR "
+                ." mobile LIKE ? OR "
+                ."email LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%", "%$searchKey%"]
+            );
+            $this->db->where('role', '=', 'user')
+                ->execute();
+            $tfcount = ($result = $this->db->fetch()) ? $result->count : 0;
         } else {
             $tfcount = $tcount;
         }
@@ -214,7 +228,7 @@ class ManageUserModel extends BaseModel
                 ->where('userId', '=', $id)
                 ->where('status.value', '=', STATUS_ISSUED)
                 ->execute();
-            if ($this->db->fetch()->count != 0) {
+            if (($result = $this->db->fetch()) && $result->count != 0) {
                 $msg = "The user need to return some books, In order to delete "
                         . "his/her record please mark those books as returned "
                         . "and makes a delete request";
@@ -235,13 +249,13 @@ class ManageUserModel extends BaseModel
      */
     public function getRoleCodes(): array
     {
-        $result = [];
+        $roles = [];
         $this->db->select('code')->from('role');
         $this->db->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row->code;
+            $roles[] = $row->code;
         }
-        return $result;
+        return $roles;
     }
 
     /**
@@ -253,17 +267,17 @@ class ManageUserModel extends BaseModel
      */
     public function getUsersLike(string $userName): array
     {
-        $result = [];
+        $users = [];
         $this->db->select("id code", "userName value")
             ->from('user')->where('userName', 'LIKE', "%" . $userName . "%")
-            ->where('deletionToken', '=', "N/A")->where('status', '=', 1);
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         $orderClause = "case when userName like '$userName%' THEN 0 "
             . "WHEN userName like '% %$userName% %' THEN 1 "
             . "WHEN userName like '%$userName' THEN 2 else 3 end, userName";
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row;
+            $users[] = $row;
         }
-        return $result;
+        return $users;
     }
 }

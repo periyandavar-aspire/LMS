@@ -56,6 +56,10 @@ class DatabaseSession implements SessionHandlerInterface
      */
     public function open($savePath, $sessionName): bool
     {
+        $key = "bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=";
+        $iv = "1234567891011121";
+        $method = "aes-128-cbc";
+        $this->_security = new Security($method, $key, 0, $iv);
         $this->connect();
         $this->_table = $savePath;
         return isset($this->_db);
@@ -75,18 +79,18 @@ class DatabaseSession implements SessionHandlerInterface
     /**
      * Reads data from session
      *
-     * @param $sessId Session Id
+     * @param $sessionId Session Id
      *
-     * @return null|string
+     * @return string
      */
-    public function read($sessId)
+    public function read($sessionId)
     {
         $this->_db->select("data")
             ->from($this->_table)
-            ->where("sessId", '=', $sessId);
+            ->where("sessionId", '=', $sessionId);
         $this->_db->execute();
         if ($row = $this->_db->fetch()) {
-            return $row->data;
+            return ($data = $this->_security->decrypt($row->data)) ? $data : '';
         } else {
             return '';
         }
@@ -95,27 +99,28 @@ class DatabaseSession implements SessionHandlerInterface
     /**
      * Writes data to the session db
      *
-     * @param $sessId Session id
-     * @param $data   Session data
+     * @param $sessionId Session id
+     * @param $data      Session data
      *
      * @return bool
      */
-    public function write($sessId, $data)
+    public function write($sessionId, $data)
     {
         $access = time();
+        $data = $this->_security->encrypt($data);
         $this->_db->select('id')
             ->from($this->_table)
-            ->where('sessId', '=', $sessId)
+            ->where('sessionId', '=', $sessionId)
             ->limit(1);
         $this->_db->execute();
         if ($this->_db->fetch()) {
             $this->_db->update($this->_table, ["access" => $access, "data" => $data])
-                ->where('sessId', '=', $sessId)->limit(1);
+                ->where('sessionId', '=', $sessionId)->limit(1);
             return $this->_db->execute();
         } else {
             $this->_db->insert(
                 $this->_table,
-                ["sessId"=>$sessId, "access" => $access, "data" => $data]
+                ["sessionId"=>$sessionId, "access" => $access, "data" => $data]
             );
             return $this->_db->execute();
         }
@@ -124,13 +129,13 @@ class DatabaseSession implements SessionHandlerInterface
     /**
      * Destroy sessions
      *
-     * @param $sessId Session Id
+     * @param $sessionId Session Id
      *
      * @return bool
      */
-    public function destroy($sessId)
+    public function destroy($sessionId)
     {
-        $this->_db->delete($this->_table)->where('sessId', '=', $sessId);
+        $this->_db->delete($this->_table)->where('sessionId', '=', $sessionId);
         return $this->_db->execute();
     }
 

@@ -23,6 +23,8 @@ class FileSession implements SessionHandlerInterface
 {
     private $_savePath;
 
+    private $_security;
+
     /**
      * Session open
      *
@@ -33,6 +35,10 @@ class FileSession implements SessionHandlerInterface
      */
     public function open($savePath, $sessionName)
     {
+        $key = "bRuD5WYw5wd0rdHR9yLlM6wt2vteuiniQBqE70nAuhU=";
+        $iv = "1234567891011121";
+        $method = "aes-128-cbc";
+        $this->_security = new Security($method, $key, 0, $iv);
         $this->_savePath = $savePath;
         !is_dir($this->_savePath) and mkdir($this->_savePath, 0777);
         return true;
@@ -53,11 +59,14 @@ class FileSession implements SessionHandlerInterface
      *
      * @param string $sessId Session Id
      *
-     * @return null|string
+     * @return string
      */
     public function read($sessId)
     {
-        return (string)@file_get_contents("$this->_savePath/$sessId");
+        $data = (string)@file_get_contents("$this->_savePath/$sessId");
+        $data = $this->_security->decrypt($data);
+        $data or $data = '';
+        return $data;
     }
 
     /**
@@ -70,6 +79,7 @@ class FileSession implements SessionHandlerInterface
      */
     public function write($sessId, $data)
     {
+        $data = $this->_security->encrypt(var_export($data, true));
         return file_put_contents("$this->_savePath/$sessId", $data) === false
             ? false
             : true;

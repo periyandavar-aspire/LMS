@@ -97,9 +97,17 @@ class MysqliDriver extends Database
                 $result = $stmt->get_result();
                 $this->result = ($result == false) ? null : $this->result = $result;
             }
-        } catch (Mysqli_sql_exception $exception) {
+        } catch (Mysqli_sql_exception $e) {
             Log::getInstance()->error(
-                $exception->getMessage(),
+                "Exception: ".$e->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
+        } catch (Error $e) {
+            Log::getInstance()->error(
+                "Exception: ".$e->getMessage(),
                 [
                     "sql" => $this->query,
                     "bind values" => $this->bindValues
@@ -112,7 +120,7 @@ class MysqliDriver extends Database
     /**
      * Fetch the records
      *
-     * @return object|bool
+     * @return mixed
      */
     public function fetch()
     {
@@ -154,9 +162,17 @@ class MysqliDriver extends Database
                 $result = $stmt->get_result();
                 $this->result = ($result == false) ? null : $this->result = $result;
             }
-        } catch (Mysqli_sql_exception $exception) {
+        } catch (Mysqli_sql_exception $e) {
             Log::getInstance()->error(
-                $exception->getMessage(),
+                "Exception: ".$e->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
+        } catch (Error $e) {
+            Log::getInstance()->error(
+                "Error: ".$e->getMessage(),
                 [
                     "sql" => $this->query,
                     "bind values" => $this->bindValues

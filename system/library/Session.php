@@ -11,6 +11,7 @@
  */
 
 defined('VALID_REQ') or exit('Invalid request');
+require_once 'Security.php';
 /**
  * Session class set and manage custom session handlers
  *

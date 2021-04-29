@@ -22,8 +22,9 @@ defined('VALID_REQ') or exit('Invalid request');
                                 </div>
                                 <div class="form-input-div">
                                     <label>Enter User Name <span class="required-star">*</span></label>
-                                    <input class="form-control" type="text" pattern="^[a-zA-Z0-9_]+$" id="username"
+                                    <input class="form-control" onblur="checkUserName(event, 'user-availability-status');" type="text" pattern="^[a-zA-Z0-9_]+$" id="username"
                                         name="username" autocomplete="off" placeholder="User Name..." required="">
+                                        <span id="user-availability-status" style="color:red;"></span>
                                 </div>
                                 <div class="form-input-div">
                                     <label>Select Your Gender <span class="required-star">*</span></label>
@@ -50,10 +51,9 @@ defined('VALID_REQ') or exit('Invalid request');
                                 </div>
                                 <div class="form-input-div">
                                     <label>Enter Email <span class="required-star">*</span></label>
-                                    <input class="form-control" type="email" name="email" id="emailid"
+                                    <input class="form-control" onblur="checkEmail(event, 'email-availability-status')"  type="email" name="email" id="emailid"
                                         placeholder="Email..." autocomplete="off" required="">
-                                    <!--onblur="checkAvailability()"-->
-                                    <span id="user-availability-status" style="font-size:12px;"></span>
+                                    <span id="email-availability-status" style="color:red;"></span>
                                 </div>
                                 <div class="form-input-div">
                                     <label>Enter Password <span class="required-star">*</span></label>

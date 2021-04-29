@@ -68,6 +68,7 @@ class Log
             ? $level
             : "ALL";
         $this->_dir = $config['logs'];
+        !is_dir($this->_dir) and mkdir($this->_dir, 0777);
         $this->_initialize();
     }
 
@@ -252,15 +253,16 @@ class Log
      */
     private function _add(string $file, string $msg, ?array $data = null)
     {
-        $fp = fopen($file, "a") or null;
-        if ($fp != null) {
-            fwrite($fp, $msg);
-            isset($data) and fwrite($fp, ", Data : " . print_r($data, true));
-            fwrite($fp, "\n");
-            fclose($fp);
+        try {
+            if (!file_exists($file)) {
+                throw new Exception("File not found..!");
+            }
+            ($data != null) and ($msg .= ", Data : " . print_r($data, true));
+            $msg .= "\n";
+            file_put_contents($file, $msg, FILE_APPEND);
             return true;
-        } else {
-            return false;
+        } catch (Exception $e) {
         }
+        return false;
     }
 }

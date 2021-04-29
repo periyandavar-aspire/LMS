@@ -44,6 +44,8 @@ class BookController extends BaseController
         if ($this->input->session('msg') != null) {
             $this->addScript($this->input->session('msg'));
             Utility::setSessionData('msg', null);
+        } else {
+            echo "ASsas";
         }
     }
 
@@ -69,7 +71,11 @@ class BookController extends BaseController
      */
     public function getToEdit(int $id)
     {
-        $data['book'] = $this->model->get($id);
+        if (!$data['book'] = $this->model->get($id)) {
+            $script = "toast('Invalid Request..!');";
+            Utility::setSessionData('msg', $script);
+            $this->redirect("book-management");
+        }
         $user = $this->input->session('type');
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook", $data);
@@ -106,16 +112,15 @@ class BookController extends BaseController
 
     /**
      * Handles the search form and return the search result
-     * 
-     * @param int $offset offset
-     * @param int $limit  Limit value
      *
      * @return void
      */
-    public function search(int $offset = 0, int $limit = 12)
+    public function search()
     {
         $user = $this->input->session('type');
         $keyword = $this->input->get('search') ?? '';
+        $offset = $this->input->get('offset') ?? 0;
+        $limit = $this->input->get('limit') ?? 12;
         $data['books'] = $this->model->searchBook($keyword, $offset, $limit);
         $data['searchKey'] = $keyword;
         $this->loadLayout($user.'header.html');
@@ -128,21 +133,18 @@ class BookController extends BaseController
     /**
      * Displays the books requested by the user
      *
-     * @param int $offset Offset
-     * @param int $limit  Limit
-     *
      * @return void
      */
     public function loadBooks()
     {
         $offset = $this->input->get('offset') ?? 0;
         $limit = $this->input->get('limit') ?? 12;
-        $search = $this->input->get("search");
-        $data["books"] = $this->model->getAvailableBooks(
-            $offset,
-            $limit,
-            $search
-        );
+        $data["books"] = ($search = $this->input->get("search"))
+            ? $this->model->searchBook($search, $offset, $limit)
+            : $this->model->getAvailableBooks(
+                $offset,
+                $limit
+            );
         echo json_encode($data);
     }
 
@@ -178,6 +180,7 @@ class BookController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
+        $adminId = $this->input->session('id');
         $inputFields = [
             'name',
             'location',
@@ -200,7 +203,6 @@ class BookController extends BaseController
         $fields->addRule($rules);
         $fields->setRequiredFields(...$inputFields);
         $fields->addValues($this->input->post());
-        $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
@@ -212,24 +214,23 @@ class BookController extends BaseController
             if ($fields->uploadFile($uploadfile, $coverPic, 'book')) {
                 $book['coverPic'] = $coverPic;
                 if ($this->model->addBook($book)) {
+                    $this->log->activity(
+                        "Admin user added new book with values "
+                        . json_encode($book) . ", admin id: '$adminId'"
+                    );
                     $script = "toast('New book added successfully..!', 'success');";
                     Utility::setSessionData('msg', $script);
-                    $this->redirect('book-management');
-                    // $data['books'] = $this->model->getBooks();
-                    // $this->loadLayout($user . "Header.html");
-                    // $this->loadView("manageBooks", $data);
-                    // $this->loadLayout($user . "Footer.html");
-                    // $this->addScript($script);
-                    return;
+                    // $this->redirect('book-management');
                 } else {
-                    $script = "toast('Unable to add new book..!', 'danger');";
+                    $script = "toast('Unable to add new book..!', 'danger',"
+                        ." 'Failed');";
                 }
             } else {
                 $script = "toast('Error occured in file uploading";
-                $script .= "and book not added..!', 'danger');";
+                $script .= "and book not added..!', 'danger', 'Failed');";
             }
         } else {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         }
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook");
@@ -245,11 +246,11 @@ class BookController extends BaseController
      */
     public function load()
     {
-        $start = $this->input->get("iDisplayStart", '0');
-        $limit = $this->input->get("iDisplayLength", '10');
+        $start = $this->input->get("iDisplayStart", 0);
+        $limit = $this->input->get("iDisplayLength", 10);
         $sortby = $this->input->get("iSortCol_0", '0');
         $sortDir = $this->input->get("sSortDir_0", 'ASC');
-        $searchKey = $this->input->get("sSearch");
+        $searchKey = $this->input->get("sSearch", '');
         $data['aaData'] = $this->model->getBooks(
             $start,
             $limit,
@@ -274,7 +275,13 @@ class BookController extends BaseController
     public function changeStatus(int $id)
     {
         $data = $this->input->data();
-        $result['result'] = $this->model->updateBook($data, $id);
+        $adminId = $this->input->session('id');
+        if ($result['result'] = $this->model->updateBook($data, $id)) {
+            $this->log->activity(
+                "Admin user updated the book($id) with new values "
+                . json_encode($data) . ", admin id: '$adminId'"
+            );
+        }
         echo json_encode($result);
     }
 
@@ -290,6 +297,7 @@ class BookController extends BaseController
         global $config;
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
+        $adminId = $this->input->session('id');
         $inputFields = [
             'name',
             'location',
@@ -312,7 +320,6 @@ class BookController extends BaseController
         $fields->addRule($rules);
         $fields->setRequiredFields(...$inputFields);
         $fields->addValues($this->input->post());
-        $fields->renameFieldName('isbn', 'isbnNumber');
         $flag = $fdv->validate($fields, $field);
         if ($flag) {
             $book = $fields->getValues();
@@ -337,17 +344,22 @@ class BookController extends BaseController
                             . $oldPic
                         );
                     }
+                    $this->log->activity(
+                        "Admin user updated the book($id) with new values "
+                        . json_encode($book) . ", admin id: '$adminId'"
+                    );
                     Utility::setSessionData('msg', $script);
-                    $this->redirect('book-management');
+                    // $this->redirect('book-management');
                 } else {
-                    $script = "toast('Unable to update the book..!', 'danger');";
+                    $script = "toast('Unable to update the book..!', 'danger', "
+                        . "'Failed..!');";
                 }
             } else {
                 $script = "toast('Error in file uploading and book not added..!',";
-                $script .= "'danger');";
+                $script .= "'danger', 'Failed');";
             }
         } else {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         }
         $data['books'] = $this->model->getBooks();
         $data['book'] = $this->model->get($id);
@@ -423,21 +435,26 @@ class BookController extends BaseController
      */
     public function delete(int $id)
     {
-        $result['result'] = $this->model->delete($id, $msg);
+        $adminId = $this->input->session('id');
+        if ($result['result'] = $this->model->delete($id, $msg)) {
+            $this->log->activity(
+                "Admin user deleted the book($id), admin id: '$adminId'"
+            );
+        }
         $result['msg'] = $msg;
         echo json_encode($result);
     }
 
     /**
-     * Search for a book with given isbnNumber
+     * Search for a book with given isbn
      *
-     * @param string $isbnNumber Search keys as string
+     * @param string $isbn Search keys as string
      *
      * @return void
      */
-    public function searchByIsbn(string $isbnNumber)
+    public function searchByIsbn(string $isbn)
     {
-        $result['result'] = $this->model->getByIsbn($isbnNumber);
+        $result['result'] = $this->model->getByIsbn($isbn);
         echo json_encode($result);
     }
 }

@@ -46,7 +46,7 @@ class CategoryModel extends BaseModel
      * @param string      $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getAll(
@@ -59,13 +59,13 @@ class CategoryModel extends BaseModel
         ?string &$tfcount = null
     ): array {
         $category = [];
-        $result = $this->db->select("id", "name", "status")
+        $this->db->select("id", "name", "status")
             ->selectAs(
                 "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
                 "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
             )
             ->from('category');
-        $this->db->where('deletionToken', '=', "N/A");
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         if ($searchKey != null) {
             $this->db->where('name', "LIKE", "%$searchKey%");
         }
@@ -78,17 +78,17 @@ class CategoryModel extends BaseModel
         $this->db->selectAs(
             "COUNT(*) count",
         )->from('category');
-        $this->db->where('deletionToken', '=', "N/A")
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        $tcount = ($result = $this->db->fetch()) ? $result->count : 0;
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('category');
-            $this->db->where('deletionToken', '=', "N/A");
+            $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
             $this->db->where('name', "LIKE", "%$searchKey%")
-                ->execute();    
-            $tfcount = $this->db->fetch()->count;
+                ->execute();
+            $tfcount = ($result = $this->db->fetch()) ? $result->count : 0;
         } else {
             $tfcount = $tcount;
         }
@@ -100,13 +100,15 @@ class CategoryModel extends BaseModel
      *
      * @param int $id Category Id
      *
-     * @return object
+     * @return object|null
      */
-    public function get(int $id): object
+    public function get(int $id): ?object
     {
         $this->db->select('id', 'name')->from('category')->where('id', '=', $id);
-        $this->db->where('deletionToken', '=', "N/A")->limit(1)->execute();
-        return $this->db->fetch();
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->limit(1)->execute();
+        $category = $this->db->fetch() or $category = null;
+        return $category;
     }
 
     /**
@@ -135,36 +137,39 @@ class CategoryModel extends BaseModel
     public function update(array $fields, int $id): bool
     {
         $this->db->update('category', $fields)->where('id', '=', $id)
-            ->where('deletionToken', '=', 'N/A');
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         return $this->db->execute();
     }
 
     /**
      * Returns all the categories matching given search key
      *
-     * @param string $Searchkey  Search Key
+     * @param string $searchKey  Search Key
      * @param string $ignoreList Category codes with , seperator
      *                           which are ignored on search result
      *
      * @return array
      */
-    public function getCategoriesLike(string $Searchkey, string $ignoreList): array
+    public function getCategoriesLike(string $searchKey, string $ignoreList): array
     {
-        $result = [];
+        $categories = [];
         $this->db->select("id code", "name value")
             ->from('category')
-            ->where('name', 'LIKE', "%" . $Searchkey . "%");
-        $this->db->where('deletionToken', '=', "N/A")
+            ->where('name', 'LIKE', "%" . $searchKey . "%");
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
             ->where('status', '=', 1);
-        $this->db->where("NOT find_in_set(id, '$ignoreList')");
-        $orderClause = "case when name like '$Searchkey%' THEN 0 "
-            . "WHEN name like '% %$Searchkey% %' THEN 1 "
-            . "WHEN name like '%$Searchkey' THEN 2 "
+        $this->db->where("NOT find_in_set(id, ?)");
+        $orderClause = "case when name like ? THEN 0 "
+            . "WHEN name like ? THEN 1 "
+            . "WHEN name like ? THEN 2 "
             . "else 3 end, name";
+        $this->db->appendBindValues(
+            [$ignoreList, "$searchKey%", "% %$searchKey% %", "%$searchKey"]
+        );
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row;
+            $categories[] = $row;
         }
-        return $result;
+        return $categories;
     }
 }

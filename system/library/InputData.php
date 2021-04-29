@@ -64,41 +64,67 @@ final class InputData
     /**
      * This function is used to get the values form GET array
      *
-     * @param string|null $key     key name
-     * @param string|null $default default value
+     * @param string|null $key        Key name
+     * @param string|null $default    Default value
+     * @param bool        $escapeHtml To escape HTML charecters or not default:false
+     * @param bool        $trimData   To trim the input
      *
      * @return void
      */
-    public function get(?string $key = null, ?string $default = null)
-    {
+    public function get(
+        ?string $key = null,
+        ?string $default = null,
+        bool $escapeHtml = true,
+        bool $trimData = true
+    ) {
         $data = $this->_checkKey($this->_getData, $key);
         if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                $data[$key] = htmlspecialchars(trim($value));
+            if ($escapeHtml || $trimData) {
+                foreach ($data as $key => $value) {
+                    $escapeHtml and ($value = htmlspecialchars($value));
+                    $trimData and ($value = trim($value));
+                    $data[$key] = $value;
+                }
             }
             return $data;
         }
-        return $data != null ? htmlspecialchars(trim($data)) : $default;
+        $data = (($data != null) ? $data : $default);
+        ($data != null) and $escapeHtml and $data = htmlspecialchars($data);
+        ($data != null) and $trimData and $data = trim($data);
+        return $data;
     }
 
     /**
      * This function is used to get the values form POST array
      *
-     * @param string|null $key     key name
-     * @param string|null $default default value
+     * @param string|null $key        Key name
+     * @param string|null $default    Default value
+     * @param bool        $escapeHtml To escape HTML charecters or not default:false
+     * @param bool        $trimData   To trim the input
      *
      * @return void
      */
-    public function post(?string $key = null, ?string $default = null)
-    {
+    public function post(
+        ?string $key = null,
+        ?string $default = null,
+        bool $escapeHtml = true,
+        bool $trimData = true
+    ) {
         $data = $this->_checkKey($this->_postData, $key);
         if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                $data[$key] = htmlspecialchars(trim($value));
+            if ($escapeHtml || $trimData) {
+                foreach ($data as $key => $value) {
+                    $escapeHtml and ($value = htmlspecialchars($value));
+                    $trimData and ($value = trim($value));
+                    $data[$key] = $value;
+                }
             }
             return $data;
         }
-        return $data != null ? htmlspecialchars(trim($data)) : $default;
+        $data = (($data != null) ? $data : $default);
+        ($data != null) and $escapeHtml and $data = htmlspecialchars($data);
+        ($data != null) and $trimData and $data = trim($data);
+        return $data;
     }
 
     /**
@@ -111,7 +137,8 @@ final class InputData
      */
     public function session(?string $key, ?string $default = null): ?string
     {
-        return ($this->_checkKey($this->_sessionData, $key));
+        $data = ($this->_checkKey($this->_sessionData, $key));
+        return ($data == null ? $default : $data);
     }
 
     /**
@@ -157,10 +184,9 @@ final class InputData
      */
     public function data(): array
     {
-        // parse_str(file_get_contents("php://input"), $data);
         $data = (array) json_decode(file_get_contents('php://input'), true);
         foreach ($data as $key => $value) {
-                $data[$key] = htmlspecialchars(trim($value));
+            $data[$key] = htmlspecialchars(trim($value));
         }
         return $data;
     }

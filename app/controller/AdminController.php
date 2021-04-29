@@ -60,7 +60,7 @@ class AdminController extends BaseController
             if ($result->password == md5($this->input->post('password'))) {
                 Utility::setsessionData('login', true);
                 Utility::setSessionData("type", $result->type);
-                Utility::setSessionData("id", $user);
+                Utility::setSessionData("id", $result->id);
                 $this->redirect(strtolower($result->type) . "/home");
             }
         }
@@ -117,6 +117,7 @@ class AdminController extends BaseController
     {
         $fdv = new FormDataValidation();
         $id = $this->input->session('id');
+        $adminId = $this->input->session('id');
         $user = $this->input->session('type');
         $fields = new Fields(['fullname']);
         $rules = [
@@ -126,24 +127,35 @@ class AdminController extends BaseController
         $fields->setRequiredFields('fullname');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $msg = "toast('Invalid $field..!', 'danger');";
+            $msg = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
-            $msg = "toast('Unable to update the profile..!', 'danger');";
+            $msg = "toast('Unable to update the profile..!', 'danger',"
+                . " 'Failed');";
         } else {
             $msg = "toast('Profile updated successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user updated his profile with new values "
+                . json_encode($fields->getValues()) . ", admin id: '$adminId'"
+            );
         }
         $password = $this->input->post('password');
         if ($password != '') {
             if (strlen($password) < 6) {
                 $msg .= "toast('Your password is too short & not updated..!',
-                         'danger');";
+                         'danger', 'Failed');";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
-                    $msg .= "toast('Unable to update password..!', 'danger');";
+                    $msg .= "toast('Unable to update password..!', "
+                        . "'danger', 'Failed');";
                 }
+                $this->log->activity(
+                    "Admin user updated his password admin id: '$adminId'"
+                );
             }
         }
-        $data['result'] = $this->model->getProfile($id);
+        if (!($data['result'] = $this->model->getProfile($id))) {
+            $this->redirect("login");
+        }
         $this->loadLayout($user . "Header.html");
         $this->loadView($user . "Profile", $data);
         $this->loadLayout($user . "Footer.html");
@@ -171,6 +183,7 @@ class AdminController extends BaseController
     public function updateSettings()
     {
         $fdv = new FormDataValidation();
+        $adminId = $this->input->session('id');
         $fields = new Fields(
             ['maxBookLend', 'maxLendDays', 'maxBookRequest', 'fineAmtPerDay']
         );
@@ -182,11 +195,16 @@ class AdminController extends BaseController
         );
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->updateSettings($fields->getValues())) {
-            $script = "toast('Unable to update the settings..!', 'danger');";
+            $script = "toast('Unable to update the settings..!', 'danger',"
+                . " 'Failed..!');";
         } else {
             $script = "toast('Settings updated successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user updated lms settings with new values: "
+                . json_encode($fields->getValues()) .", admin id: '$adminId'"
+            );
         }
         $data['data'] = $this->model->getConfigs();
         $this->loadLayout("adminHeader.html");
@@ -216,6 +234,7 @@ class AdminController extends BaseController
     public function updateCms()
     {
         $fdv = new FormDataValidation();
+        $adminId = $this->input->session('id');
         $fields = [
             'aboutus',
             'address',
@@ -238,11 +257,16 @@ class AdminController extends BaseController
         );
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->updateCmsConfigs($fields->getValues())) {
-            $script = "toast('Unable to update the settings..!', 'danger');";
+            $script = "toast('Unable to update the settings..!', 'danger',"
+                . "'Failed..!');";
         } else {
             $script = "toast('Settings updated successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user updated cms settings with new values "
+                . json_encode($fields->getValues()) . ", admin id: '$adminId'"
+            );
         }
         $data['data'] = $this->model->getCmsConfigs();
         $this->loadLayout("adminHeader.html");

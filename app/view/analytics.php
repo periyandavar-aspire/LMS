@@ -12,11 +12,11 @@ defined('VALID_REQ') or exit('Invalid request');
             </div>
             <div class="row">
                 <div class='cols col-1'>
-                    <label> Between Dates </label>
+                    <label> From </label>
                     <input type='date' value="<?php echo $sDate; ?>" onchange="changeReport('/analytics');" id='sDate' class='form-control'>
                 </div>
                 <div class='cols col-1'>
-                    <label> &nbsp; <label>
+                    <label>To </label>
                     <input type='date' value="<?php echo $eDate; ?>" onchange="changeReport('/analytics');" id='eDate' class='form-control'>
                 </div>
                 <div class='cols col-1'>
@@ -118,7 +118,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 "data": "name"
             },
             {
-                "data": "isbnNumber"
+                "data": "isbn"
             },
             {
                 "data": "categories"

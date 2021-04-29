@@ -1,4 +1,4 @@
-function deleteItem(delUrl) {
+function deleteItem(delUrl, title) {
     AskConfirm("Are sure to delete..?", () => fetch(delUrl, {
             method: 'DELETE',
             headers: {
@@ -9,11 +9,13 @@ function deleteItem(delUrl) {
         .then(data => {
             if (data.result == 1) {
                 parts = delUrl.split("/");
-                document.getElementById(parts[parts.length - 1]).remove();
-                toast("The item deleted successfully..!", 'success');
+                // document.getElementById(parts[parts.length - 1]).remove();
+                title = (title == undefined) ? "item" : title;
+                loadTable();
+                toast("The " + title + " was deleted..!", 'success');
             } else {
                 msg = data.msg != undefined ? data.msg : "Unable to delete the item..!";
-                toast(msg, 'danger');
+                toast(msg, 'danger', 'Failed');
             }
         }));
 }
@@ -49,37 +51,48 @@ function changeStatus(event, statusChangeUrl) {
         .then(response => { return response.json() })
         .then(data => {
             if (data.result == 1) {
-                toast("The status updated successfully..!", 'success');
+                toast("The status was updated..!", 'success');
             } else {
                 event.target.checked = !(event.target.checked);
-                toast("Unable to upate the status..!", 'danger');
+                toast("Unable to upate the status..!", 'danger', 'Failed');
             }
         });
 }
+var loadTable;
 
-function loadTableData(id, url, columns, title) {
-    studentTable = jQuery('#' + id).dataTable({
-        "bJQueryUI": true,
-        "sPaginationType": "full_numbers",
-        "iDisplayLength": 10,
-        'destroy': true,
-        "bJQueryUI": true,
-        "sPaginationType": "full_numbers",
-        "iDisplayLength": 10,
-        "bProcessing": true,
-        "bServerSide": true,
-        "rowId": "id",
-        "sAjaxSource": url,
-        "columns": columns,
-        "ordering": false
-    });
+function loadTableData(id, url, columns) {
+    loadTable = function() {
+        studentTable = jQuery('#' + id).dataTable({
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "iDisplayLength": 10,
+            'destroy': true,
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "iDisplayLength": 10,
+            "bProcessing": true,
+            "bServerSide": true,
+            "rowId": "id",
+            "sAjaxSource": url,
+            "columns": columns,
+            "ordering": false
+        });
+    }
+    loadTable();
 }
 
 function changeReport(url) {
     let list = document.getElementById('list').value;
     let sDate = document.getElementById('sDate').value;
-    sDate = sDate == '' ? '0000-00-00' : sDate;
     let eDate = document.getElementById('eDate').value;
+    if (new Date(sDate) > new Date(eDate)) {
+        alert("Invalid date range end date should be greater than start date");
+        return;
+    } else if (new Date(eDate) > new Date) {
+        alert("Future dates are not allowed to generate report");
+        return;
+    }
+    sDate = sDate == '' ? '0000-00-00' : sDate;
     url = url + "/" + list + '?sDate=' + sDate + '&eDate=' + eDate;
     window.location.replace(url);
 }

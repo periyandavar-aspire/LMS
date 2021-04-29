@@ -17,6 +17,8 @@ defined('VALID_REQ') or exit('Invalid request');
                             <tr>
                                 <th data-orderable="false">Sl. No</th>
                                 <th>Book</th>
+                                <th>ISBN</th>
+                                <th>location</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Status</th>
@@ -44,6 +46,12 @@ defined('VALID_REQ') or exit('Invalid request');
             "data": "name"
         },
         {
+            "data": "isbn"
+        },
+        {
+            "data": "location"
+        },
+        {
             "data": "createdAt"
         },
         {
@@ -67,7 +75,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 code += "'/book-management/books/" + item.id + "'";
                 code +=
                     'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></a> <button type="button"';
-                code += ' onclick="deleteItem(' + "'/book-management/books/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/book-management/books/" + item.id + "', 'book');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;

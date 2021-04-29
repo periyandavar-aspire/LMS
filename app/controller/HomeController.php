@@ -100,6 +100,10 @@ class HomeController extends BaseController
         $this->loadLayout("header.html");
         $this->loadView("login");
         $this->loadView("footer", $data);
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -134,12 +138,12 @@ class HomeController extends BaseController
                  */
                 public function validate(string $data, ?string &$msg = null): ?bool
                 {
-                    // if ($data == (new InputData())->session("captcha")) {
+                    if ($data == (new InputData())->session("captcha")) {
                         return true;
-                    // } else {
-                    //     $msg = "Invalid captcha";
-                    //     return false;
-                    // }
+                    } else {
+                        $msg = "Invalid captcha";
+                        return false;
+                    }
                 }
             }
         );
@@ -148,7 +152,9 @@ class HomeController extends BaseController
             $data["msg"] = "Invalid $field..!";
         } else {
             $user = $this->model->getUser($username);
-            if (isset($user) && $user->password == md5($this->input->post('password'))) {
+            if (isset($user)
+                && $user->password == md5($this->input->post('password'))
+            ) {
                 Utility::setsessionData('login', VALID_LOGIN);
                 Utility::setSessionData("type", REG_USER);
                 Utility::setSessionData("id", $user->id);
@@ -201,11 +207,12 @@ class HomeController extends BaseController
         } elseif (!$this->model->createAccount($fields->getValues())) {
             $data["msg"] = "Unable to create an account..!";
         } else {
-            $this->loadLayout("header.html");
-            $this->loadView("login");
-            $this->loadView("footer", $data);
-            $this->addScript(
-                "toast('Your Account is created successfully..!', 'success');"
+            $msg = "toast('Your Account is created successfully..!', 'success');";
+            Utility::setsessionData('msg', $msg);
+            $this->redirect('login');
+            $this->log->activity(
+                "A new account created with values "
+                . json_encode($fields->getValues())
             );
             return;
         }

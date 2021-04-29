@@ -555,15 +555,7 @@ Router::add(
 Router::add(
     '/book/([1-9]{1}[0-9]*)',
     'book/view',
-    'get',
-    function () {
-        $input = new InputData();
-        // if ($input->session('login') == VALID_LOGIN) {
-        return true;
-        // } else {
-        //     Utility::redirectURL('/login');
-        // }
-    }
+    'get'
 );
 
 

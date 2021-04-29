@@ -34,7 +34,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         <div class="form-input-div">
                             <label>ISBN <span class="required-star">*</span></label>
                             <input pattern="^[0-9]+$" class="form-control" autocomplete="off" type="text"
-                                id="isbnNumber" name="isbnNumber" placeholder="Book Name" required="">
+                                id="isbn" name="isbn" placeholder="Book Name" required="">
                             <input type="hidden" id="bookId" name="bookId">
                         </div>
                     </div>
@@ -102,14 +102,14 @@ defined('VALID_REQ') or exit('Invalid request');
 <script>
     document.getElementById('issued').className += " active";
     autocomplete(document.getElementById("username"), null, "/user/user-name/", loadUserDetails);
-    autocomplete(document.getElementById("isbnNumber"), null, "/book/isbn-number/", loadBookDetails);
+    autocomplete(document.getElementById("isbn"), null, "/book/isbn-number/", loadBookDetails);
     column = [{
             "render": function(data, type, row, meta) {
                 return meta.row + meta.settings._iDisplayStart + 1;
             }
         },
         {
-            "data": "isbnNumber"
+            "data": "isbn"
         },
         {
             "data": "bookName"

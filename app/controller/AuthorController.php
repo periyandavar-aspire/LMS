@@ -85,18 +85,23 @@ class AuthorController extends BaseController
         $fdv = new FormDataValidation();
         $fields = new Fields(['name']);
         $user = $this->input->session('type');
+        $adminId = $this->input->session('id');
         $fields->setRequiredFields('name');
         $rules = [
-            'name' => 'alphaSpaceValidation',            
+            'name' => 'alphaSpaceValidation',
         ];
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->add($fields->getValues())) {
-            $script = "toast('Unable to add new author..!', 'danger');";
+            $script = "toast('Unable to add new author..!', 'danger', 'Failed');";
         } else {
             $script = "toast('New author is added successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user added new author with values "
+                . json_encode($fields->getValues()) . ", admin id: '$adminId'"
+            );
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('author-management');
@@ -124,13 +129,18 @@ class AuthorController extends BaseController
      * Change the status of the author & displays the success/failure message in JSON
      *
      * @param int $id AuthorID
-     * 
+     *
      * @return void
      */
     public function changeStatus(int $id)
     {
+        $adminId = $this->input->session('id');
         $data = $this->input->data();
         $result['result'] = $this->model->update($data, $id);
+        $this->log->activity(
+            "Admin user updated the author($id) with new values "
+            . json_encode($data) . ", admin id: '$adminId'"
+        );
         echo json_encode($result);
     }
 
@@ -143,22 +153,28 @@ class AuthorController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
+        $adminId = $this->input->session('id');
         $fields = new Fields(['name']);
         $rules = [
-            'name' => ['alphaSpaceValidation', 'required'],           
+            'name' => ['alphaSpaceValidation', 'required'],
         ];
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->update(
             $fields->getValues(),
             $this->input->post('id')
         )
         ) {
-            $script = "toast('Unable to update..!', 'danger');";
+            $script = "toast('Unable to update..!', 'danger', 'Failed');";
         } else {
             $script = "toast('Author is updated successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user updated the author(" . $this->post('id')
+                . ") with new values " . json_encode($fields->getValues())
+                . ", admin id: '$adminId'"
+            );
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('author-management');
@@ -178,7 +194,12 @@ class AuthorController extends BaseController
      */
     public function delete(int $id)
     {
-        $result['result'] = $this->model->delete($id);
+        $adminId = $this->input->session('id');
+        if ($result['result'] = $this->model->delete($id)) {
+            $this->log->activity(
+                "Admin user deleted the author($id), admin id: '$adminId'"
+            );
+        }
         echo json_encode($result);
     }
 

@@ -43,7 +43,7 @@ if (!isset($book)) {
                                             ?>
                                         </ul>
                                         <h3>ISBN Number</h3>
-                                        <p class="text-para"> <?php echo $book->isbnNumber; ?>
+                                        <p class="text-para"> <?php echo $book->isbn; ?>
                                         </p>
                                         <h3>Location</h3>
                                         <p class="text-para"> <?php echo $book->location;?>

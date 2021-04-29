@@ -102,26 +102,26 @@ function AskConfirm(title, ok = function ok() {}, cancel = function cancel() {},
 function toast(msg = '', theme = '', title = "") {
     var ele = document.getElementById('toast-container');
     var symbol = '';
-    var title = '';
+    // var title = '';
     switch (theme) {
         case 'info':
-            title = title != '' ? title : "Info..!";
+            title = title != '' ? title : "Info";
             symbol = '<i class="fa fa-info toast-symbols" aria-hidden="true"></i>';
             break;
         case 'warning':
-            title = title != '' ? title : "Warning..!";
+            title = title != '' ? title : "Warning";
             symbol = '<i class="fa fa-exclamation-triangle toast-symbols" aria-hidden="true"></i>';
             break;
         case 'danger':
-            title = title != '' ? title : "Danger..!";
+            title = title != '' ? title : "Danger";
             symbol = '<i class="fa fa-shield toast-symbols" aria-hidden="true"></i>';
             break;
         case 'success':
-            title = title != '' ? title : "Success..!";
+            title = title != '' ? title : "Success";
             symbol = '<i class="fa fa-check toast-symbols" aria-hidden="true"></i>';
             break;
         default:
-            title = title != '' ? title : "New Message..!";
+            title = title != '' ? title : "New Message";
             symbol = '<i class="fa fa-bell toast-symbols" aria-hidden="true"></i>';
             break;
 
@@ -161,9 +161,10 @@ function loaded() {
 let offset = 12;
 let limit = 12;
 
-function loadMoreBooks(event, url) {
-    url = url != undefined ? url : '/books/load';
+function loadMoreBooks(event, url, searchKey) {
+    url = (url != undefined) ? url : '/books/load';
     url += "?offset=" + offset + "&limit=" + limit;
+    url += (searchKey != undefined) ? "&search=" + searchKey : '';
     fetch(url, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => {

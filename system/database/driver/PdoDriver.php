@@ -96,9 +96,17 @@ class PdoDriver extends Database
             if ($flag == true) {
                 $this->result = $stmt;
             }
-        } catch (PDOException $exception) {
+        } catch (PDOException $e) {
             Log::getInstance()->error(
-                $exception->getMessage(),
+                "Exception: ".$e->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
+        } catch (Error $e) {
+            Log::getInstance()->error(
+                "Exception: ".$e->getMessage(),
                 [
                     "sql" => $this->query,
                     "bind values" => $this->bindValues
@@ -111,7 +119,7 @@ class PdoDriver extends Database
     /**
      * Fetch the records
      *
-     * @return object|null
+     * @return mixed
      */
     public function fetch()
     {
@@ -148,9 +156,17 @@ class PdoDriver extends Database
             if ($flag == true) {
                 $this->result = $stmt;
             }
-        } catch (PDOException $exception) {
+        } catch (PDOException $e) {
             Log::getInstance()->error(
-                $exception->getMessage(),
+                "Exception: ".$e->getMessage(),
+                [
+                    "sql" => $this->query,
+                    "bind values" => $this->bindValues
+                ]
+            );
+        } catch (Error $e) {
+            Log::getInstance()->error(
+                "Exception: ".$e->getMessage(),
                 [
                     "sql" => $this->query,
                     "bind values" => $this->bindValues

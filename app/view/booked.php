@@ -49,7 +49,7 @@ defined('VALID_REQ') or exit('Invalid request');
                             <tr id="<?php echo $book->id;?>">
                                 <td><?php echo ++$i;?>
                                 </td>
-                                <td><?php echo $book->isbnNumber;?>
+                                <td><?php echo $book->isbn;?>
                                 </td>
                                 <td><?php echo $book->bookName?>
                                 </td>
@@ -61,7 +61,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                 </td>
                                 <td>
                                     <button type="button"
-                                        onclick="deleteItem('/user-request-management/user-request/<?php echo $book->id; ?>');"
+                                        onclick="deleteItem('/user-request-management/user-request/<?php echo $book->id; ?>', 'request');"
                                         class="button-control icon-btn negative" title="delete"><i
                                             class="fa fa-trash"></i></button>
                                 </td>

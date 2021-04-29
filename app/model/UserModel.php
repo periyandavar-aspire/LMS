@@ -26,11 +26,11 @@ class UserModel extends BaseModel
     /**
      * Returns the user details
      *
-     * @param string $id UserId
+     * @param int $id UserId
      *
      * @return object
      */
-    public function getProfile(string $id): object
+    public function getProfile(int $id): ?object
     {
         $this->db->select(
             'fullName',
@@ -41,20 +41,20 @@ class UserModel extends BaseModel
             'u.updatedAt'
         )->from('user u');
         $this->db->where('id', '=', $id);
-        $this->db->where('u.deletionToken', '=', 'N/A')->execute();
-        $result = $this->db->fetch();
-        return $result;
+        $this->db->where('u.deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
+        $user = $this->db->fetch() or $user = null;
+        return $user;
     }
 
     /**
      * Updates the user details
      *
-     * @param string $userId   UserId
-     * @param array  $userData User details
+     * @param int   $userId   UserId
+     * @param array $userData User details
      *
      * @return boolean
      */
-    public function updateProfile(string $userId, array $userData): bool
+    public function updateProfile(int $userId, array $userData): bool
     {
         $result = $this->db->update('user', $userData)
             ->where('id', '=', $userId)
@@ -65,12 +65,12 @@ class UserModel extends BaseModel
     /**
      * Updates the user password
      *
-     * @param string $userId   User Id
+     * @param int    $userId   User Id
      * @param string $password password
      *
      * @return boolean
      */
-    public function updatePassword(string $userId, string $password): bool
+    public function updatePassword(int $userId, string $password): bool
     {
         $result = $this->db->update('user', ['password' => md5($password)])
             ->where('id', '=', $userId)
@@ -85,23 +85,23 @@ class UserModel extends BaseModel
      */
     public function getGender(): array
     {
-        $result = [];
+        $gender = [];
         $i = 0;
         $this->db->select('code', 'value')->from('gender');
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
         while ($row = $this->db->fetch()) {
-            $result[$i]['code'] = $row->code;
-            $result[$i]['value'] = $row->value;
+            $gender[$i]['code'] = $row->code;
+            $gender[$i]['value'] = $row->value;
             $i++;
         }
-        return $result;
+        return $gender;
     }
 
     /**
      * Returns the lent books details
      *
-     * @param string      $userId User Id
-     * @param null|int    $Tcount Total Records count
+     * @param int         $userId User Id
+     * @param null|int    $tcount Total Records count
      * @param int         $offset Offset
      * @param int         $limit  Row count
      * @param string|null $search Search value
@@ -109,14 +109,14 @@ class UserModel extends BaseModel
      * @return array
      */
     public function getLentBooks(
-        string $userId,
-        ?int &$Tcount = null,
+        int $userId,
+        ?int &$tcount = null,
         int $offset = 0,
         int $limit = 5,
         ?string $search = null
     ): array {
         $books = [];
-        $this->db->select('isbnNumber', 'name bookName', 'ib.id')
+        $this->db->select('isbn', 'name bookName', 'ib.id')
             ->selectAs(
                 "date_format(issuedAt, '%d-%m-%Y %h:%i:%s') issuedAt",
                 "IF(returnAt='0000-00-00','Not Return Yet', "
@@ -131,7 +131,7 @@ class UserModel extends BaseModel
         $this->db->where('user.id', '=', $userId)
             ->where('issuedAt', '!=', '0000-00-00');
         if ($search != null) {
-            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?)');
+            $this->db->where('(name LIKE ? OR isbn LIKE ?)');
             $this->db->appendBindValues(["%$search%", "%$search%"]);
         }
         $this->db->orderby('returnAt', 'DESC')->limit($limit, $offset)
@@ -148,21 +148,21 @@ class UserModel extends BaseModel
             ->innerJoin('user')
             ->on('user.id = ib.userId');
         if ($search != null) {
-            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?)');
+            $this->db->where('(name LIKE ? OR isbn LIKE ?)');
             $this->db->appendBindValues(["%$search%", "%$search%"]);
         }
         $this->db->where('user.id', '=', $userId)
             ->where('issuedAt', '!=', '0000-00-00')
             ->execute();
-        $Tcount = $this->db->fetch()->tCount;
+        $tcount = ($result = $this->db->fetch()) ? $result->tCount : 0;
         return $books;
     }
 
     /**
      * Returns the requested books details
      *
-     * @param string      $userId UserId
-     * @param null|int    $Tcount Total Records count
+     * @param int         $userId UserId
+     * @param null|int    $tcount Total Records count
      * @param int         $offset Offset
      * @param int         $limit  Row count
      * @param string|null $search Search value
@@ -170,15 +170,15 @@ class UserModel extends BaseModel
      * @return array
      */
     public function getRequestedBooks(
-        string $userId,
-        ?int &$Tcount = null,
+        int $userId,
+        ?int &$tcount = null,
         int $offset = 0,
         int $limit = 5,
         ?string $search = null
     ): array {
         $books = [];
         $this->db->select(
-            'isbnNumber',
+            'isbn',
             'name bookName',
             'ib.id',
             'requestedAt',
@@ -195,11 +195,16 @@ class UserModel extends BaseModel
         $this->db->where('user.id', '=', $userId)
             ->where('status.value', 'LIKE', STATUS_REQ);
         if ($search != null) {
-            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?  OR status.value LIKE ? OR comments LIKE ?)');
-            $this->db->appendBindValues(["%$search%", "%$search%", "%$search%", "%$search%"]);
+            $this->db->where(
+                '(name LIKE ? OR isbn LIKE ?  OR status.value LIKE ?'
+                .' OR comments LIKE ?)'
+            );
+            $this->db->appendBindValues(
+                ["%$search%", "%$search%", "%$search%", "%$search%"]
+            );
         }
         $this->db->orderby('returnAt')
-            ->limit($limit, $offset)    
+            ->limit($limit, $offset)
             ->execute();
         while ($row = $this->db->fetch()) {
             $books[] = $row;
@@ -217,30 +222,80 @@ class UserModel extends BaseModel
         $this->db->where('user.id', '=', $userId)
             ->where('status.value', 'LIKE', STATUS_REQ);
         if ($search != null) {
-            $this->db->where('(name LIKE ? OR isbnNumber LIKE ?  OR status.value LIKE ? OR comments LIKE ?)');
-            $this->db->appendBindValues(["%$search%", "%$search%", "%$search%", "%$search%"]);
+            $this->db->where(
+                '(name LIKE ? OR isbn LIKE ?  OR status.value LIKE ?'
+                .' OR comments LIKE ?)'
+            );
+            $this->db->appendBindValues(
+                ["%$search%", "%$search%", "%$search%", "%$search%"]
+            );
         }
         $this->db->orderby('returnAt')
             ->execute();
-        $Tcount = $this->db->fetch()->tCount;
+        $tcount = ($result = $this->db->fetch()) ? $result->tCount : 0;
         return $books;
+    }
+
+    /**
+     * Check the user is exiting with the given mail id or not
+     *
+     * @param string $email email id
+     * 
+     * @return boolean
+     */
+    public function isEmailAvailable(string $email): bool
+    {
+        $this->db->select("id")
+            ->from('user')
+            ->where('email', '=', $email)
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->execute();
+        if ($this->db->fetch()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check the user is exiting with the given username or not
+     *
+     * @param string $userName username
+     * 
+     * @return boolean
+     */
+    public function isNameAvailable(string $userName): bool
+    {
+        $this->db->select("id")
+            ->from('user')
+            ->where('userName', '=', $userName)
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->execute();
+        if ($this->db->fetch()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Removes user request
      *
-     * @param integer $id   User request id
-     * @param string  $user UserName
+     * @param int $id     User request id
+     * @param int $userId UserName
      *
      * @return bool
      */
-    public function removeRequest(int $id, string $user): bool
+    public function removeRequest(int $id, int $userId): bool
     {
         $this->db->select('code')
             ->from('status')
-            ->where('value', '=', 'Deleted Request')
+            ->where('value', '=', STATUS_DEL_REQ)
             ->execute();
-        $data['ib.status'] = $this->db->fetch()->code;
+        if (!($result = $this->db->fetch())) {
+            return false;
+        }
+        $data['ib.status'] = $result->code;
         $data['ib.deletionToken'] = uniqid();
         $this->db->update(
             'issued_book ib',
@@ -249,7 +304,7 @@ class UserModel extends BaseModel
             'Inner Join user on ib.userId = user.id'
         );
         $result = $this->db->where('ib.id', '=', $id)
-            ->where('user.id', '=', $user)
+            ->where('user.id', '=', $userId)
             ->execute();
         return $result;
     }

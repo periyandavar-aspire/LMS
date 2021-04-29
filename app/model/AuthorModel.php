@@ -33,7 +33,7 @@ class AuthorModel extends BaseModel
      * @param string|null $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
-     * 
+     *
      * @return array
      */
     public function getAll(
@@ -46,13 +46,13 @@ class AuthorModel extends BaseModel
         ?string &$tfcount = null
     ): array {
         $author = [];
-        $result = $this->db->select("id", "name", "status")
+        $this->db->select("id", "name", "status")
             ->selectAs(
                 "date_format(createdAt, '%d-%m-%Y %h:%i:%s') createdAt",
                 "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
             )
             ->from('author');
-        $this->db->where('deletionToken', '=', "N/A");
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         if ($searchKey != null) {
             $this->db->where('name', "LIKE", "%$searchKey%");
         }
@@ -65,17 +65,17 @@ class AuthorModel extends BaseModel
         $this->db->selectAs(
             "COUNT(*) count",
         )->from('author');
-        $this->db->where('deletionToken', '=', "N/A")
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        $tcount = ($result = $this->db->fetch()) ? $result->count : 0;
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('author');
-            $this->db->where('deletionToken', '=', "N/A");
+            $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
             $this->db->where('name', "LIKE", "%$searchKey%")
-                ->execute();    
-            $tfcount = $this->db->fetch()->count;
+                ->execute();
+            $tfcount = ($result = $this->db->fetch()) ? $result->count : 0;
         } else {
             $tfcount = $tcount;
         }
@@ -90,8 +90,7 @@ class AuthorModel extends BaseModel
      */
     public function add(array $author): bool
     {
-        $result = $this->db->insert('author', $author)->execute();
-        return $result;
+        return $this->db->insert('author', $author)->execute();
     }
 
     /**
@@ -99,13 +98,18 @@ class AuthorModel extends BaseModel
      *
      * @param integer $id Author Id
      *
-     * @return object
+     * @return object|null
      */
-    public function get(int $id): object
+    public function get(int $id): ?object
     {
         $this->db->select('id', 'name')->from('author')->where('id', '=', $id);
-        $this->db->where('deletionToken', '=', 'N/A')->limit(1)->execute();
-        return $this->db->fetch();
+        $this->db->where(
+            'deletionToken',
+            '=',
+            DEFAULT_DELETION_TOKEN
+        )->limit(1)->execute();
+        $author = $this->db->fetch() or $author = null;
+        return $author;
     }
 
     /**
@@ -134,34 +138,38 @@ class AuthorModel extends BaseModel
     public function update(array $fields, int $id): bool
     {
         $this->db->update('author', $fields)->where('id', '=', $id);
-        $this->db->where('deletionToken', '=', 'N/A');
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         return $this->db->execute();
     }
 
     /**
      * Search for the authors with given search keys
      *
-     * @param string $Searchkey  Search keys to search author
+     * @param string $searchKey  Search keys to search author
      * @param string $ignoreList Author codes with , seperator
      *                           which will be ignored on search
      *
      * @return array
      */
-    public function getAuthorsLike(string $Searchkey, string $ignoreList): array
+    public function getAuthorsLike(string $searchKey, string $ignoreList): array
     {
-        $result = [];
+        $authors = [];
         $this->db->select("id code", "name value")
             ->from('author')
-            ->where('name', 'LIKE', "%" . $Searchkey . "%");
-        $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
-        $this->db->where("NOT find_in_set(id, '$ignoreList')");
-        $orderClause = "case when name like '$Searchkey%' THEN 0 ";
-        $orderClause .= "WHEN name like '% %$Searchkey% %' THEN 1 ";
-        $orderClause .= "WHEN name like '%$Searchkey' THEN 2 else 3 end, name";
+            ->where('name', 'LIKE', "%$searchKey%");
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->where('status', '=', 1);
+        $this->db->where("NOT find_in_set(id, ?)");
+        $orderClause = "case when name like ? THEN 0 ";
+        $orderClause .= "WHEN name like ? THEN 1 ";
+        $orderClause .= "WHEN name like ? THEN 2 else 3 end, name";
+        $this->db->appendBindValues(
+            ["$ignoreList", "$searchKey%", "'% %$searchKey% %'", "%$searchKey"]
+        );
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row;
+            $authors[] = $row;
         }
-        return $result;
+        return $authors;
     }
 }

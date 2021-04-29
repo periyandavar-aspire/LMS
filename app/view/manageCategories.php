@@ -39,7 +39,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     <div class="form-input-div">
                         <label>Category Name</label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name"
-                            autocomplete="off" placeholder="Category Name..." required="">
+                            autocomplete="off" placeholder="Category Name" required="">
                     </div>
                     <div class="form-buttons">
                         <button type="submit" name="action" value="add" class="btn-link">Add</button>
@@ -102,7 +102,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 code += "'/category-management/categories/" + item.id + "');" + '"';
                 code +=
                     'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button> <button type="button"';
-                code += ' onclick="deleteItem(' + "'/category-management/categories/" + item.id + "');" + '"';
+                code += ' onclick="deleteItem(' + "'/category-management/categories/" + item.id + "', 'category');" + '"';
                 code +=
                     'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
                 return code;

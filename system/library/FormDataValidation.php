@@ -93,6 +93,35 @@ class FormDataValidation
     }
 
     /**
+     * Isbn Validation
+     *
+     * @param string $isbn Isbn Number
+     * 
+     * @return boolean
+     */
+    public function isbnValidation(string $isbn): bool
+    {
+        $n = strlen($isbn);
+        if ($n != 10) {
+            return false;
+        }
+        $sum = 0;
+        for ($i = 0; $i < 9; $i++) {
+            if (!is_numeric($isbn[$i])) {
+                return false;
+            }
+            $digit = (int)($isbn[$i]);
+            $sum += ($digit * (10 - $i));
+        }
+        $last = $isbn[9];
+        if ($last != 'X' && (!is_numeric($last))) {
+            return false;
+        }
+        $sum += (($last == 'X') ? 10 : ((int)$last));
+        return ($sum % 11 == 0);
+    }
+
+    /**
      * Performs numeric validation and range validation
      *
      * @param string       $data  Data

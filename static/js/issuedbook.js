@@ -76,7 +76,7 @@ function MarkasReturn(id) {
                 document.getElementById(id).remove();
                 toast("Success..!", 'success');
             } else {
-                toast("Failed..!", 'danger');
+                toast("Failed..!", 'danger', 'Failed');
             }
         });
 }

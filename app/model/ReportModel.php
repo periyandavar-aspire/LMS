@@ -27,20 +27,20 @@ class ReportModel extends BaseModel
      * Returns Top Books List
      *
      * @param string      $sDate     start date
-     * @param string|null $eDate     end date
+     * @param string      $eDate     end date
      * @param integer     $start     offset
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
      * @param string      $sortDir   sorting direction
-     * @param string      $searchKey search key
+     * @param string|null $searchKey search key
      * @param string|null $tcount    stores total records count
      * @param string|null $tfcount   stores filtered records  count
      *
      * @return array
      */
     public function getTopBookList(
-        string $sDate = '0000-00-00',
-        ?string $eDate = null,
+        string $sDate,
+        string $eDate,
         int $start = 0,
         int $limit = 10,
         string $sortby = "rank",
@@ -49,18 +49,18 @@ class ReportModel extends BaseModel
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
-
         $records = [];
         $tcount = $tfcount = 0;
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->execute();
-        $tot = $this->db->fetch()->count;
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->execute();
+        $tot = ($result = $this->db->fetch()) ? $result->count : 0;
         $this->db->select(
             'b.name',
             'b.id',
-            'isbnNumber',
+            'isbn',
             'authors',
             'categories',
         )->selectAs(
@@ -68,13 +68,17 @@ class ReportModel extends BaseModel
         )->from('book_detail b')
             ->leftJoin('issued_book ib')
             ->on('b.id = ib.bookId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
         if ($searchKey != null) {
             $this->db->where(
-                "(b.name LIKE '%$searchKey%'"
-                ." OR authors LIKE '%$searchKey%'OR "
-                ."isbnNumber LIKE '%$searchKey%'OR "
-                ."categories LIKE '%$searchKey%')"
+                "(b.name LIKE ?"
+                ." OR authors LIKE ? OR "
+                ."isbn LIKE ? OR "
+                ."categories LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%","%$searchKey%","%$searchKey%"]
             );
         }
         $this->db->groupBy('b.id');
@@ -90,8 +94,9 @@ class ReportModel extends BaseModel
         )->from('book_detail b')
             ->leftJoin('issued_book ib')
             ->on('b.id = ib.bookId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->groupBy('b.id')
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->groupBy('b.id')
             ->execute();
         while ($row = $this->db->fetch()) {
             $tcount++;
@@ -102,13 +107,18 @@ class ReportModel extends BaseModel
             )->from('book_detail b')
                 ->leftJoin('issued_book ib')
                 ->on('b.id = ib.bookId')
-                ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+                ->where("requestedAt BETWEEN ? AND ?");
+            $this->db->appendBindValues([$sDate, $eDate]);
             $this->db->where(
-                "(b.name LIKE '%$searchKey%'"
-                ." OR authors LIKE '%$searchKey%'OR "
-                ."isbnNumber LIKE '%$searchKey%'OR "
-                ."categories LIKE '%$searchKey%')"
-            )->groupBy('b.id')
+                "(b.name LIKE ? "
+                ." OR authors LIKE ? OR "
+                ."isbn LIKE ? OR "
+                ."categories LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%","%$searchKey%","%$searchKey%"]
+            );
+            $this->db->groupBy('b.id')
                 ->execute();
             while ($row = $this->db->fetch()) {
                 $tfcount++;
@@ -123,7 +133,7 @@ class ReportModel extends BaseModel
      * Returns Top Authors List
      *
      * @param string      $sDate     start date
-     * @param string|null $eDate     end date
+     * @param string      $eDate     end date
      * @param integer     $start     offset
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
@@ -135,8 +145,8 @@ class ReportModel extends BaseModel
      * @return array
      */
     public function getTopAuthorList(
-        string $sDate = '0000-00-00',
-        ?string $eDate = null,
+        string $sDate,
+        string $eDate,
         int $start = 0,
         int $limit = 10,
         string $sortby = "rank",
@@ -145,13 +155,13 @@ class ReportModel extends BaseModel
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
-
         $records = [];
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->execute();
-        $tot = $this->db->fetch()->count;
+            ->where("requestedAt BETWEEN ? AND ? ");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->execute();
+        $tot = ($result = $this->db->fetch()) ? $result->count : 0;
         $this->db->select(
             'a.name',
             'a.id'
@@ -164,13 +174,17 @@ class ReportModel extends BaseModel
             ->on('ba.bookId = b.id')
             ->rightJoin('author a')
             ->on('a.id = ba.authorId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
         if ($searchKey != null) {
             $this->db->where(
-                "(b.name LIKE '%$searchKey%'"
-                ." OR authors LIKE '%$searchKey%'OR "
-                ."isbnNumber LIKE '%$searchKey%'OR "
-                ."categories LIKE '%$searchKey%')"
+                "(b.name LIKE ?"
+                ." OR authors LIKE ? OR "
+                ."isbn LIKE ? OR "
+                ."categories LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%","%$searchKey%","%$searchKey%"]
             );
         }
         $this->db->groupBy('a.id');
@@ -190,10 +204,13 @@ class ReportModel extends BaseModel
             ->on('ba.bookId = b.id')
             ->rightJoin('author a')
             ->on('a.id = ba.authorId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->groupBy('a.id')
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->groupBy('a.id')
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        while ($row = $this->db->fetch()) {
+            $tcount++;
+        }
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
@@ -204,15 +221,22 @@ class ReportModel extends BaseModel
                 ->on('ba.bookId = b.id')
                 ->rightJoin('author a')
                 ->on('a.id = ba.authorId')
-                ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+                ->where("requestedAt BETWEEN ? AND ?");
+            $this->db->appendBindValues([$sDate, $eDate]);
             $this->db->where(
-                "(b.name LIKE '%$searchKey%'"
-                ." OR authors LIKE '%$searchKey%'OR "
-                ."isbnNumber LIKE '%$searchKey%'OR "
-                ."categories LIKE '%$searchKey%')"
-            )->groupBy('b.id')
+                "(b.name LIKE ?"
+                ." OR authors LIKE ? OR "
+                ."isbn LIKE ? OR "
+                ."categories LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%","%$searchKey%","%$searchKey%"]
+            );
+            $this->db->groupBy('b.id')
                 ->execute();
-            $tfcount = $this->db->fetch()->count;
+            while ($row = $this->db->fetch()) {
+                $tfcount++;
+            }
         } else {
             $tfcount = $tcount;
         }
@@ -223,7 +247,7 @@ class ReportModel extends BaseModel
      * Returns Top Categories List
      *
      * @param string      $sDate     start date
-     * @param string|null $eDate     end date
+     * @param string      $eDate     end date
      * @param integer     $start     offset
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
@@ -235,8 +259,8 @@ class ReportModel extends BaseModel
      * @return array
      */
     public function getTopCategoryList(
-        string $sDate = '0000-00-00',
-        ?string $eDate = null,
+        string $sDate,
+        string $eDate,
         int $start = 0,
         int $limit = 10,
         string $sortby = "rank",
@@ -245,13 +269,13 @@ class ReportModel extends BaseModel
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
-
         $records = [];
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->execute();
-        $tot = $this->db->fetch()->count;
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->execute();
+        $tot = ($result = $this->db->fetch()) ? $result->count : 0;
         $this->db->select(
             'c.name',
             'c.id',
@@ -264,13 +288,17 @@ class ReportModel extends BaseModel
             ->on('bc.bookId = b.id')
             ->rightJoin('category c')
             ->on('c.id = bc.catId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
         if ($searchKey != null) {
             $this->db->where(
-                "(b.name LIKE '%$searchKey%'"
-                ." OR authors LIKE '%$searchKey%'OR "
-                ."isbnNumber LIKE '%$searchKey%'OR "
-                ."categories LIKE '%$searchKey%')"
+                "(b.name LIKE ?"
+                ." OR authors LIKE ? OR "
+                ."isbn LIKE ? OR "
+                ."categories LIKE ? )"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%","%$searchKey%","%$searchKey%"]
             );
         }
         $this->db->groupBy('c.id');
@@ -290,10 +318,13 @@ class ReportModel extends BaseModel
             ->on('bc.bookId = b.id')
             ->rightJoin('category c')
             ->on('c.id = bc.catId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->groupBy('c.id')
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->groupBy('c.id')
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        while ($row = $this->db->fetch()) {
+            $tcount++;
+        }
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
@@ -304,15 +335,22 @@ class ReportModel extends BaseModel
                 ->on('bc.bookId = b.id')
                 ->rightJoin('category c')
                 ->on('c.id = bc.catId')
-                ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+                ->where("requestedAt BETWEEN ? AND ?");
+            $this->db->appendBindValues([$sDate, $eDate]);
             $this->db->where(
-                "(b.name LIKE '%$searchKey%'"
-                ." OR authors LIKE '%$searchKey%'OR "
-                ."isbnNumber LIKE '%$searchKey%'OR "
-                ."categories LIKE '%$searchKey%')"
-            )->groupBy('c.id')
+                "(b.name LIKE ?"
+                ." OR authors LIKE ? OR "
+                ."isbn LIKE ? OR "
+                ."categories LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%","%$searchKey%","%$searchKey%"]
+            );
+            $this->db->groupBy('c.id')
                 ->execute();
-            $tfcount = $this->db->fetch()->count;
+            while ($row = $this->db->fetch()) {
+                $tfcount++;
+            }
         } else {
             $tfcount = $tcount;
         }
@@ -323,7 +361,7 @@ class ReportModel extends BaseModel
      * Returns Top Users List
      *
      * @param string      $sDate     start date
-     * @param string|null $eDate     end date
+     * @param string      $eDate     end date
      * @param integer     $start     offset
      * @param integer     $limit     limit value
      * @param string      $sortby    sorting column
@@ -335,8 +373,8 @@ class ReportModel extends BaseModel
      * @return array
      */
     public function getTopUserList(
-        string $sDate = '0000-00-00',
-        ?string $eDate = null,
+        string $sDate,
+        string $eDate,
         int $start = 0,
         int $limit = 10,
         string $sortby = "rank",
@@ -345,13 +383,13 @@ class ReportModel extends BaseModel
         ?string &$tcount = null,
         ?string &$tfcount = null
     ): array {
-
         $records = [];
         $this->db->selectAs('count(*) as count')
             ->from('issued_book')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->execute();
-        $tot = $this->db->fetch()->count;
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->execute();
+        $tot = ($result = $this->db->fetch()) ? $result->count : 0;
         $this->db->select(
             'u.username name',
             'u.id',
@@ -361,11 +399,15 @@ class ReportModel extends BaseModel
         )->from('user u')
             ->leftJoin('issued_book ib')
             ->on('u.id = ib.userId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
         if ($searchKey != null) {
             $this->db->where(
-                "(u.username LIKE '%$searchKey%'"
-                ." OR u.fullname LIKE '%$searchKey%')"
+                "(u.username LIKE ?"
+                ." OR u.fullname LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%"]
             );
         }
         $this->db->groupBy('u.id');
@@ -381,27 +423,36 @@ class ReportModel extends BaseModel
         )->from('user u')
             ->leftJoin('issued_book ib')
             ->on('u.id = ib.userId')
-            ->where("requestedAt BETWEEN '$sDate' AND '$eDate'")
-            ->groupBy('u.id')
+            ->where("requestedAt BETWEEN ? AND ?");
+        $this->db->appendBindValues([$sDate, $eDate]);
+        $this->db->groupBy('u.id')
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        while ($row = $this->db->fetch()) {
+            $tcount++;
+        }
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('user u')
                 ->leftJoin('issued_book ib')
                 ->on('u.id = ib.userId')
-                ->where("requestedAt BETWEEN '$sDate' AND '$eDate'");
+                ->where("requestedAt BETWEEN ? AND ?");
+            $this->db->appendBindValues([$sDate, $eDate]);
             $this->db->where(
-                "(u.username LIKE '%$searchKey%'"
-                ." OR u.fullname LIKE '%$searchKey%')"
-            )->groupBy('u.id')
+                "(u.username LIKE ?"
+                ." OR u.fullname LIKE ?)"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%"]
+            );
+            $this->db->groupBy('u.id')
                 ->execute();
-            $tfcount = $this->db->fetch()->count;
+            while ($row = $this->db->fetch()) {
+                $tfcount++;
+            }
         } else {
             $tfcount = $tcount;
         }
         return $records;
     }
-
 }

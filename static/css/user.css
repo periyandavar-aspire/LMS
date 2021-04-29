@@ -124,6 +124,7 @@ header .symbols:hover {
 .main {
     margin-left: 18%;
     padding: 24px;
+    margin-top: 27px;
     min-height: calc(100vh - 100px);
 }
 

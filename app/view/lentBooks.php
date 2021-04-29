@@ -48,7 +48,7 @@ defined('VALID_REQ') or exit('Invalid request');
                             <tr>
                                 <td><?php echo ++$i;?>
                                 </td>
-                                <td><?php echo $book->isbnNumber;?>
+                                <td><?php echo $book->isbn;?>
                                 </td>
                                 <td><?php echo $book->bookName?>
                                 </td>

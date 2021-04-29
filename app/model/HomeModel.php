@@ -30,13 +30,13 @@ class HomeModel extends BaseModel
      */
     public function getGenderCodes(): array
     {
-        $result = [];
+        $genders = [];
         $this->db->select('code')->from('gender');
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row->code;
+            $genders[] = $row->code;
         }
-        return $result;
+        return $genders;
     }
 
     /**
@@ -58,7 +58,7 @@ class HomeModel extends BaseModel
         // $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')
         //     ->innerJoin('author a')
         //     ->on('ba.authorId = a.id');
-        $this->db->where('status', '=', 1)//->where('b.deletionToken', '=', 'N/A')
+        $this->db->where('status', '=', 1)
             ->orderby('RAND()')
             ->limit(12)
             ->execute();
@@ -75,16 +75,16 @@ class HomeModel extends BaseModel
      */
     public function getGender(): array
     {
-        $result = [];
+        $genders = [];
         $i = 0;
         $this->db->select('code', 'value')->from('gender');
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
         while ($row = $this->db->fetch()) {
-            $result[$i]['code'] = $row->code;
-            $result[$i]['value'] = $row->value;
+            $genders[$i]['code'] = $row->code;
+            $genders[$i]['value'] = $row->value;
             $i++;
         }
-        return $result;
+        return $genders;
     }
 
     /**
@@ -99,13 +99,10 @@ class HomeModel extends BaseModel
         $this->db->select('password', 'id');
         $this->db->from('user');
         $this->db->where('username', '=', $username);
-        $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         $this->db->execute();
-        if ($result = $this->db->fetch()) {
-            return $result;
-        } else {
-            return null;
-        }
+        $user = $this->db->fetch() or $user = null;
+        return $user;
     }
 
     /**
@@ -125,9 +122,9 @@ class HomeModel extends BaseModel
     /**
      * Returns the footer area content
      *
-     * @return object
+     * @return object|null
      */
-    public function getFooterData(): object
+    public function getFooterData(): ?object
     {
         $this->db->select(
             'aboutUs',
@@ -139,39 +136,37 @@ class HomeModel extends BaseModel
             'instaUrl'
         )->from('cms');
         $this->db->where('id', '=', 1)->limit(1)->execute();
-        $result = $this->db->fetch();
-        return $result;
+        $footer = $this->db->fetch() or $footer = null;
+        return $footer;
     }
 
     /**
      * Returns the Vision
      *
-     * @return string
+     * @return string|null
      */
-    public function getVision(): string
+    public function getVision(): ?string
     {
         $this->db->select('vision')
             ->from('cms')
             ->where('id', '=', 1)
             ->limit(1)
             ->execute();
-        $result = $this->db->fetch();
-        return $result->vision;
+        return ($result = $this->db->fetch()) ? $result->vision : null;
     }
 
     /**
      * Returns the Mission
      *
-     * @return string
+     * @return string|null
      */
-    public function getMission(): string
+    public function getMission(): ?string
     {
         $this->db->select('mission')
             ->from('cms')
             ->where('id', '=', 1)
             ->limit(1)
             ->execute();
-        $result = $this->db->fetch();
-        return $result->mission;
+        return ($result = $this->db->fetch()) ? $result->mission : null;
     }
 }

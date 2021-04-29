@@ -26,33 +26,33 @@ class AdminModel extends BaseModel
     /**
      * Returns the admin details
      *
-     * @param string $email Email id
+     * @param int $id Admin Id
      *
-     * @return object
+     * @return object|null
      */
-    public function getProfile(string $email): object
+    public function getProfile(int $id): ?object
     {
         $this->db->select('fullName', 'email')
             ->selectAs("date_format(updatedat, '%d-%m-%Y %h:%i:%s') updatedAt")
             ->from('admin_user')
-            ->where('email', '=', $email);
-        $this->db->where('deletionToken', '=', 'N/A')->execute();
-        $result = $this->db->fetch();
-        return $result;
+            ->where('id', '=', $id);
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
+        $admin = $this->db->fetch() or $admin = null;
+        return $admin;
     }
 
     /**
      * Updates the admin details
      *
-     * @param string $email    Email Id
-     * @param array  $userData details
+     * @param int   $id       Admin Id
+     * @param array $userData details
      *
      * @return bool
      */
-    public function updateProfile(string $email, array $userData): bool
+    public function updateProfile(int $id, array $userData): bool
     {
         $result = $this->db->update('admin_user', $userData)
-            ->where('email', '=', $email)
+            ->where('id', '=', $id)
             ->execute();
         return $result;
     }
@@ -60,15 +60,15 @@ class AdminModel extends BaseModel
     /**
      * Updates the admin password
      *
-     * @param string $email    admin Email Id
-     * @param string $password admin New Password
+     * @param int    $id       Admin Id
+     * @param string $password Admin New Password
      *
      * @return bool
      */
-    public function updatePassword(string $email, string $password): bool
+    public function updatePassword(int $id, string $password): bool
     {
         $result = $this->db->update('admin_user', ['password' => md5($password)])
-            ->where('email', '=', $email)
+            ->where('id', '=', $id)
             ->execute();
         return $result;
     }
@@ -78,46 +78,48 @@ class AdminModel extends BaseModel
      *
      * @param string $email Email Id
      *
-     * @return object
+     * @return object|null
      */
-    public function getAdminUser(string $email): object
+    public function getAdminUser(string $email): ?object
     {
-        $this->db->select("password", "role.value type")
+        $this->db->select("admin_user.id", "password", "role.value type")
             ->from('admin_user')
             ->innerJoin('role')
             ->on('admin_user.role=role.code');
-        $this->db->where('email', '=', $email)->where('admin_user.status', '=', 1);
-        $this->db->where('admin_user.deletionToken', '=', "N/A")->execute();
-        $result = $this->db->fetch();
-        return $result;
+        $this->db->where('email', '=', $email);
+        $this->db->where('admin_user.deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->execute();
+        $admin = $this->db->fetch() or $admin = null;
+        return $admin;
     }
 
     /**
      * Returns core configuration details
      *
-     * @return object
+     * @return object|null
      */
-    public function getConfigs(): object
+    public function getConfigs(): ?object
     {
-        $result = $this->db->select(
+        $this->db->select(
             "maxBookLend",
             "maxLendDays",
             "fineAmtPerDay",
             "maxBookRequest",
         )->selectAs(
             "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
-        )->from("core_config")->where('id=1')->execute();
-        return $this->db->fetch();
+        )->from("core_config")->where('id', '=', 1)->execute();
+        ($result = $this->db->fetch()) or $result = null;
+        return $result;
     }
 
     /**
      * Returns the cms details
      *
-     * @return object
+     * @return object|null
      */
-    public function getCmsConfigs(): object
+    public function getCmsConfigs(): ?object
     {
-        $result = $this->db->select(
+        $this->db->select(
             "aboutUs",
             "address",
             "mobile",
@@ -129,8 +131,9 @@ class AdminModel extends BaseModel
             "mission",
         )->selectAs(
             "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
-        )->from("cms")->where('id=1')->execute();
-        return $this->db->fetch();
+        )->from("cms")->where('id', '=', 1)->execute();
+        ($result = $this->db->fetch()) or $result = null;
+        return $result;
     }
 
     /**
@@ -143,8 +146,7 @@ class AdminModel extends BaseModel
     public function updateSettings(array $data): bool
     {
         $this->db->update('core_config', $data)->where('id', '=', 1);
-        $result = $this->db->execute();
-        return $result;
+        return $this->db->execute();
     }
 
     /**
@@ -156,7 +158,6 @@ class AdminModel extends BaseModel
      */
     public function updateCmsConfigs(array $data): bool
     {
-        $result = $this->db->update('cms', $data)->where('id', '=', 1)->execute();
-        return $result;
+        return $this->db->update('cms', $data)->where('id', '=', 1)->execute();
     }
 }

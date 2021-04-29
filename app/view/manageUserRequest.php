@@ -44,7 +44,7 @@ defined('VALID_REQ') or exit('Invalid request');
             }
         },
         {
-            "data": "isbnNumber"
+            "data": "isbn"
         },
         {
             "data": "bookName"

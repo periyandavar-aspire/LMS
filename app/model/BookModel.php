@@ -33,7 +33,7 @@ class BookModel extends BaseModel
         $category = [];
         $this->db->select('id code', 'name value')
             ->from('category')
-            ->where('deletionToken', '=', 'N/A');
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         $this->db->where('status', '=', 1)->execute();
         while ($row = $this->db->fetch()) {
             $category[] = $row;
@@ -51,7 +51,7 @@ class BookModel extends BaseModel
         $author = [];
         $this->db->select('id code', 'name value')
             ->from('author')
-            ->where('deletionToken', '=', "N/A");
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         $this->db->where('status', '=', 1)->execute();
         while ($row = $this->db->fetch()) {
             $author[] = $row;
@@ -128,12 +128,12 @@ class BookModel extends BaseModel
         ?string &$tfcount = null
     ): array {
         $books = [];
-        $result = $this->db->select(
+        $this->db->select(
             "id",
             "name",
             "location",
             "publication",
-            "isbnNumber",
+            "isbn",
             "stack",
             "available",
             "status"
@@ -142,9 +142,15 @@ class BookModel extends BaseModel
             "date_format(updatedAt, '%d-%m-%Y %h:%i:%s') updatedAt"
         )->from('book');
 
-        $this->db->where('deletionToken', '=', 'N/A');
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         if ($searchKey != null) {
-            $this->db->where('name', "LIKE", "%$searchKey%");
+            $this->db->where(
+                "(name LIKE ? OR isbn LIKE ? OR"
+                . " location LIKE ? )"
+            );
+            $this->db->appendBindValues(
+                ["%$searchKey%", "%$searchKey%", "%$searchKey%"]
+            );
         }
         $this->db->orderBy($sortby, $sortDir)
             ->limit($limit, $start)
@@ -155,17 +161,17 @@ class BookModel extends BaseModel
         $this->db->selectAs(
             "COUNT(*) count",
         )->from('book');
-        $this->db->where('deletionToken', '=', "N/A")
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
             ->execute();
-        $tcount = $this->db->fetch()->count;
+        $tcount = ($result = $this->db->fetch()) ? $result->count : 0;
         if ($searchKey != null) {
             $this->db->selectAs(
                 "COUNT(*) count",
             )->from('book');
-            $this->db->where('deletionToken', '=', "N/A");
+            $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
             $this->db->where('name', "LIKE", "%$searchKey%")
                 ->execute();
-            $tfcount = $this->db->fetch()->count;
+            $tfcount = ($result = $this->db->fetch()) ? $result->count : 0;
         } else {
             $tfcount = $tcount;
         }
@@ -196,7 +202,7 @@ class BookModel extends BaseModel
         // $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')
         //     ->innerJoin('author a')
         //     ->on('ba.authorId = a.id');
-        $this->db->where('status', '=', 1)//->where('b.deletionToken', '=', 'N/A')
+        $this->db->where('status', '=', 1)
             ->orderby('id', 'desc')
             ->limit($limit, $offset)
             ->execute();
@@ -211,9 +217,9 @@ class BookModel extends BaseModel
      *
      * @param int $bookId Book Id
      *
-     * @return object
+     * @return object|null
      */
-    public function getBookDetails(int $bookId): object
+    public function getBookDetails(int $bookId): ?object
     {
         $this->db->select(
             'id',
@@ -224,14 +230,13 @@ class BookModel extends BaseModel
             'coverpic',
             'categories',
             'location',
-            'isbnNumber',
+            'isbn',
             'stack'
         )->from('book_detail');
         $this->db->where('id', '=', $bookId);
         $this->db->where('status', '=', '1')->execute();
-        $result = $this->db->fetch();
-        // var_export($result);
-        return $result;
+        $book = $this->db->fetch() or $book = null;
+        return $book;
     }
 
     /**
@@ -251,7 +256,7 @@ class BookModel extends BaseModel
             ->where('status.value', '=', STATUS_ISSUED)
             ->where('bookId', '=', $id)
             ->execute();
-        if ($this->db->fetch()->count != 0) {
+        if (($result = $this->db->fetch()) && $result->count != 0) {
             $msg = "The of the book is issued to the user. Please "
                 . "mark those as returned and again make the delete request "
                 . "to delete it";
@@ -287,7 +292,7 @@ class BookModel extends BaseModel
             'id',
             'name',
             'publication',
-            'isbnNumber',
+            'isbn',
             'location',
             'price',
             'stack',
@@ -300,11 +305,8 @@ class BookModel extends BaseModel
             'categoryCodes'
         )->from('book_detail');
         $this->db->where('id', '=', $id)->execute();
-        if ($row = $this->db->fetch()) {
-            return $row;
-        } else {
-            return null;
-        }
+        $book = $this->db->fetch() or $book = null;
+        return $book;
     }
 
     /**
@@ -362,15 +364,15 @@ class BookModel extends BaseModel
      *
      * @param int $id BookId
      *
-     * @return string
+     * @return string|null
      */
-    public function getCoverPic(int $id): string
+    public function getCoverPic(int $id): ?string
     {
         $this->db->select("coverpic")
             ->from("book")
             ->where('id', '=', $id)
             ->execute();
-        return $this->db->fetch()->coverpic;
+        return ($result = $this->db->fetch()) ? $result->coverpic : null;
     }
     /**
      * Updates the book details
@@ -387,28 +389,30 @@ class BookModel extends BaseModel
     }
 
     /**
-     * Returns the books like given search key
+     * Returns the books like given partial isbn
      *
-     * @param string $isbnNumber Search keys
+     * @param string $isbn Search keys
      *
      * @return array
      */
-    public function getByIsbn(string $isbnNumber): array
+    public function getByIsbn(string $isbn): array
     {
-        $result = [];
-        $this->db->select("id code", "isbnNumber value")
+        $books = [];
+        $this->db->select("id code", "isbn value")
             ->from('book')
-            ->where('isbnNumber', 'LIKE', "%" . $isbnNumber . "%");
-        $this->db->where('deletionToken', '=', 'N/A')->where('status', '=', 1);
-        $orderClause = "case when isbnNumber like '$isbnNumber%' THEN 0 ";
-        $orderClause .= "WHEN isbnNumber like '% %$isbnNumber% %' THEN 1 ";
-        $orderClause .= "WHEN isbnNumber like '%$isbnNumber' THEN 2 else 3 end,";
-        $orderClause .= "isbnNumber";
+            ->where('isbn', 'LIKE', "%$isbn%");
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->where('status', '=', 1);
+        $orderClause = "case when isbn like ? THEN 0 ";
+        $orderClause .= "WHEN isbn like ? THEN 1 ";
+        $orderClause .= "WHEN isbn like ? THEN 2 else 3 end,";
+        $orderClause .= "isbn";
+        $this->db->appendBindValues(["$isbn%", "% %$isbn% %", "%$isbn"]);
         $this->db->orderBy($orderClause)->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row;
+            $books[] = $row;
         }
-        return $result;
+        return $books;
     }
 
 
@@ -421,7 +425,7 @@ class BookModel extends BaseModel
      */
     public function getIssuedUsers(int $bookId): array
     {
-        $result = [];
+        $users = [];
         $this->db->select('username', 'status.value status')
             ->from('issued_book ib')
             ->innerJoin('status')
@@ -435,9 +439,9 @@ class BookModel extends BaseModel
             ->where('status.value', '!=', 'Deleted Request')
             ->execute();
         while ($row = $this->db->fetch()) {
-            $result[] = $row;
+            $users[] = $row;
         }
-        return $result;
+        return $users;
     }
 
     /**
@@ -459,7 +463,7 @@ class BookModel extends BaseModel
         //     'b.id id',
         //     'b.name',
         //     'publication',
-        //     'isbnNumber',
+        //     'isbn',
         //     'location',
         //     'price',
         //     'stack',
@@ -478,13 +482,13 @@ class BookModel extends BaseModel
         // $this->db->innerJoin('category c')
         //     ->on('(`bc`.`catId` = `c`.`id`) AND(`c`.`status` = 1)');
         // $this->db->where('b.status', '=', 1);
-        // $this->db->where('b.deletionToken', '=', 'N/A');
+        // $this->db->where('b.deletionToken', '=', DEFAULT_DELETION_TOKEN);
         // $this->db->where(
-        //     "(MATCH(b.name, description, publication, isbnNumber) "
-        //     . "AGAINST ('$Searchkey')"
+        //     "(MATCH(b.name, description, publication, isbn) "
+        //     . "AGAINST ('$searchKey')"
         // );
-        // $this->db->orWhere("a.name", "LIKE", "%$Searchkey%");
-        // $this->db->orWhere("c.name", "LIKE", "%$Searchkey%");
+        // $this->db->orWhere("a.name", "LIKE", "%$searchKey%");
+        // $this->db->orWhere("c.name", "LIKE", "%$searchKey%");
         // $this->db->appendWhere(')');
         // $this->db->groupBy('b.id');
         // $this->db->limit($limit, $offset);

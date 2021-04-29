@@ -53,6 +53,7 @@ try {
 }
 
 Session::getInstance(); // Initialize the Session
+Log::getInstance();
 session_start();
 
 global $config;

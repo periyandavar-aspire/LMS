@@ -139,7 +139,12 @@ class ManageUserController extends BaseController
      */
     public function delete(string $role, int $id)
     {
-        $result['result'] = $this->model->delete($role, $id, $msg);
+        $adminId = $this->input->session('id');
+        if ($result['result'] = $this->model->delete($role, $id, $msg)) {
+            $this->log->activity(
+                "Admin user deleted user($id, $role), admin id: '$adminId'"
+            );
+        }
         $result['msg'] = $msg;
         echo json_encode($result);
     }
@@ -152,6 +157,7 @@ class ManageUserController extends BaseController
     public function addUser()
     {
         $fdv = new FormDataValidation();
+        $adminId = $this->input->session('id');
         $fields = new Fields(['fullName', 'email', 'role', 'password']);
         $roleCodes = implode(" ", $this->model->getRoleCodes());
         $rules = [
@@ -164,11 +170,15 @@ class ManageUserController extends BaseController
         $fields->setRequiredFields('fullName', 'email', 'role', 'password');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger');";
+            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         } elseif (!$this->model->addAdminUser($fields->getValues())) {
-            $script = "toast('Unable to add new user..!', 'danger');";
+            $script = "toast('Unable to add new user..!', 'danger', 'Failed');";
         } else {
             $script = "toast('New user added successfully..!', 'success');";
+            $this->log->activity(
+                "Admin user added a new user with values "
+                . json_encode($fields->getValues()) . ", admin id: '$adminId'"
+            );
         }
         $currentUser = $this->input->session('id');
         $data['users'] = $this->model->getAllUsers($currentUser);

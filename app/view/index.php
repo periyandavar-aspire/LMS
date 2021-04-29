@@ -12,7 +12,9 @@ defined('VALID_REQ') or exit('Invalid request');
                         <p class="heading-para">We store the energy that fuels the imagination. we open up windows to
                             the world and inspire you to explore and achieve, and contribute to improving your quality
                             of life.</p>
-                        <a class="btn-link" href="<?php echo Router::getURL('registrationPage', 'get', []);?>">JOIN NOW</a>
+                        <a class="btn-link"
+                            href="<?php echo Router::getURL('registrationPage', 'get', []);?>">JOIN
+                            NOW</a>
                     </div>
                 </div>
             </div>
@@ -58,8 +60,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <?php if (isset($books)):?>
                 <?php foreach ($books as $book): ?>
                 <div class="card cols">
-                    <a
-                        href="/book/<?php echo $book->id; ?>">
+                    <a href="/book/<?php echo $book->id; ?>">
                         <book-element
                             cover="<?php echo Utility::baseURL()?>/upload/book/<?php echo $book->coverPic;?>"
                             book="<?php echo $book->name; ?>"
@@ -75,12 +76,16 @@ defined('VALID_REQ') or exit('Invalid request');
                         <p><?php echo $book->description;?>
                         </p>
                         <p>
-                            <?php echo ($book->available == 0) ? "no copy" 
+                            <?php echo ($book->available == 0) ? "no copy"
                                 : ("only " . $book->available
                                 . (($book->available == 1) ? " copy" : " copies"));
                             ?>
-                            available</p>
+                            available
+                        </p>
                         <div class="btn-container">
+                            <a class="btn-link"
+                                href="/book/<?php echo $book->id?>">View
+                                Book</a>
                         </div>
                     </div>
                 </div>

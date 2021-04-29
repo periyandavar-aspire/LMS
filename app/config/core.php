@@ -65,8 +65,8 @@ $config['logs'] = "app/log";
 /**
  * Session driver available options file|database
  */
-// $config['session_driver'] = 'database';
-$config['session_driver'] = 'file';
+$config['session_driver'] = 'database';
+// $config['session_driver'] = 'file';
 /**
  * Session expiration time
  */
@@ -78,17 +78,9 @@ $config['cookie_expiration'] = 86400;
 /**
  * Session save path
  */
-// $config['session_save_path'] = 'sess'; 
-$config['session_save_path'] = 'C:\xampp\LMS\sess';
+$config['session_save_path'] = 'session';
+// $config['session_save_path'] = 'C:\xampp\LMS\session';
 /**
  * Sets default timezone
  */
 $config['timezone'] = 'Asia/Kolkata';
-/**
- * Server email from this all mails were sent
- */
-$config['serverEmail'] = 'admin@lms.com';
-/**
- * Sets a mail to report errors
- */
-$config['mailTo'] = 'someonesomeone@example.com';

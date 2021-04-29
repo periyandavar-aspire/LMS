@@ -59,6 +59,40 @@ class UserController extends BaseController
     }
 
     /**
+     * Checks the email id is available or not
+     *
+     * @param string $email email id
+     *
+     * @return void
+     */
+    public function isEmailAvailable(string $email)
+    {
+        $flag = preg_match(
+            '/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/',
+            $email
+        );
+        if (!$flag) {
+            echo json_encode(["result" => false]);
+        } else {
+            $result = $this->model->isEmailAvailable($email);
+            echo json_encode(["result" => $result]);
+        }
+    }
+
+    /**
+     * Checks the username is available or not
+     *
+     * @param string $userName username
+     *
+     * @return void
+     */
+    public function isNameAvailable(string $userName)
+    {
+        $result = $this->model->isNameAvailable($userName);
+        echo json_encode(["result" => $result]);
+    }
+
+    /**
      * Updates the user profile
      *
      * @return void
@@ -73,23 +107,31 @@ class UserController extends BaseController
             'mobile' => 'mobileNumberValidation',
         ];
         $fields->addRule($rules);
-        $fields->setRequiredFields('gender', 'mobileno', 'fullname');
+        $fields->setRequiredFields('gender', 'mobile', 'fullname');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $msg = "Invalid $field..!";
+            $msg = "toast('Invalid $field..!', 'danger',"
+            . " 'Failed');";
         } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
-            $msg = "toast('Unable to update the profile..!', 'danger');";
+            $msg = "toast('Unable to update the profile..!', 'danger',"
+                . " 'Failed');";
         } else {
             $msg = "toast('Profile updated successfully..!', 'success');";
+            $this->log->activity("User updated his profile, user id: '$id'");
         }
         $password = $this->input->post('password');
         if ($password != '') {
             if (strlen($password) < 6) {
                 $msg .= "toast('Your password is too short & not updated..!',";
-                $msg .= "'danger');";
+                $msg .= "'danger', 'Failed');";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
-                    $msg .= "toast('Unable to update password..!', 'danger');";
+                    $msg .= "toast('Unable to update password..!', 'danger',"
+                        . " 'Failed');";
+                } else {
+                    $this->log->activity(
+                        "User updated his password, user id: '$id'"
+                    );
                 }
             }
         }
@@ -117,7 +159,7 @@ class UserController extends BaseController
      *
      * @return void
      */
-    public function getLentBooks() 
+    public function getLentBooks()
     {
         $offset = $this->input->get("index") ?? 0;
         $limit = $this->input->get("limit") ?? 5;
@@ -146,10 +188,10 @@ class UserController extends BaseController
 
     /**
      * Displays the books requested by the user
-     * 
+     *
      * @return void
      */
-    public function getRequestedBooks() 
+    public function getRequestedBooks()
     {
         $offset = $this->input->get("index") ?? 0;
         $limit = $this->input->get("limit") ?? 5;
@@ -187,7 +229,9 @@ class UserController extends BaseController
     public function removeRequest(int $id)
     {
         $user = $this->input->session('id');
-        $result['result'] = $this->model->removeRequest($id, $user);
+        if ($result['result'] = $this->model->removeRequest($id, $user)) {
+            $this->log->activity("User removed his request($id), user id: '$id'");
+        }
         echo json_encode($result);
     }
 }

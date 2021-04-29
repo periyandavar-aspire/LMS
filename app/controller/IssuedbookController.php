@@ -72,7 +72,12 @@ class IssuedBookController extends BaseController
      */
     public function markAsReturn(int $id)
     {
-        $result['result'] = $this->model->bookReturned($id);
+        $adminId = $this->input->session('id');
+        if (($result['result'] = $this->model->bookReturned($id))) {
+            $this->log->activity(
+                "The issued_book($id) is marked as returned, admin id: '$adminId'"
+            );
+        }
         echo json_encode($result);
     }
 
@@ -148,11 +153,24 @@ class IssuedBookController extends BaseController
     public function updateRequest(int $id)
     {
         $updateTo = $this->input->post('status');
-        $flag = $this->model->updateRequest(
+        $adminId = $this->input->session('id');
+        if ($flag = $this->model->updateRequest(
             $id,
             $updateTo,
             $this->input->post('comments', '')
-        );
+        )
+        ) {
+            $this->log->activity(
+                "The user request($id) is updated with new values "
+                . json_encode(
+                    [
+                        "status" => $updateTo,
+                        "comment" => $this->input->post('comments', '')
+                    ]
+                ) . ", admin id: '$adminId'"
+            );
+        }
+
         $script = $flag == true ? 'Success..!' : 'Failed..!';
         Utility::setSessionData('msg', $script);
         $this->redirect('request-management');
@@ -167,6 +185,7 @@ class IssuedBookController extends BaseController
     {
         $fdv = new FormDataValidation();
         $user = $this->input->session('type');
+        $adminId = $this->input->session('id');
         $fields = new Fields(['userId', 'bookId', 'comments']);
         $rules = [
             'userId' => 'numericValidation',
@@ -190,11 +209,15 @@ class IssuedBookController extends BaseController
                 $msg
             )
             ) {
-                $script = "toast('$msg..!', 'danger')";
+                $script = "toast('$msg..!', 'danger', 'Failed')";
             } elseif (!$this->model->addIssuedBook($values)) {
                 $script = "toast('The user alredy lend a copy of this book..!'";
-                $script .= ",'danger')";
+                $script .= ",'danger', 'Failed')";
             } else {
+                $this->log->activity(
+                    "Admin user issued a new book "
+                    . json_encode($values) . ", admin id: '$adminId'"
+                );
                 $script = "toast('New Entry Added Successfully..!','success')";
             }
         }
@@ -235,6 +258,9 @@ class IssuedBookController extends BaseController
             if (!$this->model->requestBook($user, $id)) {
                 $msg = "You already requested this book";
             } else {
+                $this->log->activity(
+                    "User requestd a new book($id), user id: '$user'"
+                );
                 $msg = "success..!";
                 $result['result'] = 1;
             }
