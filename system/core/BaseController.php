@@ -212,7 +212,7 @@ class BaseController
      */
     public function __call(string $name, array $args)
     {
-        $this->log->error("Undefined method call in " . get_called_class());
+        $this->log->error("Undefined method call in $name " . get_called_class());
     }
 
     /**

@@ -171,7 +171,7 @@ class AuthorController extends BaseController
         } else {
             $script = "toast('Author is updated successfully..!', 'success');";
             $this->log->activity(
-                "Admin user updated the author(" . $this->post('id')
+                "Admin user updated the author(" . $this->input->post('id')
                 . ") with new values " . json_encode($fields->getValues())
                 . ", admin id: '$adminId'"
             );
