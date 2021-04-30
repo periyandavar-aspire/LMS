@@ -124,9 +124,6 @@ class AdminModel extends BaseModel
             "address",
             "mobile",
             "email",
-            "fbUrl",
-            "ytUrl",
-            "instaUrl",
             "vision",
             "mission",
         )->selectAs(

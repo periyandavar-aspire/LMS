@@ -1,6 +1,6 @@
 <?php
 /**
- * HomeView File Doc Comment
+ * Captcha Doc Comment
  * php version 7.3.5
  *
  * @category View
@@ -11,7 +11,7 @@
  */
 defined('VALID_REQ') or exit('Invalid request');
 /**
- * HomeView Class Base class for all View Classes
+ * Captcha class to generate captcha
  *
  * @category   View
  * @package    View

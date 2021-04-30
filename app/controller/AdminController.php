@@ -246,9 +246,7 @@ class AdminController extends BaseController
             'aboutus',
             'address',
             'email',
-            'fbUrl',
-            'ytUrl',
-            'instaUrl',
+            'mobile',
             'vision',
             'mission'];
         $fields = new Fields($fields);
@@ -256,12 +254,14 @@ class AdminController extends BaseController
             'aboutus',
             'address',
             'email',
-            'fbUrl',
-            'ytUrl',
-            'instaUrl',
             'vision',
-            'mission'
+            'mission',
+            'mobile'
         );
+        $rules = [
+            'mobile' => "landlineValidation"
+        ];
+        $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
@@ -269,7 +269,7 @@ class AdminController extends BaseController
             $script = "toast('Unable to update the settings..!', 'danger',"
                 . "'Failed..!');";
         } else {
-            $script = "toast('Settings updated successfully..!', 'success');";
+            $script = "toast('Contents updated successfully..!', 'success');";
             $this->log->activity(
                 "Admin user updated cms settings with new values "
                 . json_encode($fields->getValues()) . ", admin id: '$adminId'"

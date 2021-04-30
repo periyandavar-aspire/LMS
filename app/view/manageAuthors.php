@@ -45,7 +45,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Author</h1>
                 <hr><br>
-                <form action="/author-management/authors" id="add" method="post">
+                <form action="/author-management/authors" onsubmit="nameValidator(event);" id="add" method="post">
                     <div class="form-input-div">
                         <label>Author Name <span class="required-star">*</span></label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name"
@@ -62,7 +62,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
                 <h1>Edit Author</h1>
                 <hr><br>
-                <form action="/author-management/authors" id="edit" method="post">
+                <form action="/author-management/authors" onsubmit="nameValidator(event);" id="edit" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
                         <label>Author Name <span class="required-star">*</span></label>

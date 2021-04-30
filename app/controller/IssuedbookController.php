@@ -188,8 +188,8 @@ class IssuedBookController extends BaseController
         $adminId = $this->input->session('id');
         $fields = new Fields(['userId', 'bookId', 'comments']);
         $rules = [
-            'userId' => 'numericValidation',
-            'bookId' => 'numericValidation'
+            'userId' => 'numericValidation 0',
+            'bookId' => 'numericValidation 0'
         ];
         $fields->addRule($rules);
         $fields->setRequiredFields('userId', 'bookId');

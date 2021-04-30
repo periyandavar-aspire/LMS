@@ -49,6 +49,23 @@ class HomeController extends BaseController
     }
 
     /**
+     * Displays forgot-password page
+     *
+     * @return void
+     */
+    public function forgotPassword()
+    {
+        $data['footer'] = $this->model->getFooterData();
+        $this->loadLayout("header.html");
+        $this->loadView("userForgetPassword");
+        $this->loadView("footer", $data);
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
+    }
+
+    /**
      * Displays the available books
      *
      * @return void
@@ -233,6 +250,39 @@ class HomeController extends BaseController
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
         $this->loadView("registration", $data);
+        $this->loadView("footer", $data);
+    }
+
+    /**
+     * Recover user Account
+     *
+     * @return void
+     */
+    public function recoverAccount()
+    {
+        $this->load->library('captcha');
+        $this->load->library('mailer');
+        $username = $this->input->post('username');
+        $data['footer'] = $this->model->getFooterData();
+        $user = $this->model->getUser($username);
+        if ($user == null) {
+            Utility::setSessionData('msg', "toast('User account not found..!')");
+            $this->redirect("forgot-password");
+        }
+        $record['userId'] = $user->id;
+        $record['token'] = md5(time().$this->captcha->randomStr(7));
+        $record['expireAt'] = date('Y-m-d H:i:s', strtotime('now +12 minutes'));
+        $record['role'] = REG_USER;
+        $flag = $this->model->addPassRest($record)
+            && $this->mailer->send(
+                'lms@lms.com',
+                $user->email,
+                "Recover LMS account",
+                'mailcontent.php'
+            );
+        $result['flag'] = $flag;
+        $this->loadLayout("header.html");
+        $this->loadView("userForgetPassword", ["flag"=>$flag]);
         $this->loadView("footer", $data);
     }
 }

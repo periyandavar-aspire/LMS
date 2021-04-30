@@ -96,7 +96,7 @@ class HomeModel extends BaseModel
      */
     public function getUser(string $username): ?object
     {
-        $this->db->select('password', 'id');
+        $this->db->select('password', 'id', 'email');
         $this->db->from('user');
         $this->db->where('username', '=', $username);
         $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
@@ -105,6 +105,23 @@ class HomeModel extends BaseModel
         return $user;
     }
 
+    /**
+     * Inserts a record to pasword reset data
+     *
+     * @param array $data Data
+     * 
+     * @return bool
+     */
+    public function addPassRest($data)
+    {
+        // $this->db->select('code')->from('role')
+        //     ->where('value', '=', )
+        //     ->execute();
+        // if (!($data['role'] = $this->db->fetch())) {
+        //     $data['role'] = 'user';
+        // }
+        return $this->db->insert('password_reset', $data)->execute();
+    }
     /**
      * Creates new user account
      *
@@ -130,10 +147,7 @@ class HomeModel extends BaseModel
             'aboutUs',
             'address',
             'mobile',
-            'email',
-            'fbUrl',
-            'ytUrl',
-            'instaUrl'
+            'email'
         )->from('cms');
         $this->db->where('id', '=', 1)->limit(1)->execute();
         $footer = $this->db->fetch() or $footer = null;

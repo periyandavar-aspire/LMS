@@ -6,6 +6,7 @@ const regexMail = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})
 const regexAlpha = /^[A-Za-z]+$/;
 const regexAlphaSpace = /^[A-Za-z ]+$/;
 const regexPhone = /^[789]\d{9}$/;
+const regexLandline = /\d{5}([- ]*)\d{6}/;
 
 function passStrength(password) {
     document.querySelector("#pass1str").style.display = "block";
@@ -107,7 +108,52 @@ const bookFormValidator = function(event) {
     }
 };
 
-const bookEditFormValidator = function(event) {
+const configValidator = function(event) {
+    if (!isNaN(document.getElementById("maxbookLend").value) && parseInt(document.getElementById("maxbookLend").value) > 0) {
+        toast("Invalid maximum book lend count..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!isNaN(document.getElementById("maxLendDays").value) && parseInt(document.getElementById("maxLendDays").value) > 0) {
+        toast("Invalid maximum lend days..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!isNaN(document.getElementById("maxBookRequest").value) && parseInt(document.getElementById("maxBookRequest").value) > 0) {
+        toast("Invalid maximum book request count..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!isNaN(document.getElementById("fineAmtPerDay").value) && parseInt(document.getElementById("fineAmtPerDay").value) > 0) {
+        toast("Invalid fine amount..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+}
+
+const cmsValidator = function(event) {
+    if ((document.getElementById("aboutus").value) == '') {
+        toast("Please enter aboutus contentens..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if ((document.getElementById("address").value) == '') {
+        toast("Please enter the address..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if ((document.getElementById("mission").value) == '') {
+        toast("Please enter the mission contents..!", 'danger', "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!regexMail.test(document.getElementById("emailid").value)) {
+        toast("Please enter valid email id..!", "danger", "Invalid Input");
+        event.preventDefault();
+        return false;
+    } else if (!regexLandline.test(document.getElementById("mobile").value)) {
+        toast("Please enter valid phone number..!", "danger", "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+}
+
+
+const editBookFormValidator = function(event) {
     if ((document.getElementById("price").value) <= 0) {
         toast("Invalid price..!", 'danger', "Invalid Input");
         event.preventDefault();
@@ -159,9 +205,22 @@ const bookEditFormValidator = function(event) {
     }
 };
 
-const categoryValidator = function(event, val) {
-    console.log(val);
-    // event.preventDefault();
+const nameValidator = function(event) {
+    form = new FormData(event.target);
+    if (!regexAlphaSpace.test(form.get('name'))) {
+        toast("Invalid name..!", "danger", "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
+}
+
+const usernameValidator = function(event) {
+    form = new FormData(event.target);
+    if (!new RegExp(/^[A-Za-z0-9_]*$/).test(form.get('username'))) {
+        toast("Invalid username..!", "danger", "Invalid Input");
+        event.preventDefault();
+        return false;
+    }
 }
 
 const registrationFormValidator = function(event) {

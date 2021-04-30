@@ -10,6 +10,22 @@
     justify-content: space-between;
 }
 
+section .home-container {
+    max-width: 1140px;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 15px;
+}
+
+p.msg {
+    color: white;
+}
+
+.container-card {
+    max-width: 60%;
+}
+
 img {
     vertical-align: middle;
 }
@@ -864,5 +880,8 @@ article section:nth-of-type(2) {
         margin-left: 5%;
         width: 70%;
         margin-top: 30%;
+    }
+    h1 {
+        font-size: 20px;
     }
 }

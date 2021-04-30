@@ -153,3 +153,14 @@ Router::add(
         }
     }
 );
+
+Router::add(
+    '/forgot-password',
+    'home/forgotPassword'
+);
+
+Router::add(
+    '/forgot-password',
+    'home/recoverAccount',
+    'post'
+);

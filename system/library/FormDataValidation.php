@@ -66,6 +66,18 @@ class FormDataValidation
     }
 
     /**
+     * Performs landline number validation
+     *
+     * @param string $data data
+     *
+     * @return bool
+     */
+    public function landlineValidation(string $data): bool
+    {
+        return preg_match('/\d{5}([- ]*)\d{6}/', $data);
+    }
+
+    /**
      * Performs alpha and space validation
      *
      * @param string $data Data

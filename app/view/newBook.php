@@ -21,7 +21,12 @@ defined('VALID_REQ') or exit('Invalid request');
                 </div>
             </div>
 
-            <form action="" enctype="multipart/form-data" onsubmit="bookEditFormValidator(event);" method="post">
+            <form action="" enctype="multipart/form-data" 
+                onsubmit="<?php
+                          isset($book) 
+                            ? print("editBookFormValidator(event)") 
+                            : print("bookFormValidator(event)"); ?>;" 
+                            method="post">
                 <div class="form-input-div">
                     <label>Name <span class="required-star">*</span></label>
                     <input class="form-control" type="text" 

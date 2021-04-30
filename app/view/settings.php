@@ -18,29 +18,29 @@ if (!isset($data)) {
     <section>
         <h1>Settings</h1>
         <hr>
-        <form action="/admin/settings" onsubmit="//event.preventDefault(); registrationFormValidator(event);"
+        <form action="/admin/settings" onsubmit="configValidator(event);"
             method="POST">
             <div class="form-input-div">
                 <label>Maximum Book Lend <span class="required-star">*</span> </label>
-                <input class="form-control" type="number" id="maxbookLend" name="maxBookLend" maxlength="2"
+                <input class="form-control" type="number" id="maxbookLend" min="1" name="maxBookLend" maxlength="2"
                     placeholder="Maximum Book Lend" autocomplete="off" required=""
                     value="<?php echo $data->maxBookLend; ?>">
             </div>
             <div class="form-input-div">
                 <label>Maximum Lend Days <span class="required-star">*</span></label>
-                <input class="form-control" type="number" id="maxLendDays" name="maxLendDays" maxlength="2"
+                <input class="form-control" type="number" id="maxLendDays" min="1" name="maxLendDays" maxlength="2"
                     placeholder="Maximum Lend Days" required=""
                     value="<?php echo $data->maxLendDays; ?>">
             </div>
             <div class="form-input-div">
                 <label>Maximum Book Request  <span class="required-star">*</span></label>
-                <input class="form-control" type="number" id="maxBookRequest" name="maxBookRequest" maxlength="2"
+                <input class="form-control" type="number" id="maxBookRequest" min="1" name="maxBookRequest" maxlength="2"
                     placeholder="Maximum Book Request" required=""
                     value="<?php echo $data->maxBookRequest; ?>">
             </div>
             <div class="form-input-div">
                 <label>Fine Amout per day <span class="required-star">*</span></label>
-                <input class="form-control" type="number" id="fineAmtPerDay" name="fineAmtPerDay"
+                <input class="form-control" type="number" id="fineAmtPerDay" min="1" name="fineAmtPerDay"
                     placeholder="Fine Amount per day" $maxlength="2" required=""
                     value="<?php echo $data->fineAmtPerDay; ?>">
             </div>

@@ -100,11 +100,13 @@ class UserController extends BaseController
     public function updateProfile()
     {
         $fdv = new FormDataValidation();
+        $genCodes = implode(" ", $this->model->getGenderCodes());
         $id = $this->input->session('id');
         $fields = new Fields(['gender', 'mobile', 'fullname']);
         $rules = [
             'fullName' => 'alphaSpaceValidation',
             'mobile' => 'mobileNumberValidation',
+            'gender' => ["valuesInValidation $genCodes", 'required']
         ];
         $fields->addRule($rules);
         $fields->setRequiredFields('gender', 'mobile', 'fullname');

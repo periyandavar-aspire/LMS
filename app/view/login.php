@@ -55,9 +55,10 @@ defined('VALID_REQ') or exit('Invalid request');
                                         echo $msg;
                                     } ?>
                                 </div>
-                                <br><span> Don't have an account..? <a class="link" href="/signup"> Register here
+                                <br><span style="float:left;"> Don't have an account..? <a class="link" href="/signup"> Register here
                                     </a></span>
-
+                                <span  style="float:right;"> Forgot password..? <a class="link" href="/forgot-password"> Recover here
+                                    </a></span>
                             </form>
                         </section>
                     </div>

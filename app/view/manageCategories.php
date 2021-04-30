@@ -45,7 +45,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Category</h1>
                 <hr><br>
-                <form onsubmit="categoryValidator(event, this);" action="/category-management/categories" id="add" method="post">
+                <form onsubmit="nameValidator(event);" action="/category-management/categories" id="add" method="post">
                     <div class="form-input-div">
                         <label>Category Name <span class="required-star">*</span></label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="catname" name="name"
@@ -62,7 +62,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
                 <h1>Edit Category</h1>
                 <hr><br>
-                <form onsubmit="categoryValidator(event, this);" action="/category-management/categories" id="edit" onsubmit="updateItem(event);" method="post">
+                <form onsubmit="nameValidator(event);" action="/category-management/categories" id="edit" onsubmit="updateItem(event);" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
                         <label>Category Name <span class="required-star">*</span></label>

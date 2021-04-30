@@ -36,7 +36,7 @@ defined('VALID_REQ') or exit('Invalid request');
 <article>
     <!-- section 1 -->
     <section>
-        <div class="container">
+        <div class="home-container">
             <div class="row">
                 <div class="cols col-3">
                     <div class="text-container">
@@ -59,7 +59,7 @@ defined('VALID_REQ') or exit('Invalid request');
     </section>
     <!-- section 2 -->
     <section>
-        <div class="container">
+        <div class="home-container">
             <div class="row">
                 <div class="cols col-9 container-heading">
                     <h1>Find the Books of your Taste<br>among the thounsand's collection </h1>

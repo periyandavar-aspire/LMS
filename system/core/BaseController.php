@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+// namespace Lms\System\Core;
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Super class for all controller. All controllers should extend this controller
