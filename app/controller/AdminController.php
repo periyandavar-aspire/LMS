@@ -193,6 +193,13 @@ class AdminController extends BaseController
             'maxBookRequest',
             'fineAmtPerDay'
         );
+        $rules = [
+            'maxBookLend' => 'numericValidation',
+            'maxLendDays' => 'numericValidation',
+            'maxBookRequest' => 'numericValidation',
+            'fineAmtPerDay' => 'numericValidation'
+        ];
+        $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
             $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";

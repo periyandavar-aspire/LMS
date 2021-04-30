@@ -23,7 +23,7 @@ defined('VALID_REQ') or exit('Invalid request');
 
             <form action="" enctype="multipart/form-data" onsubmit="bookEditFormValidator(event);" method="post">
                 <div class="form-input-div">
-                    <label>Name</label>
+                    <label>Name <span class="required-star">*</span></label>
                     <input class="form-control" type="text" 
                     <?php if (isset($book->name)) {
                         echo "value='".$book->name."'";
@@ -31,7 +31,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     id="bookname" name="name" autocomplete="off" placeholder="Book Name" required="">
                 </div>
                 <div class="form-input-div">
-                    <label>Location</label>
+                    <label>Location <span class="required-star">*</span></label>
                     <input class="form-control" type="text" 
                     <?php if (isset($book->location)) {
                         echo "value='".$book->location."'";
@@ -45,7 +45,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         placeholder="Search Author">
                 </div> -->
                 <div class="form-input-div">
-                    <label>Authors</label>
+                    <label>Authors <span class="required-star">*</span></label>
                     <div class="form-control list-group" contenteditable="true" id="authorslist" name="userDetails">
                         <?php
                         if (isset($book)) {
@@ -69,7 +69,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         placeholder="Search Category">
                 </div> -->
                 <div class="form-input-div">
-                    <label>Categories</label>
+                    <label>Categories <span class="required-star">*</span></label>
                     <div contenteditable="true" class="form-control list-group " id="catlist" name="userDetails">
                         <?php
                         if (isset($book)) {
@@ -89,7 +89,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 </div>
 
                 <div class="form-input-div">
-                    <label>Publication</label>
+                    <label>Publication <span class="required-star">*</span></label>
                     <input class="form-control" type="text" 
                         <?php if (isset($book->publication)) {
                             echo "value='".$book->publication."'";
@@ -97,7 +97,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     id="publication" name="publication" autocomplete="off" placeholder="Book Publication" required="">
                 </div>
                 <div class="form-input-div">
-                    <label>ISBN</label>
+                    <label>ISBN <span class="required-star">*</span></label>
                     <input class="form-control" type="text" 
                         <?php if (isset($book->isbn)) {
                             echo "value='".$book->isbn."'";
@@ -105,7 +105,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     id="isbn" name="isbn" autocomplete="off" placeholder="ISBN Number" required="">
                 </div>
                 <div class="form-input-div">
-                    <label>Price</label>
+                    <label>Price <span class="required-star">*</span></label>
                     <input class="form-control" type="number" min="0" id="price" name="price" 
                         <?php if (isset($book->price)) {
                             echo "value='".$book->price."'";
@@ -113,7 +113,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     autocomplete="off" placeholder="Price" required="">
                 </div>
                 <div class="form-input-div">
-                    <label>Stack</label>
+                    <label>Stack <span class="required-star">*</span></label>
                     <input class="form-control" type="number" min="0" id="stack" name="stack" 
                         <?php if (isset($book->stack)) {
                             echo "value='".$book->stack."'";
@@ -121,7 +121,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     autocomplete="off" placeholder="Stack" required="">
                 </div>
                 <div class="form-input-div">
-                    <label>Description</label>
+                    <label>Description <span class="required-star">*</span></label>
                     <textarea class="form-control" id="description" name="description" placeholder="Description"
                         required=""><?php if (isset($book->description)) {
                                         echo $book->description;
@@ -129,7 +129,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 </div>
 
                 <div class="form-input-div">
-                    <label>Cover Picture</label>
+                    <label>Cover Picture <span class="required-star">*</span></label>
                         <?php if (isset($book->coverPic)) {
                             echo '<input class="form-control" type="file" id="coverPic" name="coverPic" accept=".jpg, .png" onchange="changePreview(event);">';
                             echo '<img class="file-preview" id="file-preview" src="/upload/book/' . $book->coverPic .'">';

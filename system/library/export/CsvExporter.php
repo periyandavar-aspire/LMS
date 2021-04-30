@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+namespace Export;
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Export the data into csv

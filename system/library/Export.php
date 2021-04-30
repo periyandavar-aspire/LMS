@@ -35,6 +35,7 @@ class Export
         $class = $type . 'Exporter';
         if (file_exists($file)) {
             include_once "$file";
+            $class = "\\Export\\".$class;
             $this->_exporter = new $class();
         } else {
             Log::getInstance()->Debug("Invalid export type '$file'");

@@ -47,7 +47,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <hr><br>
                 <form action="/author-management/authors" id="add" method="post">
                     <div class="form-input-div">
-                        <label>Author Name</label>
+                        <label>Author Name <span class="required-star">*</span></label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name"
                             autocomplete="off" placeholder="Author Name" required="">
                     </div>
@@ -65,7 +65,7 @@ defined('VALID_REQ') or exit('Invalid request');
                 <form action="/author-management/authors" id="edit" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
-                        <label>Author Name</label>
+                        <label>Author Name <span class="required-star">*</span></label>
                         <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="edit-name" name="name"
                             autocomplete="off" placeholder="Author Name..." required="">
                     </div>

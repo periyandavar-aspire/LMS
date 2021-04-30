@@ -20,12 +20,12 @@ if (!isset($data)) {
         <hr>
         <form action="/admin/cms" onsubmit="//event.preventDefault(); registrationFormValidator(event);" method="POST">
             <div class="form-input-div">
-                <label>About Us</label>
+                <label>About Us <span class="required-star">*</span></label>
                 <textarea class="form-control" id="aboutus" name="aboutus"
                     required=""><?php echo $data->aboutUs; ?></textarea>
             </div>
             <div class="form-input-div">
-                <label>Address</label>
+                <label>Address <span class="required-star">*</span></label>
                 <textarea class="form-control" id="address" name="address"
                     required=""><?php echo $data->address; ?></textarea>
             </div>
@@ -42,30 +42,30 @@ if (!isset($data)) {
                     autocomplete="off" required="">
             </div>
             <div class="form-input-div">
-                <label>Facebook Link </label>
+                <label>Facebook Link <span class="required-star">*</span> </label>
                 <input class="form-control" type="url" name="fbUrl" id="fburl" placeholder="Facebook"
                     value="<?php echo $data->fbUrl?>"
                     autocomplete="off" required="">
             </div>
             <div class="form-input-div">
-                <label>YouTube Link</label>
+                <label>YouTube Link  <span class="required-star">*</span></label>
                 <input class="form-control" type="url" name="ytUrl" id="ytUrl" placeholder="YouTube"
                     value="<?php echo $data->ytUrl?>"
                     autocomplete="off" required="">
             </div>
             <div class="form-input-div">
-                <label>Insta Link </label>
+                <label>Insta Link <span class="required-star">*</span> </label>
                 <input class="form-control" type="url" name="instaUrl" id="instaUrl" placeholder="Instagram"
                     value="<?php echo $data->instaUrl?>"
                     autocomplete="off" required="">
             </div>
             <div class="form-input-div">
-                <label>Vision</label>
+                <label>Vision <span class="required-star">*</span></label>
                 <textarea class="form-control" id="vision" name="vision"
                     required=""><?php  echo $data->vision;?></textarea>
             </div>
             <div class="form-input-div">
-                <label>Mission</label>
+                <label>Mission <span class="required-star">*</span></label>
                 <textarea class="form-control" id="mission" name="mission"
                     required=""><?php echo $data->mission; ?></textarea>
             </div>

@@ -9,8 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+namespace Export;
 defined('VALID_REQ') or exit('Invalid request');
-
 require_once 'fpdf/pdf.php';
 /**
  * Fields Class used to store the input fields
@@ -36,7 +36,7 @@ class PdfExporter
      */
     public function __construct()
     {
-        $this->_pdf = new PDF();
+        $this->_pdf = new \PDF();
         $this->_pdf->AliasNbPages();
     }
 

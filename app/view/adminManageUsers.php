@@ -48,25 +48,25 @@ defined('VALID_REQ') or exit('Invalid request');
                 <hr><br>
                 <form action="/admin/user-management" onsubmit="createUserFormValidator(event);" method="post">
                     <div class="form-input-div">
-                        <label>Full Name</label>
+                        <label>Full Name <span class="required-star">*</span></label>
                         <input class="form-control" type="text" id="fullname" name="fullName" autocomplete="off"
                             placeholder="Full Name" required="">
                     </div>
                     <div class="form-input-div">
-                        <label>Email</label>
+                        <label>Email <span class="required-star">*</span></label>
                         <input class="form-control" type="email" id="email" name="email" autocomplete="off"
                             placeholder="email" required="">
                     </div>
 
                     <div class="form-input-div">
-                        <label>Role</label>
+                        <label>Role <span class="required-star">*</span></label>
                         <select class="form-control" type="text" id="role" name="role" required="">
                             <option style="display:none" value=''>Select Role</option>
                         </select>
                     </div>
 
                     <div class="form-input-div">
-                        <label>Password </label>
+                        <label>Password <span class="required-star">*</span></label>
                         <input class="form-control" onkeyup="passStrength('password')" type="password" id="password"
                             name="password" placeholder="********" autocomplete="off">
                         <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none"
@@ -74,7 +74,7 @@ defined('VALID_REQ') or exit('Invalid request');
                         <span id="pass1msg" style="display:none"></span>
                     </div>
                     <div class="form-input-div">
-                        <label>Confirm Password </label>
+                        <label>Confirm Password <span class="required-star">*</span> </label>
                         <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','errormsg')"
                             type="password" id="confirmPassword" name="confirmpassword" placeholder="********"
                             autocomplete="off">

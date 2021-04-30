@@ -21,25 +21,25 @@ if (!isset($data)) {
         <form action="/admin/settings" onsubmit="//event.preventDefault(); registrationFormValidator(event);"
             method="POST">
             <div class="form-input-div">
-                <label>Maximum Book Lend </label>
+                <label>Maximum Book Lend <span class="required-star">*</span> </label>
                 <input class="form-control" type="number" id="maxbookLend" name="maxBookLend" maxlength="2"
                     placeholder="Maximum Book Lend" autocomplete="off" required=""
                     value="<?php echo $data->maxBookLend; ?>">
             </div>
             <div class="form-input-div">
-                <label>Maximum Lend Days</label>
+                <label>Maximum Lend Days <span class="required-star">*</span></label>
                 <input class="form-control" type="number" id="maxLendDays" name="maxLendDays" maxlength="2"
                     placeholder="Maximum Lend Days" required=""
                     value="<?php echo $data->maxLendDays; ?>">
             </div>
             <div class="form-input-div">
-                <label>Maximum Book Request </label>
+                <label>Maximum Book Request  <span class="required-star">*</span></label>
                 <input class="form-control" type="number" id="maxBookRequest" name="maxBookRequest" maxlength="2"
                     placeholder="Maximum Book Request" required=""
                     value="<?php echo $data->maxBookRequest; ?>">
             </div>
             <div class="form-input-div">
-                <label>Fine Amout per day</label>
+                <label>Fine Amout per day <span class="required-star">*</span></label>
                 <input class="form-control" type="number" id="fineAmtPerDay" name="fineAmtPerDay"
                     placeholder="Fine Amount per day" $maxlength="2" required=""
                     value="<?php echo $data->fineAmtPerDay; ?>">
