@@ -194,10 +194,10 @@ class AdminController extends BaseController
             'fineAmtPerDay'
         );
         $rules = [
-            'maxBookLend' => 'numericValidation',
-            'maxLendDays' => 'numericValidation',
-            'maxBookRequest' => 'numericValidation',
-            'fineAmtPerDay' => 'numericValidation'
+            'maxBookLend' => 'numericValidation 1',
+            'maxLendDays' => 'numericValidation 1',
+            'maxBookRequest' => 'numericValidation 1',
+            'fineAmtPerDay' => 'numericValidation 1'
         ];
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
