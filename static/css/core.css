@@ -905,6 +905,10 @@ article section:nth-of-type(2) {
         max-width: 100%;
         font-size: 40px;
     }
+    section .home-container {
+        max-width: 78%;
+        font-size: 40px;
+    }
     #nav-bar-top-admin {
         height: 300px;
     }

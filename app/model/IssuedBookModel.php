@@ -475,21 +475,29 @@ class IssuedBookModel extends BaseModel
         $book['status'] = $result->code;
         $data = [
             'returnAt = NOW()',
-            "fine = IF($finSettings->maxLendDays < DATEDIFF(now(), issuedAt), "
-                . "((DATEDIFF(now(), issuedAt) - $finSettings->maxLendDays) * "
-                . "'$finSettings->fineAmtPerDay' ) ,0)"
+            "fine = IF(? < DATEDIFF(now(), issuedAt), "
+                . "((DATEDIFF(now(), issuedAt) - ?) * "
+                . "? ) ,0)"
         ];
-        // $this->db->appendBindValues(
-        //     [
-        //         $finSettings->maxLendDays,
-        //         $finSettings->maxLendDays,
-        //         $finSettings->fineAmtPerDay
-        //     ]
-        // );
         $this->db->update('issued_book', $book)
             ->setTo(...$data)
+            ->appendBindValues(
+                [
+                    $finSettings->maxLendDays,
+                    $finSettings->maxLendDays,
+                    $finSettings->fineAmtPerDay
+                ]
+            )
             ->where('id', '=', $id);
-        return $this->db->execute();
+        $this->db->execute();
+        $this->db->select('bookId')->from('issued_book')->where('id', '=', $id);
+        $flag = $this->db->execute();
+        if ($flag && $row = $this->db->fetch()) {
+            $data = "available = available +1";
+            $this->db->update('book')->setTo($data)->where('id', '=', $row->bookId);
+            $this->db->execute();
+        }
+        return $flag;
     }
 
     /**
