@@ -181,7 +181,6 @@ class BookModel extends BaseModel
         }
         return $books;
     }
-
     /**
      * Returns enabled books
      *
@@ -329,8 +328,15 @@ class BookModel extends BaseModel
         unset($book['category']);
         unset($book['author']);
         $this->db->set("autocommit", 0);
+        $this->db->select('stack')->from('book')->where('id', '=', $bookId);
+        $this->db->execute();
+        if (!$row = $this->db->fetch()) {
+            return false;
+        }
+        $diff = $book['stack'] - $row->stack;
         $this->db->begin();
-        $flag1 = $this->db->update('book', $book)
+        $flag1 = $this->db->update('book', $book)->setTo("available = available + ?")
+            ->appendBindValues([$diff])
             ->where('id', '=', $bookId)
             ->execute();
         $flag2 = $this->db->delete('book_category')
