@@ -9,6 +9,12 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
+use System\Database\DatabaseFactory;
+use System\Core\Log;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Super class for all Model. All Model class should extend this Model.

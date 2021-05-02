@@ -1,6 +1,6 @@
 <?php
 /**
- * Forgot password
+ * Recover Account
  * php version 7.3.5
  *
  * @category View
@@ -28,16 +28,26 @@ use System\Core\Utility;
                                         ."use that link to recover your account..! link will be valid"
                                         ."for 10 minutes </p>"
                                     : print "<p class='msg'>Unable to send a recovery mail please try again later..!</p>";
-                                echo '<a class="btn-link" href="/">GO TO HOME</a>';
                             else: ?>
-                            <form action="" onsubmit="usernameValidator(event);" method="POST">
+                            <form action="" onsubmit="passwordValidator(event);" method="POST">
                                 <div class="form-input-div">
-                                    <label style="float:left;">Enter User Name <span class="required-star">*</span></label>
-                                    <input class="form-control" type="text" pattern="^[a-zA-Z0-9_]+$" id="username"
-                                        name="username" autocomplete="off" placeholder="User Name..." required="">
-                                    <span id="user-availability-status" style="font-size:12px;"></span>
+                                    <label>Enter Password <span class="required-star">*</span></label>
+                                    <input class="form-control" onkeyup="passStrength('password')" minlength="6"
+                                        type="password" id="password" name="password" placeholder="********"
+                                        autocomplete="off" required="">
+                                    <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50"
+                                        style="display:none" value="0"></meter>
+                                    <span id="password-span" style="display:none"></span>
                                 </div>
-                                <button type='submit' class="btn-link">RECOVER</button>
+                                <div class="form-input-div">
+                                    <label>Confirm Password <span class="required-star">*</span></label>
+                                    <input class="form-control"
+                                        onkeyup="checkConfirm('password','confirmPassword','confirmPassword-span')" minlength="6"
+                                        type="password" id="confirmPassword" name="confirmpassword"
+                                        placeholder="********" autocomplete="off" required="">
+                                    <span id="confirmPassword-span" style="color:red"></span>
+                                </div>
+                                <button type='submit' class="btn-link">Change Password</button>
                             </form>
                             <?php endif;?>
                         </div>

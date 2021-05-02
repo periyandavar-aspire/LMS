@@ -9,7 +9,15 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\CategoryModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
 
 /**
  * CategoryController Class Handles the request related to the categories
@@ -160,11 +168,6 @@ class CategoryController extends BaseController
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('category-management');
-        // $data['categories'] = $this->model->getAll();
-        // $this->loadLayout($user."Header.html");
-        // $this->loadView("manageCategories", $data);
-        // $this->loadLayout($user."Footer.html");
-        // $this->addScript($script);
     }
 
     /**
@@ -198,11 +201,6 @@ class CategoryController extends BaseController
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('category-management');
-        // $data['categories'] = $this->model->getAll();
-        // $this->loadLayout($user."Header.html");
-        // $this->loadView("manageCategories", $data);
-        // $this->loadLayout($user."Footer.html");
-        // $this->addScript($script);
     }
 
     /**

@@ -9,6 +9,7 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+use System\Helper\PaginationHelper;
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <article class="main">
@@ -87,7 +88,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     <div>
                         <ul class="pagination">
                             <?php
-                                echo generatePagination($pagination, "/lent-books");
+                                echo PaginationHelper::generatePagination($pagination, "/lent-books");
                             ?>
 
                             <!-- <li class="active"><a>1</a></li>

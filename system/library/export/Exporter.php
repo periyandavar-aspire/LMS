@@ -9,7 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-namespace Export;
+
+namespace System\Libraray\Export;
+
 defined('VALID_REQ') or exit('Invalid request');
 
 /**

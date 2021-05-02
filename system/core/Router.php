@@ -9,6 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Router Class handles routing
@@ -304,7 +307,7 @@ class Router
                 $requestCtrl = explode('/', trim($requestCtrl, "/"));
                 $ctrl = $requestCtrl[0];
                 $method = $requestCtrl[1] ?? '';
-                $controllerName = ucfirst($ctrl) . "Controller";
+                $controllerName = "App\Controller\\" . ucfirst($ctrl) . "Controller";
                 $controllerObj = new $controllerName();
                 if (method_exists($controllerName, $method)) {
                     $controllerObj->$method(...$matches);
@@ -318,7 +321,7 @@ class Router
                 self::$pathNotAllowed();
                 return;
             } elseif (isset($config['error_ctrl'])) {
-                $controllerName = $config['error_ctrl'];
+                $controllerName = "App\Controller\\" . $config['error_ctrl'];
                 $file = $config['controller'] . "/" . $config['error_ctrl'].".php";
                 if (file_exists($file)) {
                     if (method_exists($controllerName, 'pageNotFound')) {
@@ -336,7 +339,7 @@ class Router
                 self::$_methodNotAllowed();
                 return;
             } elseif (isset($config['error_ctrl'])) {
-                $controllerName = $config['error_ctrl'];
+                $controllerName = "App\Controller\\" . $config['error_ctrl'];
                 $file = $config['controller'] . "/" . $config['error_ctrl'] . ".php";
                 if (file_exists($file)) {
                     if (method_exists($controllerName, 'invalidRequest')) {
@@ -367,7 +370,7 @@ class Router
             echo $content;
             exit();
         } elseif (isset($config['error_ctrl'])) {
-            $controllerName = $config['error_ctrl'];
+            $controllerName = "App\Controller\\" . $config['error_ctrl'];
             $file = $config['controller'] . "/" . $config['error_ctrl'] . ".php";
             if (file_exists($file)) {
                 if (method_exists($controllerName, 'serverError')) {
@@ -399,11 +402,12 @@ class Router
         $controller = $url[0] . "Controller";
         $method = $url[1];
         if (file_exists($config['controller']) . "/" . $controller . ".php") {
+            $controller = "App\Controller\\" . ucfirst($controller);
             if (method_exists($controller, $method)) {
                 (new $controller())->$method();
                 exit();
             }
         }
-        Route::error();
+        Router::error();
     }
 }

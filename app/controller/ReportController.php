@@ -9,7 +9,13 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\ReportModel;
+use System\Library\Export;
 
 /**
  * ReportController Class Handles the requests related to the Books
@@ -47,15 +53,14 @@ class ReportController extends BaseController
     /**
      * Undocumented function
      *
-     * @param string $list List name
-     *
      * @return void
      */
-    public function exportToCsv(string $list = 'book')
+    public function exportToCsv()
     {
         $user = $this->input->session('type');
         $sDate = $this->input->get('sDate') ?? "0000-00-00";
         $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
+        $list = $this->input->get('list') ?? "book";
         $funcName = "getTop" . $list . "List";
         $tcount = $tfcount = null;
         $data = $this->model->$funcName(
@@ -72,28 +77,19 @@ class ReportController extends BaseController
         $csv = new Export('csv');
         $csv->generate($data, ["id", 'rank']);
         $csv->send();
-        // unset($->new_property);
-
-        // $this->load->helper('chartHelper');
-        // $this->loadLayout($user . "Header.html");
-        // $this->includeScript('chart.js');
-        // $this->loadView('analytics', $data);
-        // $this->loadLayout($user . "Footer.html");
-        // print_r($data);   
     }
 
     /**
      * Undocumented function
      *
-     * @param string $list List name
-     *
      * @return void
      */
-    public function exportToPdf(string $list = 'book')
+    public function exportToPdf()
     {
         $user = $this->input->session('type');
         $sDate = $this->input->get('sDate') ?? "0000-00-00";
         $eDate = $this->input->get('eDate') ?? Date('Y-m-d');
+        $list = $this->input->get('list') ?? "book";
         $funcName = "getTop" . $list . "List";
         $tcount = $tfcount = null;
         $data = $this->model->$funcName(
@@ -107,27 +103,19 @@ class ReportController extends BaseController
             $tcount,
             $tfcount
         );
-        $csv = new Export('pdf');
-        $csv->generate($data, ["id", 'rank']);
-        $csv->send();
-        // unset($->new_property);
-
-        // $this->load->helper('chartHelper');
-        // $this->loadLayout($user . "Header.html");
-        // $this->includeScript('chart.js');
-        // $this->loadView('analytics', $data);
-        // $this->loadLayout($user . "Footer.html");
-        // print_r($data);   
+        $pdf = new Export('pdf');
+        $pdf->generate($data, ["id", 'rank']);
+        $pdf->send();
     }
 
     /**
      * Displays reports page
-     * 
+     *
      * @param string $list List name
      *
      * @return void
      */
-    public function analytics(string $list = 'book') 
+    public function analytics(string $list = 'book')
     {
         $user = $this->input->session('type');
         $data['sDate'] = $this->input->get('sDate') ?? "0000-00-00";
@@ -151,29 +139,6 @@ class ReportController extends BaseController
         $this->includeScript('chart.js');
         $this->loadView('analytics', $data);
         $this->loadLayout($user . "Footer.html");
-
-        // $user = $this->input->session('type');
-        // $data['sDate'] = $this->input->get('sDate') ?? "0000-00-00";
-        // $data['eDate'] = $this->input->get('eDate') ?? Date('Y-m-d');
-        // $data['list'] = $this->input->get('list');
-        // $funcName = "getTop" . $data['list'] . "List";
-        // $tcount = $tfcount = null;
-        // $data['data'] = $this->model->$funcName(
-        //     $data['sDate'],
-        //     $data['eDate'],
-        //     0,
-        //     10,
-        //     'rank',
-        //     'DESC',
-        //     '',
-        //     $tcount,
-        //     $tfcount
-        // );
-        // $this->load->helper('chartHelper');
-        // $this->loadLayout($user . "Header.html");
-        // $this->includeScript('chart.js');
-        // $this->loadView('analytics', $data);
-        // $this->loadLayout($user . "Footer.html"); 
     }
 
     /**

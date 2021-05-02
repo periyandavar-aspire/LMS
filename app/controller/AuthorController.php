@@ -9,7 +9,15 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\AuthorModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
 
 /**
  * AuthorController Class Handles the requests related to the authors
@@ -76,7 +84,7 @@ class AuthorController extends BaseController
 
 
     /**
-     * Add new author and display available authors
+     * Add new author
      *
      * @return void
      */
@@ -105,11 +113,6 @@ class AuthorController extends BaseController
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('author-management');
-        // $data['authors'] = $this->model->getAll();
-        // $this->loadLayout($user."Header.html");
-        // $this->loadView("manageAuthors", $data);
-        // $this->loadLayout($user."Footer.html");
-        // $this->addScript($script);
     }
 
     /**
@@ -178,11 +181,6 @@ class AuthorController extends BaseController
         }
         Utility::setSessionData('msg', $script);
         $this->redirect('author-management');
-        // $data['authors'] = $this->model->getAll();
-        // $this->loadLayout($user."Header.html");
-        // $this->loadView("manageAuthors", $data);
-        // $this->loadLayout($user."Footer.html");
-        // $this->addScript($script);
     }
 
     /**

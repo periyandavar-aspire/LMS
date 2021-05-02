@@ -9,6 +9,14 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Database;
+
+use Pdo;
+use PdoException;
+use System\Core\Log;
+use Error;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * PdoDriver Class Handles the data base operations with PDO connection
@@ -69,7 +77,7 @@ class PdoDriver extends Database
         string $db,
         string $driver
     ) {
-        self::$instance = self::$instance 
+        self::$instance = self::$instance
             ?? new static($host, $user, $pass, $db, $driver);
         return self::$instance;
     }

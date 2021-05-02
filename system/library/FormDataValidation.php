@@ -9,6 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Library;
+
 defined('VALID_REQ') or exit('Invalid request');
 
 /**
@@ -108,7 +111,7 @@ class FormDataValidation
      * Isbn Validation
      *
      * @param string $isbn Isbn Number
-     * 
+     *
      * @return boolean
      */
     public function isbnValidation(string $isbn): bool
@@ -253,19 +256,19 @@ class FormDataValidation
                             if (count($params) == 0) {
                                 if ($data == null) {
                                     if (in_array("required", (array)$rules)) {
-                                        $invalidField = $fieldName;
+                                        $invalidField = "$fieldName is required";
                                         return false;
                                     } else {
                                         continue;
                                     }
                                 } elseif (!$this->$rule($data)) {
-                                    $invalidField = $fieldName;
+                                    $invalidField = "$fieldName";
                                     return false;
                                 }
                             } elseif (count($params) != 0) {
                                 if ($data == null) {
                                     if (in_array("required", (array)$rules)) {
-                                        $invalidField = $fieldName;
+                                        $invalidField = "$fieldName is required";
                                         return false;
                                     } else {
                                         continue;

@@ -9,7 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
  * HomeModel Class Handles the HomeController class data base operations
@@ -23,22 +27,6 @@ defined('VALID_REQ') or exit('Invalid request');
  */
 class HomeModel extends BaseModel
 {
-    /**
-     * Returns available gender codes
-     *
-     * @return array
-     */
-    public function getGenderCodes(): array
-    {
-        $genders = [];
-        $this->db->select('code')->from('gender');
-        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
-        while ($row = $this->db->fetch()) {
-            $genders[] = $row->code;
-        }
-        return $genders;
-    }
-
     /**
      * Returns all the available books
      *
@@ -55,9 +43,6 @@ class HomeModel extends BaseModel
             'available',
             'coverPic'
         )->from('book_detail');
-        // $this->db->innerJoin('book_author ba')->on('b.id = ba.bookId')
-        //     ->innerJoin('author a')
-        //     ->on('ba.authorId = a.id');
         $this->db->where('status', '=', 1)
             ->orderby('RAND()')
             ->limit(12)
@@ -68,24 +53,7 @@ class HomeModel extends BaseModel
         return $books;
     }
 
-    /**
-     * Returns avaialbe gender values with code
-     *
-     * @return array
-     */
-    public function getGender(): array
-    {
-        $genders = [];
-        $i = 0;
-        $this->db->select('code', 'value')->from('gender');
-        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
-        while ($row = $this->db->fetch()) {
-            $genders[$i]['code'] = $row->code;
-            $genders[$i]['value'] = $row->value;
-            $i++;
-        }
-        return $genders;
-    }
+
 
     /**
      * Returns the password of the given username
@@ -109,19 +77,14 @@ class HomeModel extends BaseModel
      * Inserts a record to pasword reset data
      *
      * @param array $data Data
-     * 
+     *
      * @return bool
      */
     public function addPassRest($data)
     {
-        // $this->db->select('code')->from('role')
-        //     ->where('value', '=', )
-        //     ->execute();
-        // if (!($data['role'] = $this->db->fetch())) {
-        //     $data['role'] = 'user';
-        // }
         return $this->db->insert('password_reset', $data)->execute();
     }
+
     /**
      * Creates new user account
      *
@@ -182,5 +145,27 @@ class HomeModel extends BaseModel
             ->limit(1)
             ->execute();
         return ($result = $this->db->fetch()) ? $result->mission : null;
+    }
+
+    /**
+     * Validates a token
+     *
+     * @param string $token Token
+     *
+     * @return object|null
+     */
+    public function validateToken(string $token)
+    {
+        $this->db->select('id', 'userId', 'role', 'expireAt')
+            ->from('password_reset')
+            ->where('token', '=', $token)
+            ->execute();
+        if (!($result = $this->db->fetch())) {
+            return null;
+        }
+        $this->db->delete('password_reset')
+            ->where('id', '=', $result->id)
+            ->execute();
+        return $result;
     }
 }

@@ -229,3 +229,33 @@ label {
         margin: unset;
     }
 }
+
+@media screen and (min-width: 1824px) {
+    header {
+        height: 110px;
+        margin-left: 18%;
+    }
+    .main {
+        margin-top: 80px;
+    }
+    nav ul li {
+        padding: 30px;
+        font-size: 44px;
+    }
+    #searchBar input {
+        width: 785px;
+        height: 45px;
+    }
+    #searchBar button {
+        padding: 8px;
+        width: 83px;
+        height: 78px;
+        font-size: 27px;
+    }
+    .dashboard-icons i {
+        font-size: 239px;
+    }
+    .dashboard-icons {
+        font-size: 81px;
+    }
+}

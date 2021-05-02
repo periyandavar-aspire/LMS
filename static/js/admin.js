@@ -50,7 +50,6 @@ function editItem(editUrl, element = "editRecord") {
         .then(data => {
             openModal(element);
             for (const key in data.data) {
-                console.log(key);
                 document.getElementById("edit-" + key).value = data.data[key];
             }
         });
@@ -58,13 +57,10 @@ function editItem(editUrl, element = "editRecord") {
 
 function changeStatus(event, statusChangeUrl) {
     status = event.target.checked ? 1 : 0;
-    // const formData = new FormData();
-    // formData.append('status', status);
+
     data = {
-            "status": status
-        }
-        // statusChangeUrl += "/" + flag;
-    console.log(statusChangeUrl);
+        "status": status
+    }
     fetch(statusChangeUrl, {
             method: 'PUT',
             headers: {

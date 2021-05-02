@@ -11,6 +11,13 @@
  * @link     http://url.com
  */
 define("VALID_REQ", true);
+use System\Core\EnvParser;
+use System\Core\Loader;
+use System\Core\Session;
+use System\Core\Log;
+use System\Core\FrameworkException;
+use System\Core\Constants;
+use System\Core\Router;
 
 require_once 'system/core/FrameworkException.php';
 
@@ -126,22 +133,7 @@ if (!function_exists("exceptionHandler")) {
 
 set_exception_handler('exceptionHandler');
 set_error_handler("errHandler");
-// $to_email = "vickyperiyandavar@gmail.com";
-// $subject = "Simple Email Test via PHP";
-// $headers = "From:  admin@lms.com" . "\r\n";
-// $headers .= "Reply-To: admin@lms.com". "\r\n";
-// $headers .= "CC: susan@example.com\r\n";
-// $headers .= "MIME-Version: 1.0\r\n";
-// $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
-// $message = '<p><strong>This is strong text</strong> while this is not.</p>';
-
- 
-// if (mail($to_email, $subject, $message, $headers)) {
-//     echo "Email successfully sent to $to_email...";
-// } else {
-//     echo "Email sending failed...";
-// }
 ob_start();
 Router::run();
 $output = ob_get_contents();

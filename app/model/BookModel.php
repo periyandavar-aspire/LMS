@@ -9,7 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
  * BookModel Class Handles the BookController class data base operations
@@ -99,7 +103,7 @@ class BookModel extends BaseModel
             }
         }
         ($flag1 && $flag2 && $flag3)
-            ? ($flag = $this->db->commit()) 
+            ? ($flag = $this->db->commit())
             : ($this->db->rollback());
         $this->db->set("autocommit", 1);
         return $flag;
@@ -272,8 +276,8 @@ class BookModel extends BaseModel
             ->where('id', '=', $id)
             ->where('returnAt', '=', DEFAULT_DATE_VAL)
             ->execute();
-         ($flag1 && $flag2)
-            ? ($flag =$this->db->commit()) 
+        ($flag1 && $flag2)
+            ? ($flag =$this->db->commit())
             : ($this->db->rollback());
         $this->db->set("autocommit", 1);
         return $flag;
@@ -354,10 +358,79 @@ class BookModel extends BaseModel
             }
         }
         ($flag1 && $flag2 && $flag3)
-            ? ($flag = $this->db->commit()) 
+            ? ($flag = $this->db->commit())
             : ($this->db->rollback());
         $this->db->set("autocommit", 1);
         return $flag;
+    }
+
+    /**
+     * Returns matching authors name as string
+     *
+     * @param string $authorIds Author ids with , as seperator
+     *
+     * @return void
+     */
+    public function getAuthorList(string $authorIds): string
+    {
+        $authors = '';
+        $authorIds = rtrim($authorIds, ',');
+        $this->db->select('name')
+            ->from('author')
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->where("FIND_IN_SET(id, ?)")
+            ->appendBindValues([$authorIds])
+            ->execute();
+        while ($row = $this->db->fetch()) {
+            $authors = $row->name . ",";
+        }
+        return rtrim($authors, ",");
+    }
+
+    /**
+     * Returns matching Categories name as string
+     *
+     * @param string $catIds Category ids with , as seperator
+     *
+     * @return void
+     */
+    public function getCatList(string $catIds): string
+    {
+        $categories = '';
+        $catIds = rtrim($catIds, ',');
+        $this->db->select('name')
+            ->from('category')
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->where("FIND_IN_SET(id, ?)")
+            ->appendBindValues([$catIds])
+            ->execute();
+        while ($row = $this->db->fetch()) {
+            $categories = $row->name . ",";
+        }
+        return rtrim($categories, ",");
+    }
+
+    /**
+     * Check the book is exiting with the given isbn or not
+     *
+     * @param string $isbn   ISBN
+     * @param string $ignore This id will be ignored
+     *
+     * @return boolean
+     */
+    public function isIsbnAvailable(string $isbn, int $ignore): bool
+    {
+        $this->db->select("id")
+            ->from('book')
+            ->where('isbn', '=', $isbn)
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->where('id', '!=', $ignore)
+            ->execute();
+        if ($this->db->fetch()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

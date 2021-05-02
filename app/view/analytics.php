@@ -9,6 +9,8 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+use System\Helper\ChartHelper;
+use System\Helper\PaginationHelper;
 defined('VALID_REQ') or exit('Invalid request');
 ?>
 <article class="main">
@@ -48,24 +50,12 @@ defined('VALID_REQ') or exit('Invalid request');
                     <h3></h3>
                 </div>
             </div>
-                <!-- <div class="cols">
-                    <div class="div-card-body"> -->
             <div style="overflow-x:auto;">
                 <?php 
                 $values = [];
                 foreach ($data as $temp) {
-                    // print_r($temp);
                     $values[] = [$temp->name, $temp->impression];
                 }
-                // $values = [
-                //     // [$data->name, $data->impression],
-                //     ["Atlantis", 16.67],
-                //     ["Night", 14.58],
-                //     ["gravity", 12.5],
-                //     ["king", 10.42],
-                //     ["histories", 6.25],
-                //     ["cs", 4.17]
-                // ];
                 $properties = [
                     "xAxis"=> "Book Name",
                     "yAxis"=> "Impressions",
@@ -73,9 +63,9 @@ defined('VALID_REQ') or exit('Invalid request');
                     "color"=> "#005A9C",
                     "yDots" => 10
                 ];
-                echo createChart("chart", 400, 850, 'responsiveChart');
+                echo ChartHelper::createChart("chart", 400, 850, 'responsiveChart');
                 // echo getChartJs(); 
-                echo generateChart("chart", $values, $properties);
+                echo ChartHelper::generateChart("chart", $values, $properties);
                 ?>
             </div>
                     <!-- </div>
@@ -91,13 +81,13 @@ defined('VALID_REQ') or exit('Invalid request');
                                     <th data-orderable="false">Sl. No</th>
                                     <?php 
                                     if ($list== "book") {
-                                        echo generateTh(['Book Name', 'ISBN Number', 'Categories', 'Authors']);
+                                        echo PaginationHelper::generateTh(['Book Name', 'ISBN Number', 'Categories', 'Authors']);
                                     } elseif ($list== "user") {
-                                        echo generateTh(['User Name', 'Full Name']);
+                                        echo PaginationHelper::generateTh(['User Name', 'Full Name']);
                                     } elseif ($list== "category") {
-                                        echo generateTh(['Category']);
+                                        echo PaginationHelper::generateTh(['Category']);
                                     } elseif ($list== "author") {
-                                        echo generateTh(['Author']);
+                                        echo PaginationHelper::generateTh(['Author']);
                                     }
                                     ?>
                                     

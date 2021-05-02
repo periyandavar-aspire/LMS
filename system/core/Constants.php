@@ -9,6 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Constants Class used to access the Constants
@@ -28,7 +31,7 @@ final class Constants
     public const METHOD_PUT = 'put';
 
     public const METHOD_DELETE = 'delete';
-    
+
     public const ENV_PRODUCTION = 'production';
 
     public const ENV_TESTING = 'testing';

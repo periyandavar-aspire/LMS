@@ -9,7 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
  * AdminModel Class Handles the AdminController class data base operations
@@ -39,6 +43,27 @@ class AdminModel extends BaseModel
         $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
         $admin = $this->db->fetch() or $admin = null;
         return $admin;
+    }
+
+    /**
+     * Check the user is exiting with the given mail id or not
+     *
+     * @param string $email email id
+     *
+     * @return boolean
+     */
+    public function isEmailAvailable(string $email): bool
+    {
+        $this->db->select("id")
+            ->from('admin_user')
+            ->where('email', '=', $email)
+            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+            ->execute();
+        if ($this->db->fetch()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -82,7 +107,7 @@ class AdminModel extends BaseModel
      */
     public function getAdminUser(string $email): ?object
     {
-        $this->db->select("admin_user.id", "password", "role.value type")
+        $this->db->select("admin_user.id", "password", "fullName", "role.value type")
             ->from('admin_user')
             ->innerJoin('role')
             ->on('admin_user.role=role.code');

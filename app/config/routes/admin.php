@@ -1,6 +1,6 @@
 <?php
 /**
- * Routes File all the configurations of the routes are defined here
+ * Routes File, all the route configurations for admin are defined here
  * php version 7.3.5
  *
  * @category   Route
@@ -11,10 +11,15 @@
  * @link       http://url.com
  */
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Router;
+use System\Core\Utility;
+use System\Core\InputData;
 
 Router::add('/admin/login', 'admin/login');
 Router::add('/admin', 'admin/login');
 Router::add('/admin/login', 'admin/dologin', 'post');
+Router::add('/admin/forgot-password', 'admin/forgotPassword');
+Router::add('/admin/forgot-password', 'admin/recoveryRequest', 'post');
 
 Router::add(
     '/admin-profile',
@@ -71,7 +76,8 @@ Router::add(
     function () {
         $input = new InputData();
         if ($input->session('login') == VALID_LOGIN
-            && $input->session('type') == ADMIN_USER
+            && ($input->session('type') == LIBR_USER
+            ||$input->session('type') == ADMIN_USER)
         ) {
             return true;
         } else {
@@ -133,7 +139,7 @@ Router::add(
 
 Router::add(
     '/admin/user-management',
-    'manageUser/manageAllUsers',
+    'userManage/manageAllUsers',
     'get',
     function () {
         $input = new InputData();
@@ -149,7 +155,7 @@ Router::add(
 
 Router::add(
     '/admin/user-management',
-    'manageUser/addUser',
+    'userManage/addUser',
     'post',
     function () {
         $input = new InputData();
@@ -333,6 +339,40 @@ Router::add(
 Router::add(
     '/request-management',
     'Issuedbook/manageUserRequest',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Router::add(
+    '/book-management/books/isbn/([0-9X]{10})',
+    'book/isAvailable',
+    'get',
+    function () {
+        $input = new InputData();
+        if ($input->session('login') == VALID_LOGIN
+            && ($input->session('type') == LIBR_USER
+            || $input->session('type') == ADMIN_USER)
+        ) {
+            return true;
+        } else {
+            Utility::redirectURL('admin/login');
+        }
+    }
+);
+
+Router::add(
+    '/user-management/admin-users/email/([\s\S]*)',
+    'admin/isEmailAvailable',
     'get',
     function () {
         $input = new InputData();

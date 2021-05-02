@@ -9,7 +9,13 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use System\Library\ErrorHandler;
+
 /**
  * ErrorController Class Handles the errors
  *

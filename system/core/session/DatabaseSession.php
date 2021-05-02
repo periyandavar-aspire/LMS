@@ -4,23 +4,25 @@
  * php version 7.3.5
  *
  * @category SessionHandler
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
 
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * DatabaseSession class, custom session handler
  *
  * @category SessionHandler
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
-class DatabaseSession implements SessionHandlerInterface
+class DatabaseSession implements \SessionHandlerInterface
 {
     /**
      * Database connection object
@@ -43,7 +45,7 @@ class DatabaseSession implements SessionHandlerInterface
      */
     public function connect()
     {
-        $this->_db = DatabaseFactory::create();
+        $this->_db = \System\Database\DatabaseFactory::create();
     }
 
     /**

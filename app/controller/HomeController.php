@@ -9,7 +9,18 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\HomeModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
+use System\Library\ValidationRule;
+use System\Core\InputData;
+
 /**
  * HomeController Class Handles all the request to the home page
  *
@@ -46,6 +57,10 @@ class HomeController extends BaseController
         $this->loadView("index", $homeData);
         $this->loadView("footer", $data);
         $this->includeScript('bookElement.js');
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -195,7 +210,8 @@ class HomeController extends BaseController
     {
         $data = [];
         $fdv = new FormDataValidation();
-        $genCodes = implode(" ", $this->model->getGenderCodes());
+        $this->load->model('gender');
+        $genCodes = implode(" ", $this->gender->getCodes());
         $fields = new fields(
             [
                 'email',
@@ -217,26 +233,26 @@ class HomeController extends BaseController
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         $data['footer'] = $this->model->getFooterData();
-        if ($this->input->post('captcha') != (new InputData())->session("captcha")) {
-            $data["msg"] = "Invalid captcha..!";
+        if ($this->input->post('captcha') != $this->input->session("captcha")) {
+            $flag = 0;
+            $msg = "Invalid captcha..!";
         } elseif (!$fdv->validate($fields, $field)) {
-            $data["msg"] = "Invalid $field..!";
+            $flag = 0;
+            $msg = "Invalid $field..!";
         } elseif (!$this->model->createAccount($fields->getValues())) {
-            $data["msg"] = "Unable to create an account..!";
+            $flag = 0;
+            $msg = "Unable to create an account..!";
         } else {
-            $msg = "toast('Your Account is created successfully..!', 'success');";
-            Utility::setsessionData('msg', $msg);
-            $this->redirect('login');
+            $flag = 1;
+            $msg = "Your Account is created successfully..!";
+            Utility::setSessionData('msg', "toast('$msg')");
             $this->log->activity(
                 "A new account created with values "
                 . json_encode($fields->getValues())
             );
-            return;
         }
-        $data['dropdownGen'] = $this->model->getGender();
-        $this->loadLayout("header.html");
-        $this->loadView("registration", $data);
-        $this->loadView("footer", $data);
+        $result = ['result'=> $flag, 'message' => $msg];
+        echo json_encode($result);
     }
 
     /**
@@ -246,7 +262,8 @@ class HomeController extends BaseController
      */
     public function registration()
     {
-        $data['dropdownGen'] = $this->model->getGender();
+        $this->load->model('gender');
+        $data['dropdownGen'] = $this->gender->get();
         $data['footer'] = $this->model->getFooterData();
         $this->loadLayout("header.html");
         $this->loadView("registration", $data);
@@ -254,11 +271,11 @@ class HomeController extends BaseController
     }
 
     /**
-     * Recover user Account
+     * Raise the recovery request for the user and sends the Mail
      *
      * @return void
      */
-    public function recoverAccount()
+    public function recoveryRequest()
     {
         $this->load->library('captcha');
         $this->load->library('mailer');
@@ -273,16 +290,44 @@ class HomeController extends BaseController
         $record['token'] = md5(time().$this->captcha->randomStr(7));
         $record['expireAt'] = date('Y-m-d H:i:s', strtotime('now +12 minutes'));
         $record['role'] = REG_USER;
+        $mailData['user'] = $username;
+        $mailData['link'] = Utility::baseUrl() . "/recover-account?token="
+            . $record['token'];
         $flag = $this->model->addPassRest($record)
             && $this->mailer->send(
                 'lms@lms.com',
                 $user->email,
                 "Recover LMS account",
-                'mailcontent.php'
+                'mailcontents.html',
+                $mailData
             );
         $result['flag'] = $flag;
         $this->loadLayout("header.html");
         $this->loadView("userForgetPassword", ["flag"=>$flag]);
         $this->loadView("footer", $data);
+    }
+
+    /**
+     * Recover user account
+     *
+     * @return void
+     */
+    public function recover()
+    {
+        $token = $this->input->get('token');
+        $cdate = date('Y-m-d H:i:s');
+        if (($result = $this->model->validateToken($token))
+            && (strtotime($cdate) < strtotime($result->expireAt))
+        ) {
+            Utility::setSessionData("urole", $result->role);
+            Utility::setSessionData("uid", $result->userId);
+            $data['footer'] = $this->model->getFooterData();
+            $this->loadLayout("header.html");
+            $this->loadView("recoverAccount");
+            $this->loadView("footer", $data);
+        } else {
+            Utility::setSessionData('msg', "toast('Invalid Request..!')");
+            $this->redirect("");
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * ManageUserController File Doc Comment
+ * UserManageController File Doc Comment
  * php version 7.3.5
  *
  * @category Controller
@@ -9,26 +9,33 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\UserManageModel;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
 
 /**
- * ManageUserController Class allows ys to manage the users
+ * UserManageController Class allows ys to manage the users
  *
  * @category   Controller
  * @package    Controller
- * @subpackage ManageUserController
+ * @subpackage UserManageController
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
  */
-class ManageUserController extends BaseController
+class UserManageController extends BaseController
 {
     /**
-     * Instantiate the new ManageUserController instance
+     * Instantiate the new UserManageController instance
      */
     public function __construct()
     {
-        parent::__construct(new ManageUserModel());
+        parent::__construct(new UserManageModel());
     }
 
     /**
@@ -162,7 +169,7 @@ class ManageUserController extends BaseController
         $roleCodes = implode(" ", $this->model->getRoleCodes());
         $rules = [
             'email' => ['emailValidation', 'required'],
-            'fullname' => ['alphaSpaceValidation', 'required'],
+            'fullName' => ['alphaSpaceValidation', 'required'],
             'password' => ["lengthValidation 6", 'required'],
             'role' => ["valuesInValidation $roleCodes", 'required']
         ];
@@ -170,23 +177,20 @@ class ManageUserController extends BaseController
         $fields->setRequiredFields('fullName', 'email', 'role', 'password');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
+            $result['message'] = "Invalid $field..!";
+            $result['result'] = 0;
         } elseif (!$this->model->addAdminUser($fields->getValues())) {
-            $script = "toast('Unable to add new user..!', 'danger', 'Failed');";
+            $result['message'] = "Unable to add new user..!";
+            $result['result'] = 0;
         } else {
-            $script = "toast('New user added successfully..!', 'success');";
+            $result['message'] = "New user added successfully..!";
             $this->log->activity(
                 "Admin user added a new user with values "
                 . json_encode($fields->getValues()) . ", admin id: '$adminId'"
             );
+            $result['result'] = 1;
         }
-        $currentUser = $this->input->session('id');
-        $data['users'] = $this->model->getAllUsers($currentUser);
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("adminmanageUsers", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->includeScript("populate.js");
-        $this->addScript($script);
+        echo json_encode($result);
     }
 
     /**

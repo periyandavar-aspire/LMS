@@ -9,7 +9,15 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\UserModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
 
 /**
  * UserController Class Handles the requests by user
@@ -51,7 +59,8 @@ class UserController extends BaseController
     public function getProfile()
     {
         $id = $this->input->session('id');
-        $data['dropdownGen'] = $this->model->getGender();
+        $this->load->model('gender');
+        $data['dropdownGen'] = $this->gender->get();
         $data['result'] = $this->model->getProfile($id);
         $this->loadLayout("userHeader.html");
         $this->loadView("userProfile", $data);
@@ -100,7 +109,8 @@ class UserController extends BaseController
     public function updateProfile()
     {
         $fdv = new FormDataValidation();
-        $genCodes = implode(" ", $this->model->getGenderCodes());
+        $this->load->model('gender');
+        $genCodes = implode(" ", $this->gender->getCodes());
         $id = $this->input->session('id');
         $fields = new Fields(['gender', 'mobile', 'fullname']);
         $rules = [
@@ -112,24 +122,20 @@ class UserController extends BaseController
         $fields->setRequiredFields('gender', 'mobile', 'fullname');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $msg = "toast('Invalid $field..!', 'danger',"
-            . " 'Failed');";
+            $result["message"] = "Invalid $field..!";
         } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
-            $msg = "toast('Unable to update the profile..!', 'danger',"
-                . " 'Failed');";
+            $result["message"] = 'Unable to update the profile..!';
         } else {
-            $msg = "toast('Profile updated successfully..!', 'success');";
+            $result["message"] = "Profile updated successfully..!";
             $this->log->activity("User updated his profile, user id: '$id'");
         }
-        $password = $this->input->post('password');
+        $password = $this->input->post('password', '');
         if ($password != '') {
             if (strlen($password) < 6) {
-                $msg .= "toast('Your password is too short & not updated..!',";
-                $msg .= "'danger', 'Failed');";
+                $result["message"] .= "Your password is too short & not updated..!";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
-                    $msg .= "toast('Unable to update password..!', 'danger',"
-                        . " 'Failed');";
+                    $result["message"] .= "Unable to update password..!";
                 } else {
                     $this->log->activity(
                         "User updated his password, user id: '$id'"
@@ -137,12 +143,7 @@ class UserController extends BaseController
                 }
             }
         }
-        $data['result'] = $this->model->getProfile($id);
-        $data['dropdownGen'] = $this->model->getGender();
-        $this->loadLayout("userHeader.html");
-        $this->loadView("userProfile", $data);
-        $this->loadLayout("userFooter.html");
-        $this->addScript($msg);
+        echo json_encode($result);
     }
 
     /**
@@ -235,5 +236,49 @@ class UserController extends BaseController
             $this->log->activity("User removed his request($id), user id: '$id'");
         }
         echo json_encode($result);
+    }
+
+    /**
+     * Change user Password
+     *
+     * @return void
+     */
+    public function changePassword()
+    {
+        $msg = '';
+        $password = $this->input->post('password', '');
+        $user = $this->input->session('urole', '');
+        $id = $this->input->session('uid', '');
+        if ($password != '' && $user != '') {
+            if (strlen($password) < 6) {
+                $msg = "toast('Your password is too short & not updated..!',"
+                        .  "'danger', 'Failed');";
+            } else {
+                if (!$this->model->updatePassword($id, $password, $user)) {
+                    $msg = "toast('Unable to update password..!', 'danger',"
+                        . " 'Failed');";
+                } else {
+                    $this->log->activity(
+                        "User updated his password, user id: '$id'"
+                    );
+                    Utility::setSessionData('urole', null);
+                    Utility::setSessionData('uid', null);
+                    Utility::setSessionData(
+                        'msg',
+                        "toast('Password changed successfully, Now "
+                        . "login with your new password..!')"
+                    );
+                    if ($user == ADMIN_USER) {
+                        $this->redirect("admin/login");
+                    } else {
+                        $this->redirect("login");
+                    }
+                }
+            }
+        } else {
+            $msg = "toast('Invalid Request..!')";
+        }
+        Utility::setSessionData('msg', $msg);
+        $this->redirect("");
     }
 }

@@ -9,6 +9,12 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
+use System\Core\Utility;
+use System\Core\FrameworkException;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Loader Class autoloads the files
@@ -28,6 +34,7 @@ class Loader
      */
     private static $_instance = null;
 
+    private $_prefixes = [];
     /**
      * Controller object
      *
@@ -40,8 +47,17 @@ class Loader
      */
     public function __construct()
     {
-        $this->_defaultRegister();
         $this->loadAll('system/core');
+        global $config;
+        $this->_prefixes = [
+            "App\Controller\\" => $config['controller'],
+            "App\Model\\" => $config['model'],
+            "App\Service\\" => $config['service'],
+            "System\Helper\\" => $config['helper'],
+            "System\Library\\" => $config['library'],
+            "System\Database\\" => "system\database\\"
+        ];
+        spl_autoload_register([$this, "autoLoader"]);
         $this->loadAll('system/database');
         $this->loadAll('app/config/routes');
     }
@@ -57,7 +73,7 @@ class Loader
      */
     public static function autoLoadClass(BaseController $ctrl): Loader
     {
-        global $autoload;
+        global $autoload, $config;
         $loads = ['model', 'service', 'library', 'helper'];
         if (isset(static::$_instance)) {
             static::$_ctrl = $ctrl;
@@ -83,10 +99,11 @@ class Loader
     {
         global $config;
         foreach ($models as $model) {
-            $file = $config['model'] . '/' . $model . '.php';
+            $file =  $config['model'] . '/' . (Utility::endswith($model, "Model") ? $model : $model . 'Model') . '.php';
+            $class = "App\\Model\\" . $model . 'Model';
             if (file_exists($file)) {
                 include_once $file;
-                static::$_ctrl->{lcfirst($model)} = new $model();
+                static::$_ctrl->{lcfirst($model)} = new $class();
             } else {
                 throw new FrameworkException(
                     "Unable to locate the model class '$model'"
@@ -107,10 +124,11 @@ class Loader
     {
         global $config;
         foreach ($services as $service) {
-            $file = $config['service'] . '/' . $service . '.php';
+            $file =  $config['service'] . '/' . (Utility::endswith($service, "Service") ? $service : $service . 'Service') . '.php';
+            $class = "App\\Service\\" . $service . 'Service';
             if (file_exists($file)) {
                 include_once $file;
-                static::$_ctrl->{lcfirst($service)} = new $service();
+                static::$_ctrl->{lcfirst($service)} = new $class();
             } else {
                 throw new FrameworkException(
                     "Unable to loacate the '$service' class"
@@ -133,10 +151,12 @@ class Loader
         foreach ($libraries as $library) {
             if (file_exists($config['library'] . $library . '.php')) {
                 include_once $config['library'] . $library . '.php';
-                static::$_ctrl->{lcfirst($library)} = new $library();
+                $class = "App\\Library\\".$library;
+                static::$_ctrl->{lcfirst($library)} = new $class();
             } elseif (file_exists("system/library/" . $library . '.php')) {
                 include_once "system/library/" . $library . '.php';
-                static::$_ctrl->{lcfirst($library)} = new $library();
+                $class = "System\Library\\".$library;
+                static::$_ctrl->{lcfirst($library)} = new $class();
             } else {
                 throw new FrameworkException("Library class '$library' not found");
             }
@@ -156,27 +176,15 @@ class Loader
     {
         global $config;
         foreach ($helpers as $helper) {
-            if (file_exists($config['helper'] . '/' . $helper . '.php')) {
-                include_once $config['helper'] . '/' . $helper . '.php';
-            } elseif (file_exists('system/helper/' . $helper . '.php')) {
-                include_once 'system/helper/' . $helper . '.php';
+            $helper = (Utility::endswith($helper, "helper") ? $helper : $helper . '.php');
+            if (file_exists($config['helper'] . '/' . $helper)) {
+                include_once $config['helper'] . '/' . $helper;
+            } elseif (file_exists('system/helper/' . $helper)) {
+                include_once 'system/helper/' . $helper;
             } else {
                 throw new FrameworkException("Helper class '$helper' not found");
             }
         }
-    }
-
-    /**
-     * Checks whether the class is loaded or not
-     *
-     * @param string $class Class Name
-     *
-     * @return string
-     */
-    public function isLoaded($class): bool
-    {
-        $loadedFiles = get_included_files();
-        return in_array(ucfirst($class), $loadedFiles, true);
     }
 
     /**
@@ -194,43 +202,46 @@ class Loader
     }
 
     /**
-     * Sets Default autoload register
+     * Function autoloader
+     *
+     * @param string $class classname
      *
      * @return void
      */
-    private function _defaultRegister()
+    public function autoLoader(string $class)
     {
-        spl_autoload_register(
-            function ($className) {
-                global $config;
-                if (Utility::endsWith(strtolower($className), 'controller')) {
-                    $file = $config['controller'] . $className . ".php";
-                    if (file_exists($file)) {
-                        include_once $file;
-                    }
-                } elseif (Utility::endsWith(strtolower($className), 'model')) {
-                    $file = $config['model'] . $className . ".php";
-                    if (file_exists($file)) {
-                        include_once $file;
-                    }
-                } elseif (Utility::endsWith(strtolower($className), 'service')) {
-                    $file = $config['service'] . $className . ".php";
-                    if (file_exists($file)) {
-                        include_once $file;
-                    }
-                } elseif (Utility::endsWith(strtolower($className), 'driver')) {
-                    $file = 'system/database/driver/' . $className . ".php";
-                    if (file_exists($file)) {
-                        include_once $file;
-                    }
-                } else {
-                    $file = 'system/library/' . $className . ".php";
-                    if (file_exists($file)) {
-                        include_once $file;
-                    }
-                }
+        global $config;
+        foreach ($this->_prefixes as $prefix) {
+            if (strpos($class, $prefix) == 0) {
+                $this->loadFile($class, $prefix);
             }
-        );
+        }
+    }
+
+    /**
+     * Includes the file if it exists
+     *
+     * @param string      $file   file name
+     * @param string|null $prefix namesapace prefix if any
+     *
+     * @return bool
+     */
+    public function loadFile(string $file, ?string $prefix = null): bool
+    {
+        $file = rtrim($file, '.php') . '.php';
+        if ($prefix == null) {
+            if (isset($this->_prefixes[$prefix])) {
+                $path = $this->_prefixes[$prefix];
+                $file = $paths . str_replace("\\", "/", $file);
+            } else {
+                return false;
+            }
+        }
+        if (file_exists($file)) {
+            include_once $file;
+            return true;
+        }
+        return false;
     }
 
     /**

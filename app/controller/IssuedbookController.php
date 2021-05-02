@@ -9,7 +9,16 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\IssuedBookModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
+use App\Service\IssuedBookService;
 
 /**
  * IssuedBookController Class Handles Issued books
@@ -31,19 +40,6 @@ class IssuedBookController extends BaseController
     {
         parent::__construct(new IssuedBookModel(), new IssuedBookService());
     }
-
-    // /**
-    //  * Displays the list of issued books with option to add new issue book entry
-    //  *
-    //  * @return void
-    //  */
-    // public function manage()
-    // {
-    //     $user = $this->input->session('type');
-    //     $this->loadLayout($user . "Header.html");
-    //     $this->loadView('manageIssuedbooks');
-    //     $this->loadLayout($user . "Footer.html");
-    // }
 
     /**
      * Displays the list of issued books with the option to add new issue book entry
@@ -229,11 +225,6 @@ class IssuedBookController extends BaseController
         );
         Utility::setSessionData('msg', $script);
         $this->redirect('issued-book-management');
-        // $this->loadLayout($user . "Header.html");
-        // $this->includeScript("issuedbook.js");
-        // $this->loadView("manageissuedbooks", $data);
-        // $this->loadLayout($user . "Footer.html");
-        // $this->addScript($script);
     }
 
     /**

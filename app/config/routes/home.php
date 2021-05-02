@@ -1,6 +1,6 @@
 <?php
 /**
- * Routes File all the configurations of the routes are defined here
+ * Routes File all the route configurations of the user are defined here
  * php version 7.3.5
  *
  * @category   Route
@@ -11,6 +11,7 @@
  * @link       http://url.com
  */
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Router;
 
 Router::add('/', 'home/getIndexPage');
 Router::add('/books', 'home/getBooks');
@@ -27,4 +28,15 @@ Router::add(
 Router::add(
     '/user-management/users/user-name/([a-zA-Z0-9_]+)',
     'user/isNameAvailable'
+);
+
+Router::add(
+    '/forgot-password',
+    'home/forgotPassword'
+);
+
+Router::add(
+    '/forgot-password',
+    'home/recoveryRequest',
+    'post'
 );

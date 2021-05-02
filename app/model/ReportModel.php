@@ -1,6 +1,6 @@
 <?php
 /**
- * ManageUserModel File Doc Comment
+ * ReportModel File Doc Comment
  * php version 7.3.5
  *
  * @category Model
@@ -9,10 +9,14 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
- * ReportModel Class Handles the ManageUserController class data base operations
+ * ReportModel Class Handles the ReportController class data base operations
  *
  * @category   Model
  * @package    Model

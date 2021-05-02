@@ -9,8 +9,13 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
-// namespace Lms\System\Core;
+
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Utility;
+use System\Core\Log;
+
 /**
  * Super class for all controller. All controllers should extend this controller
  * BaseController class consists of basic level functions for various purposes

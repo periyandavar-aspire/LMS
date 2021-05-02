@@ -9,7 +9,12 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Service;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseService;
+
 /**
  * BookService Class Handles the BookService class Logical operations
  *
@@ -27,7 +32,7 @@ class BookService extends BaseService
      * Seperates the issued and requested users
      *
      * @param array $users User, status
-     * 
+     *
      * @return array
      */
     public function seperateUsers(array $users): object

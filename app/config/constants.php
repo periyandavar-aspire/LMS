@@ -3,7 +3,7 @@
  * All constants used in the applications are defined here
  * php version 7.3.5
  *
- * @category Constants
+ * @category Config
  * @package  Config
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license

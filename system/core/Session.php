@@ -4,19 +4,22 @@
  * php version 7.3.5
  *
  * @category Session
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
 
+namespace System\Core;
+
+use System\Core\Log;
+
 defined('VALID_REQ') or exit('Invalid request');
-require_once 'Security.php';
 /**
  * Session class set and manage custom session handlers
  *
  * @category Session
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
@@ -36,24 +39,25 @@ class Session
         try {
             session_save_path($config['session_save_path']);
             ini_set("session.gc_maxlifetime", $config['session_expiration']);
-            $file = 'system/library/session/'
+            $file = 'system/core/session/'
             . $config['session_driver']
             . 'Session.php';
             $class = $config['session_driver'].'session';
             if (file_exists($file)) {
                 include_once "$file";
+                $class = "System\Core\\" . $class;
                 $this->_driver = new $class();
             } else {
                 throw new FrameworkException("Invalid Driver");
             }
             if (isset($this->_driver)) {
                 session_set_save_handler(
-                    array($this->_driver, 'open'),
-                    array($this->_driver, 'close'),
-                    array($this->_driver, 'read'),
-                    array($this->_driver, 'write'),
-                    array($this->_driver, 'destroy'),
-                    array($this->_driver, 'gc')
+                    [$this->_driver, 'open'],
+                    [$this->_driver, 'close'],
+                    [$this->_driver, 'read'],
+                    [$this->_driver, 'write'],
+                    [$this->_driver, 'destroy'],
+                    [$this->_driver, 'gc']
                 );
                 register_shutdown_function('session_write_close');
             }

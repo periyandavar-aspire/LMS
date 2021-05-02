@@ -9,7 +9,17 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\BookModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
+use App\Service\BookService;
+
 /**
  * BookController Class Handles the requests related to the Books
  *
@@ -80,21 +90,6 @@ class BookController extends BaseController
         $this->loadLayout($user . "Footer.html");
     }
 
-    // /**
-    //  * Displays the details of the given book $id
-    //  *
-    //  * @param int $id BookID
-    //  *
-    //  * @return void
-    //  */
-    // public function get(int $id)
-    // {
-    //     $data['book'] = $this->model->getBookDetails($id);
-    //     $this->loadLayout('header.html');
-    //     $this->loadView("book", $data);
-    //     $this->loadLayout('footer.html');
-    // }
-
     /**
      * Displays the book details of the given Id in JSON
      *
@@ -145,29 +140,6 @@ class BookController extends BaseController
             );
         echo json_encode($data);
     }
-
-    // /**
-    //  * Displays the books requested by the user
-    //  *
-    //  * @param string $search Search Key
-    //  * @param int    $offset Offset
-    //  * @param int    $limit  Limit
-    //  *
-    //  * @return void
-    //  */
-    // public function findMoreBooks(
-    //     string $search,
-    //     int $offset = 0,
-    //     int $limit = 12
-    // ) {
-    //     $data["books"] = $this->model->searchBook(
-    //         $search,
-    //         $offset,
-    //         $limit
-    //     );
-    //     echo json_encode($data);
-    // }
-
 
     /**
      * Add a new book
@@ -230,11 +202,35 @@ class BookController extends BaseController
         } else {
             $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         }
+        $formData = (object)$this->input->post();
+        $formData->authorCodes = trim($this->input->post('author'), ",");
+        $formData->categoryCodes = trim($this->input->post('category'), ",");
+        $formData->authors = $this->model->getAuthorList($formData->authorCodes);
+        $formData->categories = $this->model->getCatList($formData->categoryCodes);
+        $data['book'] = $formData;
         $this->loadLayout($user . "Header.html");
-        $this->loadView("newBook");
+        $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
         $this->includeScript("populate.js");
         $this->addScript($script);
+    }
+
+    /**
+     * Checks whether the isbn is available or not
+     *
+     * @param string $isbn ISBN
+     *
+     * @return void
+     */
+    public function isAvailable(string $isbn): void
+    {
+        if (!(new FormDataValidation())->isbnValidation($isbn)) {
+            echo json_encode(["result" => false]);
+        } else {
+            $id = $this->input->get('id', 0);
+            $result = $this->model->isIsbnAvailable($isbn, $id);
+            echo json_encode(["result" => $result]);
+        }
     }
 
     /**
@@ -359,34 +355,19 @@ class BookController extends BaseController
         } else {
             $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
         }
-        $data['books'] = $this->model->getBooks();
-        $data['book'] = $this->model->get($id);
+        $formData = (object)$this->input->post();
+        $formData->authorCodes = trim($this->input->post('author'), ",");
+        $formData->categoryCodes = trim($this->input->post('category'), ",");
+        $formData->authors = $this->model->getAuthorList($formData->authorCodes);
+        $formData->categories = $this->model->getCatList($formData->categoryCodes);
+        $formData->coverPic = $this->model->getCoverPic($id);
+        $formData->id = $id;
+        $data['book'] = $formData;
         $this->loadLayout($user . "Header.html");
         $this->loadView("newBook", $data);
         $this->loadLayout($user . "Footer.html");
         $this->addScript($script);
     }
-
-
-    // public function bookstatus()
-    // {
-    //     $lastUpdate = filemtime("log/unavailablebooks.log");
-    //     header("Cache-Control: no-cache");
-    //     header("Content-Type: text/event-stream");
-    //     while (true) {
-    //         // if ($lastUpdate != filemtime("log/unavailablebooks.log")) {
-    //         echo "event: $lastUpdate";
-    //         echo "\n\n";
-    //         $data = base64_decode(file_get_contents("log/unavailablebooks.log"));
-    //         echo 'data:'.$data."\n\n";
-    //         // }
-    //         flush();
-    //         sleep(10);
-    //         if (connection_aborted()) {
-    //             break;
-    //         }
-    //     }
-    // }
 
     /**
      * Display the details of the single book

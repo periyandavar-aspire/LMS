@@ -4,7 +4,7 @@
  * Those files are loaded automatically for all request
  * php version 7.3.5
  *
- * @category Autoload
+ * @category Config
  * @package  Config
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
@@ -16,13 +16,12 @@ $autoload['library'] = [
 ];
 
 $autoload['model'] = [
-
 ];
 
 $autoload['service'] = [
 ];
 
 $autoload['helper'] = [
-    'dataHelper',
+    'paginationHelper',
     'historyHelper'
 ];

@@ -3,7 +3,7 @@
  * DbConfig File all the configurations of the database are defined here
  * php version 7.3.5
  *
- * @category DbConfig
+ * @category Config
  * @package  Config
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license

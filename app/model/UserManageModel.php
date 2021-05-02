@@ -1,6 +1,6 @@
 <?php
 /**
- * ManageUserModel File Doc Comment
+ * UserManageModel File Doc Comment
  * php version 7.3.5
  *
  * @category Model
@@ -9,19 +9,23 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
- * ManageUserModel Class Handles the ManageUserController class data base operations
+ * UserManageModel Class Handles the UserManageController class data base operations
  *
  * @category   Model
  * @package    Model
- * @subpackage ManageUserModel
+ * @subpackage UserManageModel
  * @author     Periyandavar <periyandavar@gmail.com>
  * @license    http://license.com license
  * @link       http://url.com
  */
-class ManageUserModel extends BaseModel
+class UserManageModel extends BaseModel
 {
     /**
      * Returns all Users

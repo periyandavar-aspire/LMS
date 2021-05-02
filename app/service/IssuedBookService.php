@@ -9,6 +9,12 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Service;
+
+defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseService;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * IssuedBookService Class Handles the IssuedBookService class logical operations

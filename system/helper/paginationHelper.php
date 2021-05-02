@@ -3,24 +3,36 @@
  * Helper
  * php version 7.3.5
  *
- * @category   Helper
- * @package    SYS
- * @subpackage Libraries
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category PaginationHelper
+ * @package  Helper
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Invalid request');
 
-if (!function_exists('generateTh')) {
+namespace System\Helper;
+
+defined('VALID_REQ') or exit('Invalid request');
+/**
+ * Pagination Helper
+ * php version 7.3.5
+ *
+ * @category PaginationHelper
+ * @package  Helper
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+class PaginationHelper
+{
     /**
      * Function will generates the Table head for passed columns
      *
      * @param array $columns Columns
-     * 
+     *
      * @return void
      */
-    function generateTh(array $columns)
+    public static function generateTh(array $columns)
     {
         $th = '';
         foreach ($columns as $column) {
@@ -28,18 +40,16 @@ if (!function_exists('generateTh')) {
         }
         return $th;
     }
-}
 
-if (!function_exists('generatePagination')) {
     /**
      * Generates the Paginations
      *
      * @param array  $pagination Pagination details
      * @param string $url        base url
-     * 
+     *
      * @return string
      */
-    function generatePagination($pagination, $url): string
+    public static function generatePagination($pagination, $url): string
     {
         $code = '';
         if ($pagination['tpages'] > 1) {
@@ -51,14 +61,14 @@ if (!function_exists('generatePagination')) {
                  . '">Previous</a></li>';
             $code .= ($pagination['start'] == 1)
             ? '<li class="active"><a>1</a></li>'
-            : '<li><a href="' . $url 
-                . '?index=0&limit=' . $pagination['limit'] 
+            : '<li><a href="' . $url
+                . '?index=0&limit=' . $pagination['limit']
                 . '&search='.$pagination['search'].'">1</a></li>';
             if ($pagination['tpages'] > 6 && $pagination['cpage'] > 4) {
                 $i = $pagination['cpage'];
                 $iEnd = $pagination['cpage'] + 3;
-                $iEnd = $pagination['tpages'] < $iEnd 
-                    ? $pagination['tpages'] 
+                $iEnd = $pagination['tpages'] < $iEnd
+                    ? $pagination['tpages']
                     : $iEnd;
             } else {
                 $i = 2;
@@ -71,7 +81,7 @@ if (!function_exists('generatePagination')) {
                 $li = "<li";
                 $li = ($i == $pagination['cpage']+1)
                 ? $li . " class='active'><a>$i</a></li>"
-                : $li . "><a href='$url?index=" . ($pagination['limit']*($i-1)) 
+                : $li . "><a href='$url?index=" . ($pagination['limit']*($i-1))
                         . "&limit=".$pagination['limit'] . '&search='
                         . $pagination['search'] . "'>$i</a></li>";
                 $code .= $li;
@@ -83,7 +93,7 @@ if (!function_exists('generatePagination')) {
             ? '<li class="active"><a>'.$pagination['tpages'].'</a></li>'
             : '<li><a href="' . $url
                  . '?index='.(($pagination['tpages']-1)*$pagination['limit'])
-                 . '&limit='.$pagination['limit'].'&search='.$pagination['search'] 
+                 . '&limit='.$pagination['limit'].'&search='.$pagination['search']
                  .'">'.$pagination['tpages'].'</a></li>';
             $code .=  ($pagination['end'] == $pagination['tcount'])
             ? '<li class="disable"><a class="disable">Next</a></li>'

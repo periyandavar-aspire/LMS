@@ -3,22 +3,34 @@
  * History Helper
  * php version 7.3.5
  *
- * @category   Helper
- * @package    Helper
- * @subpackage UrlHelper
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category HistoryHelper
+ * @package  Helper
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
-defined('VALID_REQ') or exit('Invalid request');
 
-if (!function_exists("traceUser")) {
+namespace System\Helper;
+
+defined('VALID_REQ') or exit('Invalid request');
+/**
+ * History Helper
+ * php version 7.3.5
+ *
+ * @category HistoryHelper
+ * @package  Helper
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+class HistoryHelper
+{
     /**
      * Stores last 7 accessed URL in cookies
      *
      * @return void
      */
-    function traceUser()
+    public static function traceUser()
     {
         global $config;
         $history = [];
@@ -38,15 +50,12 @@ if (!function_exists("traceUser")) {
         $history = json_encode($history);
         setcookie($cookieName, $history, time() + ($cookieExpiration), "/");
     }
-}
-
-if (!function_exists("getHistory")) {
     /**
      * Retrieve histories in cookies
      *
      * @return void
      */
-    function getHistory()
+    public static function getHistory()
     {
         $cookieName = "history";
         $history = (isset($_COOKIE[$cookieName]))

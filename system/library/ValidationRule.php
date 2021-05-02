@@ -9,6 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Library;
+
 defined('VALID_REQ') or exit('Invalid request');
 
 /**

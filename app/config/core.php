@@ -3,7 +3,7 @@
  * Config File all the configurations of the applications are defined here
  * php version 7.3.5
  *
- * @category Core
+ * @category Config
  * @package  Config
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license

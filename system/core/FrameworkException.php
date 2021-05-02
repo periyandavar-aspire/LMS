@@ -11,6 +11,8 @@
  * @link       http://url.com
  */
 
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * FrameworkExcepion raised when there is an excptions occured other than application
@@ -22,7 +24,7 @@ defined('VALID_REQ') or exit('Invalid request');
  * @license    http://license.com license
  * @link       http://url.com
  */
-class FrameworkException extends Exception
+class FrameworkException extends \Exception
 {
     /**
      * Instantiate new FrameworkException instance

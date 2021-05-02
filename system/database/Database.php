@@ -9,7 +9,12 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Database;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Utility;
+
 /**
  * Super class for all Database. All drivers should extend this Database
  * Database class consists of basic level functions for various purposes and

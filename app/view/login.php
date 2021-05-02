@@ -10,6 +10,7 @@
  * @link     http://url.com
  */
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Utility;
 ?>
 <!-- top container starts -->
 <div class="top-container">
@@ -37,7 +38,7 @@ defined('VALID_REQ') or exit('Invalid request');
                                         autocomplete="off" required="">
                                     <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50"
                                         style="display:none" value="0"></meter>
-                                    <span id="pass1msg" style="display:none"></span>
+                                    <span id="password-span" style="display:none"></span>
                                 </div>
                                 <div class="form-input-div">
                                     <label>Verification code <span class="required-star">*</span> </label>
@@ -55,9 +56,8 @@ defined('VALID_REQ') or exit('Invalid request');
                                         echo $msg;
                                     } ?>
                                 </div>
-                                <br><span style="float:left;"> Don't have an account..? <a class="link" href="/signup"> Register here
-                                    </a></span>
-                                <span  style="float:right;"> Forgot password..? <a class="link" href="/forgot-password"> Recover here
+                                <br>
+                                <span> Forgot password..? <a class="link" href="/forgot-password"> Recover here
                                     </a></span>
                             </form>
                         </section>

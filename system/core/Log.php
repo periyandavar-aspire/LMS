@@ -9,6 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
+use System\Core\Utility;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Log Class autoloads the files
@@ -253,15 +258,11 @@ class Log
      */
     private function _add(string $file, string $msg, ?array $data = null)
     {
-        try {
-            if (!file_exists($file)) {
-                throw new Exception("File not found..!");
-            }
+        if (file_exists($file)) {
             ($data != null) and ($msg .= ", Data : " . print_r($data, true));
             $msg .= "\n";
             file_put_contents($file, $msg, FILE_APPEND);
             return true;
-        } catch (Exception $e) {
         }
         return false;
     }

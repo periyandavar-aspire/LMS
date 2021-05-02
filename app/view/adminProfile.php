@@ -24,36 +24,36 @@ if (!isset($result)) {
                 </div>
             </div>
 
-            <form action="/admin-profile" onsubmit="editProfileValidator(event);" method="POST">
+            <form action="/admin-profile" onsubmit="adminProfileValidator(event);" method="POST">
                 <div class="form-input-div">
                     <label>Full Name <span class="required-star">*</span></label>
                     <input class="form-control" type="text"
                         value="<?php echo $result->fullName; ?>"
-                        pattern="^[a-zA-Z ]+$" id="fullname" name="fullname" autocomplete="off"
+                        pattern="^[a-zA-Z ]+$" id="fullname" name="fullName" autocomplete="off"
                         placeholder="Full Name..." required="">
+                        <span id="fullname-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
-                    <label>Email <span class="required-star">*</span></label>
+                    <label>Email </label>
                     <input class="form-control" disabled type="email"
                         value="<?php echo $result->email; ?>"
                         name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">
-                    <!--onblur="checkAvailability()"-->
-                    <span id="user-availability-status" style="font-size:12px;"></span>
-                </div>
+                        <span id="emailid-span" class="span-err-msg"></span>
+                    </div>
                 <div class="form-input-div">
                     <label>Password </label>
                     <input class="form-control" onkeyup="passStrength('password')" type="password" id="password"
                         name="password" placeholder="********" autocomplete="off">
                     <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none"
                         value="0"></meter>
-                    <span id="pass1msg" style="display:none"></span>
+                        <span id="password-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
                     <label>Confirm Password </label>
-                    <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','errormsg')"
+                    <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','confirmPassword-span')"
                         type="password" id="confirmPassword" name="confirmpassword" placeholder="********"
                         autocomplete="off">
-                    <span id="errormsg" style="color:red"></span>
+                    <span id="confirmPassword-span" class="span-err-msg"></span>
                 </div>
                 <div class="msg">
                     <i>last updation on <?php echo $result->updatedAt ?><i><br><br>

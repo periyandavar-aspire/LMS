@@ -4,18 +4,21 @@
  * php version 7.3.5
  *
  * @category InputData
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
 
 /**
  * InputData Class used to access the GET, POST and SESSION values
  *
  * @category InputData
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com

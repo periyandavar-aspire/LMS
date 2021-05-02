@@ -9,6 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Library;
+
+use Iterator;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Fields Class used to store the input fields

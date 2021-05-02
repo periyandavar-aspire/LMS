@@ -9,7 +9,12 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
+
 /**
  * IssuedBookModel Class Handles the IssuedBookController class data base operations
  *
@@ -148,7 +153,7 @@ class IssuedBookModel extends BaseModel
         $flag2 = $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
             ->execute();
         (($flag1 && $flag2))
-            ? ($flag = $this->db->commit()) 
+            ? ($flag = $this->db->commit())
             : ($this->db->rollback());
         $this->db->set("autocommit", 1);
         return $flag;
@@ -547,7 +552,7 @@ class IssuedBookModel extends BaseModel
             $flag2 = $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
                 ->execute();
             (($flag1 && $flag2))
-                ? ($flag = $this->db->commit()) 
+                ? ($flag = $this->db->commit())
                 : ($this->db->rollback());
             $this->db->set("autocommit", 1);
             return $flag;

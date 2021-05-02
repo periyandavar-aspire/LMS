@@ -1,6 +1,6 @@
 <?php
 /**
- * Routes File all the configurations of the routes are defined here
+ * Routes File all the route route configurations for api defined here
  * php version 7.3.5
  *
  * @category   Route
@@ -11,6 +11,9 @@
  * @link       http://url.com
  */
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Router;
+use System\Core\Utility;
+use System\Core\InputData;
 
 Router::add(
     '/category-management/categories',
@@ -416,7 +419,7 @@ Router::add(
 
 Router::add(
     '/user-management/all-users',
-    'manageuser/loadAllUser',
+    'userManage/loadAllUser',
     'get',
     function () {
         $input = new InputData();
@@ -433,7 +436,7 @@ Router::add(
 
 Router::add(
     '/user-management/all-users/(user|librarian|admin)/([1-9]{1}[0-9]*)',
-    'manageuser/delete',
+    'userManage/delete',
     'delete',
     function () {
         $input = new InputData();
@@ -449,7 +452,7 @@ Router::add(
 
 Router::add(
     '/user-management/reg-users',
-    'manageuser/loadRegUser',
+    'userManage/loadRegUser',
     'get',
     function () {
         $input = new InputData();
@@ -467,7 +470,7 @@ Router::add(
 
 Router::add(
     '/user/user-name/([a-zA-Z0-9_]+)',
-    'manageuser/search',
+    'userManage/search',
     'get',
     function () {
         $input = new InputData();
@@ -501,7 +504,7 @@ Router::add(
 
 Router::add(
     '/user/roles',
-    'manageUser/getUserRoles',
+    'userManage/getUserRoles',
     'get',
     function () {
         $input = new InputData();

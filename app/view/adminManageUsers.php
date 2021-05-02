@@ -51,11 +51,13 @@ defined('VALID_REQ') or exit('Invalid request');
                         <label>Full Name <span class="required-star">*</span></label>
                         <input class="form-control" type="text" id="fullname" name="fullName" autocomplete="off"
                             placeholder="Full Name" required="">
+                            <span id="fullname-span" class="span-err-msg"></span>
                     </div>
                     <div class="form-input-div">
                         <label>Email <span class="required-star">*</span></label>
-                        <input class="form-control" type="email" id="email" name="email" autocomplete="off"
+                        <input class="form-control" onblur="checkEmail(event.target.value, 'email-span', true)" type="email" id="email" name="email" autocomplete="off"
                             placeholder="email" required="">
+                            <span id="email-span" class="span-err-msg"></span>
                     </div>
 
                     <div class="form-input-div">
@@ -63,25 +65,26 @@ defined('VALID_REQ') or exit('Invalid request');
                         <select class="form-control" type="text" id="role" name="role" required="">
                             <option style="display:none" value=''>Select Role</option>
                         </select>
+                        <span id="role-span" class="span-err-msg"></span>
                     </div>
 
                     <div class="form-input-div">
                         <label>Password <span class="required-star">*</span></label>
                         <input class="form-control" onkeyup="passStrength('password')" type="password" id="password"
-                            name="password" placeholder="********" autocomplete="off">
+                            name="password" required="" placeholder="********" autocomplete="off">
                         <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none"
                             value="0"></meter>
-                        <span id="pass1msg" style="display:none"></span>
+                        <span id="password-span" class="span-err-msg"></span>
                     </div>
                     <div class="form-input-div">
                         <label>Confirm Password <span class="required-star">*</span> </label>
-                        <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','errormsg')"
-                            type="password" id="confirmPassword" name="confirmpassword" placeholder="********"
+                        <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','confirmPassword-span')"
+                            type="password" required="" id="confirmPassword" name="confirmpassword" placeholder="********"
                             autocomplete="off">
-                        <span id="errormsg" style="color:red"></span>
+                        <span id="confirmPassword-span" class="span-err-msg"></span>
                     </div>
                     <div class="form-buttons">
-                        <button type="submit" class="btn-link">Add</button>
+                        <button type="submit" id="submit-btn" value='0' class="btn-link">Add</button>
                     </div>
                 </form>
             </div>

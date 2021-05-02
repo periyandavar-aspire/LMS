@@ -11,6 +11,7 @@
  * @link     http://url.com
  */
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\Utility;
 if (!isset($books)) {
     return;
 }

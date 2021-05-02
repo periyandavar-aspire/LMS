@@ -9,7 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
  * UserModel Class Handles the UserController class data base operations
@@ -67,34 +71,20 @@ class UserModel extends BaseModel
      *
      * @param int    $userId   User Id
      * @param string $password password
+     * @param string $role     Role
      *
      * @return boolean
      */
-    public function updatePassword(int $userId, string $password): bool
-    {
-        $result = $this->db->update('user', ['password' => md5($password)])
+    public function updatePassword(
+        int $userId,
+        string $password,
+        string $role = REG_USER
+    ): bool {
+        $table = ($role == REG_USER) ? 'user' : 'admin_user';
+        $result = $this->db->update($table, ['password' => md5($password)])
             ->where('id', '=', $userId)
             ->execute();
         return $result;
-    }
-
-    /**
-     * Returns avaialbe gender values with code
-     *
-     * @return array
-     */
-    public function getGender(): array
-    {
-        $gender = [];
-        $i = 0;
-        $this->db->select('code', 'value')->from('gender');
-        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)->execute();
-        while ($row = $this->db->fetch()) {
-            $gender[$i]['code'] = $row->code;
-            $gender[$i]['value'] = $row->value;
-            $i++;
-        }
-        return $gender;
     }
 
     /**
@@ -240,7 +230,7 @@ class UserModel extends BaseModel
      * Check the user is exiting with the given mail id or not
      *
      * @param string $email email id
-     * 
+     *
      * @return boolean
      */
     public function isEmailAvailable(string $email): bool
@@ -261,7 +251,7 @@ class UserModel extends BaseModel
      * Check the user is exiting with the given username or not
      *
      * @param string $userName username
-     * 
+     *
      * @return boolean
      */
     public function isNameAvailable(string $userName): bool

@@ -9,7 +9,15 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Controller;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseController;
+use App\Model\AdminModel;
+use System\Core\Utility;
+use System\Library\FormDataValidation;
+use System\Library\Fields;
 
 /**
  * AdminController Class Handles the admin functionalities
@@ -39,6 +47,10 @@ class AdminController extends BaseController
     public function login()
     {
         $this->loadView("admin");
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
     }
 
     /**
@@ -109,6 +121,27 @@ class AdminController extends BaseController
     }
 
     /**
+     * Checks the email id is available or not
+     *
+     * @param string $email email id
+     *
+     * @return void
+     */
+    public function isEmailAvailable(string $email)
+    {
+        $flag = preg_match(
+            '/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/',
+            $email
+        );
+        if (!$flag) {
+            echo json_encode(["result" => false]);
+        } else {
+            $result = $this->model->isEmailAvailable($email);
+            echo json_encode(["result" => $result]);
+        }
+    }
+
+    /**
      * Update the admin profile
      *
      * @return void
@@ -119,20 +152,19 @@ class AdminController extends BaseController
         $id = $this->input->session('id');
         $adminId = $this->input->session('id');
         $user = $this->input->session('type');
-        $fields = new Fields(['fullname']);
+        $fields = new Fields(['fullName']);
         $rules = [
             'fullName' => 'alphaSpaceValidation',
         ];
         $fields->addRule($rules);
-        $fields->setRequiredFields('fullname');
+        $fields->setRequiredFields('fullName');
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $msg = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
+            $result['message'] = "Invalid $field..!";
         } elseif (!$this->model->updateProfile($id, $fields->getValues())) {
-            $msg = "toast('Unable to update the profile..!', 'danger',"
-                . " 'Failed');";
+            $result['message'] = "Unable to update the profile..!";
         } else {
-            $msg = "toast('Profile updated successfully..!', 'success');";
+            $result['message'] = "Profile updated successfully..!";
             $this->log->activity(
                 "Admin user updated his profile with new values "
                 . json_encode($fields->getValues()) . ", admin id: '$adminId'"
@@ -141,25 +173,17 @@ class AdminController extends BaseController
         $password = $this->input->post('password');
         if ($password != '') {
             if (strlen($password) < 6) {
-                $msg .= "toast('Your password is too short & not updated..!',
-                         'danger', 'Failed');";
+                $result['message'] .= "your password is too short & not updated..!";
             } else {
                 if (!$this->model->updatePassword($id, $password)) {
-                    $msg .= "toast('Unable to update password..!', "
-                        . "'danger', 'Failed');";
+                    $result['message'] .= "but Unable to update password..!";
                 }
                 $this->log->activity(
                     "Admin user updated his password admin id: '$adminId'"
                 );
             }
         }
-        if (!($data['result'] = $this->model->getProfile($id))) {
-            $this->redirect("login");
-        }
-        $this->loadLayout($user . "Header.html");
-        $this->loadView($user . "Profile", $data);
-        $this->loadLayout($user . "Footer.html");
-        $this->addScript($msg);
+        echo json_encode($result);
     }
 
     /**
@@ -202,22 +226,17 @@ class AdminController extends BaseController
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
+            $result['message'] = "Invalid $field..!";
         } elseif (!$this->model->updateSettings($fields->getValues())) {
-            $script = "toast('Unable to update the settings..!', 'danger',"
-                . " 'Failed..!');";
+            $result['message'] = "Unable to update the settings..!";
         } else {
-            $script = "toast('Settings updated successfully..!', 'success');";
+            $result['message'] = "Settings updated successfully..!";
             $this->log->activity(
                 "Admin user updated lms settings with new values: "
                 . json_encode($fields->getValues()) .", admin id: '$adminId'"
             );
         }
-        $data['data'] = $this->model->getConfigs();
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("settings", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->addScript($script);
+        echo json_encode($result);
     }
 
     /**
@@ -259,26 +278,78 @@ class AdminController extends BaseController
             'mobile'
         );
         $rules = [
-            'mobile' => "landlineValidation"
+            'mobile' => "landlineValidation",
+            'email' => 'emailValidation'
         ];
         $fields->addRule($rules);
         $fields->addValues($this->input->post());
         if (!$fdv->validate($fields, $field)) {
-            $script = "toast('Invalid $field..!', 'danger', 'Invalid Input');";
+            $result['message'] = "Invalid $field..!";
         } elseif (!$this->model->updateCmsConfigs($fields->getValues())) {
-            $script = "toast('Unable to update the settings..!', 'danger',"
-                . "'Failed..!');";
+            $result['message'] = "Unable to update the settings..!";
         } else {
-            $script = "toast('Contents updated successfully..!', 'success');";
+            $result['message'] = "Contents updated successfully..!";
             $this->log->activity(
                 "Admin user updated cms settings with new values "
                 . json_encode($fields->getValues()) . ", admin id: '$adminId'"
             );
         }
-        $data['data'] = $this->model->getCmsConfigs();
-        $this->loadLayout("adminHeader.html");
-        $this->loadView("cms", $data);
-        $this->loadLayout("adminFooter.html");
-        $this->addScript($script);
+        echo json_encode($result);
+    }
+
+    /**
+     * Displays forgot-password page
+     *
+     * @return void
+     */
+    public function forgotPassword()
+    {
+        $this->loadView("adminForgetPassword");
+        if ($this->input->session('msg') != null) {
+            $this->addScript($this->input->session('msg'));
+            Utility::setSessionData('msg', null);
+        }
+    }
+
+    /**
+     * Recover user Account
+     *
+     * @return void
+     */
+    public function recoveryRequest()
+    {
+        $this->load->library('captcha');
+        $this->load->library('mailer');
+        $this->load->model('home');
+        $data['footer'] = $this->home->getFooterData();
+        $email = $this->input->post('email', '');
+        if (!((new FormDataValidation())->emailValidation($email))) {
+            Utility::setSessionData('msg', "toast('Invalid email id..!')");
+            $this->redirect("admin/forgot-password");
+        }
+        $user = $this->model->getAdminUser($email);
+        if ($user == null) {
+            Utility::setSessionData('msg', "toast('User account not found..!')");
+            $this->redirect("admin/forgot-password");
+        }
+        $record['userId'] = $user->id;
+        $record['token'] = md5(time().$this->captcha->randomStr(7));
+        $record['expireAt'] = date('Y-m-d H:i:s', strtotime('now +12 minutes'));
+        $record['role'] = ADMIN_USER;
+        $mailData['user'] = $user->fullName;
+        $mailData['link'] = Utility::baseUrl() . "/recover-account?token="
+            . $record['token'];
+        $flag = $this->home->addPassRest($record)
+            && $this->mailer->send(
+                'lms@lms.com',
+                $email,
+                "Recover LMS account",
+                'mailcontents.html',
+                $mailData
+            );
+        $result['flag'] = $flag;
+        $this->loadLayout("header.html");
+        $this->loadView("userForgetPassword", ["flag"=>$flag]);
+        $this->loadView("footer", $data);
     }
 }

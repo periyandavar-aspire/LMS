@@ -59,39 +59,17 @@ use System\Core\Utility;
                             </div>
                             <h3>WELCOME</h3>
                             <p> Sign in with your login credentials here..</p><br>
-                            <form action="/admin/login" onsubmit="adminLoginFormValidator(event);" method="post">
+                            <form action="" onsubmit="emailValidator(event);" method="POST">
                                 <div class="form-input-div">
                                     <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;
                                     <input class="form-control" type="email" name="email" id="emailid"
                                         placeholder="Email ID" autocomplete="off" required="">
-                                    <!--onblur="checkAvailability()"-->
-                                    <span id="user-availability-status" style="font-size:12px;"></span>
-                                </div>
-                                <div class="form-input-div">
-                                    <i class="fa fa-lock" aria-hidden="true"></i>&nbsp;
-                                    <input class="form-control" type="password" id="pass" name="password"
-                                        placeholder="Password" autocomplete="off" required="">
-                                    <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50"
-                                        style="display:none" value="0"></meter>
-                                    <span id="password-span" style="display:none"></span>
-                                </div>
-                                <div class="form-input-div">
-                                    <i class="fa fa-superpowers" aria-hidden="true"></i>&nbsp;
-                                    <input type="text" name="verfcode" maxlength="5" autocomplete="off"
-                                        placeholder="Verification Code" required="" class="verfcode">&nbsp;<img
-                                        src="<?php echo "/captcha"; ?>">
-                                </div>
-                                <div class="msg">
-                                    <?php if (isset($msg)) {
-                                        echo $msg;
-                                    } ?>
                                 </div>
                                 <div class="form-buttons">
-                                    <button type="submit" class="btn-link">Login</button>
+                                    <button type="submit" class="btn-link">Recover</button>
                                 </div>
-                                <br><span style="color:white;"> Forgot password..? <a class="link" href="/admin/forgot-password"> Recover here
-                                    </a></span>
                             </form>
+                             
                         </div>
                     </div>
                 </div>

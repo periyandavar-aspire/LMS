@@ -9,7 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace App\Model;
+
 defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
 
 /**
  * AuthorModel Class Handles the AuthorController class data base operations

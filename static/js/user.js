@@ -41,5 +41,4 @@ function changePagination(url) {
     limit = isNaN(limit) ? 5 : limit;
     url = url + "?index=" + offset + "&limit=" + limit + "&search=" + search;
     window.location.replace(url);
-    // console.log(url);
 }

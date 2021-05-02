@@ -9,6 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
+use System\Core\FrameworkException;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * EnvParser parse the env files and loads values from it
@@ -30,7 +35,7 @@ class EnvParser
      * Instantitate the new EnvParser Instance
      *
      * @param $file ENV File Name
-     * 
+     *
      * @throws FrameworkException
      */
     public function __construct($file)

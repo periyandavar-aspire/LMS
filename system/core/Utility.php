@@ -9,6 +9,9 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Utility Class offers various static functions
@@ -94,5 +97,4 @@ final class Utility
         $len = strlen($startStr);
         return (substr($str, 0, $len) === $startStr);
     }
-
 }

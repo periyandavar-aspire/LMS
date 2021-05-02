@@ -9,6 +9,11 @@
  * @license  http://license.com license
  * @link     http://url.com
  */
+
+namespace System\Library;
+
+use System\Core\Log;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Exporter Class used to store the input Exporter
@@ -35,7 +40,7 @@ class Export
         $class = $type . 'Exporter';
         if (file_exists($file)) {
             include_once "$file";
-            $class = "\\Export\\".$class;
+            $class = "\\System\\Libraray\\Export\\".$class;
             $this->_exporter = new $class();
         } else {
             Log::getInstance()->Debug("Invalid export type '$file'");

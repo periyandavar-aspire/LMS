@@ -1,6 +1,6 @@
 <?php
 /**
- * Routes File all the configurations of the routes are defined here
+ * Routes File, all the route configurations of the librarian are defined here
  * php version 7.3.5
  *
  * @category   Route
@@ -11,7 +11,9 @@
  * @link       http://url.com
  */
 defined('VALID_REQ') or exit('Invalid request');
-
+use System\Core\Router;
+use System\Core\InputData;
+use System\Core\Utility;
 
 Router::add('/librarian', 'admin/login');
 Router::add('/librarian/login', 'admin/login');
@@ -67,7 +69,7 @@ Router::add(
 
 Router::add(
     '/librarian/user-management',
-    'manageUser/manageRegUsers',
+    'userManage/manageRegUsers',
     'get',
     function () {
         $input = new InputData();

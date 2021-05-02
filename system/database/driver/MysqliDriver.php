@@ -10,6 +10,14 @@
  * @license    http://license.com license
  * @link       http://url.com
  */
+
+namespace System\Database;
+
+use mysqli;
+use Mysqli_sql_exception;
+use Error;
+use System\Core\Log;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * MysqliDriver Class performs database operations with mysqli connection

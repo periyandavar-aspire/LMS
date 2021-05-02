@@ -198,3 +198,9 @@ span.required-star {
         width: 99%;
     }
 }
+
+@media screen and (min-width: 1824px) {
+    .button-control {
+        font-size: 30px;
+    }
+}

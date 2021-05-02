@@ -24,13 +24,14 @@ if (!isset($result)) {
                 </div>
             </div>
 
-            <form action="/user-profile" onsubmit="editProfileValidator(event);" method="POST">
+            <form action="/user-profile" onsubmit="userProfileValidator(event);" method="POST">
                 <div class="form-input-div">
                     <label>Full Name <span class="required-star">*</span></label>
                     <input class="form-control" type="text"
                         value="<?php echo $result->fullName; ?>"
                         pattern="^[a-zA-Z ]+$" id="fullname" name="fullname" autocomplete="off"
                         placeholder="Full Name..." required="">
+                        <span id="fullname-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
                     <label>User Name</label>
@@ -53,6 +54,7 @@ if (!isset($result)) {
                             <?php endforeach;?>
                         <?php endif;?>
                     </select>
+                    <span id="gender-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
                     <label>Mobile Number <span class="required-star">*</span></label>
@@ -60,14 +62,14 @@ if (!isset($result)) {
                         value="<?php echo $result->mobile; ?>"
                         pattern="^[789]\d{9}$" type="text" id="mobile" name="mobile" maxlength="10"
                         placeholder="Mobile Number..." autocomplete="off" required="">
+                        <span id="mobile-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
-                    <label>Email <span class="required-star">*</span></label>
+                    <label>Email</label>
                     <input class="form-control" disabled type="email"
                         value="<?php echo $result->email; ?>"
                         name="mail" id="emailid" placeholder="Email..." autocomplete="off" required="">
-                    <!--onblur="checkAvailability()"-->
-                    <span id="user-availability-status" style="font-size:12px;"></span>
+                    <span id="emailid-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
                     <label>Password </label>
@@ -75,14 +77,14 @@ if (!isset($result)) {
                         name="password" placeholder="********" autocomplete="off">
                     <meter id="pass1str" min="0" low="40" high="95" max="100" optimum="50" style="display:none"
                         value="0"></meter>
-                    <span id="pass1msg" style="display:none"></span>
+                    <span id="password-span" class="span-err-msg"></span>
                 </div>
                 <div class="form-input-div">
                     <label>Confirm Password </label>
-                    <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','errormsg')"
+                    <input class="form-control" onkeyup="checkConfirm('password','confirmPassword','confirmPassword-span')"
                         type="password" id="confirmPassword" name="confirmpassword" placeholder="********"
                         autocomplete="off">
-                    <span id="errormsg" style="color:red"></span>
+                    <span id="confirmPassword-span" class="span-err-msg"></span>
                 </div>
                 <div class="msg">
                     <i>last updation on <?php echo $result->updatedAt ?><i><br><br>

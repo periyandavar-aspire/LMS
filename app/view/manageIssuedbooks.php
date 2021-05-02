@@ -43,7 +43,7 @@ defined('VALID_REQ') or exit('Invalid request');
                     <div class="cols col-4">
                         <div class="form-input-div">
                             <label>ISBN <span class="required-star">*</span></label>
-                            <input pattern="^[0-9]+$" class="form-control" autocomplete="off" type="text"
+                            <input class="form-control" autocomplete="off" type="text"
                                 id="isbn" name="isbn" placeholder="Book Name" required="">
                             <input type="hidden" id="bookId" name="bookId">
                         </div>

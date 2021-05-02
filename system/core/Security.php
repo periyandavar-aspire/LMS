@@ -4,18 +4,20 @@
  * php version 7.3.5
  *
  * @category Security
- * @package  Library
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
 
+namespace System\Core;
+
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Security class used to perform encryption and decryption
  *
- * @category Session
- * @package  Library
+ * @category Security
+ * @package  Core
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com

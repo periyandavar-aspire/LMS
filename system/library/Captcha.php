@@ -3,22 +3,22 @@
  * Captcha Doc Comment
  * php version 7.3.5
  *
- * @category View
- * @package  View
+ * @category Library
+ * @package  Libaray
  * @author   Periyandavar <periyandavar@gmail.com>
  * @license  http://license.com license
  * @link     http://url.com
  */
+namespace System\Library;
 defined('VALID_REQ') or exit('Invalid request');
 /**
  * Captcha class to generate captcha
  *
- * @category   View
- * @package    View
- * @subpackage HomeView
- * @author     Periyandavar <periyandavar@gmail.com>
- * @license    http://license.com license
- * @link       http://url.com
+ * @category Library
+ * @package  Library
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
  */
 class Captcha
 {
