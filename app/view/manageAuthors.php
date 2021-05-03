@@ -1,74 +1,42 @@
-<article class="main">    
+<?php
+/**
+ * Manage Authors
+ * php version 7.3.5
+ *
+ * @category View
+ * @package  View
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
+defined('VALID_REQ') or exit('Invalid request');
+?>
+<article class="main">
     <section>
         <div class="container div-card">
             <div class="row">
                 <div class="cols col-9">
-                    <h1>Authors &nbsp;<a class="btn-link" onclick="openModal('addRecord');">Add</a></h1><hr>
+                    <h1>Authors &nbsp;<a class="btn-link" onclick="openModal('addRecord');">Add</a></h1>
+                    <hr>
                 </div>
             </div>
             <div class="div-card-body">
-                <div class='table-panel'>
-                    <div class="form-input-div">
-                        <label> Record count </label>
-                        <select class="table-form-control">
-                            <option>5</option>
-                            <option>10</option>
-                            <option>20</option>
-                            <option>50</option>
-                        </select>
-                    </div>
-                    <div class="form-input-div">
-                        <label> Search </label>
-                        <input type="text" class="table-form-control">
-                    </div>
-                </div>
                 <div style="overflow-x:auto;">
-                    <table class="tab_design">
+                    <table id="author-list" class="tab_design">
                         <thead>
                             <tr>
-                                <th>Sl. No</th>
-                                <th>Author</th>
+                                <th data-orderable="false">#</th>
+                                <th>Name</th>
                                 <th>Created at</th>
                                 <th>Updated at</th>
                                 <th>Status</th>
-                                <th>Action</th>
+                                <th data-orderable="false">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php $i=0; if (isset($authors)): ?>
-                                
-                                <?php foreach ($authors as $author):?>
-                                    <tr id="<?php echo $author->id;?>">
-                                        <td><?php echo ++$i;?></td>
-                                        <td><?php echo $author->name;?></td>
-                                        <td><?php echo $author->createdAt;?></td>
-                                        <td><?php echo $author->updatedAt;?></td>
-                                        <td><div class="checkbox"><input type="checkbox" id="<?php echo $author->id;?>" <?php if ($author->status == 1) {
-    echo "checked";
-}?>></div></td>
-                                        <td>
-                                            <button type="button" onclick="editItem('/authors/edit/<?php echo $author->id;?>');" class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button>
-                                            <button type="button" onclick="deleteItem('/authors/delete/<?php echo $author->id;?>');" class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>
-                                        </td>
-                                    </tr> 
-                                <?php endforeach;?>
-                            <?php endif;?>
+                        <tbody class="table_body">
+
                         </tbody>
                     </table>
-                </div>
-                <div class="table-panel">
-                    <div>
-                        Showing 1 to 2 of 2 entries
-                    </div>
-                    <div>
-                        <ul class="pagination">
-                            <li class="disable"><a>Previous</a></li>
-                            <li class="active"><a>1</a></li>
-                            <li><a>2</a></li>
-                            <li><a>3</a></li>
-                            <li><a>Next</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
@@ -77,10 +45,11 @@
                 <span class="close-modal" onclick="closeModal('addRecord');">✖</span>
                 <h1>Add New Author</h1>
                 <hr><br>
-                <form action="/authors" id="add" method="post">
+                <form action="/author-management/authors" onsubmit="nameValidator(event);" id="add" method="post">
                     <div class="form-input-div">
-                        <label>Author Name</label>
-                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name" autocomplete="off" placeholder="Author Name..." required="">
+                        <label>Author Name <span class="required-star">*</span></label>
+                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="autname" name="name"
+                            autocomplete="off" placeholder="Author Name" required="">
                     </div>
                     <div class="form-buttons">
                         <button type="submit" name="action" value="add" class="btn-link">Add</button>
@@ -91,13 +60,14 @@
         <div class="modal-shadow" id="editRecord">
             <div class="modal">
                 <span class="close-modal" onclick="closeModal('editRecord');">✖</span>
-                <h1>Add New Author</h1>
+                <h1>Edit Author</h1>
                 <hr><br>
-                <form action="/authors" id="edit" method="post">
+                <form action="/author-management/authors" onsubmit="nameValidator(event);" id="edit" method="post">
                     <input type="hidden" name="id" id="edit-id">
                     <div class="form-input-div">
-                        <label>Author Name</label>
-                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="edit-name" name="name" autocomplete="off" placeholder="Author Name..." required="">
+                        <label>Author Name <span class="required-star">*</span></label>
+                        <input class="form-control" type="text" pattern="^[a-zA-Z ]+$" id="edit-name" name="name"
+                            autocomplete="off" placeholder="Author Name..." required="">
                     </div>
                     <div class="form-buttons">
                         <button type="submit" name="action" value="update" class="btn-link">Update</button>
@@ -110,4 +80,46 @@
 
 <script>
     document.getElementById('authors').className += " active";
+    column = [{
+        "render": function (data, type, row, meta) {
+        return meta.row + meta.settings._iDisplayStart + 1;
+        }
+        },
+        {
+            "data": "name"
+        },
+        {
+            "data": "createdAt"
+        },
+        {
+            "data": "updatedAt"
+        },
+        {
+            "data": null,
+            "render": function(item) {
+                code = '<div class="checkbox"><input type="checkbox" ';
+                code += 'onchange="changeStatus(event,'
+                code += "'/author-management/authors/" + item.id + "');" + '" ';
+                code += item.status == 1 ? "checked" : '';
+                code += '></div>';
+                return code;
+            }
+        },
+        {
+            "data": null,
+            "render": function(item) {
+                code = '<button type="button" onclick="editItem(';
+                code += "'/author-management/authors/" + item.id + "');" + '"';
+                code +=
+                    'class="button-control icon-btn positive" title="edit"><i class="fa fa-edit"></i></button> <button type="button"';
+                code += ' onclick="deleteItem(' + "'/author-management/authors/" + item.id + "', 'author');" + '"';
+                code +=
+                    'class="button-control icon-btn negative" title="delete"><i class="fa fa-trash"></i></button>';
+                return code;
+            }
+        }
+    ]
+    $(document).ready(function() {
+        loadTableData("author-list", "/author-management/authors", column);
+    });
 </script>

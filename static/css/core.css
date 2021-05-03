@@ -10,6 +10,22 @@
     justify-content: space-between;
 }
 
+section .home-container {
+    max-width: 1140px;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 15px;
+}
+
+p.msg {
+    color: white;
+}
+
+.container-card {
+    max-width: 60%;
+}
+
 img {
     vertical-align: middle;
 }
@@ -287,6 +303,11 @@ header h1 {
     height: 100%;
 }
 
+
+/* .view-book {
+    color: dodgerblue;
+} */
+
 .img-wrapper img {
     height: 100%;
 }
@@ -381,6 +402,24 @@ section {
     padding-bottom: 60px;
 }
 
+.icons {
+    width: 40px;
+    cursor: pointer;
+}
+
+.print-btn {
+    display: inline-block;
+    padding: 7px 12px;
+    border: 2px solid dodgerblue;
+    border-radius: 8.5px;
+    background-color: dodgerblue;
+    color: #fff;
+    font: 700 12px sans-serif;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
 section .container {
     max-width: 1140px;
     width: 100%;
@@ -388,6 +427,24 @@ section .container {
     padding-left: 15px;
     margin-right: auto;
     margin-left: auto;
+    margin-bottom: 15px;
+}
+
+@media print {
+    html,
+    body {
+        height: auto;
+    }
+    #page-wrapper {
+        margin: 0 0 0 0;
+        border-left: #FFF;
+        padding: 0 10px;
+        min-height: auto;
+    }
+    .navbar-static-side {
+        margin: 0 0 0 0;
+        margin-top: 10px;
+    }
 }
 
 .cols {
@@ -658,6 +715,12 @@ p.stack-msg {
     width: 100%;
 }
 
+#nav-bar-top-admin {
+    background: linear-gradient(rgb(0 0 0 / 13%), rgb(0 0 0 / 23%)), url(../img/admin-nav-banar.jpg) center center no-repeat;
+    background-size: cover;
+    height: 122px;
+}
+
 .expand-navbar ul {
     margin-top: 7px;
     margin-bottom: 7px;
@@ -679,6 +742,10 @@ p.stack-msg {
     background-repeat: no-repeat;
     background-size: 21px 21px;
     background-position: center;
+}
+
+.span-err-msg {
+    color: red;
 }
 
 .indent-para {
@@ -823,5 +890,35 @@ article section:nth-of-type(2) {
         margin-left: 5%;
         width: 70%;
         margin-top: 30%;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    .heading-para {
+        font-size: 18px;
+        width: 95%;
+    }
+}
+
+@media screen and (min-width: 1824px) {
+    section .container {
+        max-width: 100%;
+        font-size: 40px;
+    }
+    #nav-bar-top-admin {
+        height: 300px;
+    }
+    h1 {
+        font-size: 57px;
+    }
+    .btn-link {
+        font: 700 33px sans-serif;
+    }
+    .form-control {
+        height: 84px;
+        font-size: 31px;
+    }
+    label {
+        font-size: 30px;
     }
 }

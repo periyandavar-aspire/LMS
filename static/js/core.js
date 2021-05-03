@@ -102,26 +102,26 @@ function AskConfirm(title, ok = function ok() {}, cancel = function cancel() {},
 function toast(msg = '', theme = '', title = "") {
     var ele = document.getElementById('toast-container');
     var symbol = '';
-    var title = '';
+    // var title = '';
     switch (theme) {
         case 'info':
-            title = title != '' ? title : "Info..!";
+            title = title != '' ? title : "Info";
             symbol = '<i class="fa fa-info toast-symbols" aria-hidden="true"></i>';
             break;
         case 'warning':
-            title = title != '' ? title : "Warning..!";
+            title = title != '' ? title : "Warning";
             symbol = '<i class="fa fa-exclamation-triangle toast-symbols" aria-hidden="true"></i>';
             break;
         case 'danger':
-            title = title != '' ? title : "Danger..!";
+            title = title != '' ? title : "Danger";
             symbol = '<i class="fa fa-shield toast-symbols" aria-hidden="true"></i>';
             break;
         case 'success':
-            title = title != '' ? title : "Success..!";
+            title = title != '' ? title : "Success";
             symbol = '<i class="fa fa-check toast-symbols" aria-hidden="true"></i>';
             break;
         default:
-            title = title != '' ? title : "New Message..!";
+            title = title != '' ? title : "New Message";
             symbol = '<i class="fa fa-bell toast-symbols" aria-hidden="true"></i>';
             break;
 
@@ -153,28 +153,65 @@ function showElement(id) {
     document.getElementById(id).style.display = 'block';
 }
 
-function deleteItem(delUrl) {
-    AskConfirm("Are sure to delete..?", () => fetch(delUrl, { headers: { response: "application/json" } })
-        .then(response => { return response.json() })
-        .then(data => {
-            if (data.result == 1) {
-                parts = delUrl.split("/");
-                document.getElementById(parts[parts.length - 1]).remove();
-                toast("The item deleted successfully..!", 'success');
-            } else {
-                toast("Unable to delete the item..!", 'danger');
-            }
-        }));
+function loaded() {
+    document.getElementsByClassName('left-cover')[0].style.left = '100%';
+    document.getElementsByClassName('right-cover')[0].style.right = "100% ";
+    document.getElementById('loader').className += " loaded";
 }
+let offset = 12;
+let limit = 12;
 
-function editItem(editUrl, element = "editRecord") {
-    fetch(editUrl, { headers: { response: "application/json" } })
+function loadMoreBooks(event, url, searchKey) {
+    url = (url != undefined) ? url : '/books/load';
+    url += "?offset=" + offset + "&limit=" + limit;
+    url += (searchKey != undefined) ? "&search=" + searchKey : '';
+    fetch(url, { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => {
-            openModal(element);
-            for (const key in data.data) {
-                console.log(key);
-                document.getElementById("edit-" + key).value = data.data[key];
+            let divElem;
+            let target = document.getElementById('books-list');
+            if (data.books.length > 0) {
+                for (const book of data.books) {
+                    divElem = document.createElement('div');
+                    code = `<a href="/book/` + book.id + `">
+                            <book-element
+                                cover="/upload/book/` + book.coverPic + `"
+                                book="` + book.name + `"
+                                author="` + book.authors + `"
+                                id="` + book.id + `">
+                            </book-element>
+                            </a>
+                            <div class="card-content">
+                                <h3>` + book.name + `
+                                </h3>
+                                <div class="text-author">` + book.authors + `
+                                </div>
+                                <p>` + book.description + `
+                                </p>
+                                <p>`;
+                    code += book.available == 0 ? "no copy" : (('only ' + book.available) + (
+                        (book.available == 1) ? " copy" : " copies"
+                    ))
+                    code += ` available</p>
+                                <div class="btn-container">
+                                    <a class="btn-link"
+                                        href="/book/` + book.id + `">View
+                                        Book</a>
+                                </div>
+                            </div>
+                        `;
+                    divElem.className = "card cols";
+                    divElem.innerHTML = code;
+                    target.appendChild(divElem);
+                }
+
+            } else {
+                // toast("Unabel to fetch data..!", 'danger');
+                event.target.remove();
             }
         });
+    offset += 12;
+}
+window.onload = function() {
+    setTimeout(loaded(), 10000);
 }

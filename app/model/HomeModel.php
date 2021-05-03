@@ -1,93 +1,171 @@
 <?php
+/**
+ * HomeModel File Doc Comment
+ * php version 7.3.5
+ *
+ * @category Model
+ * @package  Model
+ * @author   Periyandavar <periyandavar@gmail.com>
+ * @license  http://license.com license
+ * @link     http://url.com
+ */
 
+namespace App\Model;
+
+defined('VALID_REQ') or exit('Invalid request');
+use System\Core\BaseModel;
+
+/**
+ * HomeModel Class Handles the HomeController class data base operations
+ *
+ * @category   Model
+ * @package    Model
+ * @subpackage HomeModel
+ * @author     Periyandavar <periyandavar@gmail.com>
+ * @license    http://license.com license
+ * @link       http://url.com
+ */
 class HomeModel extends BaseModel
 {
-    public function __construct()
+    /**
+     * Returns all the available books
+     *
+     * @return array
+     */
+    public function getAvailableBooks(): array
     {
-        parent::__construct();
-    }
-
-    // public function getData()
-    // {
-    //     $result = $this->db->runQuery("SELECT * FROM user");
-    //     $result = $this->db->fetch();
-    //     print_r($result);
-
-    //     $this->db->selectAll()->from('user')->execute();
-    //     $result = $this->db->fetch();
-    //     print_r($result);
-    // }
-
-    public function getGenderCodes()
-    {
-        $result = [];
-        $this->db->select('code')->from('gender')->execute();
-        while($row = $this->db->fetch()){
-            $result[] = $row->code;
+        $books = [];
+        $this->db->select(
+            'id',
+            'name',
+            'authors',
+            'description',
+            'available',
+            'coverPic'
+        )->from('book_detail');
+        $this->db->where('status', '=', 1)
+            ->orderby('RAND()')
+            ->limit(12)
+            ->execute();
+        while ($row = $this->db->fetch()) {
+            $books[] = $row;
         }
-        return $result;
+        return $books;
     }
 
-    public function getGender()
-    {
-        $result = [];
-        $i = 0;
-        $this->db->select('code', 'value')->from('gender')->execute();
-        while($row = $this->db->fetch()){
-            $result[$i]['code'] = $row->code;
-            $result[$i]['value'] = $row->value; 
-            $i++;
-        }
-        return $result;
-    }
 
-    public function getUserPass(string $username)
+
+    /**
+     * Returns the password of the given username
+     *
+     * @param string $username User Name
+     *
+     * @return object|null
+     */
+    public function getUser(string $username): ?object
     {
-        $this->db->select('password');
+        $this->db->select('password', 'id', 'email');
         $this->db->from('user');
         $this->db->where('username', '=', $username);
+        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
         $this->db->execute();
-        $result = $this->db->fetch();
-        if ($result != null) {
-            return $result->password;
-        } else {
-            return null;
-        }
+        $user = $this->db->fetch() or $user = null;
+        return $user;
     }
 
-    public function createAccount(array $fields)
+    /**
+     * Inserts a record to pasword reset data
+     *
+     * @param array $data Data
+     *
+     * @return bool
+     */
+    public function addPassRest($data)
+    {
+        return $this->db->insert('password_reset', $data)->execute();
+    }
+
+    /**
+     * Creates new user account
+     *
+     * @param array $fields User details
+     *
+     * @return bool
+     */
+    public function createAccount(array $fields): bool
     {
         $fields['password'] = md5($fields['password']);
         $flag = $this->db->insert('user', $fields)->execute();
         return  $flag;
     }
 
-    public function getFooterData()
+    /**
+     * Returns the footer area content
+     *
+     * @return object|null
+     */
+    public function getFooterData(): ?object
     {
-        $this->db->select('aboutUs','address','mobile','email','fbUrl','ytUrl','instaUrl')->from('cms');
-        $this->db->where('id','=',1)->limit(1)->execute();
-        $result = $this->db->fetch();
-        return $result;
-    }
-    
-    public function getVision()
-    {
-        $this->db->select('vision')->from('cms')->where('id','=',1)->limit(1)->execute();
-        $result = $this->db->fetch();
-        return $result->vision;
+        $this->db->select(
+            'aboutUs',
+            'address',
+            'mobile',
+            'email'
+        )->from('cms');
+        $this->db->where('id', '=', 1)->limit(1)->execute();
+        $footer = $this->db->fetch() or $footer = null;
+        return $footer;
     }
 
-    public function getMission()
+    /**
+     * Returns the Vision
+     *
+     * @return string|null
+     */
+    public function getVision(): ?string
     {
-        $this->db->select('mission')->from('cms')->where('id','=',1)->limit(1)->execute();
-        $result = $this->db->fetch();
-        return $result->mission;
+        $this->db->select('vision')
+            ->from('cms')
+            ->where('id', '=', 1)
+            ->limit(1)
+            ->execute();
+        return ($result = $this->db->fetch()) ? $result->vision : null;
     }
-    
-    // public function getAboutUs()
-    // {
-    //     $this->db->select('aboutUs')->from('cms')->where('id','=',1)->limit(1)->execute();
-    //     $result = $this->db->fetch();
-    //     return $result->aboutUs;
-    // }
+
+    /**
+     * Returns the Mission
+     *
+     * @return string|null
+     */
+    public function getMission(): ?string
+    {
+        $this->db->select('mission')
+            ->from('cms')
+            ->where('id', '=', 1)
+            ->limit(1)
+            ->execute();
+        return ($result = $this->db->fetch()) ? $result->mission : null;
+    }
+
+    /**
+     * Validates a token
+     *
+     * @param string $token Token
+     *
+     * @return object|null
+     */
+    public function validateToken(string $token)
+    {
+        $this->db->select('id', 'userId', 'role', 'expireAt')
+            ->from('password_reset')
+            ->where('token', '=', $token)
+            ->execute();
+        if (!($result = $this->db->fetch())) {
+            return null;
+        }
+        $this->db->delete('password_reset')
+            ->where('id', '=', $result->id)
+            ->execute();
+        return $result;
+    }
 }

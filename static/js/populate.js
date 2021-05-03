@@ -12,7 +12,7 @@ function loadAuthors() {
 
 
 function loadRoles() {
-    fetch("/user/allRoles", { headers: { response: "application/json" } })
+    fetch("/user/roles", { headers: { response: "application/json" } })
         .then(response => { return response.json() })
         .then(data => populateSelect(document.getElementById('role'), data));
 }
