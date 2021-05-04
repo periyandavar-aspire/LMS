@@ -66,7 +66,7 @@ class Log
      *
      * @param string $level Levels
      */
-    public function __construct($level = 'ALL')
+    private function __construct($level = 'ALL')
     {
         global $config;
         $this->_level = in_array($level, array_keys($this->_levels))
@@ -103,6 +103,16 @@ class Log
             and fclose(fopen($this->_dir .'/'. $this->_error, 'w'));
         !file_exists($this->_dir .'/'. $this->_activity)
             and fclose(fopen($this->_dir .'/'. $this->_activity, 'w'));
+    }
+
+    /**
+     * Disabling cloning the object from outside the class
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+        
     }
 
     /**

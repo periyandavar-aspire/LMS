@@ -45,7 +45,7 @@ class Loader
     /**
      * Instantiate the the Loader instance
      */
-    public function __construct()
+    private function __construct()
     {
         $this->loadAll('system/core');
         global $config;

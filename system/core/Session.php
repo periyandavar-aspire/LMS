@@ -33,7 +33,7 @@ class Session
     /**
      * Instantiate the Session instance
      */
-    public function __construct()
+    private function __construct()
     {
         global $config, $dbConfig;
         try {
@@ -70,6 +70,16 @@ class Session
                 "Unable to Register the session driver '$file'"
             );
         }
+    }
+
+    /**
+     * Disabling cloning the object from outside the class
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+        
     }
 
     /**

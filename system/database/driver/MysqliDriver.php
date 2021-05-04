@@ -39,7 +39,7 @@ class MysqliDriver extends Database
      * @param string $pass Password
      * @param string $db   Database Name
      */
-    public function __construct(string $host, string $user, string $pass, string $db)
+    private function __construct(string $host, string $user, string $pass, string $db)
     {
         try {
             $this->con = new mysqli($host, $user, $pass, $db);
@@ -49,6 +49,16 @@ class MysqliDriver extends Database
             );
             die();
         }
+    }
+
+    /**
+     * Disabling cloning the object from outside the class
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+        
     }
 
     /**

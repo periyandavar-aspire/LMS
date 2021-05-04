@@ -40,7 +40,7 @@ class PdoDriver extends Database
      * @param string $db     Database Name
      * @param string $driver Driver Name
      */
-    public function __construct(
+    private function __construct(
         string $host,
         string $user,
         string $pass,
@@ -57,6 +57,16 @@ class PdoDriver extends Database
             );
             die();
         }
+    }
+
+    /**
+     * Disabling cloning the object from outside the class
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+        
     }
 
     /**

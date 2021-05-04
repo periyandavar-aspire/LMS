@@ -76,6 +76,16 @@ abstract class Database
     abstract public function fetch(); //:object|bool|null;
 
     /**
+     * Disabling cloning the object from outside the class
+     * 
+     * @return void
+     */
+    private function __clone()
+    {
+        
+    }
+
+    /**
      * This abstract function should implemented on the handlers to get the
      * instance of the class in
      * singleton approch
