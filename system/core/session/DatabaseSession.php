@@ -152,6 +152,6 @@ class DatabaseSession implements \SessionHandlerInterface
     {
         $old = time() - $max;
         $this->_db->delete($this->_table)->where('access', '<', $old);
-        return $this->db->execute();
+        return $this->_db->execute();
     }
 }
