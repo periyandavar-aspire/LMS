@@ -52,10 +52,11 @@ class Loader
         $this->_prefixes = [
             "App\Controller\\" => $config['controller'],
             "App\Model\\" => $config['model'],
+            "App\DataModel\\" => $config['model'] ."DataModel/",
             "App\Service\\" => $config['service'],
             "System\Helper\\" => $config['helper'],
             "System\Library\\" => $config['library'],
-            "System\Database\\" => "system\database\\"
+            "System\Database\\" => "system/database/"
         ];
         spl_autoload_register([$this, "autoLoader"]);
         $this->loadAll('system/database');
@@ -211,9 +212,11 @@ class Loader
     public function autoLoader(string $class)
     {
         global $config;
-        foreach ($this->_prefixes as $prefix) {
+        foreach ($this->_prefixes as $prefix => $dir) {
             if (strpos($class, $prefix) == 0) {
-                $this->loadFile($class, $prefix);
+                if ($this->loadFile($class, $prefix)) {
+                    break;
+                }
             }
         }
     }
@@ -228,11 +231,15 @@ class Loader
      */
     public function loadFile(string $file, ?string $prefix = null): bool
     {
+        
         $file = rtrim($file, '.php') . '.php';
-        if ($prefix == null) {
+        if ($prefix != null) {
             if (isset($this->_prefixes[$prefix])) {
-                $path = $this->_prefixes[$prefix];
-                $file = $paths . str_replace("\\", "/", $file);
+                $path = rtrim($this->_prefixes[$prefix], "/");
+                $prefix = str_replace("\\", "/", $prefix);
+                $file = str_replace("\\", "/", $file);
+                $prefix = '#'. rtrim($prefix, "/") .'#';
+                $file = preg_replace($prefix, $path, $file, 1);
             } else {
                 return false;
             }

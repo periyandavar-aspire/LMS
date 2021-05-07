@@ -14,6 +14,7 @@ namespace App\Model;
 
 defined('VALID_REQ') or exit('Invalid request');
 use System\Core\BaseModel;
+use App\DataModel\Category;
 
 /**
  * CategoryModel Class Handles the CategoryController class data base operations
@@ -36,8 +37,13 @@ class CategoryModel extends BaseModel
      */
     public function add(array $category): bool
     {
-        $result = $this->db->insert('category', $category)->execute();
-        return $result;
+        // $result = $this->db->insert('category', $category)->execute();
+        // return $result;
+        $cat = new Category();
+        $cat->name = $category['name'];
+        $cat->status = '1';
+        return $cat->save();
+        // return false;
     }
 
     /**
@@ -108,11 +114,13 @@ class CategoryModel extends BaseModel
      */
     public function get(int $id): ?object
     {
-        $this->db->select('id', 'name')->from('category')->where('id', '=', $id);
-        $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
-            ->limit(1)->execute();
-        $category = $this->db->fetch() or $category = null;
-        return $category;
+        // $this->db->select('id', 'name')->from('category')->where('id', '=', $id);
+        // $this->db->where('deletionToken', '=', DEFAULT_DELETION_TOKEN)
+        //     ->limit(1)->execute();
+        // $category = $this->db->fetch() or $category = null;
+        $category = Category::get("id = ?", [$id]);
+        return $category[0];
+        // return null;
     }
 
     /**
@@ -140,9 +148,14 @@ class CategoryModel extends BaseModel
      */
     public function update(array $fields, int $id): bool
     {
-        $this->db->update('category', $fields)->where('id', '=', $id)
-            ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
-        return $this->db->execute();
+        // $this->db->update('category', $fields)->where('id', '=', $id)
+        //     ->where('deletionToken', '=', DEFAULT_DELETION_TOKEN);
+        $category = Category::get("id = ?", [$id])[0];
+        foreach ($fields as $key => $value) {
+            $category->$key = $value;
+        }
+        return $category->save('id');
+        // return $this->db->execute();
     }
 
     /**

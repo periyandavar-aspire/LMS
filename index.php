@@ -131,8 +131,8 @@ if (!function_exists("exceptionHandler")) {
     }
 }
 
-set_exception_handler('exceptionHandler');
-set_error_handler("errHandler");
+// set_exception_handler('exceptionHandler');
+// set_error_handler("errHandler");
 
 ob_start();
 Router::run();
