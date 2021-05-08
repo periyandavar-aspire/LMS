@@ -37,4 +37,6 @@ final class Constants
     public const ENV_TESTING = 'testing';
 
     public const ENV_DEVELOPMENT = 'development';
+
+    public const METHOD_PATCH = 'patch';
 }

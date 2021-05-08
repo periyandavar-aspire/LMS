@@ -100,7 +100,9 @@ class Loader
     {
         global $config;
         foreach ($models as $model) {
-            $file =  $config['model'] . '/' . (Utility::endswith($model, "Model") ? $model : $model . 'Model') . '.php';
+            $file =  $config['model'] . '/' . (Utility::endswith($model, "Model")
+                ? $model
+                : $model . 'Model') . '.php';
             $class = "App\\Model\\" . $model . 'Model';
             if (file_exists($file)) {
                 include_once $file;
@@ -125,7 +127,11 @@ class Loader
     {
         global $config;
         foreach ($services as $service) {
-            $file =  $config['service'] . '/' . (Utility::endswith($service, "Service") ? $service : $service . 'Service') . '.php';
+            $file =  $config['service'] . '/'
+                . (Utility::endswith($service, "Service")
+                    ? $service
+                    : $service . 'Service')
+                . '.php';
             $class = "App\\Service\\" . $service . 'Service';
             if (file_exists($file)) {
                 include_once $file;
@@ -177,7 +183,9 @@ class Loader
     {
         global $config;
         foreach ($helpers as $helper) {
-            $helper = (Utility::endswith($helper, "helper") ? $helper : $helper . '.php');
+            $helper = (Utility::endswith($helper, "helper")
+                ? $helper
+                : $helper . '.php');
             if (file_exists($config['helper'] . '/' . $helper)) {
                 include_once $config['helper'] . '/' . $helper;
             } elseif (file_exists('system/helper/' . $helper)) {
@@ -231,7 +239,6 @@ class Loader
      */
     public function loadFile(string $file, ?string $prefix = null): bool
     {
-        
         $file = rtrim($file, '.php') . '.php';
         if ($prefix != null) {
             if (isset($this->_prefixes[$prefix])) {

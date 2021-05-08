@@ -46,6 +46,13 @@ class Router
     private static $_putMethodRoutes = [];
 
     /**
+     * PATCH method routes
+     *
+     * @var array
+     */
+    private static $_patchMethodRoutes = [];
+
+    /**
      * DELETE method routes
      *
      * @var array
@@ -125,6 +132,19 @@ class Router
                     'rule' => $filter
                     ];
             break;
+        case Constants::METHOD_PATCH:
+                $name != null
+                    ? self::$_patchMethodRoutes[$name] = [
+                        'route' => $route,
+                        'expression' => $expression,
+                        'rule' => $filter
+                        ]
+                    : self::$_patchMethodRoutes[] = [
+                        'route' => $route,
+                        'expression' => $expression,
+                        'rule' => $filter
+                        ];
+            break;
         case Constants::METHOD_DELETE:
             $name != null
                 ? self::$_deleteMethodRoutes[$name] = [
@@ -183,6 +203,11 @@ class Router
         case Constants::METHOD_PUT:
             $route = isset(self::$_putMethodRoutes[$name])
                 ? self::$_putMethodRoutes[$name]['route']
+                : null;
+            break;
+        case Constants::METHOD_PATCH:
+            $route = isset(self::$_patchMethodRoutes[$name])
+                ? self::$_patchMethodRoutes[$name]['route']
                 : null;
             break;
         case Constants::METHOD_DELETE:
@@ -263,12 +288,54 @@ class Router
         case Constants::METHOD_PUT:
             self::handleRequest($path, self::$_putMethodRoutes, $caseSensitive);
             break;
+        case Constants::METHOD_PATCH:
+            self::handleRequest($path, self::$_patchMethodRoutes, $caseSensitive);
+            break;
         case Constants::METHOD_DELETE:
             self::handleRequest($path, self::$_deleteMethodRoutes, $caseSensitive);
             break;
         default:
             self::handleRequest($path, self::$_otherMethodRoutes, $caseSensitive);
             break;
+        }
+    }
+
+    /**
+     * Runs the current api route
+     *
+     * @param boolean $caseSensitive does the URL is case sensitive or not
+     *
+     * @return void
+     */
+    public static function runApi(bool $caseSensitive = false)
+    {
+        $parsedUrl = parse_url($_SERVER['REQUEST_URI']);
+        $path = $parsedUrl['path'] ?? '/';
+        $path = explode("/", ltrim(urldecode($path), "/"));
+        $reqMethod = strtolower($_SERVER['REQUEST_METHOD']);
+        $controllerName = "App\Controller\\" . ucfirst($path[1]) . "Controller";
+        $controllerObj = new $controllerName();
+        unset($path[0]);
+        unset($path[1]);
+        switch ($reqMethod) {
+        case Constants::METHOD_GET:
+            $controllerObj->get(...$path);
+            break;
+        case Constants::METHOD_POST:
+            $controllerObj->create(...$path);
+            break;
+        case Constants::METHOD_PUT:
+            $controllerObj->update(...$path);
+            break;
+        case Constants::METHOD_PATCH:
+            $controllerObj->patch(...$path);
+            break;
+        case Constants::METHOD_DELETE:
+            $controllerObj->delete(...$path);
+            break;
+        default:
+            echo "Invalid Request";
+            exit();
         }
     }
 

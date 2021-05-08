@@ -60,7 +60,9 @@ final class InputData
     {
         $this->_postData = $_POST;
         $this->_getData = $_GET;
-        $this->_sessionData = $_SESSION;
+        $this->_sessionData = (session_status() != PHP_SESSION_NONE)
+            ? $_SESSION
+            : null;
         $this->_fileData = $_FILES;
     }
 

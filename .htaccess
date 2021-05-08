@@ -1,5 +1,6 @@
 #Rewrite all request to index.php
 RewriteEngine On
+RewriteRule ^api/([\s\S]*)$ api.php?name=$1 [NC,L]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.+)$ index.php/$1 [L]

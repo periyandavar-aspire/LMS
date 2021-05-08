@@ -1,7 +1,7 @@
 <?php
 /**
- * Entry point of the application
- * All the requests are handled by this file
+ * Entry point of REST request
+ * All the rest requests are handled by this file
  * php version 7.3.5
  *
  * @category Index
@@ -11,10 +11,11 @@
  * @link     http://url.com
  */
 define("VALID_REQ", true);
-use System\Core\Session;
+define("API_REQ", true);
 use System\Core\FrameworkException;
 use System\Core\Router;
 use System\Core\Log;
+
 /**
  * Define error handler
  */
@@ -35,7 +36,7 @@ if (!function_exists("errHandler")) {
         Log::getInstance()->error(
             $errMsg . ' in ' . $errFile . ' at line ' . $errLine
         );
-        Router::error();
+        echo json_encode(["error" => 'server error']);
     }
 }
 
@@ -57,17 +58,25 @@ if (!function_exists("exceptionHandler")) {
             $exception->getMessage() . " in " . $exception->getFile() ." at line "
                 . $exception->getLine()
         );
-        Router::error();
+        echo json_encode(["error" => 'server error']);
     }
 }
 
 require_once 'app.php'; // Intialize the application
 
-Session::getInstance(); // Initialize the Session
-session_start();
 
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,PATCH,DELETE");
+header("Access-Control-Max-Age: 3600");
+header(
+    "Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers,"
+    . " Authorization, X-Requested-With"
+);
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = explode('/', $uri);
 ob_start();
-Router::run();
+Router::runApi();
 $output = ob_get_contents();
 ob_end_clean();
 echo $output;
