@@ -47,7 +47,6 @@ class Loader
      */
     private function __construct()
     {
-        $this->loadAll('system/core');
         global $config;
         $this->_prefixes = [
             "App\Controller\\" => $config['controller'],
@@ -55,10 +54,12 @@ class Loader
             "App\DataModel\\" => $config['model'] ."DataModel/",
             "App\Service\\" => $config['service'],
             "System\Helper\\" => $config['helper'],
+            "System\Core\\" => "system/core/",
             "System\Library\\" => $config['library'],
             "System\Database\\" => "system/database/"
         ];
         spl_autoload_register([$this, "autoLoader"]);
+        $this->loadAll('system/core');
         $this->loadAll('system/database');
         $this->loadAll('app/config/routes');
     }
@@ -67,12 +68,12 @@ class Loader
      * Loads the all classes from autoload class list
      * and creates the instance for them
      *
-     * @param BaseController $ctrl Controller object
+     * @param SysController $ctrl Controller object
      *
      * @return Loader
      * @throws FrameworkException
      */
-    public static function autoLoadClass(BaseController $ctrl): Loader
+    public static function autoLoadClass(SysController $ctrl): Loader
     {
         global $autoload, $config;
         $loads = ['model', 'service', 'library', 'helper'];

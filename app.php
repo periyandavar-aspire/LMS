@@ -15,6 +15,8 @@ use System\Core\Loader;
 use System\Core\Log;
 use System\Core\Constants;
 
+require "vendor/autoload.php";
+
 require_once 'system/core/FrameworkException.php';
 
 require_once 'system/core/Loader.php';
