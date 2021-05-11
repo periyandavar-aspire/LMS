@@ -40,9 +40,7 @@ class HistoryHelper
             $history = json_decode($_COOKIE[$cookieName], true);
         array_push(
             $history,
-            (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'
-                ? "https"
-                : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"
+            Utility::currentUrl()
         );
         if (count($history) > 7) {
             array_splice($history, 0, count($history)-7);

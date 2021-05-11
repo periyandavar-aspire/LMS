@@ -97,4 +97,16 @@ final class Utility
         $len = strlen($startStr);
         return (substr($str, 0, $len) === $startStr);
     }
+
+    /**
+     * Returns current URL
+     *
+     * @return string
+     */
+    public static function currentUrl(): string
+    {
+        return ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'
+                ? "https"
+                : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+    }
 }
